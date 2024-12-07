@@ -1,2 +1,5 @@
-# kiasin
-it's an information gathering and second mind app
+
+  ## kiasin productivity 
+
+  It's an app for gather information and mentian knowlage with the para method
+
