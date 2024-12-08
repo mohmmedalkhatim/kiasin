@@ -2662,6 +2662,7 @@ dependencies = [
  "async-std",
  "sea-orm 1.0.1",
  "sea-orm-migration",
+ "serde",
 ]
 
 [[package]]
