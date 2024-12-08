@@ -2660,6 +2660,7 @@ name = "migration"
 version = "0.1.0"
 dependencies = [
  "async-std",
+ "sea-orm 1.0.1",
  "sea-orm-migration",
 ]
 
@@ -4148,18 +4149,24 @@ checksum = "ea1fee0cf8528dbe6eda29d5798afc522a63b75e44c5b15721e6e64af9c7cc4b"
 dependencies = [
  "async-stream",
  "async-trait",
+ "bigdecimal",
+ "chrono",
  "futures",
  "log",
  "ouroboros",
+ "rust_decimal",
  "sea-orm-macros 1.0.1",
  "sea-query 0.31.1",
  "sea-query-binder 0.6.0",
  "serde",
+ "serde_json",
  "sqlx",
  "strum 0.26.3",
  "thiserror 1.0.69",
+ "time",
  "tracing",
  "url",
+ "uuid",
 ]
 
 [[package]]
@@ -4247,10 +4254,16 @@ version = "0.31.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b4fd043b8117af233e221f73e3ea8dfbc8e8c3c928017c474296db45c649105c"
 dependencies = [
+ "bigdecimal",
+ "chrono",
  "educe",
  "inherent",
  "ordered-float",
+ "rust_decimal",
  "sea-query-derive",
+ "serde_json",
+ "time",
+ "uuid",
 ]
 
 [[package]]
@@ -4275,8 +4288,14 @@ version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "754965d4aee6145bec25d0898e5c931e6c22859789ce62fd85a42a15ed5a8ce3"
 dependencies = [
+ "bigdecimal",
+ "chrono",
+ "rust_decimal",
  "sea-query 0.31.1",
+ "serde_json",
  "sqlx",
+ "time",
+ "uuid",
 ]
 
 [[package]]
