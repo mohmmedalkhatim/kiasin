@@ -28,7 +28,9 @@
     "@tiptap/starter-kit": "^2.10.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^7.0.2"
+    "react-form-hook": "^0.0.1",
+    "react-router-dom": "^7.0.2",
+    "zustand": "^5.0.2"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.0.0",
