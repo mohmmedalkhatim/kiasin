@@ -19,6 +19,7 @@ sea-orm = { version = "1", features = [
     "runtime-tokio-native-tls",
 ] }
 sea-orm-macros = "1"
+base64 = "0.13"
 thiserror = "1.0"
 sea-query = "0.23"
 tokio = { version = "1", features = ["full"] }

@@ -1,5 +1,9 @@
 pub mod user;
+pub mod db;
+pub mod DB;
+pub mod note;
 pub mod area;
+pub mod media;
 pub mod project;
 pub mod archive;
 pub mod resources;
