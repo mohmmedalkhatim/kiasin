@@ -1,5 +1,6 @@
 mod commands;
-
+mod connetion;
+pub use connetion::database_connection;
 pub use commands::{
     area_controller::{__cmd__area_control, area_control},
     archive_controller::{__cmd__archive_control,archive_control},
