@@ -6,7 +6,7 @@ mod functions;
 
 
 #[command]
-pub async fn area_control( ) -> Result<(), String> {
+pub async fn user_control( ) -> Result<(), String> {
 
   Ok(())
 }
