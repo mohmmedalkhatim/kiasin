@@ -1,16 +1,17 @@
-use migration::entities::area::ActiveModel;
-use sea_orm::Set;
-
-use crate::app::commands::area::objects::*;
+use migration::entities::area::{ActiveModel, Entity};
+use sea_orm::{DatabaseConnection, EntityTrait, Set};
 
 
-fn create_area(area:Area)->Result<(),String>{
-    let new = ActiveModel{
-        title:Set(area.title),
+pub fn create_area(db: &DatabaseConnection) -> Result<(), String> {
+    let new = ActiveModel {
+        title: Set(Some("untitled".to_string())),
         user_id: Set(1),
-        descrption: Set(area.discription),
-        icon: todo!(), 
+        descrption: Set(Some("set a discrption".to_string())),
+        icon: Set(None),
+        cover: Set(None),
         ..Default::default()
     };
+    let _ = Entity::insert(new).exec(db);
+
     Ok(())
 }

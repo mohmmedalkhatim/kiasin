@@ -13,6 +13,9 @@ struct DbConnection {
 
 #[tokio::main]
 async fn main() {
+    let db = DbConnection{
+        db:Mutex::from(database_connection().await),
+    };
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![
@@ -21,9 +24,7 @@ async fn main() {
             app::project_control,
             app::resources_control,
         ])
-        .manage(DbConnection {
-            db: Mutex::from(database_connection().await),
-        })
+        .manage(db)
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

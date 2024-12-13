@@ -1,10 +1,11 @@
 use migration::entities::{project,area,note};
 
-pub struct Area {
+pub struct Project {
     pub title: Option<String>,
     pub discription: Option<String>,
     pub cover: Option<String>,
     pub icon: Option<String>,
+    pub area_id: Option<i32>,
 }
 
 pub struct AreaPage{
@@ -15,6 +16,6 @@ pub struct AreaPage{
 
 pub struct Payload {
    pub command:String,
-   pub item:Area,
+   pub item:Project,
 
 }
