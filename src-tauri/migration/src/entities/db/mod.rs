@@ -6,6 +6,7 @@ pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
     pub data: Vec<u8>,
+    pub user_id:i32,
 }
 
 impl ActiveModelBehavior for ActiveModel {}

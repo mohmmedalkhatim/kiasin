@@ -1,15 +1,21 @@
-use migration::entities::area::ActiveModel;
+use migration::entities::user::ActiveModel;
 use sea_orm::Set;
 
-use crate::app::commands::area::objects::*;
+use crate::app::commands::user::objects::User;
 
 
-fn create_area(area:Area)->Result<(),String>{
+pub fn create_user(user:User)->Result<(),String>{
+    let mut icon = None;
+    if user.icon.is_some() {
+        let file  = base64::decode(user.icon.clone().unwrap()).unwrap();
+        icon = Some(file)
+    }
+
     let new = ActiveModel{
-        title:Set(area.title),
-        user_id: Set(1),
-        descrption: Set(area.discription),
-        icon: todo!(), 
+        name:Set(user.name),
+        email:Set(user.email),
+        password:Set(user.password),
+        icon: Set(icon), 
         ..Default::default()
     };
     Ok(())

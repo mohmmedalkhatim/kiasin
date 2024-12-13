@@ -37,8 +37,16 @@ pub async fn area_control(
             let _ = server.send(list);
             Ok(())
         }
-        _ => {
-          Err("you are trying to access unregistered command".to_string())
+        "delete_one" => {
+            let _= functions::delete_area(payload.id.clone().unwrap(), &db)
+                .await
+                .expect("there a error in the database");
+            let list = functions::find_many(&db)
+                .await
+                .expect("there a error in the database");
+            let _ = server.send(list);
+            Ok(())
         }
+        _ => Err("you are trying to access unregistered command".to_string()),
     }
 }

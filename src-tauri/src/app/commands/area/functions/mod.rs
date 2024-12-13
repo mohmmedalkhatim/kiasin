@@ -5,3 +5,4 @@ mod updata;
 pub use retrive::*;
 pub use create::create_area;
 pub use updata::updata_area;
+pub use delete::delete_area;
