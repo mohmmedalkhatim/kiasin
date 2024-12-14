@@ -1,4 +1,4 @@
-use migration::entities::{note, project};
+use migration::entities::{note, project, user};
 
 pub struct User {
     pub name: String,
@@ -8,12 +8,13 @@ pub struct User {
 }
 
 pub struct UserPage{
-    pub info:User::Model,
+    pub info:user::Model,
     pub projects:Vec<project::Model>,
     pub notes:Vec<note::Model>
 }
 
 pub struct Payload {
    pub command:String,
-   pub item:User,
+   pub item:Option<User>,
+   pub id:Option<i32>
 }
