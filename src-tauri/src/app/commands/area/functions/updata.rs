@@ -3,7 +3,7 @@ use sea_orm::{DatabaseConnection, EntityTrait, Set};
 
 use crate::app::commands::area::objects::*;
 
-pub fn updata_area(db: &DatabaseConnection, area: Area) -> Result<(), String> {
+pub fn updata_area(db: & DatabaseConnection, area: Area) -> Result<(), String> {
     let mut cover = None;
     if area.cover.is_some() {
         cover =

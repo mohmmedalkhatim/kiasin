@@ -12,8 +12,9 @@ mod functions;
 
 
 #[command]
-pub async fn user_control(payload:Payload,server:Channel<Model>,db:State<'_,Mutex<DbConnection>>) -> Result<(), String> {
-  let db = db.lock().await.db.get_mut().to_owned();
+pub async fn user_control(payload:Payload,server:Channel<Model>,data:State<'_,DbConnection>) -> Result<(), String> {
+  let db = data.db.lock().await;
+
   match payload.command.as_str() {
       "create"=>{
         let _ = functions::create_user(payload.item.unwrap(),&db).await.expect("database errr");
