@@ -1,20 +1,11 @@
-use migration::entities::db;
+use migration::entities::{db, project::{self, Entity}};
+use sea_orm::{DatabaseConnection, EntityTrait};
 
 use crate::{app::commands::project::objects::Payload, DbConnection};
 
 
 
 
-fn find_many(payload:Payload,db:std::sync::Mutex<DbConnection>)->Result<(),String> {
-    match  payload.command.as_str(){
-        "create"=>{
-            Ok(())
-        },
-        "many"=>{
-            Ok(())
-        },
-        _=>{
-            Ok(())
-        },
-    }
+pub async fn find_many(db:&DatabaseConnection)->Result<Vec<project::Model>,String> {
+    Ok(Entity::find().all(db).await.unwrap())
 }
