@@ -13,6 +13,7 @@ pub struct Model{
     pub notes:Option<u32>,
     pub cover:Option<Vec<u8>>,
     pub icon:Option<Vec<u8>>,
+    pub in_archive:bool
 
 }
  impl Related<super::note::Entity> for Entity {
