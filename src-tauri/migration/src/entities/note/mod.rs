@@ -24,6 +24,12 @@ impl Related<super::area::Entity> for Entity {
         Relation::Area.def()
     }
 }
+
+impl Related<super::resources::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Area.def()
+    }
+}
 impl Related<super::project::Entity> for Entity {
     fn to() -> RelationDef{
         Relation::Project.def()
