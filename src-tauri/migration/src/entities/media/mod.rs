@@ -8,7 +8,7 @@ pub struct Model {
     pub buffer:Vec<u8>,
     pub note_id:i32,
     pub project_id:i32,
-    pub structure:String,
+    pub media_type:String,
 }
 
 impl Related<super::note::Entity> for ActiveModel {

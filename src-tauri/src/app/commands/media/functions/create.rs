@@ -1,17 +1,15 @@
 use migration::entities::media::{ActiveModel, Entity};
 use sea_orm::{DatabaseConnection, EntityTrait, Set};
 
-use crate::app::commands::note::objects::Note;
+use crate::app::commands::media::objects::Media;
 
 
-pub async fn create_media(note: Note,db:&DatabaseConnection) -> Result<(), String> {
-
+pub async fn create_media(media: Media,db:&DatabaseConnection) -> Result<(), String> {
+    let file =  base64::decode(media.buffer).expect("problem with file format");
     let new = ActiveModel {
-        title: Set(note.title),
-        area_id: Set(note.area_id),
-        project_id: Set(note.project_id),
-        content: Set(note.content),
-        description: Set(note.discription),
+        project_id: Set(media.project_id.unwrap()),
+        buffer: Set(file),
+        media_type: Set(media.structure),
         ..Default::default()
     };
     let note  = Entity::insert(new).exec(db).await;

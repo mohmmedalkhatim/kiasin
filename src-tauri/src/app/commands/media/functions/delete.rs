@@ -1,4 +1,4 @@
-use migration::entities::project::Entity;
+use migration::entities::media::Entity;
 use sea_orm::{DatabaseConnection, EntityTrait};
 
 

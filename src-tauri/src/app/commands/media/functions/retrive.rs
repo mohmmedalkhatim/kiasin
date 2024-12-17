@@ -1,9 +1,9 @@
 use migration::entities::{
-    area, db, note::{self, Entity, Model}, project
+    area,  note::{self, Entity, Model}, project
 };
-use sea_orm::{DatabaseConnection, EntityTrait, QueryFilter, Related};
+use sea_orm::{DatabaseConnection, EntityTrait};
 
-use crate::{app::commands::note::objects::Payload, DbConnection};
+use crate::app::commands::media::objects::Payload;
 
 pub async fn find_many(db: &DatabaseConnection) -> Result<Vec<Model>, String> {
     Ok(Entity::find().all(db).await.unwrap())
