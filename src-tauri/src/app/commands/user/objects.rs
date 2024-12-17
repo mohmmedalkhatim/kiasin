@@ -1,5 +1,8 @@
 use migration::entities::{note, project, user};
+use serde::{Deserialize, Serialize};
 
+
+#[derive(Serialize,Deserialize,Clone,Debug)]
 pub struct User {
     pub name: String,
     pub email: String,
@@ -12,6 +15,8 @@ pub struct UserPage{
     pub projects:Vec<project::Model>,
     pub notes:Vec<note::Model>
 }
+
+#[derive(Serialize,Deserialize,Clone)]
 
 pub struct Payload {
    pub command:String,
