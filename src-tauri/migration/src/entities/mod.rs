@@ -4,7 +4,6 @@ pub mod note;
 pub mod area;
 pub mod media;
 pub mod project;
-pub mod archive;
 pub mod resources;
 use sea_orm::prelude::*;
 use sea_orm_migration::prelude::*;
