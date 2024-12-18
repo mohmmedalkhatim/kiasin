@@ -11,7 +11,8 @@ pub struct Model {
     pub icon: Option<Vec<u8>>,
     pub cover: Option<Vec<u8>>,
     pub structure: Json,
-    pub in_archive: bool
+    pub in_archive: bool,
+    pub created:Date,
 }
 
 impl ActiveModelBehavior for ActiveModel {}

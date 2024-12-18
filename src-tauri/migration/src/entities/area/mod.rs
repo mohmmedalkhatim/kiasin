@@ -13,6 +13,7 @@ pub struct Model{
     pub notes:Option<u32>,
     pub cover:Option<Vec<u8>>,
     pub icon:Option<Vec<u8>>,
+    pub created:Option<Date>,
     pub in_archive:bool
 
 }
