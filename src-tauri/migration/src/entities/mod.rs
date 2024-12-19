@@ -1,6 +1,7 @@
 pub mod user;
 pub mod db;
 pub mod note;
+pub mod todo;
 pub mod area;
 pub mod media;
 pub mod project;

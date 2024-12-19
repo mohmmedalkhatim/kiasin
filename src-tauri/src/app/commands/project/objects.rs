@@ -14,7 +14,7 @@ pub struct Project {
 
 pub struct ProjectPage{
     pub info:project::Model,
-    pub projects:Vec<project::Model>,
+    pub todo:Vec<project::Model>,
     pub notes:Vec<note::Model>
 }
 
