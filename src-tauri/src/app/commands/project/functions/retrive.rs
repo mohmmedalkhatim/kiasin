@@ -7,8 +7,7 @@ pub async fn find_many(db: &DatabaseConnection) -> Result<Vec<project::Model>, S
 }
 pub async fn area_projects(id: u32, db: &DatabaseConnection) -> Result<Vec<project::Model>, DbErr> {
     let list = Entity::find()
-        .filter(
-            Condition::all().add(project::Column::AreaId.eq(id)))
+        .filter(Condition::all().add(project::Column::AreaId.eq(id)))
         .all(db)
         .await?;
     Ok(list)
