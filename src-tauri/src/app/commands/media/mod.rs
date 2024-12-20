@@ -9,41 +9,36 @@ mod functions;
 mod objects;
 
 #[command]
-pub async fn media_control(payload: Payload,data:State<'_,DbConnection>,server:Channel<Model>) -> Result<(), String> {
+pub async fn media_control(
+    payload: Payload,
+    data: State<'_, DbConnection>,
+    server: Channel<Model>,
+) -> Result<(), String> {
     let db = data.db.lock().await;
 
-    let strs: Vec<String> =  Vec::new();
-    let mut hash: HashMap<String, Vec<String>> =  HashMap::new();
+    let strs: Vec<String> = Vec::new();
+    let mut hash: HashMap<String, Vec<String>> = HashMap::new();
 
     match payload.command.as_str() {
-        "create" => {
-          match payload.item {
-              Some(model)=>{
-                let  _ = functions::create_media(model, &*db).await.expect("there is a problem with the database");
-              Ok(())
-              },
-              None=>{
-                Err("you have add a project".to_string())
-              }
-          }
-        }
-        "delete"=>{
-          Ok(())
-        }
-        "updata" => {
-          match payload.item {
-              Some(model)=>{
-                let  _ = functions::updata_note(model, &*db).await.expect("there is a problem with the database");
-              Ok(())
-              },
-              None=>{
-                Err("you have add a project".to_string())
-              }
-          }
-        }
-        _ => {
-          Err("".to_string())
-        }
+        "create" => match payload.item {
+            Some(model) => {
+                let _ = functions::create_media(model, &db)
+                    .await
+                    .expect("there is a problem with the database");
+                Ok(())
+            }
+            None => Err("you have add a project".to_string()),
+        },
+        "delete" => Ok(()),
+        "updata" => match payload.item {
+            Some(model) => {
+                let _ = functions::updata_note(model, &db)
+                    .await
+                    .expect("there is a problem with the database");
+                Ok(())
+            }
+            None => Err("you have add a project".to_string()),
+        },
+        _ => Err("".to_string()),
     }
-
 }

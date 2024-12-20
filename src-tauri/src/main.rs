@@ -2,8 +2,8 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
 use app::database_connection;
-use tokio::sync::Mutex;
 use sea_orm::DatabaseConnection;
+use tokio::sync::Mutex;
 
 mod app;
 
@@ -13,8 +13,8 @@ struct DbConnection {
 
 #[tokio::main]
 async fn main() {
-    let db = DbConnection{
-        db:Mutex::from(database_connection().await),
+    let db = DbConnection {
+        db: Mutex::from(database_connection().await),
     };
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())

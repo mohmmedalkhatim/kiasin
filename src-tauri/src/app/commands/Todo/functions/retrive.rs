@@ -1,9 +1,8 @@
 use migration::entities::{
-    area, db, note::{self, Entity, Model}, project
+    area, db, project,
+    todo::{self, Entity, Model},
 };
 use sea_orm::{DatabaseConnection, EntityTrait, QueryFilter, Related};
-
-use crate::{app::commands::note::objects::Payload, DbConnection};
 
 pub async fn find_many(db: &DatabaseConnection) -> Result<Vec<Model>, String> {
     Ok(Entity::find().all(db).await.unwrap())
@@ -11,9 +10,9 @@ pub async fn find_many(db: &DatabaseConnection) -> Result<Vec<Model>, String> {
 pub async fn find_for_project(
     project_id: i32,
     db: &DatabaseConnection,
-) -> Result<Vec<note::Model>, String> {
+) -> Result<Vec<todo::Model>, String> {
     let list = project::Entity::find_by_id(project_id)
-        .find_with_related(note::Entity)
+        .find_with_related(todo::Entity)
         .all(db)
         .await;
     Ok(list.unwrap()[0].1.clone())
@@ -21,9 +20,9 @@ pub async fn find_for_project(
 pub async fn find_for_area(
     area_id: i32,
     db: &DatabaseConnection,
-) -> Result<Vec<note::Model>, String> {
+) -> Result<Vec<todo::Model>, String> {
     let list = area::Entity::find_by_id(area_id as u32)
-        .find_with_related(note::Entity)
+        .find_with_related(todo::Entity)
         .all(db)
         .await;
     Ok(list.unwrap()[0].1.clone())

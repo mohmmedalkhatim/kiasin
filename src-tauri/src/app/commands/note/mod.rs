@@ -8,41 +8,43 @@ mod functions;
 mod objects;
 
 #[command]
-pub async fn note_control(payload: Payload,data:State<'_,DbConnection>,server:Channel<Note>) -> Result<(), String> {
-    let db = data.db.lock().await;
+pub async fn note_control(
+    payload: Payload,
+    data: State<'_, DbConnection>,
+    server: Channel<Note>,
+) -> Result<(), String> {
+    let db = &data.db.lock().await;
 
-    let strs: Vec<String> =  Vec::new();
-    let mut hash: HashMap<String, Vec<String>> =  HashMap::new();
+    let strs: Vec<String> = Vec::new();
+    let mut hash: HashMap<String, Vec<String>> = HashMap::new();
 
     match payload.command.as_str() {
-        "create" => {
-          match payload.item {
-              Some(model)=>{
-                let  _ = functions::create_note(model, &*db).await.expect("there is a problem with the database");
-              Ok(())
-              },
-              None=>{
-                Err("you have add a project".to_string())
-              }
-          }
-        }
-        "delete"=>{
-          Ok(())
-        }
-        "updata" => {
-          match payload.item {
-              Some(model)=>{
-                let  _ = functions::updata_note(model, &*db).await.expect("there is a problem with the database");
-              Ok(())
-              },
-              None=>{
-                Err("you have add a project".to_string())
-              }
-          }
-        }
-        _ => {
-          Err("".to_string())
-        }
+        "create" => match payload.item {
+            Some(model) => {
+                let _ = functions::create_note(model, db)
+                    .await
+                    .expect("there is a problem with the database");
+                Ok(())
+            }
+            None => Err("you have add a project".to_string()),
+        },
+        "delete" => match payload.id {
+            Some(id) => {
+                let _ = functions::delete_one(db, id);
+                let list = functions::find_many(db);
+                Ok(())
+            }
+            None => Err("you have to add an id".to_string()),
+        },
+        "updata" => match payload.item {
+            Some(model) => {
+                let _ = functions::updata_note(model, db)
+                    .await
+                    .expect("there is a problem with the database");
+                Ok(())
+            }
+            None => Err("you have add a project".to_string()),
+        },
+        _ => Err("".to_string()),
     }
-
 }

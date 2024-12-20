@@ -3,7 +3,7 @@ use sea_orm::{DatabaseConnection, EntityTrait, Set};
 
 use crate::app::commands::project::objects::*;
 
-pub async fn updata_project(project: Project,db:&DatabaseConnection) -> Result<(), String> {
+pub async fn updata_project(project: Project, db: &DatabaseConnection) -> Result<(), String> {
     let mut icon = None;
     let mut cover = None;
     if project.cover.is_some() {}
@@ -26,6 +26,6 @@ pub async fn updata_project(project: Project,db:&DatabaseConnection) -> Result<(
         cover: Set(cover),
         ..Default::default()
     };
-    let _  = Entity::update(new).exec(db);
+    let _ = Entity::update(new).exec(db);
     Ok(())
 }

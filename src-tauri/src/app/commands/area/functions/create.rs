@@ -1,7 +1,6 @@
 use migration::entities::area::{ActiveModel, Entity};
 use sea_orm::{DatabaseConnection, EntityTrait, Set};
 
-
 pub fn create_area(db: &DatabaseConnection) -> Result<(), String> {
     let new = ActiveModel {
         title: Set(Some("untitled".to_string())),

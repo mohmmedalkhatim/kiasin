@@ -1,5 +1,7 @@
 use migration::entities::{
-    area,  note::{self, Entity, Model}, project
+    area,
+    note::{self, Entity, Model},
+    project,
 };
 use sea_orm::{DatabaseConnection, EntityTrait};
 

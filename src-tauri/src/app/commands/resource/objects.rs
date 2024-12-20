@@ -1,4 +1,4 @@
-use migration::entities::{project,area,note};
+use migration::entities::{area, note, project};
 
 pub struct Area {
     pub title: Option<String>,
@@ -7,14 +7,13 @@ pub struct Area {
     pub icon: Option<String>,
 }
 
-pub struct AreaPage{
-    pub info:area::Model,
-    pub projects:Vec<project::Model>,
-    pub notes:Vec<note::Model>
+pub struct AreaPage {
+    pub info: area::Model,
+    pub projects: Vec<project::Model>,
+    pub notes: Vec<note::Model>,
 }
 
 pub struct Payload {
-   pub command:String,
-   pub item:Area,
-
+    pub command: String,
+    pub item: Area,
 }

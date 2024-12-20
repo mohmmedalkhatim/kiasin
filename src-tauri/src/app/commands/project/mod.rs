@@ -25,26 +25,20 @@ pub async fn project_control(
             }
             None => Err("you have add a project".to_string()),
         },
-        "area_projects" => {
-
-            match payload.id{
-                Some(state)=>{
-                    let list =
-                    functions::area_projects(state as u32, &db).await;
-                    let _ = server.send(list.unwrap());
-                    Ok(())
-                }
-                None=>{
-                    Err("you have to add an id to the payload".to_string())
-                }
+        "area_projects" => match payload.id {
+            Some(state) => {
+                let list = functions::area_projects(state as u32, &db).await;
+                let _ = server.send(list.unwrap());
+                Ok(())
             }
-        }
+            None => Err("you have to add an id to the payload".to_string()),
+        },
         "page" => Ok(()),
         "delete" => {
             let _ = functions::delete_one(&db, payload.id.expect(""));
-            
+
             Ok(())
-        },
+        }
         "updata" => match payload.item {
             Some(model) => {
                 let _ = functions::updata_project(model, &*db)

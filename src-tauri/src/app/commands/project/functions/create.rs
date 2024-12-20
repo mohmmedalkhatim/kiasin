@@ -3,7 +3,7 @@ use sea_orm::{DatabaseConnection, EntityTrait, Set};
 
 use crate::app::commands::project::objects::*;
 
-pub async fn create_project(project: Project,db:&DatabaseConnection) -> Result<(), String> {
+pub async fn create_project(project: Project, db: &DatabaseConnection) -> Result<(), String> {
     let mut icon = None;
     let mut cover = None;
     if project.cover.is_some() {}
@@ -24,9 +24,9 @@ pub async fn create_project(project: Project,db:&DatabaseConnection) -> Result<(
         area_id: Set(Some(1)),
         icon: Set(icon),
         cover: Set(cover),
-        structure:Set(serde_json::json!(project.sturcture)),
+        structure: Set(serde_json::json!(project.sturcture)),
         ..Default::default()
     };
-    let _  = Entity::insert(new).exec(db).await;
+    let _ = Entity::insert(new).exec(db).await;
     Ok(())
 }
