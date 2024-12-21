@@ -1,7 +1,7 @@
-use migration::entities::{
+use migration::{entities::{
     area, db, project,
     todo::{self, Entity, Model},
-};
+}, Expr};
 use sea_orm::{DatabaseConnection, EntityTrait, QueryFilter, Related};
 
 pub async fn find_many(db: &DatabaseConnection) -> Result<Vec<Model>, String> {
@@ -11,19 +11,17 @@ pub async fn find_for_project(
     project_id: i32,
     db: &DatabaseConnection,
 ) -> Result<Vec<todo::Model>, String> {
-    let list = project::Entity::find_by_id(project_id)
-        .find_with_related(todo::Entity)
+    let list = Entity::find().filter(Expr::col(todo::Column::ProjectId).eq(project_id))
         .all(db)
         .await;
-    Ok(list.unwrap()[0].1.clone())
+    Ok(list.unwrap())
 }
 pub async fn find_for_area(
     area_id: i32,
     db: &DatabaseConnection,
 ) -> Result<Vec<todo::Model>, String> {
-    let list = area::Entity::find_by_id(area_id as u32)
-        .find_with_related(todo::Entity)
+    let list = Entity::find().filter(Expr::col(todo::Column::AreaId).eq(area_id))
         .all(db)
         .await;
-    Ok(list.unwrap()[0].1.clone())
+    Ok(list.unwrap())
 }
