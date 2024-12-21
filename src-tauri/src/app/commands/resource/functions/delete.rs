@@ -1,4 +1,1 @@
-
-async fn delete() {
-    
-}
+async fn delete() {}

@@ -1,7 +1,6 @@
-use async_std::sync::Mutex;
 use functions::find_one;
 use migration::entities::user::Model;
-use objects::{Payload, User};
+use objects::Payload;
 use tauri::{command, ipc::Channel, State};
 
 use crate::DbConnection;
@@ -41,7 +40,7 @@ pub async fn user_control(
             Ok(())
         }
         "updata" => {
-            let _ = functions::updata_user(payload.item.unwrap());
+            let _ = functions::updata_user(payload.item.unwrap(), &db).await;
             Ok(())
         }
         _ => Err("there an error in the database".to_string()),
