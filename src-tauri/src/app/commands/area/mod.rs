@@ -46,7 +46,7 @@ pub async fn area_control(
         "Page" => match payload.id {
             Some(id) => {
                 let page = functions::find_apage(id, &db).await.unwrap();
-                page_server.send(page);
+                let _ = page_server.send(page);
                 Ok(())
             }
             None => Err("you have to provided an ID".to_string()),
