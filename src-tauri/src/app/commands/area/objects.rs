@@ -1,5 +1,4 @@
 use migration::entities::{area, note, project, todo};
-use sea_query::driver;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

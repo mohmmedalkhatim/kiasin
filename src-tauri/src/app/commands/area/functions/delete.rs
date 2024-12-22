@@ -1,19 +1,12 @@
-use migration::entities::area::{ActiveModel, Entity, Model};
-use sea_orm::{DatabaseConnection, DbErr, EntityTrait, Set};
+use migration::entities::{area::Entity, note, project, todo};
+use sea_orm::{DatabaseConnection, DbErr, EntityTrait, QueryFilter,entity::* };
 
-use super::find_one;
 
 pub async fn delete_area(id: i32, db: &DatabaseConnection) -> Result<(), DbErr> {
-    let model = find_one(id, db).await?;
-    let active = ActiveModel {
-        id: Set(model.id),
-        user_id: Set(model.user_id),
-        title: Set(model.title),
-        descrption: Set(model.descrption),
-        cover: Set(model.cover),
-        icon: Set(model.icon),
-        ..Default::default()
-    };
-    let _ = Entity::delete(active).exec(db).await?;
+
+    let _ = Entity::delete_by_id(id as u32).exec(db).await?;
+    let _ = project::Entity::delete_many().filter(project::Column::AreaId.eq(id));
+    let _ = note::Entity::delete_many().filter(note::Column::AreaId.eq(id));
+    let _ = todo::Entity::delete_many().filter(todo::Column::AreaId.eq(id));
     Ok(())
 }

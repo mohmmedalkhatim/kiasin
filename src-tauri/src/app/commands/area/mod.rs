@@ -1,6 +1,6 @@
 use crate::DbConnection;
 use migration::entities::area::Model;
-use objects::{Area, AreaPage, Payload};
+use objects::{AreaPage, Payload};
 use tauri::{command, ipc::Channel, State};
 mod functions;
 mod objects;
@@ -53,9 +53,21 @@ pub async fn area_control(
         },
         "delete_one" => match payload.id {
             Some(id) => {
-                let list = functions::delete_area(id, &db).await;
-                let _ = server.send(functions::find_many(&db).await.unwrap());
-                Ok(())
+                let done = functions::delete_area(id, &db).await;
+                match done {
+                    Ok(_) => {
+                        let _ = server.send(
+                            functions::find_many(&db)
+                                .await
+                                .expect("there an error with the database"),
+                            );
+                            Ok(())
+
+                        },
+                    Err(_) => {
+                        Err("I didn't found the area".to_string())
+                    },
+                }
             }
             None => Err("you have to provided an ID".to_string()),
         },
