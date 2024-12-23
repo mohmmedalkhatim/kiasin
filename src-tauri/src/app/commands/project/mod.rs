@@ -1,5 +1,5 @@
 use migration::entities::project::Model;
-use objects::Payload;
+use objects::{Payload, ProjectPage};
 use tauri::{command, ipc::Channel, State};
 
 use crate::DbConnection;
@@ -11,6 +11,7 @@ pub async fn project_control(
     payload: Payload,
     data: State<'_, DbConnection>,
     server: Channel<Vec<Model>>,
+    page_server: Channel<ProjectPage>,
 ) -> Result<(), String> {
     let db = data.db.lock().await;
 
@@ -33,7 +34,22 @@ pub async fn project_control(
             }
             None => Err("you have to add an id to the payload".to_string()),
         },
-        "page" => Ok(()),
+        "page" => match payload.id {
+            Some(id) => {
+                let page = functions::project_page(id, &db).await;
+                match page {
+                    Ok(state) => match state {
+                        Some(n) => {
+                            let _ = page_server.send(n);
+                            Ok(())
+                        }
+                        None => Err(format!("there no project with the format {}", id)),
+                    },
+                    Err(_) => Err("there and error with database".to_string()),
+                }
+            }
+            None => Err("you have to add an id".to_string()),
+        },
         "delete" => {
             let _ = functions::delete_one(&db, payload.id.expect(""));
 

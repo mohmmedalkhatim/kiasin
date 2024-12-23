@@ -1,4 +1,4 @@
-use migration::entities::{area, note, project};
+use migration::entities::{note, project, todo};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -11,10 +11,20 @@ pub struct Project {
     pub sturcture: String,
 }
 
+#[derive(Debug,Clone,Serialize,Deserialize)]
 pub struct ProjectPage {
     pub info: project::Model,
-    pub todo: Vec<project::Model>,
+    pub todos: Vec<todo::Model>,
     pub notes: Vec<note::Model>,
+}
+impl ProjectPage {
+    pub fn new(info:project::Model,todos:Vec<todo::Model>,notes:Vec<note::Model>) -> ProjectPage {
+        ProjectPage{
+            info,
+            todos,
+            notes
+        }
+    }
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

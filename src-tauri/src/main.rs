@@ -24,6 +24,7 @@ async fn main() {
             app::resources_control,
             app::user_control,
             app::note_control,
+            app::todo_control,
         ])
         .manage(db)
         .run(tauri::generate_context!())

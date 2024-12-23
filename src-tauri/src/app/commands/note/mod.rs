@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use migration::entities::note::Model;
 use objects::{Note, Payload};
 use tauri::{command, ipc::Channel, State};
 
@@ -11,12 +12,9 @@ mod objects;
 pub async fn note_control(
     payload: Payload,
     data: State<'_, DbConnection>,
-    server: Channel<Note>,
+    server: Channel<Vec<Model>>,
 ) -> Result<(), String> {
     let db = &data.db.lock().await;
-
-    let strs: Vec<String> = Vec::new();
-    let mut hash: HashMap<String, Vec<String>> = HashMap::new();
 
     match payload.command.as_str() {
         "create" => match payload.item {
@@ -44,6 +42,16 @@ pub async fn note_control(
                 Ok(())
             }
             None => Err("you have add a project".to_string()),
+        },
+        "project_notes" => match payload.id {
+            Some(id) => {
+                let list = functions::find_for_project(id, &db).await;
+                if let Ok(list) = list {
+                    let _ = server.send(list);
+                }
+                Ok(())
+            }
+            None => Err("you have to enter the project id".to_string()),
         },
         _ => Err("".to_string()),
     }
