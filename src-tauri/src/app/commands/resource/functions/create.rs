@@ -18,6 +18,7 @@ pub async fn create_area(resource: Resource, db: DatabaseConnection) -> Result<(
         user_id: Set(1),
         descrption: Set(resource.discription),
         icon: Set(icon),
+        cover: Set(cover),
         ..Default::default()
     };
     let _ = Entity::insert(new).exec(&db).await;

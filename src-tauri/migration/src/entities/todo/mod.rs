@@ -16,5 +16,37 @@ pub struct Model {
 }
 impl ActiveModelBehavior for ActiveModel {}
 
-#[derive(DeriveRelation, Clone, Debug, EnumIter)]
-pub enum Relation {}
+impl Related<super::area::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Area.def()
+    }
+}
+
+impl Related<super::resources::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Area.def()
+    }
+}
+impl Related<super::project::Entity> for Entity {
+    fn to() -> RelationDef{
+        Relation::Project.def()
+    }
+}
+
+
+
+#[derive(PartialEq,EnumIter,Debug,Clone,DeriveRelation)]
+pub enum Relation {
+    #[sea_orm(
+        belongs_to="super::area::Entity",
+        from = "super::todo::Column::AreaId",
+        to = "super::area::Column::Id"
+        )]
+    Area,
+    #[sea_orm(
+        belongs_to="super::project::Entity",
+        from = "super::todo::Column::ProjectId",
+        to = "super::project::Column::Id"
+        )]
+    Project,
+}

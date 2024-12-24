@@ -10,7 +10,6 @@ pub struct Model{
     pub user_id:u32,
     pub title:Option<String>,
     pub descrption:Option<String>,
-    pub notes:Option<u32>,
     pub cover:Option<Vec<u8>>,
     pub icon:Option<Vec<u8>>,
     pub created:Option<Date>,
