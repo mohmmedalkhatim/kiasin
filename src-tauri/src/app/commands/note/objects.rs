@@ -1,4 +1,3 @@
-use migration::entities::{area, note, project};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
