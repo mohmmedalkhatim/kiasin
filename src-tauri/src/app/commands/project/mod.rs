@@ -57,10 +57,13 @@ pub async fn project_control(
         }
         "updata" => match payload.item {
             Some(model) => {
-                let _ = functions::updata_project(model, &*db)
+                if let Some(id) = payload.id {
+                    let _ = functions::updata_project(model,id, &*db)
                     .await
                     .expect("there is a problem with the database");
-                Ok(())
+                    return Ok(());
+                }
+                Err("you have to add an id".to_string())
             }
             None => Err("you have add a project".to_string()),
         },
