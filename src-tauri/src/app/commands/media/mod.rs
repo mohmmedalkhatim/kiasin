@@ -16,8 +16,6 @@ pub async fn media_control(
 ) -> Result<(), String> {
     let db = data.db.lock().await;
 
-    let strs: Vec<String> = Vec::new();
-    let mut hash: HashMap<String, Vec<String>> = HashMap::new();
 
     match payload.command.as_str() {
         "create" => match payload.item {

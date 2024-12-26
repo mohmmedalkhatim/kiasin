@@ -20,18 +20,24 @@ pub async fn area_control(
         }
         "updata" => match payload.item {
             Some(area) => {
-                let _ = functions::updata_area(&db, area);
-                let list = functions::find_many(&db).await;
-                let _ = server.send(list.unwrap());
-                Ok(())
+                if let Some(id) = payload.id {
+                    let _ = functions::updata_area(&db, id, area);
+                    let list = functions::find_many(&db).await.unwrap();
+                    let _ = server.send(list);
+                    return Ok(());
+                }
+                Err("you have to add an id".to_string())
             }
             None => Err("you have to provide an area".to_string()),
         },
         "one" => match payload.id {
             Some(id) => {
                 let list = functions::find_one(id, &db).await;
-                let _ = server.send(vec![list.expect("coudn't find the error")]);
-                Ok(())
+                if let Ok(area) = list {
+                    let _ = server.send(vec![area]);
+                    return Ok(());
+                }
+                Err("hello".to_string())
             }
             None => Err("you have to provided an ID".to_string()),
         },
@@ -60,13 +66,10 @@ pub async fn area_control(
                             functions::find_many(&db)
                                 .await
                                 .expect("there an error with the database"),
-                            );
-                            Ok(())
-
-                        },
-                    Err(_) => {
-                        Err("I didn't found the area".to_string())
-                    },
+                        );
+                        Ok(())
+                    }
+                    Err(_) => Err("I didn't found the area".to_string()),
                 }
             }
             None => Err("you have to provided an ID".to_string()),
