@@ -1,5 +1,6 @@
 use std::collections::HashMap;
 
+use migration::entities::todo::Model;
 use objects::{Payload, Todo};
 use tauri::{command, ipc::Channel, State};
 
@@ -11,12 +12,9 @@ mod objects;
 pub async fn todo_control(
     payload: Payload,
     data: State<'_, DbConnection>,
-    server: Channel<Vec<Todo>>,
+    server: Channel<Vec<Model>>,
 ) -> Result<(), String> {
     let db = data.db.lock().await;
-
-    let strs: Vec<String> = Vec::new();
-    let mut hash: HashMap<String, Vec<String>> = HashMap::new();
 
     match payload.command.as_str() {
         "create" => match payload.item {
@@ -28,16 +26,38 @@ pub async fn todo_control(
             }
             None => Err("you have add a project".to_string()),
         },
-        "delete" => Ok(()),
+        "list" => {
+            let list = functions::find_many(&db).await;
+            match list {
+                Ok(state)=>{
+                   let _  = server.send(state);
+                },
+                Err(e)=>{
+                    return Err(e);
+                }
+            }
+            Ok(())
+        },
+        "delete" => match payload.id {
+            Some(id) => {
+                let _ = functions::delete_one(&db, id);
+                Ok(())
+            }
+            None => Err("you have to add an id".to_string()),
+        },
         "updata" => match payload.item {
             Some(model) => {
-                let _ = functions::updata_note(model, &*db)
-                    .await
-                    .expect("there is a problem with the database");
-                Ok(())
+                if let Some(id) = payload.id {
+                    let _ = functions::updata_note(model, id, &*db)
+                        .await
+                        .expect("there is a problem with the database");
+                    return Ok(());
+                }
+
+                Err("you have to add an id".to_string())
             }
             None => Err("you have add a project".to_string()),
         },
-        _ => Err("".to_string()),
+        _ => Err("you try to acess unregieser command \n\tcreate\tupdata\n\tdelete\tlist".to_string()),
     }
 }

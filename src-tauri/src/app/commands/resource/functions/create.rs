@@ -3,7 +3,7 @@ use base64;
 use migration::entities::{resources::ActiveModel, resources::Entity};
 use sea_orm::{DatabaseConnection, EntityTrait, Set};
 
-pub async fn create_area(resource: Resource, db: DatabaseConnection) -> Result<(), String> {
+pub async fn create_area(resource: Resource, db: &DatabaseConnection) -> Result<(), String> {
     let mut icon = None;
     let mut cover = None;
     if let Some(source) = resource.icon {
@@ -21,6 +21,6 @@ pub async fn create_area(resource: Resource, db: DatabaseConnection) -> Result<(
         cover: Set(cover),
         ..Default::default()
     };
-    let _ = Entity::insert(new).exec(&db).await;
+    let _ = Entity::insert(new).exec(db).await;
     Ok(())
 }

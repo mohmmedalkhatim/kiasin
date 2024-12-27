@@ -6,8 +6,8 @@ use crate::entities::*;
 #[sea_orm(table_name= "Resource")]
 pub struct Model{
     #[sea_orm(primary_key)]
-    pub id:u32,
-    pub user_id:u32,
+    pub id:i32,
+    pub user_id:i32,
     pub title:Option<String>,
     pub descrption:Option<String>,
     pub cover:Option<Vec<u8>>,

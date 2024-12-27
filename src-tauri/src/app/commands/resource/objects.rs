@@ -19,7 +19,7 @@ pub struct ResourcePage {
 
 #[derive(Clone,Serialize,Deserialize)]
 pub struct Payload {
+    pub id:Option<i32>,
     pub command: String,
     pub item: Option<Resource>,
-    pub id:Option<Resource>,
 }
