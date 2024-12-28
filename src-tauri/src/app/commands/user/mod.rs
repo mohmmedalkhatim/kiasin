@@ -28,19 +28,39 @@ pub async fn user_control(
             }
             None => Err("you have to add upload the user data".to_string()),
         },
-        "one" => {
-            let model = functions::find_one(payload.id.unwrap(), &db)
-                .await
-                .expect("there an error in the database");
-            let _ = server.send(model.unwrap());
-            Ok(())
+        "one" => match payload.id {
+            Some(id)=>{
+                let mode = functions::find_one(id, &db)
+                .await;
+                if let Ok(model) =mode {
+                let _  =server.send(model.unwrap());
+                 return Ok(());
+                }
+                Err("couldn't find an id".to_string())
+            }
+            None=>{
+                Err("you have to add an id".to_string())
+            }
+
         }
+        
         "delete" => {
-            let _ = functions::delete_user(payload.id.unwrap(), &db)
-                .await
-                .unwrap();
-            Ok(())
-        }
+            match payload.id{
+                Some(id)=>{
+                    let res = functions::delete_user(id, &db)
+                    .await;
+                    if let Ok(respone) = res {
+                        return Ok(respone);
+                    }
+                    Err("s".to_string())
+                },
+                None=>{
+                    Err("went wrong".to_string())
+                }
+
+            }
+    
+        },
         "updata" => match payload.item {
             Some(state) => {
                 let list = functions::updata_user(state, &db).await;
@@ -52,6 +72,6 @@ pub async fn user_control(
             }
             None => Err("you have to add upload the user data".to_string()),
         },
-        _ => Err("there an error in the database".to_string()),
+        _ => Err("there an error in the database".to_string())
     }
 }
