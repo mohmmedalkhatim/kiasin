@@ -1,7 +1,5 @@
-use functions::find_one;
 use migration::entities::user::Model;
 use objects::Payload;
-use sea_orm::sqlx::types::uuid::Error;
 use tauri::{command, ipc::Channel, State};
 
 use crate::DbConnection;

@@ -1,9 +1,9 @@
 use migration::entities::project::{ActiveModel, Entity};
-use sea_orm::{DatabaseConnection, EntityTrait, Set};
+use sea_orm::{DatabaseConnection, DbErr, EntityTrait, Set};
 
 use crate::app::commands::project::objects::*;
 
-pub async fn create_project(project: Project, db: &DatabaseConnection) -> Result<(), String> {
+pub async fn create_project(project: Project, db: &DatabaseConnection) -> Result<(), DbErr> {
     let mut icon = None;
     let mut cover = None;
     if project.cover.is_some() {}
@@ -27,6 +27,6 @@ pub async fn create_project(project: Project, db: &DatabaseConnection) -> Result
         structure: Set(serde_json::json!(project.sturcture)),
         ..Default::default()
     };
-    let _ = Entity::insert(new).exec(db).await;
+    let _ = Entity::insert(new).exec(db).await?;
     Ok(())
 }

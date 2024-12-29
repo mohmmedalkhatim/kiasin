@@ -1,10 +1,10 @@
 use migration::entities::media::Entity;
-use sea_orm::{DatabaseConnection, EntityTrait};
+use sea_orm::{DatabaseConnection, DbErr, EntityTrait};
 
-pub async fn delete_one(db: &DatabaseConnection, id: i32) -> Result<(), String> {
+pub async fn delete_one(db: &DatabaseConnection, id: i32) -> Result<(), DbErr> {
     Entity::delete_by_id(id)
         .exec(db)
-        .await
-        .expect("some thing went worrng in the delete one method");
-    Ok(())
+        .await?;
+
+        Ok(())
 }

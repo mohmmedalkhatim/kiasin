@@ -15,7 +15,7 @@ pub async fn area_control(
     let db = data.db.lock().await;
     match payload.command.as_str() {
         "create" => {
-            let _ = functions::create_area(&*db);
+            let _ = functions::create_area(&db);
             Ok(())
         }
         "updata" => match payload.item {

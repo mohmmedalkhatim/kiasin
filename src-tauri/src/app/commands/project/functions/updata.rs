@@ -1,9 +1,9 @@
 use migration::entities::project::{self,ActiveModel, Entity,};
-use sea_orm::{DatabaseConnection, EntityTrait,entity::*, QueryFilter, Set};
+use sea_orm::{entity::*, DatabaseConnection, DbErr, EntityTrait, QueryFilter, Set};
 
 use crate::app::commands::project::objects::*;
 
-pub async fn updata_project(project_dto: Project,id:i32, db: &DatabaseConnection) -> Result<(), String> {
+pub async fn updata_project(project_dto: Project,id:i32, db: &DatabaseConnection) -> Result<(), DbErr> {
     let mut icon = None;
     let mut cover = None;
     if project_dto.cover.is_some() {}
@@ -26,6 +26,6 @@ pub async fn updata_project(project_dto: Project,id:i32, db: &DatabaseConnection
         cover: Set(cover),
         ..Default::default()
     };
-    let _ = Entity::update(new).filter(project::Column::Id.eq(id)).exec(db);
+    let _ = Entity::update(new).filter(project::Column::Id.eq(id)).exec(db).await?;
     Ok(())
 }
