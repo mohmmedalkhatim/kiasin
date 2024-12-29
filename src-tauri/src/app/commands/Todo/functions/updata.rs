@@ -16,7 +16,7 @@ pub async fn updata_note(note: Todo,id:i32, db: &DatabaseConnection) -> Result<(
         created: Set(time.date_naive()),
         ..Default::default()
     };
-    let note = Entity::update(new).filter(todo::Column::Id.eq(id)).exec(db).await?;
+    let _ = Entity::update(new).filter(todo::Column::Id.eq(id)).exec(db).await?;
     Ok(())
 }
 

@@ -6,11 +6,10 @@ use crate::app::commands::project::objects::*;
 pub async fn create_project(project: Project, db: &DatabaseConnection) -> Result<(), DbErr> {
     let mut icon = None;
     let mut cover = None;
-    if project.cover.is_some() {}
     if project.icon.is_some() {
         icon = Some(
-            (base64::decode(project.icon.clone().unwrap())
-                .expect("there is a problem with the image format")),
+            base64::decode(project.icon.clone().unwrap())
+                .expect("there is a problem with the image format"),
         )
     }
     if project.cover.is_some() {

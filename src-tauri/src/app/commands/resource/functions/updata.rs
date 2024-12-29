@@ -7,11 +7,20 @@ pub async fn updata(
     db: &DatabaseConnection,
     resource: Resource,
 ) -> Result<Vec<Model>, DbErr> {
-    let cover = None;
-    if let Some(s) = resource.cover {}
-    let icon = None;
-    if let Some(s) = resource.icon {}
-
+    let mut icon = None;
+    let mut cover = None;
+    if resource.icon.is_some() {
+        icon = Some(
+            base64::decode(resource.icon.clone().unwrap())
+                .expect("there is a problem with the image format"),
+        )
+    }
+    if resource.cover.is_some() {
+        cover = Some(
+            base64::decode(resource.cover.clone().unwrap())
+                .expect("there is a problem with the image format"),
+        )
+    }
     let active = ActiveModel {
         title: Set(resource.title),
         descrption: Set(resource.discription),

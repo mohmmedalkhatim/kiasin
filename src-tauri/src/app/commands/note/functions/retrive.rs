@@ -1,7 +1,4 @@
-use migration::entities::{
-    area, db,
-    note::{self, Column, Entity, Model},
-};
+use migration::entities::note::{self, Column, Entity, Model};
 use sea_orm::{entity::*, DatabaseConnection, DbErr, EntityTrait, QueryFilter,};
 
 

@@ -65,8 +65,9 @@ pub async fn user_control(
                 if let Some(id) = payload.id {
                     let user = functions::find_one(id, &db).await;
                     let _ = server.send(user.expect("some thing went worng").unwrap());
+                    return Ok(list?);
                 }
-                Ok(())
+                Err("som".to_string())
             }
             None => Err("you have to add upload the user data".to_string()),
         },

@@ -1,5 +1,4 @@
 use crate::DbConnection;
-use functions::delete;
 use migration::entities::resources::Model;
 use tauri::{command, ipc::Channel, State};
 mod functions;

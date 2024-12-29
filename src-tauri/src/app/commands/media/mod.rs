@@ -52,16 +52,7 @@ pub async fn media_control(
                 }
                 Err(e) => Err(e),
             }
-        }
-        "updata" => match payload.item {
-            Some(model) => {
-                let _ = functions::updata_note(model, &db)
-                    .await
-                    .expect("there is a problem with the database");
-                Ok(())
-            }
-            None => Err("you have add a project".to_string()),
         },
-        _ => Err("".to_string()),
+        _ => Err("you are trying to call unregisted command".to_string()),
     }
 }

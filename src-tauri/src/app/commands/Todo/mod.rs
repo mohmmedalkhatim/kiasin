@@ -1,5 +1,3 @@
-use std::collections::HashMap;
-
 use migration::entities::todo::Model;
 use objects::{Payload, Todo};
 use tauri::{command, ipc::Channel, State};

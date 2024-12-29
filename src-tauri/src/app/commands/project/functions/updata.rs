@@ -6,11 +6,10 @@ use crate::app::commands::project::objects::*;
 pub async fn updata_project(project_dto: Project,id:i32, db: &DatabaseConnection) -> Result<(), DbErr> {
     let mut icon = None;
     let mut cover = None;
-    if project_dto.cover.is_some() {}
     if project_dto.icon.is_some() {
         icon = Some(
-            (base64::decode(project_dto.icon.clone().unwrap())
-                .expect("there is a problem with the image format")),
+            base64::decode(project_dto.icon.clone().unwrap())
+                .expect("there is a problem with the image format"),
         )
     }
     if project_dto.cover.is_some() {
