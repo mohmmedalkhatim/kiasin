@@ -1,7 +1,7 @@
 
 function Areas() {
   return (
-    <div>Areas</div>
+    <main>Areas</main>
   )
 }
 

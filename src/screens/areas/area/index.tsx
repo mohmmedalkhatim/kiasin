@@ -1,6 +1,6 @@
 function Area() {
   return (
-    <div>Area</div>
+    <main>Area</main>
   )
 }
 export default Area
