@@ -71,6 +71,7 @@ pub async fn user_control(
             }
             None => Err("you have to add upload the user data".to_string()),
         },
-        _ => Err("there an error in the database".to_string())
+        _ => Err("you are trying to access unrigusterd command \n -create\t -one\t\n -delete\t -updata".to_string())
+
     }
 }

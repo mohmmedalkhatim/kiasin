@@ -68,6 +68,6 @@ pub async fn note_control(
             }
             None => Err("you have to enter the project id".to_string()),
         },
-        _ => Err("".to_string()),
+        _ => Err("you try to acess unregieser command \n -create\t -updata\n -delete\t -one\n -project_notes".to_string())
     }
 }

@@ -21,7 +21,29 @@ pub async fn resources_control(
                 None => {}
             }
             Ok(())
-        }
+        },
+        "updata" => {
+            match payload.item {
+                Some(resource) => {
+                    match payload.id {
+                        Some(id)=>{
+                            let res =  functions::update(id, db, resource).await;
+                            if let Ok(v) = res  {
+                                let res = server.send(v);
+                                return Ok(());
+                            }
+                            Err("".to_string())
+                        },
+                        None=>{
+                            Err("you have to add an id".to_string())
+                        }
+                    }
+                }
+                None => {
+                    Err("you have to a resource feild".to_string())
+                }
+            }
+        },
         "one" => match payload.id {
             Some(id) => {
                 let res = functions::one(id, db).await;

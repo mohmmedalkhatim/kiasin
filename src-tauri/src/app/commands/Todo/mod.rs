@@ -56,6 +56,9 @@ pub async fn todo_control(
             }
             None => Err("you have add a project".to_string()),
         },
-        _ => Err("you try to acess unregieser command \n\tcreate\tupdata\n\tdelete\tlist".to_string()),
+        "area_todos"=>{
+            Ok(())
+        },
+        _ => Err("you try to acess unregieser command \n -create\t -updata\n\t -delete\t -list\n -area_todos".to_string()),
     }
 }

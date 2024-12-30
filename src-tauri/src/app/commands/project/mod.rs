@@ -67,6 +67,6 @@ pub async fn project_control(
             }
             None => Err("you have add a project".to_string()),
         },
-        _ => Err("".to_string()),
+        _ => Err("you try to acess unregieser command \n -create\t -updata\n -delete\t -page\n -area_projects".to_string())
     }
 }

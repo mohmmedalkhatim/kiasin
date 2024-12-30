@@ -2,8 +2,8 @@ use super::super::objects::Resource;
 use migration::entities::resources::{self, ActiveModel, Entity, Model};
 use sea_orm::{DatabaseConnection, DbErr, EntityTrait, QueryFilter, Set,entity::*};
 
-pub async fn updata(
-    id: u32,
+pub async fn update(
+    id: i32,
     db: &DatabaseConnection,
     resource: Resource,
 ) -> Result<Vec<Model>, DbErr> {
