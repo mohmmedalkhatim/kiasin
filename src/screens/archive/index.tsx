@@ -1,6 +1,6 @@
 function Archive() {
   return (
-    <div>Archive</div>
+    <div className=" bg-red-600">Archive</div>
   )
 }
 export default Archive
