@@ -6,22 +6,27 @@
 @layer components {
   header {
     position: fixed;
-    height: 5rem;
+    height: 4rem;
     width: 100vw;
     top: 0;
   }
 
-  nav {
+  aside {
     position: fixed;
     width: 200px;
     height: 100vh;
     top: 5rem;
+    left: 0;
   }
   main {
-    margin-top: 5rem;
+    margin-top: 4rem;
     margin-left: 200px;
-  }
-  .border {
+    padding: 2rem;
+    position: relative;
+    padding-bottom: 0;
+    border-top: 1px solid #2e2e2e90;
+    border-left: 1px solid #2e2e2e90;
+    @apply rounded-t-md border-l border-r border-[#e2e2e2e];
   }
 }
 
