@@ -28,6 +28,9 @@
     border-left: 1px solid #2e2e2e90;
     @apply rounded-t-md border-l border-r border-[#e2e2e2e];
   }
+  .cover{
+    @apply fixed top-0 w-full
+  }
 }
 
 :root {

@@ -68,6 +68,37 @@ pub async fn note_control(
             }
             None => Err("you have to enter the project id".to_string()),
         },
+        "area_notes" => match payload.id {
+            Some(id) => {
+                let list = functions::find_for_area(id, &db).await;
+                if let Ok(list) = list {
+                    let _ = server.send(list);
+                }
+                Ok(())
+            }
+            None => Err("you have to enter the project id".to_string()),
+        },
+        "area_recent"=> match payload.id {
+            Some(id) => {
+                let list = functions::recent_for_area(id, &db).await;
+                if let Ok(list) = list {
+                    let _ = server.send(list);
+                }
+                Ok(())
+            }
+            None => Err("you have to enter the area id".to_string()),
+        },
+        "project_recent"=> match payload.id {
+            Some(id) => {
+                let list = functions::recent_for_project(id, &db).await;
+                if let Ok(list) = list {
+                    let _ = server.send(list);
+                }
+                Ok(())
+            }
+            None => Err("you have to enter the project id".to_string()),
+        },
+
         _ => Err("you try to acess unregieser command \n -create\t -updata\n -delete\t -one\n -project_notes".to_string())
     }
 }
