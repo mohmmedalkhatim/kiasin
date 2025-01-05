@@ -1,0 +1,7 @@
+@tailwind components;
+
+@layer components{
+    .borad_header{
+        @apply w-full main-border p-6;
+    }  
+}

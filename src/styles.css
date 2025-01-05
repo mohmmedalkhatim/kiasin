@@ -4,7 +4,7 @@
 @tailwind variants;
 
 @layer components {
-  header {
+  .app_header {
     position: fixed;
     height: 4rem;
     width: 100vw;
@@ -18,18 +18,20 @@
     top: 5rem;
     left: 0;
   }
+  .m_border {
+    border: 4px solid #e2e2e240;
+  }
+  .m_grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit,minmax(14rem,1fr))
+  }
   main {
-    margin-top: 4rem;
-    margin-left: 200px;
-    padding: 2rem;
-    position: relative;
-    padding-bottom: 0;
     border-top: 1px solid #2e2e2e90;
     border-left: 1px solid #2e2e2e90;
-    @apply rounded-t-md border-l border-r border-[#e2e2e2e];
+    @apply rounded-t-md p-4 ml-[200px] mt-16  pb-0 relative border-l border-r border-[#e2e2e2e];
   }
-  .cover{
-    @apply fixed top-0 w-full
+  .cover {
+    @apply fixed top-0 w-full;
   }
 }
 

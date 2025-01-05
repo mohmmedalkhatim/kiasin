@@ -1,6 +1,6 @@
 function Header() {
   return (
-    <header>
+    <header className="app_header">
         header
     </header>
 )
