@@ -2,6 +2,10 @@
 
 @layer components{
     .borad_header{
-        @apply w-full main-border p-6;
-    }  
+        @apply w-full rounded-md p-6;
+    }
+    .area_grid{
+        scroll-behavior: smooth;
+        @apply col-span-9 overflow-hidden row-span-7 flex flex-wrap;
+    }
 }

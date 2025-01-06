@@ -5,10 +5,7 @@
 
 @layer components {
   .app_header {
-    position: fixed;
-    height: 4rem;
-    width: 100vw;
-    top: 0;
+    @apply flex fixed items-center top-0 h-12 w-screen;
   }
 
   aside {
@@ -19,16 +16,17 @@
     left: 0;
   }
   .m_border {
-    border: 4px solid #e2e2e240;
+    border: 1px solid #e2e2e220;
   }
   .m_grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit,minmax(14rem,1fr))
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(12, 3.5rem);
+    @apply gap-4 grid;
   }
   main {
     border-top: 1px solid #2e2e2e90;
     border-left: 1px solid #2e2e2e90;
-    @apply rounded-t-md p-4 ml-[200px] mt-16  pb-0 relative border-l border-r border-[#e2e2e2e];
+    @apply rounded-t-md p-4 ml-[200px] mt-12  pb-0 relative border-l  border-[#e2e2e2e];
   }
   .cover {
     @apply fixed top-0 w-full;
