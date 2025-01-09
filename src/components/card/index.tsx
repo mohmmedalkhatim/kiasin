@@ -4,10 +4,10 @@
 
 const Card = ({ image }: { image: String }) => {
   return (
-    <div className='relative flex w-80 flex-col rounded-md m_border bg-clip-border mx-[2px] my-[2px1] text-gray-700 shadow-md'>
+    <div className='relative flex lg:w-[19rem] w-full flex-col rounded-md m_border bg-clip-border mx-[2px] my-[2px1] text-gray-700 shadow-md'>
       <div
         style={{ backgroundImage: `url(${image})` }}
-        className='relative mx-2 my-2 h-40 overflow-hidden rounded-md bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40 bg-gradient-to-r m_border'
+        className='relative mx-2 my-2 h-36 overflow-hidden rounded-md bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40 bg-gradient-to-r m_border'
       ></div>
       <div className='p-4 flex items-center justify-between'>
         <h5 className='mb-2 block font-sans text-xl font-semibold leading-snug tracking-normal text-white antialiased'>
