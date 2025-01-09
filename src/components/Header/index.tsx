@@ -1,7 +1,7 @@
 function Header() {
   return (
-    <header className="app_header">
-        <img src="/tauri.svg"  alt="" />
+    <header className="app_header px-8">
+        <img src="/tauri.svg" width={20} alt="" />
     </header>
 )
 }
