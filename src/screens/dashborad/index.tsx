@@ -7,10 +7,10 @@ import Status from './statusbox'
 function Dashborad () {
   let [media, setmedia] = useState()
   let status = [
-    { name: 'projects', count: 1 },
     { name: 'tasks', count: 1 },
-    { name: 'complated project', count: 1 },
-    { name: 'complated Task', count: 1 }
+    { name: 'today', count: 1 },
+    { name: 'this week', count: 1 },
+    { name: 'this mouth', count: 1 }
   ]
   useEffect(() => {}, [])
   return (
@@ -22,13 +22,13 @@ function Dashborad () {
         ))}
       </div>
       <div className='col-span-3 m_border row-span-9'></div>
-      <div className='lg:area_grid'>
-        <Card image={''}></Card>
-        <Card image={''}></Card>
-        <Card image={''}></Card>
-        <Card image={''}></Card>
-        <Card image={''}></Card>
-        <Card image={''}></Card>
+      <div className='area_grid'>
+        <Card name = {"welcome"}image={''}></Card>
+        <Card name = {"welcome"}image={''}></Card>
+        <Card name = {"welcome"}image={''}></Card>
+        <Card name = {"welcome"}image={''}></Card>
+        <Card name = {"welcome"}image={''}></Card>
+        <Card name = {"welcome"}image={''}></Card>
       </div>
     </main>
   )
