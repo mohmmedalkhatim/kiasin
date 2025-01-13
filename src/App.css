@@ -1,3 +1,38 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@tailwind variants;
+
+@layer components {
+  .app_header {
+    @apply flex bg-[#181818] fixed items-center top-0 h-12 w-screen justify-between;
+  }
+
+  aside {
+    position: fixed;
+    height: 100vh;
+    top: 4rem;
+    left: 0;
+    z-index: -1;
+    @apply w-12 md:w-[200px] !important;
+  }
+  .m_border {
+    border: 1px solid #e2e2e220;
+  }
+  .gr {
+    grid-template-columns: repeat(12, minmax(3rem, 1fr));
+  }
+
+  .content {
+    border-top: 1px solid #2e2e2e90;
+    border-left: 1px solid #2e2e2e90;
+    border-right: 1px solid #2e2e2e90;
+    @apply rounded-t-md p-4 md:ml-[200px] md:mr-0 bg-[#181818] mx-[60px] mt-12   pb-0 relative border-l  border-[#e2e2e2e];
+  }
+  .cover {
+    @apply fixed top-0 w-full;
+  }
+}
 .logo.vite:hover {
   filter: drop-shadow(0 0 2em #747bff);
 }
