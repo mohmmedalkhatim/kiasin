@@ -12,8 +12,8 @@ pub struct Model{
     pub descrption:Option<String>,
     pub cover:Option<Vec<u8>>,
     pub icon:Option<Vec<u8>>,
-    pub in_archive:bool
-
+    pub in_archive:bool,
+    pub ui_schema:Json,
 }
  impl Related<super::note::Entity> for Entity {
      fn to() -> RelationDef {

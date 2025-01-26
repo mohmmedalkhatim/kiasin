@@ -1,10 +1,13 @@
 use migration::entities::{area, note, project, todo};
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
+
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Area {
     pub title: Option<String>,
     pub discription: Option<String>,
+    pub ui_schema:Value,
     pub cover: Option<String>,
     pub icon: Option<String>,
 }

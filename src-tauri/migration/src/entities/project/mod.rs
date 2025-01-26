@@ -10,9 +10,9 @@ pub struct Model {
     pub resource_id: Option<i32>,
     pub icon: Option<Vec<u8>>,
     pub cover: Option<Vec<u8>>,
-    pub structure: Json,
     pub in_archive: bool,
     pub created:Date,
+    pub ui_schema:Json,
 }
 
 impl ActiveModelBehavior for ActiveModel {}

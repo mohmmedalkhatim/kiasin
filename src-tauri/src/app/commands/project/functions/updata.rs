@@ -23,6 +23,7 @@ pub async fn updata_project(project_dto: Project,id:i32, db: &DatabaseConnection
         area_id: Set(Some(1)),
         icon: Set(icon),
         cover: Set(cover),
+        ui_schema: Set(project_dto.ui_schema),
         ..Default::default()
     };
     let _ = Entity::update(new).filter(project::Column::Id.eq(id)).exec(db).await?;

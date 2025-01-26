@@ -1,5 +1,5 @@
-mod commands;
-mod util;
+pub mod commands;
+pub mod util;
 pub use commands::{
     area::{__cmd__area_control, area_control},
     note::{__cmd__note_control, note_control},

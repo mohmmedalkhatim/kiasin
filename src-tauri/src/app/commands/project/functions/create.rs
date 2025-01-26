@@ -23,7 +23,7 @@ pub async fn create_project(project: Project, db: &DatabaseConnection) -> Result
         area_id: Set(Some(1)),
         icon: Set(icon),
         cover: Set(cover),
-        structure: Set(serde_json::json!(project.sturcture)),
+        ui_schema:Set(project.ui_schema),
         ..Default::default()
     };
     let _ = Entity::insert(new).exec(db).await?;

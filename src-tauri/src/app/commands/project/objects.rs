@@ -1,5 +1,7 @@
 use migration::entities::{note, project, todo};
 use serde::{Deserialize, Serialize};
+use serde_json::Value;
+
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Project {
@@ -8,7 +10,7 @@ pub struct Project {
     pub cover: Option<String>,
     pub icon: Option<String>,
     pub area_id: Option<i32>,
-    pub sturcture: String,
+    pub ui_schema:Value,
 }
 
 #[derive(Debug,Clone,Serialize,Deserialize)]

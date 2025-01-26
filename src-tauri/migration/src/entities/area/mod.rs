@@ -13,7 +13,8 @@ pub struct Model{
     pub cover:Option<Vec<u8>>,
     pub icon:Option<Vec<u8>>,
     pub created:Option<Date>,
-    pub in_archive:bool
+    pub in_archive:bool,
+    pub ui_schema:Json,
 
 }
  impl Related<super::note::Entity> for Entity {

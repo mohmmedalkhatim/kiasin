@@ -1,5 +1,5 @@
 use migration::entities::area::{ActiveModel, self, Entity};
-use sea_orm::{DatabaseConnection, EntityTrait, QueryFilter,entity::*, Set};
+use sea_orm::{entity::*, sqlx::types::Json, DatabaseConnection, EntityTrait, QueryFilter, Set};
 
 use crate::app::commands::area::objects::*;
 
@@ -21,6 +21,7 @@ pub fn updata_area(db: &DatabaseConnection,id:i32, area: Area) -> Result<(), Str
         descrption: Set(area.discription),
         icon: Set(icon),
         cover: Set(cover),
+        ui_schema:Set(area.ui_schema),
         ..Default::default()
     };
     let _ = Entity::update(new).filter(area::Column::Id.eq(id)).exec(db);
