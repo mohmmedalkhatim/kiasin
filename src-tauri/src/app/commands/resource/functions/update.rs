@@ -26,6 +26,7 @@ pub async fn update(
         descrption: Set(resource.discription),
         cover: Set(cover),
         icon: Set(icon),
+        ui_schema: Set(resource.ui_schema),
         ..Default::default()
     };
     let _ = Entity::update(active).filter(resources::Column::Id.eq(id)).exec(db).await?;
