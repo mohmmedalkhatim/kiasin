@@ -1,0 +1,7 @@
+@tailwind components;
+
+@layer components{
+    .input {
+        @apply bg-[#181818] rounded  leading-none h-8 px-2 w-[18rem] !important;
+    }
+}

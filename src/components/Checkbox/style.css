@@ -23,7 +23,7 @@
     border-radius: 3px;
     transform: scale(1);
     vertical-align: middle;
-    border: 1px solid #9098A9;
+    border: 1px solid #e2e2e250;
     transition: all 0.2s ease;
 }
 
@@ -45,7 +45,7 @@
 
 .checkbox-wrapper-46 .cbx span:first-child:before {
     content: "";
-    width: 100%;
+    width: 150%;
     height: 100%;
     background: #506EEC;
     display: block;

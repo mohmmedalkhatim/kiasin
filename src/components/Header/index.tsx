@@ -1,7 +1,13 @@
+import Input from "../Input"
+
 function Header() {
   return (
-    <header className="app_header px-8">
-        <img src="/tauri.svg" width={20} alt="" />
+    <header className="app_header">
+      <div></div>
+      <Input/>
+      <div></div>
+      <div></div>
+      <div></div>
     </header>
 )
 }
