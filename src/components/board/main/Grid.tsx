@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const GridContainer = styled.div<{ columns: number }>`
   display: grid;
   grid-template-columns: repeat(${(props) => props.columns}, 1fr);
-  grid-auto-rows:10rem;
+  grid-auto-rows:5rem;
   gap: 16px;
   padding: 16px;
 `;
