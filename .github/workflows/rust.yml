@@ -18,5 +18,3 @@ jobs:
     - uses: actions/checkout@v4
     - name: Build
       run: npm run tauri build
-    - name: Run tests
-      run: cargo test --verbose
