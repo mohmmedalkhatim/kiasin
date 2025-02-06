@@ -5,9 +5,13 @@ import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
 import {
   IconBoxAlignRight,
+  IconLayoutDashboard,
+  IconLayoutSidebarLeftCollapse,
+  IconLayoutSidebarLeftCollapseFilled,
   IconLayoutSidebarLeftExpandFilled,
   IconRowInsertBottom,
-  IconRowInsertTop
+  IconRowInsertTop,
+  IconRowRemove
 } from '@tabler/icons-react'
 
 const CardContainer = styled.div<{
@@ -66,15 +70,15 @@ const Card: React.FC<CardProps> = ({
       <div className=' flex absolute'>
         <div>
           <button onClick={() => setRowSpan(prev => Math.max(1, prev - 1))}>
-            <IconRowInsertBottom />
+            <IconRowRemove />
           </button>
           <button onClick={() => setRowSpan(prev => prev + 1)}>
-            <IconRowInsertTop />
+            <IconRowInsertBottom />
           </button>
         </div>
         <div>
           <button onClick={() => setColSpan(prev => Math.max(1, prev - 1))}>
-            <IconBoxAlignRight />
+            <IconLayoutSidebarLeftCollapseFilled />
           </button>
           <button onClick={() => setColSpan(prev => prev + 1)}>
             <IconLayoutSidebarLeftExpandFilled />

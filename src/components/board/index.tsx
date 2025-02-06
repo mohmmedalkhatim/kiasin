@@ -5,6 +5,7 @@ import Grid from './main/Grid';
 import Card from './main/Card'
 
 const Board: React.FC = () => {
+  
   const [items, setItems] = useState(['1', '2', '3', '4']);
   const [activeId, setActiveId] = useState<string | null>(null);
 
