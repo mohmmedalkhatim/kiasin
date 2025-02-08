@@ -61,7 +61,7 @@ const Card: React.FC<CardProps> = ({
       colSpan={colSpan}
       isDragging={isDragging}
       {...attributes}
-      className='relative'
+      className='relative rounded'
     >
       {/* Attach listeners only to the header */}
       <CardHeader {...listeners}>

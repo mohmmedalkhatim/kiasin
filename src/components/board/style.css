@@ -1,23 +1,4 @@
 @tailwind components;
 
 
-@layer components{
-    .board{
-        grid-template-columns: repeat(auto-fill,minmax(6rem,1fr));
-        grid-auto-rows: 4rem;
-        height: fit-content;
-        @apply grow grid p-4 gap-4;
-    }
-    .area_grid{
-        scroll-behavior: smooth;
-        grid-template-columns:repeat(auto-fill,minmax(10rem,1fr));
-        grid-auto-rows: 10rem;
-        @apply   gap-4 col-span-full  md:col-span-8 md:row-span-6 overflow-hidden grid ;
-    }
-    .dashboard_header{
-        @apply flex items-center justify-between col-span-full px-8 rounded-md bg-[#181818];
-    }
-    .droparea{
-        grid-area: empty;
-    }
-}
+@layer components{}
