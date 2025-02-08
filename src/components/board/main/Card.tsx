@@ -88,5 +88,4 @@ const Card: React.FC<CardProps> = ({
     </CardContainer>
   )
 }
-
 export default Card
