@@ -16,16 +16,20 @@ type setType = {
   ): void
   (state: Layout | ((state: Layout) => Layout), replace: true): void
 }
-class Layout {
+export class Layout {
   public list?: Card[]
   public sort_list?: string[]
+  public set?:setType
   constructor (set: setType, schema: string) {
-    this.list = JSON.parse(schema)
-    this.sort_list = this.list?.map(item => item.id)
+    this.list = JSON.parse(schema).items
+    this.set = set
   }
   updatalists (Cardlist: string[]) {
-    this.sort_list = Cardlist
+    let set =  this.set;
+    if(set){
+      set((state)=>(this))
+    }
   }
 }
 
-let useLayout = create<Layout>()
+export let useLayout = create<Layout>()
