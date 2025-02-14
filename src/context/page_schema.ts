@@ -1,6 +1,6 @@
-import { create, createStore } from 'zustand'
+import { create,} from 'zustand'
 interface Card {
-  id: string
+  id: number
   props: any
   content: string
   width: number
@@ -22,12 +22,16 @@ export class Layout {
   public set?:setType
   constructor (set: setType, schema: string) {
     this.list = JSON.parse(schema).items
+    this.sort_list = this.list?.map(item=>item.id.toString())
     this.set = set
   }
-  updatalists (Cardlist: string[]) {
+  updatalists (sort_list: string[]) {
     let set =  this.set;
     if(set){
-      set((state)=>(this))
+      set((state)=>{
+        state.sort_list = sort_list
+        return state
+      })
     }
   }
 }

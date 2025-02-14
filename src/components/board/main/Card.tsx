@@ -59,7 +59,6 @@ const Card: React.FC<CardProps> = ({
       {...attributes}
       className='relative rounded'
     >
-      {/* Attach listeners only to the header */}
       <CardHeader {...listeners}>
         <h3>Card {id}</h3>
       </CardHeader>

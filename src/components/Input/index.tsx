@@ -1,4 +1,3 @@
-import { forwardRef } from 'react'
 import './style.css'
 
 type Inputprops<V, P> = {
@@ -27,4 +26,4 @@ function Input<V extends string | number | readonly string[] | undefined, P> ({
     />
   )
 }
-export default forwardRef(Input)
+export default Input

@@ -18,9 +18,13 @@ import Card from './main/Card'
 import { Layout, useLayout } from '../../context/page_schema'
 
 const Board: React.FC = () => {
-  const la = useLayout(set => new Layout(set, '{ "items":[{},{},{},{}] }'))
+  const la = useLayout(
+    set => new Layout(set,`{ "items": [{ "id": 1 }, { "id": 2 }, { "id": 3 }, { "id": 4 }] }`)
+  )
 
-  const [items, setItems] = useState(la.getState().sort_list)
+  const [items, setItems] = useState<string[] | undefined>(
+    la.getState().sort_list
+  )
   const [activeId, setActiveId] = useState<string | null>(null)
 
   // Configure sensors for drag-and-drop
@@ -37,7 +41,7 @@ const Board: React.FC = () => {
     const { active, over } = event
     if (active.id !== over.id) {
       setItems(items => {
-        if(items){
+        if (items) {
           const oldIndex = items.indexOf(active.id)
           const newIndex = items.indexOf(over.id)
           return arrayMove(items, oldIndex, newIndex)
@@ -46,8 +50,7 @@ const Board: React.FC = () => {
     }
     setActiveId(null)
   }
-
-  if(items){
+  if (items) {
     return (
       <DndContext
         sensors={sensors}
@@ -65,6 +68,8 @@ const Board: React.FC = () => {
         <DragOverlay>{activeId ? <Card id={activeId} /> : null}</DragOverlay>
       </DndContext>
     )
+  } else {
+    return <div>there is an error</div>
   }
 }
 
