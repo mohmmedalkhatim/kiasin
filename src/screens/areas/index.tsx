@@ -3,7 +3,7 @@ import Card from "../../components/Card"
 function Areas() {
   return (
     <main className="content">
-      <div className="area_grid">
+      <div className="boxs_grid">
         <Card image={""} name={"whll"}/>
         <Card image={""} name={"whll"}/>
         <Card image={""} name={"whll"}/>
