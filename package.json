@@ -15,6 +15,14 @@
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
     "@excalidraw/excalidraw": "^0.17.6",
+    "@lexical/code": "^0.24.0",
+    "@lexical/headless": "^0.24.0",
+    "@lexical/link": "^0.24.0",
+    "@lexical/list": "^0.24.0",
+    "@lexical/mark": "^0.24.0",
+    "@lexical/react": "^0.24.0",
+    "@lexical/rich-text": "^0.24.0",
+    "@lexical/table": "^0.24.0",
     "@tabler/icons-react": "^3.29.0",
     "@tauri-apps/api": "^2.0.0",
     "@tauri-apps/plugin-shell": "^2.0.1",
@@ -38,14 +46,15 @@
     "react-router-dom": "^7.0.2",
     "styled-components": "^6.1.14",
     "tailwindcss": "^3.4.17",
-    "zustand": "^5.0.2"
+    "zustand": "^5.0.3"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.0.0",
-    "@types/react": "^18.2.15",
-    "@types/react-dom": "^18.2.7",
+    "@types/node": "^22.13.4",
+    "@types/react": "^18.3.18",
+    "@types/react-dom": "^18.3.5",
     "@vitejs/plugin-react": "^4.2.1",
-    "typescript": "^5.0.2",
+    "typescript": "^5.7.3",
     "vite": "^5.0.0"
   }
 }

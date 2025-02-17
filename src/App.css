@@ -8,7 +8,7 @@
     @apply flex bg-[#181818] fixed items-center top-0 h-12 w-screen justify-between;
   }
   input{
-    @apply rounded border
+    @apply rounded border !important
   }
   aside {
     position: fixed;

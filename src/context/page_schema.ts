@@ -1,4 +1,5 @@
-import { create,} from 'zustand'
+import { arrayMove } from '@dnd-kit/sortable'
+import { create } from 'zustand'
 interface Card {
   id: number
   props: any
@@ -6,34 +7,46 @@ interface Card {
   width: number
   height: number
 }
-type setType = {
-  (
-    partial:
-      | Layout
-      | Partial<Layout>
-      | ((state: Layout) => Layout | Partial<Layout>),
-    replace?: false
-  ): void
-  (state: Layout | ((state: Layout) => Layout), replace: true): void
-}
-export class Layout {
-  public list?: Card[]
-  public sort_list?: string[]
-  public set?:setType
-  constructor (set: setType, schema: string) {
-    this.list = JSON.parse(schema).items
-    this.sort_list = this.list?.map(item=>item.id.toString())
-    this.set = set
-  }
-  updatalists (sort_list: string[]) {
-    let set =  this.set;
-    if(set){
-      set((state)=>{
-        state.sort_list = sort_list
-        return state
-      })
-    }
-  }
+export interface Layout {
+  list?: Card[]
+  sort_list?: string[]
+  tauri: String
+  init: (str: string) => void
+  updateCard: (tauri: string, card: Card) => void
+  move: (tauri: string, active_id: Card, over_id: Card) => void
 }
 
-export let useLayout = create<Layout>()
+export let useLayout = create<Layout>(set => ({
+  list: [],
+  sort_list: [],
+  tauri: '',
+  init: (tauri: string) => {
+    let list: Card[] = JSON.parse(tauri).items
+    let sort_list = list.map(item => item.id.toString())
+    set({ list, sort_list, tauri })
+  },
+  updateCard: (tauri, card) => {
+    let list: Card[] = JSON.parse(tauri).items
+    let newlist = list.map(item => {
+      if (item.id == card.id) {
+        item = card
+      }
+      return item
+    })
+    set({ list: newlist })
+  },
+  move: (tauri, active, over) => {
+    let list: Card[] = JSON.parse(tauri).items
+    if (active !== over) {
+      if (list) {
+        const oldIndex = list.indexOf(active)
+        const newIndex = list.indexOf(over)
+        list = arrayMove(list, oldIndex, newIndex)
+      }
+    }
+    let json = { item: list }
+    tauri = JSON.stringify(json)
+    let sort_list = list.map(item => item.id.toString())
+    set({ list, sort_list, tauri })
+  }
+}))

@@ -18,12 +18,12 @@ import Card from './main/Card'
 import { Layout, useLayout } from '../../context/page_schema'
 
 const Board: React.FC = () => {
-  const la = useLayout(
-    set => new Layout(set,`{ "items": [{ "id": 1 }, { "id": 2 }, { "id": 3 }, { "id": 4 }] }`)
-  )
+  let { list, sort_list,init } = useLayout()
+
+
 
   const [items, setItems] = useState<string[] | undefined>(
-    la.getState().sort_list
+    sort_list
   )
   const [activeId, setActiveId] = useState<string | null>(null)
 
@@ -38,7 +38,7 @@ const Board: React.FC = () => {
   }
 
   const handleDragEnd = (event: any) => {
-    const { active, over } = event
+    const { active, over } = event;
     if (active.id !== over.id) {
       setItems(items => {
         if (items) {
