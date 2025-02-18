@@ -8,7 +8,7 @@
     @apply flex bg-[#181818] fixed items-center top-0 h-12 w-screen justify-between;
   }
   input{
-    @apply rounded border !important
+    @apply rounded m_border px-[0.5rem] py-[0.25rem] bg-[#181818] text-[#e2e2e280] !important
   }
   aside {
     position: fixed;
@@ -20,6 +20,12 @@
   }
   .m_border {
     border: 1px solid #e2e2e220;
+  }
+  .dragging {
+    transition: none !important;
+  }
+  [role="drag-overlay"] {
+    z-index: 1000;
   }
 
   .content {
