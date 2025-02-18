@@ -1,5 +1,5 @@
 
-const Card = ({ image, name }: { image: String; name: String }) => {
+const Card = ({ image, id }: { image: String; id: String }) => {
   return (
     <div className='relative flex flex-col rounded-md m_border bg-clip-border text-gray-700 shadow-md'>
       <div
@@ -8,7 +8,7 @@ const Card = ({ image, name }: { image: String; name: String }) => {
       ></div>
       <div className='px-4 py-3 flex items-center justify-between'>
         <h5 className='block text-md font-sans font-semibold leading-snug tracking-normal text-white antialiased'>
-          {name}
+          {id}
         </h5>
       </div>
     </div>

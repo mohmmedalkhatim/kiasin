@@ -1,15 +1,14 @@
-import { Element_postion } from '../../../../util/board/custom_grid'
 import Card from '../../../Card'
 
-function Areas ({label}:{label:Element_postion}) {
+function Areas () {
   return (
     <div className='area_grid'>
-      <Card name={'welcome'} image={''} />
-      <Card name={'welcome'} image={''} />
-      <Card name={'welcome'} image={''} />
-      <Card name={'welcome'} image={''} />
-      <Card name={'welcome'} image={''} />
-      <Card name={'welcome'} image={''} />
+      <Card id={'welcome'} image={''} />
+      <Card id={'welcome'} image={''} />
+      <Card id={'welcome'} image={''} />
+      <Card id={'welcome'} image={''} />
+      <Card id={'welcome'} image={''} />
+      <Card id={'welcome'} image={''} />
     </div>
   )
 }

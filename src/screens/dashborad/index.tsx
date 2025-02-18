@@ -1,9 +1,7 @@
-import { useEffect } from 'react'
 import './style.css'
 import Borad from '../../components/board'
 
-function Dashborad () {
-  useEffect(() => {}, [])
+function Dashborad() {
 
   return (
     <main className='content flex flex-col'>

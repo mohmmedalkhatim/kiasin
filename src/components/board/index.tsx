@@ -5,7 +5,8 @@ import {
   PointerSensor,
   useSensor,
   useSensors,
-  DragOverlay
+  DragOverlay,
+  DragEndEvent
 } from '@dnd-kit/core'
 import {
   arrayMove,
@@ -18,13 +19,8 @@ import Card from './main/Card'
 import { Layout, useLayout } from '../../context/page_schema'
 
 const Board: React.FC = () => {
-  let { list, sort_list,init } = useLayout()
+  let {list, sort_list, updateSort } = useLayout()
 
-
-
-  const [items, setItems] = useState<string[] | undefined>(
-    sort_list
-  )
   const [activeId, setActiveId] = useState<string | null>(null)
 
   // Configure sensors for drag-and-drop
@@ -39,18 +35,10 @@ const Board: React.FC = () => {
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
-    if (active.id !== over.id) {
-      setItems(items => {
-        if (items) {
-          const oldIndex = items.indexOf(active.id)
-          const newIndex = items.indexOf(over.id)
-          return arrayMove(items, oldIndex, newIndex)
-        }
-      })
-    }
+    updateSort(sort_list,active,over,list)
     setActiveId(null)
   }
-  if (items) {
+  if (sort_list) {
     return (
       <DndContext
         sensors={sensors}
@@ -58,9 +46,9 @@ const Board: React.FC = () => {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <SortableContext items={items} strategy={rectSortingStrategy}>
+        <SortableContext items={sort_list} strategy={rectSortingStrategy}>
           <Grid columns={8}>
-            {items.map(id => (
+            {sort_list.map(id => (
               <Card key={id} id={id} />
             ))}
           </Grid>

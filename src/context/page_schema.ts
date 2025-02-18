@@ -4,16 +4,21 @@ interface Card {
   id: number
   props: any
   content: string
-  width: number
-  height: number
+  rows: number
+  cols: number
 }
 export interface Layout {
   list?: Card[]
   sort_list?: string[]
-  tauri: String
+  tauri: string
   init: (str: string) => void
   updateCard: (tauri: string, card: Card) => void
-  move: (tauri: string, active_id: Card, over_id: Card) => void
+  updateSort: (
+    sort_list: string[] | undefined,
+    active: any,
+    over: any,
+    list: Card[] | undefined
+  ) => void
 }
 
 export let useLayout = create<Layout>(set => ({
@@ -22,6 +27,7 @@ export let useLayout = create<Layout>(set => ({
   tauri: '',
   init: (tauri: string) => {
     let list: Card[] = JSON.parse(tauri).items
+    console.log('run init')
     let sort_list = list.map(item => item.id.toString())
     set({ list, sort_list, tauri })
   },
@@ -33,20 +39,18 @@ export let useLayout = create<Layout>(set => ({
       }
       return item
     })
-    set({ list: newlist })
+    tauri = JSON.stringify({ items: newlist })
+    set({ list: newlist, tauri })
   },
-  move: (tauri, active, over) => {
-    let list: Card[] = JSON.parse(tauri).items
-    if (active !== over) {
-      if (list) {
-        const oldIndex = list.indexOf(active)
-        const newIndex = list.indexOf(over)
-        list = arrayMove(list, oldIndex, newIndex)
-      }
+  updateSort: (sort_list, active, over, newlist) => {
+    if (sort_list && newlist && active.id !== over.id) {
+      const oldIndex = sort_list.indexOf(active.id)
+      const newIndex = sort_list.indexOf(over.id)
+      let list = arrayMove(newlist, oldIndex, newIndex)
+      set({
+        list,
+        sort_list: list.map(item => item.id.toString())
+      })
     }
-    let json = { item: list }
-    tauri = JSON.stringify(json)
-    let sort_list = list.map(item => item.id.toString())
-    set({ list, sort_list, tauri })
   }
 }))
