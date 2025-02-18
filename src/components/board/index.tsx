@@ -6,20 +6,20 @@ import {
   useSensor,
   useSensors,
   DragOverlay,
-  DragEndEvent
 } from '@dnd-kit/core'
 import {
-  arrayMove,
   SortableContext,
-  rectSortingStrategy
+  horizontalListSortingStrategy,
+  SortingStrategy 
 } from '@dnd-kit/sortable'
 import { useState } from 'react'
 import Grid from './main/Grid'
 import Card from './main/Card'
-import { Layout, useLayout } from '../../context/page_schema'
+import { useLayout } from '../../context/page_schema'
+
 
 const Board: React.FC = () => {
-  let {list, sort_list, updateSort } = useLayout()
+  let { list, sort_list, updateSort } = useLayout()
 
   const [activeId, setActiveId] = useState<string | null>(null)
 
@@ -35,9 +35,10 @@ const Board: React.FC = () => {
 
   const handleDragEnd = (event: any) => {
     const { active, over } = event;
-    updateSort(sort_list,active,over,list)
+    updateSort(sort_list, active, over, list)
     setActiveId(null)
   }
+
   if (sort_list) {
     return (
       <DndContext
@@ -46,14 +47,14 @@ const Board: React.FC = () => {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <SortableContext items={sort_list} strategy={rectSortingStrategy}>
+        <SortableContext  items={sort_list} strategy={horizontalListSortingStrategy}>
           <Grid columns={8}>
             {sort_list.map(id => (
-              <Card key={id} id={id} />
+              <Card cla={activeId === id ? 'dragging' : ''}  key={id} id={id} />
             ))}
           </Grid>
         </SortableContext>
-        <DragOverlay>{activeId ? <Card id={activeId} /> : null}</DragOverlay>
+        <DragOverlay>{activeId ? <Card cla='' id={activeId} /> : null}</DragOverlay>
       </DndContext>
     )
   } else {
