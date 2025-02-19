@@ -1,6 +1,7 @@
+use async_std::sync::Mutex;
 use migration::entities::media::Model;
-use objects::Payload;
-use tauri::{command, ipc::Channel, State};
+use objects::{Media, Payload};
+use tauri::{command, ipc::Channel, AppHandle, Emitter, Manager, State};
 
 use crate::DbConnection;
 mod functions;
@@ -9,11 +10,11 @@ mod objects;
 #[command]
 pub async fn media_control(
     payload: Payload,
-    data: State<'_, DbConnection>,
-    server: Channel<Vec<Model>>,
+    data: State<'_, Mutex<DbConnection>>,
+    app:AppHandle
 ) -> Result<(), String> {
-    let db = data.db.lock().await;
-
+    let db = data.lock().await.db.clone();
+    let server = app.app_handle();
     match payload.command.as_str() {
         "create" => match payload.item {
             Some(model) => {
@@ -31,7 +32,7 @@ pub async fn media_control(
                     let list = functions::find_many(&db).await;
                     match list {
                         Ok(v) => {
-                            let _ = server.send(v);
+                            let _ = server.emit("media",v);
                         }
                         Err(e) => {
                             return Err(e);
@@ -47,7 +48,7 @@ pub async fn media_control(
             let list = functions::find_many(&db).await;
             match list {
                 Ok(v) => {
-                    let _ = server.send(v);
+                    let _ = server.emit("media",v);
                     Ok(())
                 }
                 Err(e) => Err(e),

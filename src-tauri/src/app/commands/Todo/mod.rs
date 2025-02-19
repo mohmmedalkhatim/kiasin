@@ -1,7 +1,6 @@
-use migration::entities::todo::Model;
+use async_std::sync::Mutex;
 use objects::{Payload, Todo};
-use tauri::{command, ipc::Channel, State};
-
+use tauri::{command, AppHandle, Emitter, Manager, State};
 use crate::DbConnection;
 mod functions;
 mod objects;
@@ -9,15 +8,15 @@ mod objects;
 #[command]
 pub async fn todo_control(
     payload: Payload,
-    data: State<'_, DbConnection>,
-    server: Channel<Vec<Model>>,
+    data: State<'_, Mutex<DbConnection>>,
+    app:AppHandle
 ) -> Result<(), String> {
-    let db = data.db.lock().await;
-
+    let db = data.lock().await.db.clone();
+    let server = app.app_handle();
     match payload.command.as_str() {
         "create" => match payload.item {
             Some(model) => {
-                let _ = functions::create_note(model, &*db)
+                let _ = functions::create_note(model, &db)
                     .await
                     .expect("there is a problem with the database");
                 Ok(())
@@ -28,7 +27,7 @@ pub async fn todo_control(
             let list = functions::find_many(&db).await;
             match list {
                 Ok(state)=>{
-                   let _  = server.send(state);
+                   let _  = server.emit("todos",state);
                 },
                 Err(e)=>{
                     return Err(e);
@@ -46,7 +45,7 @@ pub async fn todo_control(
         "updata" => match payload.item {
             Some(model) => {
                 if let Some(id) = payload.id {
-                    let _ = functions::updata_note(model, id, &*db)
+                    let _ = functions::updata_note(model, id, &db)
                         .await
                         .expect("there is a problem with the database");
                     return Ok(());

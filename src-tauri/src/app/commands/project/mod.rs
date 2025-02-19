@@ -1,6 +1,7 @@
 use migration::entities::project::Model;
 use objects::{Payload, ProjectPage};
-use tauri::{command, ipc::Channel, State};
+use tauri::{command, ipc::Channel, AppHandle, Emitter, Manager, State};
+use tokio::sync::Mutex;
 
 use crate::DbConnection;
 mod functions;
@@ -9,19 +10,18 @@ mod objects;
 #[command]
 pub async fn project_control(
     payload: Payload,
-    data: State<'_, DbConnection>,
-    server: Channel<Vec<Model>>,
-    page_server: Channel<ProjectPage>,
+    data: State<'_, Mutex<DbConnection>>,
+    app:AppHandle,
 ) -> Result<(), String> {
-    let db = data.db.lock().await;
-
+    let db = data.lock().await.db.clone();
+    let server = app.app_handle();
     match payload.command.as_str() {
         "create" => match payload.item {
             Some(model) => {
-                let _ = functions::create_project(model, &*db)
+                let _ = functions::create_project(model, &db)
                     .await
                     .expect("there is a problem with the database");
-                let _ = server.send(functions::find_many(&db).await.unwrap());
+                let _ = server.emit("projects",functions::find_many(&db).await.unwrap());
                 Ok(())
             }
             None => Err("you have add a project".to_string()),
@@ -29,7 +29,7 @@ pub async fn project_control(
         "area_projects" => match payload.id {
             Some(state) => {
                 let list = functions::area_projects(state as u32, &db).await;
-                let _ = server.send(list.unwrap());
+                let _ = server.emit("projects",list.unwrap());
                 Ok(())
             }
             None => Err("you have to add an id to the payload".to_string()),
@@ -40,7 +40,7 @@ pub async fn project_control(
                 match page {
                     Ok(state) => match state {
                         Some(n) => {
-                            let _ = page_server.send(n);
+                            server.emit("project",n);
                             Ok(())
                         }
                         None => Err(format!("there no project with the format {}", id)),
@@ -58,7 +58,7 @@ pub async fn project_control(
         "updata" => match payload.item {
             Some(model) => {
                 if let Some(id) = payload.id {
-                    let _ = functions::updata_project(model,id, &*db)
+                    let _ = functions::updata_project(model,id, &db)
                     .await
                     .expect("there is a problem with the database");
                     return Ok(());

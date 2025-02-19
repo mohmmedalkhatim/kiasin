@@ -1,21 +1,43 @@
+use objects::{Area, AreaPage, Payload};
+use serde_json::json;
+use tauri::{command, ipc::Channel, AppHandle, Emitter, Manager, State};
+use tokio::sync::Mutex;
 use crate::DbConnection;
-use migration::entities::area::Model;
-use objects::{AreaPage, Payload};
-use tauri::{command, ipc::Channel, State};
 mod functions;
 mod objects;
 
 #[command]
 pub async fn area_control(
+    app: AppHandle,
+    data: State<'_, Mutex<DbConnection>>,
     payload: Payload,
-    data: State<'_, DbConnection>,
-    server: Channel<Vec<Model>>,
     page_server: Channel<AreaPage>,
 ) -> Result<(), String> {
-    let db = data.db.lock().await;
+    let server = app.app_handle();
+    let db = data.lock().await.db.clone();
     match payload.command.as_str() {
+        "dashbord" => {
+            let _ = server.emit(
+                "dashboard",
+                Area {
+                    title:Some("dashboard".to_string()),
+                    ui_schema: json!({
+                        "item":[
+                            {"id":1,"cols":6,"rows":4},
+                            {"id":2,"cols":6,"rows":4},
+                            {"id":3,"cols":6,"rows":4},
+                            {"id":4,"cols":6,"rows":4},
+                            {"id":5,"cols":6,"rows":4},
+                        ]
+                    }),
+                    ..Default::default()
+                },
+            );
+            Ok(())
+        }
         "create" => {
             let _ = functions::create_area(&db);
+
             Ok(())
         }
         "updata" => match payload.item {
@@ -23,7 +45,7 @@ pub async fn area_control(
                 if let Some(id) = payload.id {
                     let _ = functions::updata_area(&db, id, area);
                     let list = functions::find_many(&db).await.unwrap();
-                    let _ = server.send(list);
+                    let _ = server.emit("areas", list);
                     return Ok(());
                 }
                 Err("you have to add an id".to_string())
@@ -34,7 +56,7 @@ pub async fn area_control(
             Some(id) => {
                 let list = functions::find_one(id, &db).await;
                 if let Ok(area) = list {
-                    let _ = server.send(vec![area]);
+                    let _ = server.emit("areas", vec![area]);
                     return Ok(());
                 }
                 Err("hello".to_string())
@@ -46,7 +68,7 @@ pub async fn area_control(
             let list = functions::find_many(&db)
                 .await
                 .expect("there a error in the database");
-            let _ = server.send(list);
+            let _ = server.emit("areas", list);
             Ok(())
         }
         "Page" => match payload.id {
@@ -62,7 +84,8 @@ pub async fn area_control(
                 let done = functions::delete_area(id, &db).await;
                 match done {
                     Ok(_) => {
-                        let _ = server.send(
+                        let _ = server.emit(
+                            "areas",
                             functions::find_many(&db)
                                 .await
                                 .expect("there an error with the database"),

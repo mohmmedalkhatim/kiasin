@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 
-#[derive(Debug, Clone, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize,Default, Deserialize)]
 pub struct Area {
     pub title: Option<String>,
     pub discription: Option<String>,

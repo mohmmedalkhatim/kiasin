@@ -1,24 +1,24 @@
-use migration::entities::note::Model;
-use objects::Payload;
-use tauri::{command, ipc::Channel, State};
 use crate::DbConnection;
+use async_std::sync::Mutex;
+use objects::Payload;
+use tauri::{command, AppHandle, Emitter, Manager, State};
 mod functions;
 mod objects;
 
 #[command]
 pub async fn note_control(
     payload: Payload,
-    data: State<'_, DbConnection>,
-    server: Channel<Vec<Model>>,
+    data: State<'_, Mutex<DbConnection>>,
+    app:AppHandle
 ) -> Result<(), String> {
-    let db = &data.db.lock().await;
-
+    let db = &data.lock().await.db.clone();
+    let server = app.app_handle();
     match payload.command.as_str() {
         "one" => match payload.id {
             Some(id) => {
                 let model = functions::find_one(id, db).await;
                 if let Ok(model) = model {
-                    let _ = server.send(vec![model]);
+                    let _ = server.emit("medias",vec![model]);
                     return Ok(());
                 }
                 Err("couldn't find the project".to_string())
@@ -39,7 +39,7 @@ pub async fn note_control(
                 let _ = functions::delete_one(db, id);
                 let list = functions::find_many(db).await;
                 if let Ok(v) = list {
-                    let _ = server.send(v);
+                    let _ = server.emit("medias",v);
                     return Ok(());
                 }
                 Ok(())
@@ -62,7 +62,7 @@ pub async fn note_control(
             Some(id) => {
                 let list = functions::find_for_project(id, &db).await;
                 if let Ok(list) = list {
-                    let _ = server.send(list);
+                    let _ = server.emit("medias",list);
                 }
                 Ok(())
             }
@@ -72,7 +72,7 @@ pub async fn note_control(
             Some(id) => {
                 let list = functions::find_for_area(id, &db).await;
                 if let Ok(list) = list {
-                    let _ = server.send(list);
+                    let _ = server.emit("medias",list);
                 }
                 Ok(())
             }
@@ -82,7 +82,7 @@ pub async fn note_control(
             Some(id) => {
                 let list = functions::recent_for_area(id, &db).await;
                 if let Ok(list) = list {
-                    let _ = server.send(list);
+                    let _ = server.emit("medias",list);
                 }
                 Ok(())
             }
@@ -92,7 +92,7 @@ pub async fn note_control(
             Some(id) => {
                 let list = functions::recent_for_project(id, &db).await;
                 if let Ok(list) = list {
-                    let _ = server.send(list);
+                    let _ = server.emit("medias",list);
                 }
                 Ok(())
             }
