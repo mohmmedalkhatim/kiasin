@@ -1,5 +1,10 @@
 
-  ## kiasin productivity 
+# kiasin_project
 
-  It's an app for gather information and mentian knowlage with the para method
+---
+   [![](https://mohamed-alkhatim.web.app/icons/favicon.svg)](https://mohamed-alkhatim.web.app/icons/favicon.svg)
+   
+    this project aim to be the ultemit second brain system
 
+
+ ca
