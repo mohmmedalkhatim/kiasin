@@ -1,3 +1,4 @@
+use async_std::sync::Mutex;
 use migration::entities::user::Model;
 use objects::Payload;
 use tauri::{command, ipc::Channel, State};
@@ -10,9 +11,9 @@ mod objects;
 pub async fn user_control(
     payload: Payload,
     server: Channel<Model>,
-    data: State<'_, DbConnection>,
+    data: State<'_, Mutex<DbConnection>>,
 ) -> Result<(), String> {
-    let db = data.db.lock().await;
+    let db = data.lock().await.db.clone();
 
     match payload.command.as_str() {
         "create" => match payload.item {
