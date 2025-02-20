@@ -1,6 +1,5 @@
-use migration::entities::project::Model;
-use objects::{Payload, ProjectPage};
-use tauri::{command, ipc::Channel, AppHandle, Emitter, Manager, State};
+use objects::Payload;
+use tauri::{command, AppHandle, Emitter, Manager, State};
 use tokio::sync::Mutex;
 
 use crate::DbConnection;
@@ -40,7 +39,7 @@ pub async fn project_control(
                 match page {
                     Ok(state) => match state {
                         Some(n) => {
-                            server.emit("project",n);
+                           let _ =  server.emit("project",n);
                             Ok(())
                         }
                         None => Err(format!("there no project with the format {}", id)),

@@ -2,7 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use app::database_connection;
 use sea_orm::DatabaseConnection;
-use tokio::sync::{Mutex, MutexGuard};
+use tokio::sync::Mutex;
 
 mod app;
 

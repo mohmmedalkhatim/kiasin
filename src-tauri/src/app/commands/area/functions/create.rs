@@ -1,6 +1,5 @@
-use super::super::objects::Area;
 use migration::entities::area::{ActiveModel, Entity};
-use sea_orm::{ColIdx, DatabaseConnection, EntityTrait, Set};
+use sea_orm::{DatabaseConnection, EntityTrait, Set};
 use serde_json::json;
 pub async fn create_area(db: &DatabaseConnection) -> Result<(), String> {
     let shema = json!({
@@ -22,6 +21,6 @@ pub async fn create_area(db: &DatabaseConnection) -> Result<(), String> {
         ..Default::default()
     };
 
-    let a = Entity::insert(new).exec(db).await.unwrap();
+    let _ = Entity::insert(new).exec(db).await.unwrap();
     Ok(())
 }

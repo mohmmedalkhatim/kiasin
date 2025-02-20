@@ -28,7 +28,7 @@ pub async fn resources_control(
                 Some(id) => {
                     let res = functions::update(id, db, resource).await;
                     if let Ok(v) = res {
-                        let res = server.emit("resource",v);
+                        let _ = server.emit("resource",v);
                         return Ok(());
                     }
                     Err("".to_string())

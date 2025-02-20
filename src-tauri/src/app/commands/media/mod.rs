@@ -1,7 +1,6 @@
 use async_std::sync::Mutex;
-use migration::entities::media::Model;
-use objects::{Media, Payload};
-use tauri::{command, ipc::Channel, AppHandle, Emitter, Manager, State};
+use objects::Payload;
+use tauri::{command, AppHandle, Emitter, Manager, State};
 
 use crate::DbConnection;
 mod functions;

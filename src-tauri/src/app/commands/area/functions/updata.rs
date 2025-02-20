@@ -1,5 +1,5 @@
 use migration::entities::area::{ActiveModel, self, Entity};
-use sea_orm::{entity::*, sqlx::types::Json, DatabaseConnection, EntityTrait, QueryFilter, Set};
+use sea_orm::{entity::*, DatabaseConnection, EntityTrait, QueryFilter, Set};
 
 use crate::app::commands::area::objects::*;
 
