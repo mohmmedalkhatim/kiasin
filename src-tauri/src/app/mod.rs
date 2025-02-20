@@ -8,5 +8,6 @@ pub use commands::{
     resource::{__cmd__resources_control, resources_control},
     user::{__cmd__user_control, user_control},
     media::{__cmd__media_control, media_control},
+    dashborad::{__cmd__dashboard,dashboard}
 };
 pub use util::database_connection;

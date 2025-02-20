@@ -5,11 +5,8 @@ import { Outlet } from 'react-router-dom'
 import Aside from './components/Aside'
 import Header from './components/Header'
 import './App.css'
-import { useLayout } from './context/page_schema'
 function App() {
   const lenisRef = useRef<any>(null)
-  let init = useLayout(state => state.init)
-  init('{"items": [{ "id": "1", "rows": 4, "cols": 6 },{ "id": "2", "rows": 8, "cols": 2 },{ "id": "3", "rows": 3, "cols": 3 },{ "id": "4", "rows": 3, "cols": 3 }]}')
 
   useEffect(() => {
     function update(time: number) {

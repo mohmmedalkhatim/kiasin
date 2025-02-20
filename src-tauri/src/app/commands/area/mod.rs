@@ -1,4 +1,4 @@
-use objects::{Area, AreaPage, Payload};
+pub use objects::{Area, AreaPage, Payload};
 use serde_json::json;
 use tauri::{command, ipc::Channel, AppHandle, Emitter, Manager, State};
 use tokio::sync::Mutex;
@@ -16,25 +16,6 @@ pub async fn area_control(
     let server = app.app_handle();
     let db = data.lock().await.db.clone();
     match payload.command.as_str() {
-        "dashbord" => {
-            let _ = server.emit(
-                "dashboard",
-                Area {
-                    title:Some("dashboard".to_string()),
-                    ui_schema: json!({
-                        "item":[
-                            {"id":1,"cols":6,"rows":4},
-                            {"id":2,"cols":6,"rows":4},
-                            {"id":3,"cols":6,"rows":4},
-                            {"id":4,"cols":6,"rows":4},
-                            {"id":5,"cols":6,"rows":4},
-                        ]
-                    }),
-                    ..Default::default()
-                },
-            );
-            Ok(())
-        }
         "create" => {
             let _ = functions::create_area(&db);
 

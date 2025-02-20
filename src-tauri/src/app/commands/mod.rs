@@ -5,3 +5,4 @@ pub mod project;
 pub mod resource;
 pub mod todo;
 pub mod user;
+pub mod dashborad;

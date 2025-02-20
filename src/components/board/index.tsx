@@ -10,9 +10,8 @@ import {
 import {
   SortableContext,
   horizontalListSortingStrategy,
-  SortingStrategy 
 } from '@dnd-kit/sortable'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import Grid from './main/Grid'
 import Card from './main/Card'
 import { useLayout } from '../../context/page_schema'
@@ -38,6 +37,14 @@ const Board: React.FC = () => {
     updateSort(sort_list, active, over, list)
     setActiveId(null)
   }
+  let elements = useMemo(() => {
+    if (sort_list) {
+      return sort_list.map(id => (
+        <Card cla={activeId === id ? 'dragging' : ''} key={id} id={id} />
+      ))
+
+    }
+  }, [sort_list])
 
   if (sort_list) {
     return (
@@ -47,11 +54,9 @@ const Board: React.FC = () => {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <SortableContext  items={sort_list} strategy={horizontalListSortingStrategy}>
+        <SortableContext items={sort_list} strategy={horizontalListSortingStrategy}>
           <Grid columns={8}>
-            {sort_list.map(id => (
-              <Card cla={activeId === id ? 'dragging' : ''}  key={id} id={id} />
-            ))}
+            {elements}
           </Grid>
         </SortableContext>
         <DragOverlay>{activeId ? <Card cla='' id={activeId} /> : null}</DragOverlay>

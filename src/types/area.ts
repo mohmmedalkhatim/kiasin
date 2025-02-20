@@ -1,3 +1,4 @@
+import { Card } from "../context/page_schema"
 import { Note } from "./notes"
 import { Project } from "./project"
 import { Todo } from "./todos"
@@ -5,7 +6,7 @@ import { Todo } from "./todos"
 export interface Area {
   title: string
   discription: string
-  ui_schema: string
+  ui_schema: {item:Card[]}
   cover: string
   icon: String
 }

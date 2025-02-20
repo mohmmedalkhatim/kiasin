@@ -25,6 +25,7 @@ async fn main() {
             app::note_control,
             app::todo_control,
             app::media_control,
+            app::dashboard,
         ])
         .manage(Mutex::from(db))
         .run(tauri::generate_context!())
