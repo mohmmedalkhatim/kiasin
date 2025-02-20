@@ -16,6 +16,7 @@
     top: 4rem;
     left: 0;
     z-index: -1;
+    
     @apply w-12 md:w-[200px] !important;
   }
   .m_border {
