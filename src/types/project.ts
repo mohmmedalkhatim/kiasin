@@ -1,3 +1,6 @@
+import { Note } from "./notes"
+import { Todo } from "./todos"
+
 export interface Project {
   title: string
   discription: string
@@ -8,8 +11,8 @@ export interface Project {
 
 export interface ProjectPage {
   info: Project
-  notes: note[]
-  todos: todo[]
+  notes: Note[]
+  todos: Todo[]
 }
 export interface Payload {
   command: String

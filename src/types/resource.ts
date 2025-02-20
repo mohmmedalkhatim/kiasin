@@ -1,4 +1,6 @@
+import { Note } from "./notes"
 import { Project } from "./project"
+import { Todo } from "./todos"
 
 export interface Resource {
     title: string
@@ -11,8 +13,8 @@ export interface Resource {
   export interface AreaPage {
     info: Resource
     projects: Project[]
-    notes: note[]
-    todos: todo[]
+    notes: Note[]
+    todos: Todo[]
   }
   export interface Payload {
     command: String
