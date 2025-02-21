@@ -25,7 +25,7 @@ export let usePara = create<Para>((set) => ({
             set({ resources: e.payload })
         })
     }
-    
+
 }))
 
 
