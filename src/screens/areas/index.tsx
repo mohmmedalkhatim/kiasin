@@ -1,15 +1,17 @@
-import Card from "../../components/Card"
+import Card from "../../components/List/Card"
 
-function Areas() {
+
+
+function List(props:{list:[]}) {
   return (
     <main className="content">
       <div className="boxs_grid">
-        <Card image={""} name={"whll"}/>
-        <Card image={""} name={"whll"}/>
-        <Card image={""} name={"whll"}/>
+        <Card image={""} id={"0"} />
+        <Card image={""} id={"1"} />
+        <Card image={""} id={"2"} />
       </div>
     </main>
   )
 }
 
-export default Areas
+export default List
