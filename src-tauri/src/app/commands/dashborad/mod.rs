@@ -4,10 +4,7 @@ use tauri::Runtime;
 use super::area::Area;
 
 #[tauri::command]
-pub async fn dashboard<R: Runtime>(
-    app: tauri::AppHandle<R>,
-    window: tauri::Window<R>,
-) -> Area {
+pub async fn dashboard() -> Area {
     println!("my frist log");
     Area {
         title: Some("dashboard".to_string()),

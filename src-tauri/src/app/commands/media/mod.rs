@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use async_std::sync::Mutex;
 use objects::Payload;
 use tauri::{command, AppHandle, Emitter, Manager, State};
@@ -9,10 +11,10 @@ mod objects;
 #[command]
 pub async fn media_control(
     payload: Payload,
-    data: State<'_, DbConnection>,
+    data: State<'_,Arc<Mutex<DbConnection>>>,
     app:AppHandle
 ) -> Result<(), String> {
-    let db = data.db.clone().unwrap();
+    let db = data.lock_arc().await.db.clone().unwrap();
     let server = app.app_handle();
     match payload.command.as_str() {
         "create" => match payload.item {

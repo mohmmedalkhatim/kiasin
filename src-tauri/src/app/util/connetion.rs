@@ -3,7 +3,7 @@ use sea_orm::{Database, DatabaseConnection};
 
 
 pub async fn database_connection(s:String) -> DatabaseConnection {
-    println!("{}",s);
+    let url = format!("sqlite://{}",s);
 
-    Database::connect(s).await.unwrap()
+    Database::connect(url).await.unwrap()
 }

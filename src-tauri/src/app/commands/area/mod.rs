@@ -1,7 +1,6 @@
 use std::sync::Arc;
 
 pub use objects::{Area, AreaPage, Payload};
-use serde_json::json;
 use tauri::{command, ipc::Channel, AppHandle, Emitter, Manager, State};
 use tokio::sync::Mutex;
 use crate::DbConnection;

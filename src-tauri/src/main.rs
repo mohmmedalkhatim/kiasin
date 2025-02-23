@@ -29,7 +29,7 @@ async fn main() {
             let database_url = app
                 .app_handle()
                 .path()
-                .resolve("kiasin\\Database\\test.db", BaseDirectory::Data)
+                .resolve("Database\\test.db", BaseDirectory::AppData)
                 .unwrap();
             let database = Arc::new(Mutex::new(DbConnection { db: None }));
             let shadow = database.clone();
