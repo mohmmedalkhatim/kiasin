@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use objects::Payload;
 use tauri::{command, AppHandle, Emitter, Manager, State};
 use tokio::sync::Mutex;
@@ -9,10 +11,10 @@ mod objects;
 #[command]
 pub async fn project_control(
     payload: Payload,
-    data: State<'_, Mutex<DbConnection>>,
     app:AppHandle,
+    data: State<'_, Arc<Mutex<DbConnection>>>,
 ) -> Result<(), String> {
-    let db = data.lock().await.db.clone();
+    let db = data.lock().await.db.clone().unwrap();
     let server = app.app_handle();
     match payload.command.as_str() {
         "create" => match payload.item {

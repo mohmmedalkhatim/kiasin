@@ -1,12 +1,14 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use app::database_connection;
+use std::sync::Arc;
+
+use async_std::sync::Mutex;
 use sea_orm::DatabaseConnection;
 use tauri::{path::BaseDirectory, Manager};
 mod app;
 
 struct DbConnection {
-    db: DatabaseConnection,
+    db: Option<DatabaseConnection>,
 }
 
 #[tokio::main]
@@ -24,17 +26,17 @@ async fn main() {
             app::dashboard,
         ])
         .setup(|app| {
-            let database = app
+            let database_url = app
                 .app_handle()
                 .path()
-                .resolve("{}/database/test.db", BaseDirectory::Data)
+                .resolve("kiasin\\Database\\test.db", BaseDirectory::Data)
                 .unwrap();
-
-            let db = tauri::async_runtime::block_on(async {
-                return database_connection(database.display().to_string()).await;
+            let database = Arc::new(Mutex::new(DbConnection { db: None }));
+            let shadow = database.clone();
+            tauri::async_runtime::spawn(async move {
+                shadow.lock_arc().await.db = Some(app::database_connection(database_url.display().to_string()).await)
             });
-            let db = DbConnection { db };
-            app.manage(db);
+            app.manage(database);
             Ok(())
         })
         .run(tauri::generate_context!())

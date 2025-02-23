@@ -8,10 +8,10 @@ mod objects;
 #[command]
 pub async fn note_control(
     payload: Payload,
-    data: State<'_, Mutex<DbConnection>>,
+    data: State<'_, DbConnection>,
     app:AppHandle
 ) -> Result<(), String> {
-    let db = &data.lock().await.db.clone();
+    let db = &data.db.clone().unwrap();
     let server = app.app_handle();
     match payload.command.as_str() {
         "one" => match payload.id {

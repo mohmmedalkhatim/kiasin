@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 pub use objects::{Area, AreaPage, Payload};
 use serde_json::json;
 use tauri::{command, ipc::Channel, AppHandle, Emitter, Manager, State};
@@ -9,12 +11,12 @@ mod objects;
 #[command]
 pub async fn area_control(
     app: AppHandle,
-    data: State<'_, Mutex<DbConnection>>,
     payload: Payload,
     page_server: Channel<AreaPage>,
+    data: State<'_, Arc<Mutex<DbConnection>>>,
 ) -> Result<(), String> {
     let server = app.app_handle();
-    let db = data.lock().await.db.clone();
+    let db = data.lock().await.db.clone().unwrap();
     match payload.command.as_str() {
         "create" => {
             let _ = functions::create_area(&db);

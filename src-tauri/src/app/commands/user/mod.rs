@@ -1,8 +1,8 @@
-use async_std::sync::Mutex;
+use std::sync::Arc;
 use migration::entities::user::Model;
 use objects::Payload;
 use tauri::{command, ipc::Channel, State};
-
+use tokio::sync::Mutex;
 use crate::DbConnection;
 mod functions;
 mod objects;
@@ -11,9 +11,9 @@ mod objects;
 pub async fn user_control(
     payload: Payload,
     server: Channel<Model>,
-    data: State<'_, Mutex<DbConnection>>,
+    data: State<'_, Arc<Mutex<DbConnection>>>,
 ) -> Result<(), String> {
-    let db = data.lock().await.db.clone();
+    let db = data.lock().await.db.clone().unwrap();
 
     match payload.command.as_str() {
         "create" => match payload.item {

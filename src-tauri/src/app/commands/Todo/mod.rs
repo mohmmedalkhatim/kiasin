@@ -1,4 +1,5 @@
-use async_std::sync::Mutex;
+use std::sync::{Arc, Mutex};
+
 use objects::{Payload, Todo};
 use tauri::{command, AppHandle, Emitter, Manager, State};
 use crate::DbConnection;
@@ -8,11 +9,12 @@ mod objects;
 #[command]
 pub async fn todo_control(
     payload: Payload,
-    data: State<'_, Mutex<DbConnection>>,
-    app:AppHandle
+    app:AppHandle,
+    data: State<'_, Arc<Mutex<DbConnection>>>,
 ) -> Result<(), String> {
-    let db = data.lock().await.db.clone();
     let server = app.app_handle();
+    let db = data.lock().unwrap().db.clone().unwrap();
+
     match payload.command.as_str() {
         "create" => match payload.item {
             Some(model) => {
