@@ -1,9 +1,9 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use std::sync::Arc;
-
 use async_std::sync::Mutex;
+use migration::MigratorTrait;
 use sea_orm::DatabaseConnection;
+use std::sync::Arc;
 use tauri::{path::BaseDirectory, Manager};
 mod app;
 
@@ -34,7 +34,9 @@ async fn main() {
             let database = Arc::new(Mutex::new(DbConnection { db: None }));
             let shadow = database.clone();
             tauri::async_runtime::spawn(async move {
-                shadow.lock_arc().await.db = Some(app::database_connection(database_url.display().to_string()).await)
+                shadow.lock_arc().await.db =
+                    Some(app::database_connection(database_url.display().to_string()).await);
+                migration::Migrator::up(&shadow.lock_arc().await.db.clone().unwrap(),None).await;
             });
             app.manage(database);
             Ok(())

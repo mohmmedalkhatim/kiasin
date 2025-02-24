@@ -1,15 +1,15 @@
-@tailwind components;
+@import "tailwindcss";
 
 
 @layer components{
     .aside{
-        @apply flex flex-col gap-4 z-10
+        @apply flex flex-col z-10;
     }
     .links{
-        @apply flex flex-col  gap-2
+        @apply flex flex-col gap-2 mt-8;
     }
     .link{
         text-decoration: none;
-        @apply px-6 py-3 hover:bg-[#e2e2e208] hover:font-medium font-normal text-white font-sans tracking-normal capitalize antialiased !important;
+        @apply px-6 py-3 hover:bg-[#e2e2e208] hover:font-medium font-normal text-white font-sans tracking-normal capitalize antialiased; 
     }
 }
