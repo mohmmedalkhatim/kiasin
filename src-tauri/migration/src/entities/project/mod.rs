@@ -13,9 +13,11 @@ pub struct Model {
     pub in_archive: bool,
     pub created:Date,
     pub ui_schema:Json,
+    pub tags:Json
 }
 
 impl ActiveModelBehavior for ActiveModel {}
+
 impl Related<super::area::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::Area.def()

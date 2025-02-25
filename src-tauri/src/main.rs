@@ -36,7 +36,7 @@ async fn main() {
             tauri::async_runtime::spawn(async move {
                 shadow.lock_arc().await.db =
                     Some(app::database_connection(database_url.display().to_string()).await);
-                migration::Migrator::up(&shadow.lock_arc().await.db.clone().unwrap(),None).await;
+                let _ = migration::Migrator::up(&shadow.lock_arc().await.db.clone().unwrap(),None).await;
             });
             app.manage(database);
             Ok(())

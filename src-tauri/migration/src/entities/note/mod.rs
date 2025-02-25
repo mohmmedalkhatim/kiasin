@@ -36,8 +36,6 @@ impl Related<super::project::Entity> for Entity {
     }
 }
 
-
-
 #[derive(PartialEq,EnumIter,Debug,Clone,DeriveRelation)]
 pub enum Relation {
     #[sea_orm(

@@ -27,7 +27,7 @@ pub struct Model{
          Relation::Project.def()
      }
  }
-
+ 
 impl ActiveModelBehavior for ActiveModel {
     
 }
@@ -36,5 +36,5 @@ pub enum Relation {
     #[sea_orm(has_many = "super::note::Entity")]
     Notes,
     #[sea_orm(has_many = "super::project::Entity")]
-    Project
+    Project,
 }
