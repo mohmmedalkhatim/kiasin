@@ -1,11 +1,50 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+
+@font-face {
+  font-family: 'OpenSans';
+  src: url('/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf') format('truetype-variations');
+  font-weight: 100 900;
+  font-stretch: 75% 125%;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'OpenSans Italic';
+  src: url('/fonts/Open_Sans/OpenSans-Italic-VariableFont_wdth,wght.ttf') format('truetype-variations');
+  font-weight: 100 900;
+  font-stretch: 75% 125%;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "AverageSans";
+  src: url("/fonts/Average_Sans/AverageSans-Regular.ttf") format("truetype");
+  font-weight: 100 900;
+  font-stretch: 75% 125%;
+  font-style: normal;
+}
+
+@theme { 
+  --color-dark:#181818;
+  --color-light: '#F9F7F7';
+  --color-muted: '#DBE2EF';
+  --color-primary: '#3F72AF';
+  --color-primary-border:#e2e2e220;
+  --font-OpenSans:'OpenSans';
+  --font-AverageSans:'AverageSans';
+}
+
+
 
 @layer components {
-  .app_header {
-    @apply flex bg-[#181818] fixed items-center top-0 h-12 w-screen justify-between;
+  body{
+    @apply font-OpenSans;
   }
-  input{
-    @apply rounded px-[0.5rem] py-[0.25rem] bg-[#181818] text-[#e2e2e280];
+  .app_header {
+    @apply flex bg-dark fixed items-center top-0 h-12 w-screen justify-between;
+  }
+  input {
+    @apply rounded px-[0.5rem] py-[0.25rem] bg-dark text-light;
   }
   aside {
     position: fixed;
@@ -13,19 +52,18 @@
     top: 4rem;
     left: 0;
     z-index: -1;
-    
+
     @apply w-12 md:w-[200px];
   }
-  a{
+  a {
     text-decoration: none;
     color: white !important;
   }
 
-
   .content {
     border-top: 1px solid #2e2e2e90;
-    border-left: 1px solid #2e2e2e90;    
-    @apply rounded-tl-md p-4 md:ml-[200px] md:mr-0 bg-[#181818] mx-[60px] mt-12   pb-0 relative border-l  border-[#e2e2e2e];
+    border-left: 1px solid #2e2e2e90;
+    @apply rounded-tl-md p-4 md:ml-[200px] md:mr-0 bg-dark mx-[60px] mt-12   pb-0 relative border-l  border-[#e2e2e2e];
   }
   .cover {
     @apply fixed top-0 w-full;
@@ -44,6 +82,6 @@
 .dragging {
   transition: none !important;
 }
-[role="drag-overlay"] {
+[role='drag-overlay'] {
   z-index: 1000;
 }
