@@ -1,9 +1,4 @@
 use crate::entities::*;
-#[derive(Serialize,Deserialize,Clone)]
-struct element{
-    
-}
-
 
 #[derive(DeriveEntityModel, Serialize, Deserialize, Clone, Debug)]
 #[sea_orm(table_name = "Tag")]
