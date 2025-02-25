@@ -24,10 +24,8 @@
 
   .content {
     border-top: 1px solid #2e2e2e90;
-    border-left: 1px solid #2e2e2e90;
-    border-right: 1px solid #2e2e2e90;
-    
-    @apply rounded-t-md p-4 md:ml-[200px] md:mr-0 bg-[#181818] mx-[60px] mt-12   pb-0 relative border-l  border-[#e2e2e2e];
+    border-left: 1px solid #2e2e2e90;    
+    @apply rounded-tl-md p-4 md:ml-[200px] md:mr-0 bg-[#181818] mx-[60px] mt-12   pb-0 relative border-l  border-[#e2e2e2e];
   }
   .cover {
     @apply fixed top-0 w-full;
