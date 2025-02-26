@@ -1,0 +1,39 @@
+@import 'tailwindcss';
+
+@layer Components {
+  .toolbar {
+    @apply flex overflow-hidden bg-white border divide-x rounded-t-lg  rtl:flex-row-reverse dark:bg-gray-900 dark:border-gray-700 dark:divide-gray-700;
+  }
+  .toolbar_button {
+    @apply px-4 py-2 font-medium text-gray-600 transition-colors duration-200 sm:px-6 dark:hover:bg-gray-800 dark:text-gray-300 hover:bg-gray-100;
+  }
+}
+
+.editor_container {     
+  display: flex;
+  flex-direction: column;
+  background-color: #181818;
+  padding: 10px;
+  border-radius: 5px 5px 0px 0px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.toolbar {
+  display: flex;
+  gap: 8px;
+}
+.editor {
+  border: 1px solid #e2e2e220;
+  border-radius: 0px 0px 5px 5px;
+  background-color: #181818;
+  color: wheat;
+  padding: 8px;
+  min-height: 200px;
+  max-height: 800px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  &:focus-visible {
+    outline: none;
+    border: none;
+  }
+}
+.tiptap {
+}
