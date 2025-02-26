@@ -1,5 +1,6 @@
+use std::sync::Arc;
+use tokio::sync::Mutex;
 use crate::DbConnection;
-use async_std::sync::Mutex;
 use objects::Payload;
 use tauri::{command, AppHandle, Emitter, Manager, State};
 mod functions;
@@ -8,10 +9,10 @@ mod objects;
 #[command]
 pub async fn note_control(
     payload: Payload,
-    data: State<'_, DbConnection>,
+    data: State<'_, Arc<Mutex<DbConnection>>>,
     app:AppHandle
 ) -> Result<(), String> {
-    let db = &data.db.clone().unwrap();
+    let db = &data.lock().await.db.clone().unwrap();
     let server = app.app_handle();
     match payload.command.as_str() {
         "one" => match payload.id {

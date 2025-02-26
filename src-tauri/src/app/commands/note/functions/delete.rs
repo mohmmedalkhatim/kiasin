@@ -1,4 +1,4 @@
-use migration::entities::project::Entity;
+use migration::entities::note::Entity;
 use sea_orm::{DatabaseConnection, EntityTrait};
 
 pub async fn delete_one(db: &DatabaseConnection, id: i32) -> Result<(), String> {

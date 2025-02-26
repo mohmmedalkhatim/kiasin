@@ -1,6 +1,6 @@
 use crate::entities::*;
 
-#[derive(DeriveEntityModel, Serialize, Deserialize, Clone, Debug)]
+#[derive(DeriveEntityModel, Serialize,Default, Deserialize, Clone, Debug)]
 #[sea_orm(table_name = "Tag")]
 pub struct Model {
     #[sea_orm(primary_key)]
