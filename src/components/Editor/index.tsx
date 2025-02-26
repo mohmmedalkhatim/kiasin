@@ -1,18 +1,22 @@
-import React from 'react';
 import { useEditor, EditorContent } from '@tiptap/react';
+import { } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
+import { Heading } from '@tiptap/extension-heading';
+import { Underline } from '@tiptap/extension-underline';
+import { TextAlign } from '@tiptap/extension-text-align';
 import { Toolbar } from './toolbar';
 import './style.css';
 
 const RichTextEditor = () => {
     const editor = useEditor({
-        extensions: [StarterKit],
+        extensions: [StarterKit, Heading, Underline, TextAlign.configure({})],
         content: '<p>Hello, world!</p>',
         injectCSS: true,
         editorProps: {
-            attributes: {    
+            attributes: {
                 class: 'editor',
-            },}
+            },
+        }
     });
 
     return (
