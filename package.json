@@ -6,9 +6,9 @@
   "main": "src/main.tsx",
   "type": "module",
   "scripts": {
-    "vite": "vite",
     "tauri": "tauri",
-    "dev": "vite"
+    "dev": "vite",
+    "test":"jest"
   },
   "author": "mohammedalkhatim",
   "license": "ISC",

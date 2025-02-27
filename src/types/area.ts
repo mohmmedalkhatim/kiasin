@@ -8,7 +8,8 @@ export interface Area {
   discription: string
   ui_schema: {item:Card[]}
   cover: string
-  icon: String
+  icon: string
+  id:string
 }
 
 export interface AreaPage {
