@@ -7,8 +7,8 @@ export interface Area {
   title: string
   discription: string
   ui_schema: {item:Card[]}
-  cover: string
-  icon: string
+  cover: number[]  | string
+  icon: number[] | string
   id:string
 }
 

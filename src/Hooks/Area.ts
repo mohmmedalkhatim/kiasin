@@ -1,11 +1,9 @@
 import { invoke } from "@tauri-apps/api/core";
 import { Area } from "../types/area";
+import { usePara } from "../context/para";
 
 
-function useArea(id: string): Area | null {
-    invoke<Area>("areas_control", { command: "retrive", payload: { id } }).then(res => {
-        return res
-    }).catch(e => { });
-    return null
-
+export function useArea(id: string | undefined): Area | null {
+    let area = usePara.getState().areas.filter((value)=>value.id == id);
+    return area[0]
 }

@@ -16,6 +16,15 @@ export let usePara = create<Para>((set) => ({
     resources: [],
     init: async () => {
         listen<Area[]>("areas", e => {
+            let areas = e.payload.map((item)=>{
+                if(typeof item.cover  == "object"){
+                    let a = new Uint8Array(item.cover); 
+                    
+                }
+                let icon  = URL.createObjectURL(new Blob(a,{type:"image/jpeg"}))
+                let cover  = URL.createObjectURL(new Blob([],{type:"image/jpeg",}))
+                return()
+            })
             set({ areas: e.payload })
         })
         listen<Project[]>("projects", e => {
