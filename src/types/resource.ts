@@ -8,6 +8,7 @@ export interface Resource {
     ui_schema: string
     cover: string
     icon: String
+    id: string
   }
   
   export interface AreaPage {

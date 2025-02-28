@@ -7,6 +7,7 @@ export interface Project {
   ui_schema: string
   cover: string
   icon: String
+  id: string
 }
 
 export interface ProjectPage {

@@ -1,5 +1,4 @@
 import { useEditor, EditorContent } from '@tiptap/react';
-import { } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { Heading } from '@tiptap/extension-heading';
 import { Underline } from '@tiptap/extension-underline';
@@ -9,7 +8,7 @@ import './style.css';
 
 const RichTextEditor = () => {
     const editor = useEditor({
-        extensions: [StarterKit, Heading, Underline, TextAlign.configure({})],
+        extensions: [StarterKit, Heading, Underline, TextAlign.configure({types:["heading", "paragraph"]})],
         content: '<p>Hello, world!</p>',
         injectCSS: true,
         editorProps: {

@@ -16,22 +16,46 @@ export let usePara = create<Para>((set) => ({
     resources: [],
     init: async () => {
         listen<Area[]>("areas", e => {
-            let areas = e.payload.map((item)=>{
-                if(typeof item.cover  == "object"){
-                    let a = new Uint8Array(item.cover); 
-                    
+            e.payload.map((item) => {
+                if (typeof item.cover == "object") {
+                    let icon = URL.createObjectURL(new Blob([new Uint8Array(item.cover)], { type: "image/jpeg" }))
+                    item.icon = icon
                 }
-                let icon  = URL.createObjectURL(new Blob(a,{type:"image/jpeg"}))
-                let cover  = URL.createObjectURL(new Blob([],{type:"image/jpeg",}))
-                return()
+                
+                if (typeof item.icon == "object"){ 
+                    let cover = URL.createObjectURL(new Blob([new Uint8Array(item.icon)], { type: "image/jpeg" }))
+                    item.cover = cover
+                }
+                set(state =>({ areas: [...state.areas,item] }))
             })
-            set({ areas: e.payload })
         })
         listen<Project[]>("projects", e => {
-            set({ projects: e.payload })
+            e.payload.map((item) => {
+                if (typeof item.cover == "object") {
+                    let icon = URL.createObjectURL(new Blob([new Uint8Array(item.cover)], { type: "image/jpeg" }))
+                    item.icon = icon
+                }
+                
+                if (typeof item.icon == "object"){ 
+                    let cover = URL.createObjectURL(new Blob([new Uint8Array(item.icon)], { type: "image/jpeg" }))
+                    item.cover = cover
+                }
+                set(state =>({ projects: [...state.projects,item] }))
+            })
         })
         listen<Resource[]>("resources", e => {
-            set({ resources: e.payload })
+            e.payload.map((item) => {
+                if (typeof item.cover == "object") {
+                    let icon = URL.createObjectURL(new Blob([new Uint8Array(item.cover)], { type: "image/jpeg" }))
+                    item.icon = icon
+                }
+                
+                if (typeof item.icon == "object"){ 
+                    let cover = URL.createObjectURL(new Blob([new Uint8Array(item.icon)], { type: "image/jpeg" }))
+                    item.cover = cover
+                }
+                set(state =>({ resources: [...state.resources,item] }))
+            })
         })
     }
 

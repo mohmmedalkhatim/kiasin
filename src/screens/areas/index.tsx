@@ -9,8 +9,9 @@ function Areas(props: { list: [] }) {
   return (
     <main className="content">
       <div className="boxs_grid">
-        {areas.map(() => {
-          return (<Card image={areas.} />)
+        {areas.map((item) => {
+        
+          return (<Card image={item.cover} />)
         })}
         <Card image={""} id={"0"} />
         <Card image={""} id={"1"} />
