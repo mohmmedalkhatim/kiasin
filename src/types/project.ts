@@ -1,12 +1,12 @@
-import { Note } from "./notes"
-import { Todo } from "./todos"
+import { Note } from './notes'
+import { Todo } from './todos'
 
 export interface Project {
   title: string
   discription: string
   ui_schema: string
-  cover: string
-  icon: String
+  cover: string | number[]
+  icon: string | number[]
   id: string
 }
 

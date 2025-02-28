@@ -6,8 +6,8 @@ export interface Resource {
     title: string
     discription: string
     ui_schema: string
-    cover: string
-    icon: String
+    cover: string | number[]
+    icon: string | number[] 
     id: string
   }
   
