@@ -39,8 +39,10 @@
 @layer components {
   .login_page{
     grid-template-columns: repeat(auto-fill,minmax(25rem,1fr));
-    
     @apply bg-dark w-screen h-screen grid ;
+  }
+  .login_illustration{
+    grid-column: 1 / span 2;
   }
   body{
     @apply font-OpenSans;

@@ -10,7 +10,7 @@ interface User {
   delete: () => void
 }
 
-let useAuth = create<User>(set => ({
+export let useAuth = create<User>(set => ({
   name: '',
   email: '',
   create: (email, password, name) => {
