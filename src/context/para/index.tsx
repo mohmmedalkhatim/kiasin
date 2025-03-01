@@ -18,10 +18,12 @@ export let usePara = create<Para>((set) => ({
     init: async () => {
         console.log("init")
         listen<Area[]>("areas",async e => {
-            let res = await invoke("areas", { command: "many" })
+            let res = await invoke("areas", { command: "many" }).then((r)=>{
+                console.log(r)
+            })
 
             e.payload.map((item) => {
-                console.log("area")
+                console.log(item)
                 if (typeof item.cover == "object") {
                     let icon = URL.createObjectURL(new Blob([new Uint8Array(item.cover)], { type: "image/jpeg" }))
                     item.icon = icon
