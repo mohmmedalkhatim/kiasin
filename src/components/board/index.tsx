@@ -10,6 +10,7 @@ import {
 import {
   SortableContext,
   horizontalListSortingStrategy,
+  verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
 import { useMemo, useState } from 'react'
 import Grid from './main/Grid'
@@ -54,7 +55,7 @@ const Board: React.FC = () => {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <SortableContext items={sort_list} strategy={horizontalListSortingStrategy}>
+        <SortableContext items={sort_list} strategy={horizontalListSortingStrategy || verticalListSortingStrategy}>
           <Grid columns={8}>
             {elements}
           </Grid>

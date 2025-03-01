@@ -3,6 +3,7 @@ import { listen } from '@tauri-apps/api/event';
 import { Area } from "../../types/area";
 import { Project } from "../../types/project";
 import { Resource } from "../../types/resource";
+import { invoke } from "@tauri-apps/api/core";
 
 interface Para {
     projects: Project[]
@@ -15,18 +16,22 @@ export let usePara = create<Para>((set) => ({
     areas: [],
     resources: [],
     init: async () => {
-        listen<Area[]>("areas", e => {
+        console.log("init")
+        listen<Area[]>("areas",async e => {
+            let res = await invoke("areas", { command: "many" })
+
             e.payload.map((item) => {
+                console.log("area")
                 if (typeof item.cover == "object") {
                     let icon = URL.createObjectURL(new Blob([new Uint8Array(item.cover)], { type: "image/jpeg" }))
                     item.icon = icon
                 }
-                
-                if (typeof item.icon == "object"){ 
+
+                if (typeof item.icon == "object") {
                     let cover = URL.createObjectURL(new Blob([new Uint8Array(item.icon)], { type: "image/jpeg" }))
                     item.cover = cover
                 }
-                set(state =>({ areas: [...state.areas,item] }))
+                set(state => ({ areas: [...state.areas, item] }))
             })
         })
         listen<Project[]>("projects", e => {
@@ -35,12 +40,12 @@ export let usePara = create<Para>((set) => ({
                     let icon = URL.createObjectURL(new Blob([new Uint8Array(item.cover)], { type: "image/jpeg" }))
                     item.icon = icon
                 }
-                
-                if (typeof item.icon == "object"){ 
+
+                if (typeof item.icon == "object") {
                     let cover = URL.createObjectURL(new Blob([new Uint8Array(item.icon)], { type: "image/jpeg" }))
                     item.cover = cover
                 }
-                set(state =>({ projects: [...state.projects,item] }))
+                set(state => ({ projects: [...state.projects, item] }))
             })
         })
         listen<Resource[]>("resources", e => {
@@ -49,12 +54,12 @@ export let usePara = create<Para>((set) => ({
                     let icon = URL.createObjectURL(new Blob([new Uint8Array(item.cover)], { type: "image/jpeg" }))
                     item.icon = icon
                 }
-                
-                if (typeof item.icon == "object"){ 
+
+                if (typeof item.icon == "object") {
                     let cover = URL.createObjectURL(new Blob([new Uint8Array(item.icon)], { type: "image/jpeg" }))
                     item.cover = cover
                 }
-                set(state =>({ resources: [...state.resources,item] }))
+                set(state => ({ resources: [...state.resources, item] }))
             })
         })
     }

@@ -1,7 +1,7 @@
 use std::sync::Arc;
 use migration::entities::user::Model;
 use objects::Payload;
-use tauri::{command, ipc::Channel, State};
+use tauri::{command, ipc::Channel, AppHandle, Emitter, Manager, State};
 use tokio::sync::Mutex;
 use crate::DbConnection;
 mod functions;
@@ -10,18 +10,18 @@ mod objects;
 #[command]
 pub async fn user_control(
     payload: Payload,
-    server: Channel<Model>,
     data: State<'_, Arc<Mutex<DbConnection>>>,
+    app:AppHandle
 ) -> Result<(), String> {
     let db = data.lock().await.db.clone().unwrap();
-
+    let server = app.app_handle();
     match payload.command.as_str() {
         "create" => match payload.item {
             Some(state) => {
                 let _ = functions::create_user(state, &db).await;
                 if let Some(id) = payload.id {
                     let user = functions::find_one(id, &db).await;
-                    let _ = server.send(user.expect("some thing went worng").unwrap());
+                    let _ = server.emit("user",user.expect("some thing went worng").unwrap());
                 }
                 Ok(())
             }
@@ -32,7 +32,7 @@ pub async fn user_control(
                 let mode = functions::find_one(id, &db)
                 .await;
                 if let Ok(model) =mode {
-                let _  =server.send(model.unwrap());
+                let _  =server.emit("user",model.unwrap());
                  return Ok(());
                 }
                 Err("couldn't find an id".to_string())
@@ -65,7 +65,7 @@ pub async fn user_control(
                 let list = functions::updata_user(state, &db).await;
                 if let Some(id) = payload.id {
                     let user = functions::find_one(id, &db).await;
-                    let _ = server.send(user.expect("some thing went worng").unwrap());
+                    let _ = server.emit("user",user.expect("some thing went worng").unwrap());
                     return Ok(list?);
                 }
                 Err("som".to_string())
