@@ -7,7 +7,7 @@ mod functions;
 mod objects;
 
 #[command]
-pub async fn note_control(
+pub async fn notes_control(
     payload: Payload,
     data: State<'_, Arc<Mutex<DbConnection>>>,
     app:AppHandle

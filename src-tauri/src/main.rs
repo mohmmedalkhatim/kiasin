@@ -16,11 +16,11 @@ async fn main() {
     tauri::Builder::default()
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![
-            app::area_control,
-            app::project_control,
+            app::areas_control,
+            app::projects_control,
             app::resources_control,
             app::user_control,
-            app::note_control,
+            app::notes_control,
             app::todo_control,
             app::media_control,
             app::dashboard,

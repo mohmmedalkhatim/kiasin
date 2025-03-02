@@ -14,7 +14,7 @@ export let useAuth = create<User>(set => ({
   name: '',
   email: '',
   create: (email, password, name) => {
-    let res = invoke('create', {
+    let res = invoke('user_control', {
       payload: { command: 'create', item: { email, password, name } }
     })
     listen<User>("user",e=>{

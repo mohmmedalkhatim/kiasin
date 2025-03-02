@@ -9,7 +9,7 @@ mod functions;
 mod objects;
 
 #[command]
-pub async fn project_control(
+pub async fn projects_control(
     payload: Payload,
     app:AppHandle,
     data: State<'_, Arc<Mutex<DbConnection>>>,
@@ -26,14 +26,6 @@ pub async fn project_control(
                 Ok(())
             }
             None => Err("you have add a project".to_string()),
-        },
-        "area_projects" => match payload.id {
-            Some(state) => {
-                let list = functions::area_projects(state as u32, &db).await;
-                let _ = server.emit("projects",list.unwrap());
-                Ok(())
-            }
-            None => Err("you have to add an id to the payload".to_string()),
         },
         "page" => match payload.id {
             Some(id) => {
@@ -53,7 +45,6 @@ pub async fn project_control(
         },
         "delete" => {
             let _ = functions::delete_one(&db, payload.id.expect(""));
-
             Ok(())
         }
         "updata" => match payload.item {

@@ -8,10 +8,9 @@ mod functions;
 mod objects;
 
 #[command]
-pub async fn area_control(
+pub async fn areas_control(
     app: AppHandle,
     payload: Payload,
-    page_server: Channel<AreaPage>,
     data: State<'_, Arc<Mutex<DbConnection>>>,
 ) -> Result<(), String> {
     let server = app.app_handle();
@@ -55,8 +54,8 @@ pub async fn area_control(
         }
         "Page" => match payload.id {
             Some(id) => {
-                let page = functions::find_apage(id, &db).await.unwrap();
-                let _ = page_server.send(page);
+                let page = functions::area_page(id, &db).await.unwrap();
+                let _ = server.emit("area",page);
                 Ok(())
             }
             None => Err("you have to provided an ID".to_string()),

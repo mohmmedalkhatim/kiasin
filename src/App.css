@@ -39,10 +39,26 @@
 @layer components {
   .login_page{
     grid-template-columns: repeat(auto-fill,minmax(25rem,1fr));
-    @apply bg-dark w-screen h-screen grid ;
+    @apply bg-dark my-16 grid mx-32;
   }
   .login_illustration{
     grid-column: 1 / span 2;
+  }
+  .login_form_container{
+    display: flex;
+
+  }
+  .login_form{
+    @apply flex flex-col gap-4 p-12 ;
+  }
+  .login_form button{
+    @apply py-2 rounded-md
+  }
+  .login_form input{
+    @apply py-2 px-3
+  }
+  .login_illustration img {
+    
   }
   body{
     @apply font-OpenSans;

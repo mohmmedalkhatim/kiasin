@@ -18,7 +18,7 @@ export let usePara = create<Para>((set) => ({
     init: async () => {
         console.log("init")
         listen<Area[]>("areas",async e => {
-            let res = await invoke("areas", { command: "many" }).then((r)=>{
+            let res = await invoke("areas_control", { command: "many" }).then((r)=>{
                 console.log(r)
             })
 
@@ -36,7 +36,11 @@ export let usePara = create<Para>((set) => ({
                 set(state => ({ areas: [...state.areas, item] }))
             })
         })
-        listen<Project[]>("projects", e => {
+        listen<Project[]>("projects", async e => {
+            let res = await invoke("r_control", { command: "many" }).then((r)=>{
+                console.log(r)
+            })
+
             e.payload.map((item) => {
                 if (typeof item.cover == "object") {
                     let icon = URL.createObjectURL(new Blob([new Uint8Array(item.cover)], { type: "image/jpeg" }))
@@ -50,7 +54,11 @@ export let usePara = create<Para>((set) => ({
                 set(state => ({ projects: [...state.projects, item] }))
             })
         })
-        listen<Resource[]>("resources", e => {
+         listen<Resource[]>("resources", async e => {
+            let res = await invoke("areas_control", { command: "many" }).then((r)=>{
+                console.log(r)
+            })
+
             e.payload.map((item) => {
                 if (typeof item.cover == "object") {
                     let icon = URL.createObjectURL(new Blob([new Uint8Array(item.cover)], { type: "image/jpeg" }))

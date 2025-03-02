@@ -17,7 +17,7 @@ pub async fn find_many(db: &DatabaseConnection) -> Result<Vec<Model>, DbErr> {
     Ok(Entity::find().all(db).await?)
 }
 
-pub async fn find_apage(id: i32, db: &DatabaseConnection) -> Result<AreaPage, DbErr> {
+pub async fn area_page(id: i32, db: &DatabaseConnection) -> Result<AreaPage, DbErr> {
     let info = find_one(id, db).await?;
     let projects = project::Entity::find()
         .filter(Expr::col(project::Column::AreaId).eq(id).into_condition())
