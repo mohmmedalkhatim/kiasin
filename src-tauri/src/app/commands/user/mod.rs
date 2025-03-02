@@ -2,7 +2,7 @@ use std::sync::Arc;
 use migration::entities::user::Model;
 use objects::Payload;
 use tauri::{command, ipc::Channel, AppHandle, Emitter, Manager, State};
-use tokio::sync::Mutex;
+use async_std::sync::Mutex;
 use crate::DbConnection;
 mod functions;
 mod objects;
@@ -18,8 +18,8 @@ pub async fn user_control(
     match payload.command.as_str() {
         "create" => match payload.item {
             Some(state) => {
-                let _ = functions::create_user(state, &db).await;
-                if let Some(id) = payload.id {
+                let id = functions::create_user(state, &db).await;
+                if let Ok(id) = id {
                     let user = functions::find_one(id, &db).await;
                     let _ = server.emit("user",user.expect("some thing went worng").unwrap());
                 }
