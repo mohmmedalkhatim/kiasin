@@ -1,5 +1,5 @@
-import { invoke } from "@tauri-apps/api/core";
 import { ChangeEvent, useState } from "react"
+import { useAuth } from "../../context/User";
 
 
 
@@ -11,24 +11,24 @@ function Login() {
     password: "",
   });
   let onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setUser(state => {
-      let name = e.target.name;
-      return ({
+    let name = e.target.name;
+    console.log(name)
+    console.log(User.name)
+    setUser(state => ({
+      ...state,
         [name]: e.target.value,
-        ...state
       })
-    })
+    )
   }
-  let onSubmit = async (data: FormData) => {
-    let a = await invoke("user_control", { payload: {command:"create", item: User } });
-  }
+  let create =useAuth(state=>state.create)
+
   return (
     <div className="login_page">
       <div className="login_illustration">
         <img className="" />
       </div>
       <div className="login_form_container">
-        <form className="login_form m_border" action={onSubmit}>
+        <form className="login_form m_border" action={(e)=>create(User.email,User.password,User.name)}>
           <input type="text" name="name" onChange={onChange} />
           <input type="text" name="email" onChange={onChange} />
           <input type="password" name="password" onChange={onChange} />
