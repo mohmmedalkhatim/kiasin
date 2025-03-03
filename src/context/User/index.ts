@@ -8,6 +8,7 @@ interface User {
   create: (email: string, password: string, name: string) => void
   update: () => void
   delete: () => void
+  auth: () => void
 }
 
 export let useAuth = create<User>(set => ({
@@ -17,9 +18,15 @@ export let useAuth = create<User>(set => ({
     let res = invoke('user_control', {
       payload: { command: 'create', item: { email, password, name } }
     })
-    listen<User>("user",e=>{
-        console.log(`user event ${e.payload.name}`)
-        set(state=>({name:e.payload.name,email:e.payload.email}))
+    listen<User>('user', e => {
+      console.log(`user event ${e.payload.name}`)
+      set({ name: e.payload.name, email: e.payload.email })
+    })
+  },
+  auth: () => {
+    invoke('user_control', { payload: { command: 'one', id: 2 } }).then(_ => {})
+    listen<User>('user', e => {
+      set({ name: e.payload.name, email: e.payload.email })
     })
   },
   update: () => {},

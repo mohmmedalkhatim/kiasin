@@ -16,11 +16,11 @@ function Login() {
     console.log(User.name)
     setUser(state => ({
       ...state,
-        [name]: e.target.value,
-      })
+      [name]: e.target.value,
+    })
     )
   }
-  let create =useAuth(state=>state.create)
+  let create = useAuth(state => state.create)
 
   return (
     <div className="login_page">
@@ -28,7 +28,7 @@ function Login() {
         <img className="" />
       </div>
       <div className="login_form_container">
-        <form className="login_form m_border" action={(e)=>create(User.email,User.password,User.name)}>
+        <form className="login_form m_border" action={(e) => create(User.email, User.password, User.name)}>
           <input type="text" name="name" onChange={onChange} />
           <input type="text" name="email" onChange={onChange} />
           <input type="password" name="password" onChange={onChange} />

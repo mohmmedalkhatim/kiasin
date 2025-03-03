@@ -10,9 +10,11 @@ import Login from './screens/login'
 
 function App() {
   let init = usePara((state) => state.init);
-  let email = useAuth((state) => state.email);
+  let email = useAuth((state) =>state.email);
+  let auth = useAuth((state) =>state.auth);
   let content = email == '' ? <Login /> : <><Header /><Outlet /><Aside /></>
   useEffect(() => {
+    auth()
     init()
   }, [])
   return (
