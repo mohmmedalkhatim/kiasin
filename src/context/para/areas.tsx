@@ -29,7 +29,14 @@ export let useAreas = create<Areas>((set) => ({
         let res = invoke("areas_control", { command: "many" }).then((r) => { })
     },
     area: (id) => {
-
+        listen<Area>("area",(r) => {
+            let icon = URL.createObjectURL(new Blob([new Uint8Array(r.payload.icon as number[])], { type: "image/jpeg" }))
+            r.payload.icon = icon
+            let cover = URL.createObjectURL(new Blob([new Uint8Array(r.payload.cover as number[])], { type: "image/jpeg" }))
+            r.payload.cover = cover
+            set(state => ({ active: r.payload }))
+        })
+        let res = invoke<Area>("areas_control", { payload: { command: "one", id: id } })
     },
     create: () => {
         invoke("areas_control", { payload: { command: "create" } });
