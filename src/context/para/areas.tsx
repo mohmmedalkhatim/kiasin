@@ -16,30 +16,27 @@ export let useAreas = create<Areas>((set) => ({
     list: [],
     active: undefined,
     init: () => {
-        listen<Area[]>("areas", async e => {
+        listen<Area[]>("area", e => {
+            console.log("hello");
             e.payload.map((item) => {
-                console.log(item)
                 let icon = URL.createObjectURL(new Blob([new Uint8Array(item.icon as number[])], { type: "image/jpeg" }))
-                item.icon = icon
+                item.icon = icon;
                 let cover = URL.createObjectURL(new Blob([new Uint8Array(item.cover as number[])], { type: "image/jpeg" }))
-                item.cover = cover
-                set(state => ({ list: [...state.list, item] }))
+                item.cover = cover;
+                let list = new Set(e.payload)
+                list.add(item)
+                set(state => ({ list: [...list] }))
             })
         })
-        let res = invoke("areas_control", { command: "many" }).then((r) => { })
+        let res = invoke("areas_control", { payload: { command: "many" } });
     },
     area: (id) => {
-        listen<Area>("area",(r) => {
-            let icon = URL.createObjectURL(new Blob([new Uint8Array(r.payload.icon as number[])], { type: "image/jpeg" }))
-            r.payload.icon = icon
-            let cover = URL.createObjectURL(new Blob([new Uint8Array(r.payload.cover as number[])], { type: "image/jpeg" }))
-            r.payload.cover = cover
-            set(state => ({ active: r.payload }))
-        })
-        let res = invoke<Area>("areas_control", { payload: { command: "one", id: id } })
+        set(state=>({active:state.list.filter((item)=>item.id == id)[0]}))
     },
     create: () => {
         invoke("areas_control", { payload: { command: "create" } });
+        let res = invoke("areas_control", { payload: { command: "many" } });
     }
+
 
 }))

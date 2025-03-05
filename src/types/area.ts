@@ -1,7 +1,13 @@
-import { Card } from "../context/page_schema"
 import { Note } from "./notes"
 import { Project } from "./project"
 import { Todo } from "./todos"
+
+export  interface Card{
+  id:number
+  cols:number,
+  rows:number,
+  props:any | undefined,
+}
 
 export interface Area {
   title: string
@@ -9,7 +15,7 @@ export interface Area {
   ui_schema: {item:Card[]}
   cover: number[]  | string
   icon: number[] | string
-  id:string
+  id:number
 }
 
 export interface AreaPage {
