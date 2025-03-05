@@ -1,5 +1,5 @@
 // components/Card.tsx
-import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
@@ -10,8 +10,7 @@ import {
   IconRowInsertBottom,
   IconRowRemove
 } from '@tabler/icons-react'
-import { useLayout } from '../../../context/page_schema'
-import Icon from '../../Icon'
+import { Card as Cardtype } from '../../../types/area';
 
 const CardContainer = styled.div<{
   rowSpan: number
@@ -38,14 +37,13 @@ const CardHeader = styled.div`
 interface CardProps {
   id: string
   cla: string
+  element: Cardtype | undefined
 }
 
 const Card: React.FC<CardProps> = ({
-  id,cla
+  id, cla,element
 }) => {
 
-  let { list, updateCard: update, tauri } = useLayout()
-  let element = list?.find(item => item.id.toString() == id)
   const { attributes, listeners, setNodeRef, transform, isDragging, transition } =
     useSortable({ id })
 
@@ -56,14 +54,14 @@ const Card: React.FC<CardProps> = ({
 
   if (element) {
     return (
-      <CardContainer 
+      <CardContainer
         ref={setNodeRef}
         style={style}
-        rowSpan={element.rows}
+        rowSpan={element.cols}
         colSpan={element.cols}
         isDragging={isDragging}
         {...attributes}
-        className={`relative rounded ${cla} card`} 
+        className={`relative rounded ${cla} card`}
       >
         <div className='flex items-center justify-between'>
           <CardHeader {...listeners}>
@@ -73,18 +71,18 @@ const Card: React.FC<CardProps> = ({
           <div>
             <div className='flex'>
               <div>
-                <button onClick={() => { element.rows = Math.max(1, element.rows - 1); update(tauri, element) }}>
+                <button onClick={() => { element.rows = Math.max(1, element.rows - 1);  }}>
                   <IconRowRemove />
                 </button>
-                <button onClick={() => { element.rows = element.rows + 1; console.log(element); update(tauri, element) }}>
+                <button onClick={() => { element.rows = element.rows + 1; console.log(element);  }}>
                   <IconRowInsertBottom />
                 </button>
               </div>
               <div>
-                <button onClick={() => { element.cols = Math.max(1, element.cols - 1); update(tauri, element) }}>
+                <button onClick={() => { element.cols = Math.max(1, element.cols - 1); }}>
                   <IconLayoutSidebarLeftCollapseFilled />
                 </button>
-                <button onClick={() => { element.cols = element.cols + 1; update(tauri, element) }}>
+                <button onClick={() => { element.cols = element.cols + 1; }}>
                   <IconLayoutSidebarLeftExpandFilled />
                 </button>
               </div>

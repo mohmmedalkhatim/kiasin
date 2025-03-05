@@ -9,17 +9,17 @@ import {
 } from '@dnd-kit/core'
 import {
   SortableContext,
+  arrayMove,
   horizontalListSortingStrategy,
   verticalListSortingStrategy,
 } from '@dnd-kit/sortable'
-import { useMemo, useState } from 'react'
+import { useState } from 'react'
 import Grid from './main/Grid'
 import Card from './main/Card'
-import { useLayout } from '../../context/page_schema'
+import { Area } from '../../types/area'
 
-
-const Board: React.FC = () => {
-  let { list, sort_list, updateSort } = useLayout()
+const Board = ({ area }: { area?: Area }) => {
+  let [sort, updateSort] = useState(area?.ui_schema.item.map(item => item.id.toString()))
 
   const [activeId, setActiveId] = useState<string | null>(null)
 
@@ -34,20 +34,18 @@ const Board: React.FC = () => {
   }
 
   const handleDragEnd = (event: any) => {
-    const { active, over } = event;
-    updateSort(sort_list, active, over, list)
+    if (event.active.id !== event.over.id && sort) {
+      const oldIndex = sort?.indexOf(event.active.id)
+      const newIndex = sort?.indexOf(event.over.id)
+      updateSort(arrayMove(sort, oldIndex, newIndex))
+    }
     setActiveId(null)
   }
-  let elements = useMemo(() => {
-    if (sort_list) {
-      return sort_list.map(id => (
-        <Card cla={activeId === id ? 'dragging' : ''} key={id} id={id} />
-      ))
 
-    }
-  }, [sort_list])
-
-  if (sort_list) {
+  let elements = area?.ui_schema.item.map(item => (
+    <Card cla={activeId === String(item.id) ? 'dragging' : ''} key={item.id} id={String(item.id)} element={item} />
+  ))
+  if(sort){
     return (
       <DndContext
         sensors={sensors}
@@ -55,16 +53,14 @@ const Board: React.FC = () => {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <SortableContext items={sort_list} strategy={horizontalListSortingStrategy || verticalListSortingStrategy}>
+        <SortableContext items={sort} strategy={horizontalListSortingStrategy || verticalListSortingStrategy}>
           <Grid columns={8}>
             {elements}
           </Grid>
         </SortableContext>
-        <DragOverlay>{activeId ? <Card cla='' id={activeId} /> : null}</DragOverlay>
+        <DragOverlay>{activeId ? <Card cla='' id={activeId} element={undefined} /> : null}</DragOverlay>
       </DndContext>
-    )
-  } else {
-    return <div>there is an error</div>
+    ) 
   }
 }
 
