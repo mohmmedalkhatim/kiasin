@@ -15,7 +15,6 @@ pub async fn user_control(
 ) -> Result<(), String> {
     let db = data.lock().await.db.clone().unwrap();
     let server = app.app_handle();
-    println!("hello from user");
     match payload.command.as_str() {
         "create" => match payload.item {
             Some(state) => {

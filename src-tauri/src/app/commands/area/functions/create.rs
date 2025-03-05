@@ -1,13 +1,10 @@
 use migration::entities::area::{ActiveModel, Entity};
-use sea_orm::{DatabaseConnection, EntityTrait, Set};
+use sea_orm::{DatabaseConnection, DbErr, EntityTrait, Set};
 use serde_json::json;
-pub async fn create_area(db: &DatabaseConnection) -> Result<(), String> {
+pub async fn create_area(db: &DatabaseConnection) -> Result<u32,DbErr> {
     let shema = json!({
         "item":[
             {"id":1,"cols":6,"rows":4},
-            {"id":2,"cols":2,"rows":8},
-            {"id":3,"cols":4,"rows":3},
-            {"id":4,"cols":4,"rows":3}
         ]
     });
 
@@ -18,9 +15,9 @@ pub async fn create_area(db: &DatabaseConnection) -> Result<(), String> {
         icon: Set(None),
         cover: Set(None),
         ui_schema: Set(shema),
+        in_archive:Set(false),
         ..Default::default()
     };
 
-    let _ = Entity::insert(new).exec(db).await.unwrap();
-    Ok(())
+    Ok(Entity::insert(new).exec(db).await?.last_insert_id)
 }

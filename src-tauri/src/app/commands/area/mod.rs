@@ -1,9 +1,9 @@
 use std::sync::Arc;
 
-pub use objects::{Area, AreaPage, Payload};
-use tauri::{command, ipc::Channel, AppHandle, Emitter, Manager, State};
-use tokio::sync::Mutex;
 use crate::DbConnection;
+use async_std::sync::Mutex;
+pub use objects::{Area, Payload};
+use tauri::{command, AppHandle, Emitter, Manager, State};
 mod functions;
 mod objects;
 
@@ -17,16 +17,25 @@ pub async fn areas_control(
     let db = data.lock().await.db.clone().unwrap();
     match payload.command.as_str() {
         "create" => {
-            let _ = functions::create_area(&db);
-
+            let res = functions::create_area(&db).await;
+            match res {
+                Ok(id) => {
+                    let one = functions::find_one(id as i32, &db).await.unwrap();
+                    let _ = server.emit("area", one);
+                }
+                Err(e) => {
+                    println!("{}", e.to_string())
+                }
+            }
             Ok(())
         }
         "updata" => match payload.item {
             Some(area) => {
                 if let Some(id) = payload.id {
-                    let _ = functions::updata_area(&db, id, area);
+                    let a = functions::updata_area(&db, id, area);
                     let list = functions::find_many(&db).await.unwrap();
                     let _ = server.emit("areas", list);
+                    
                     return Ok(());
                 }
                 Err("you have to add an id".to_string())
@@ -37,25 +46,30 @@ pub async fn areas_control(
             Some(id) => {
                 let list = functions::find_one(id, &db).await;
                 if let Ok(area) = list {
-                    let _ = server.emit("areas", vec![area]);
+                    let _ = server.emit("area", area);
                     return Ok(());
                 }
-                Err("hello".to_string())
+                Err("hello this an error fron getarea".to_string())
             }
             None => Err("you have to provided an ID".to_string()),
         },
 
         "many" => {
-            let list = functions::find_many(&db)
-                .await
-                .expect("there a error in the database");
-            let _ = server.emit("areas", list);
+            let list = functions::find_many(&db).await;
+            match list {
+                Ok(state) => {
+                    let _ = server.emit("areas", state);
+                }
+                Err(e) => {
+                    println!("{}", e.to_string())
+                }
+            }
             Ok(())
         }
         "Page" => match payload.id {
             Some(id) => {
                 let page = functions::area_page(id, &db).await.unwrap();
-                let _ = server.emit("area",page);
+                let _ = server.emit("area", page);
                 Ok(())
             }
             None => Err("you have to provided an ID".to_string()),
@@ -78,6 +92,12 @@ pub async fn areas_control(
             }
             None => Err("you have to provided an ID".to_string()),
         },
-        _ => Err("you are trying to access unregistered command".to_string()),
+        _ => {
+            println!(
+                "you are trying to access unregistered command {:?}",
+                payload
+            );
+            Ok(())
+        }
     }
 }

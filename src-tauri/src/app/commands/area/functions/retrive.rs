@@ -14,7 +14,9 @@ pub async fn find_one(id: i32, db: &DatabaseConnection) -> Result<Model, DbErr> 
 }
 
 pub async fn find_many(db: &DatabaseConnection) -> Result<Vec<Model>, DbErr> {
-    Ok(Entity::find().all(db).await?)
+    println!("Finding all areas");
+    let list = Entity::find().all(db).await?;
+    Ok(list)
 }
 
 pub async fn area_page(id: i32, db: &DatabaseConnection) -> Result<AreaPage, DbErr> {
