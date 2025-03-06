@@ -7,10 +7,10 @@ import { useQuery } from '@tanstack/react-query';
 function Dashborad({ }: {}) {
   let { data, error, isLoading } = useQuery({
     queryKey: ['area'],
-    queryFn: () => invoke<Area>('dashboard')
+    queryFn: async () => await invoke<Area>('dashboard')
   })
-  if (isLoading) return <div>Loading...</div>
-  if (error) return <div>Error: {error.message}</div>
+  if (isLoading) return <main className='content'>Loading...</main>
+  if (error) return <main  className='content'>Error: {error.message}</main>
   if (data) {
     return <main className="content">
       <Borad area={data} />
