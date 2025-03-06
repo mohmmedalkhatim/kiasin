@@ -11,7 +11,7 @@ pub async fn dashboard() -> Area {
         ui_schema: json!({
             "item":[
                 {"id":1,"cols":6,"rows":4},
-                {"id":2,"cols":2,"rows":8},
+                {"id":2,"cols":2,"rows":2},
                 {"id":3,"cols":3,"rows":4},
                 {"id":4,"cols":3,"rows":4},
                 {"id":5,"cols":8,"rows":4},

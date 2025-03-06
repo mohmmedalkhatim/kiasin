@@ -1,9 +1,10 @@
-use std::sync::Arc;
+use std::{sync::Arc, vec};
 
 use crate::DbConnection;
 use async_std::sync::Mutex;
+use migration::entities::area::Model;
 pub use objects::{Area, Payload};
-use tauri::{command, AppHandle, Emitter, Manager, State};
+use tauri::{command, ipc::Channel, AppHandle, Emitter, Manager, State};
 mod functions;
 mod objects;
 
@@ -12,16 +13,17 @@ pub async fn areas_control(
     app: AppHandle,
     payload: Payload,
     data: State<'_, Arc<Mutex<DbConnection>>>,
+    channel: Channel<Vec<Model>>,
 ) -> Result<(), String> {
-    let server = app.app_handle();
     let db = data.lock().await.db.clone().unwrap();
+    let server = app.app_handle();
     match payload.command.as_str() {
         "create" => {
             let res = functions::create_area(&db).await;
             match res {
                 Ok(id) => {
                     let one = functions::find_one(id as i32, &db).await.unwrap();
-                    let _ = server.emit("area", one);
+                    let _ = channel.send(vec![one]);
                 }
                 Err(e) => {
                     println!("{}", e.to_string())
@@ -34,8 +36,8 @@ pub async fn areas_control(
                 if let Some(id) = payload.id {
                     let a = functions::updata_area(&db, id, area);
                     let list = functions::find_many(&db).await.unwrap();
-                    let _ = server.emit("areas", list);
-                    
+                    let _ = channel.send(list);
+
                     return Ok(());
                 }
                 Err("you have to add an id".to_string())
@@ -46,7 +48,7 @@ pub async fn areas_control(
             Some(id) => {
                 let list = functions::find_one(id, &db).await;
                 if let Ok(area) = list {
-                    let _ = server.emit("area", area);
+                    let _ = channel.send(vec![area]);
                     return Ok(());
                 }
                 Err("hello this an error fron getarea".to_string())
@@ -58,7 +60,7 @@ pub async fn areas_control(
             let list = functions::find_many(&db).await;
             match list {
                 Ok(state) => {
-                    let _ = server.emit("areas", state);
+                    let _ = channel.send(state);
                 }
                 Err(e) => {
                     println!("{}", e.to_string())
@@ -66,21 +68,13 @@ pub async fn areas_control(
             }
             Ok(())
         }
-        "Page" => match payload.id {
-            Some(id) => {
-                let page = functions::area_page(id, &db).await.unwrap();
-                let _ = server.emit("area", page);
-                Ok(())
-            }
-            None => Err("you have to provided an ID".to_string()),
-        },
+
         "delete_one" => match payload.id {
             Some(id) => {
                 let done = functions::delete_area(id, &db).await;
                 match done {
                     Ok(_) => {
-                        let _ = server.emit(
-                            "areas",
+                        let _ = channel.send(
                             functions::find_many(&db)
                                 .await
                                 .expect("there an error with the database"),
