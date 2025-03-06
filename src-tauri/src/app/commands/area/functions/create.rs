@@ -5,7 +5,7 @@ pub async fn create_area(db: &DatabaseConnection) -> Result<u32,DbErr> {
     let shema = json!({
         "item":[
             {"id":1,"cols":6,"rows":3},
-            {"id":2,"cols":2,"rows":8},
+            {"id":2,"cols":2,"rows":6},
             {"id":3,"cols":3,"rows":3},
             {"id":4,"cols":3,"rows":3},
         ]

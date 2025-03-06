@@ -32,6 +32,7 @@ export let useAreas = create<Projects>((set) => ({
 
     },
     create: () => {
+        
         invoke("projects_control", { payload: { command: "create" } });
     }
 
