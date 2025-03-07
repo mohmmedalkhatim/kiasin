@@ -19,8 +19,8 @@ import Card from './main/Card'
 import { Area } from '../../types/area'
 
 const Board = ({ area }: { area?: Area }) => {
-  let [sort, updateSort] = useState(area?.ui_schema.item.map(item => item.id.toString()))
-
+  let [schema,setShema] = useState(area?.ui_schema)
+  let [sort, updateSort] = useState(schema?.item.map(item => item.id.toString()))
   const [activeId, setActiveId] = useState<string | null>(null)
 
   // Configure sensors for drag-and-drop
@@ -42,7 +42,7 @@ const Board = ({ area }: { area?: Area }) => {
     setActiveId(null)
   }
 
-  let elements = area?.ui_schema.item.map(item => (
+  let elements = schema?.item.map(item => (
     <Card cla={activeId === String(item.id) ? 'dragging' : ''} key={item.id} id={String(item.id)} element={item} />
   ))
   if(sort){

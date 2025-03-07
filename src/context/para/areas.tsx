@@ -1,7 +1,6 @@
 import { create } from "zustand";
 import { Area } from "../../types/area";
 import { Channel, invoke } from '@tauri-apps/api/core';
-import { listen } from '@tauri-apps/api/event';
 
 interface Areas {
     list: Area[],

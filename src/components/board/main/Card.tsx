@@ -57,7 +57,7 @@ const Card: React.FC<CardProps> = ({
       <CardContainer
         ref={setNodeRef}
         style={style}
-        rowSpan={element.cols}
+        rowSpan={element.rows}
         colSpan={element.cols}
         isDragging={isDragging}
         {...attributes}
