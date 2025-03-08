@@ -8,6 +8,7 @@
   "scripts": {
     "tauri": "tauri",
     "dev": "vite",
+    "build": "vite build", 
     "test": "jest"
   },
   "author": "mohammedalkhatim",

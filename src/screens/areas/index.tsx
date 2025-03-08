@@ -2,10 +2,7 @@ import Card from "../../components/List/Card"
 import { IconPlus } from '@tabler/icons-react';
 import { useAreas } from "../../context/para/areas";
 import { Link } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { Channel, invoke } from "@tauri-apps/api/core";
-import { Area } from "../../types/area";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
 
 function Areas() {

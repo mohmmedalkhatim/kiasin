@@ -16,11 +16,11 @@ import {
 import { useState } from 'react'
 import Grid from './main/Grid'
 import Card from './main/Card'
-import { Area } from '../../types/area'
+import { Area, Card as Cardtype } from '../../types/area'
 
 const Board = ({ area }: { area?: Area }) => {
-  let [schema,setShema] = useState(area?.ui_schema)
-  let [sort, updateSort] = useState(schema?.item.map(item => item.id.toString()))
+  let [schema, setShema] = useState(area?.ui_schema.item)
+  let [sort, updateSort] = useState(schema?.map(item => item.id.toString()))
   const [activeId, setActiveId] = useState<string | null>(null)
 
   // Configure sensors for drag-and-drop
@@ -34,18 +34,19 @@ const Board = ({ area }: { area?: Area }) => {
   }
 
   const handleDragEnd = (event: any) => {
+
     if (event.active.id !== event.over.id && sort) {
       const oldIndex = sort?.indexOf(event.active.id)
       const newIndex = sort?.indexOf(event.over.id)
+      let newSort = arrayMove(sort, oldIndex, newIndex);
+      let newShema = newSort.map((id) => schema?.find(item => String(item.id) == id) || {} as Cardtype)
+      setShema(newShema)
       updateSort(arrayMove(sort, oldIndex, newIndex))
     }
     setActiveId(null)
   }
 
-  let elements = schema?.item.map(item => (
-    <Card cla={activeId === String(item.id) ? 'dragging' : ''} key={item.id} id={String(item.id)} element={item} />
-  ))
-  if(sort){
+  if (sort) {
     return (
       <DndContext
         sensors={sensors}
@@ -55,12 +56,14 @@ const Board = ({ area }: { area?: Area }) => {
       >
         <SortableContext items={sort} strategy={horizontalListSortingStrategy || verticalListSortingStrategy}>
           <Grid columns={8}>
-            {elements}
+            {schema?.map(item => (
+              <Card cla={activeId === String(item.id) ? 'dragging' : ''} key={String(item.id)} id={String(item.id)} element={item} />
+            ))}
           </Grid>
         </SortableContext>
         <DragOverlay>{activeId ? <Card cla='' id={activeId} element={undefined} /> : null}</DragOverlay>
       </DndContext>
-    ) 
+    )
   }
 }
 

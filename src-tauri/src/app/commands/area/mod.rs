@@ -43,19 +43,7 @@ pub async fn areas_control(
                 Err("you have to add an id".to_string())
             }
             None => Err("you have to provide an area".to_string()),
-        },
-        "one" => match payload.id {
-            Some(id) => {
-                let list = functions::find_one(id, &db).await;
-                if let Ok(area) = list {
-                    let _ = channel.send(vec![area]);
-                    return Ok(());
-                }
-                Err("hello this an error fron getarea".to_string())
-            }
-            None => Err("you have to provided an ID".to_string()),
-        },
-
+        },            
         "many" => {
             let list = functions::find_many(&db).await;
             match list {
