@@ -3,11 +3,9 @@ import { } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { Underline } from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
-import bubble_menu from '@tiptap/extension-bubble-menu'
 import textStyle from '@tiptap/extension-text-style';
 import { Toolbar } from './toolbar';
 
-import color from '@tiptap/extension-color';
 import './style.css';
 
 
@@ -17,9 +15,6 @@ const RichTextEditor = () => {
             StarterKit,
             Underline,
             TextAlign.configure({
-                types: ["heading", 'paragraph'],
-            }),
-            color.configure({
                 types: ["heading", 'paragraph'],
             }),
             textStyle,

@@ -1,6 +1,6 @@
 import React from "react";
 import { BubbleMenu, Editor } from "@tiptap/react";
-import { IconAlignCenter, IconAlignJustified, IconAlignLeft, IconAlignRight, IconBold, IconH1, IconH2, IconH3, IconH4, IconH5, IconH6, IconHeading, IconItalic, IconUnderline } from "@tabler/icons-react"
+import { IconBold, IconItalic, IconUnderline } from "@tabler/icons-react"
 import Heading from "./heading";
 import Alignment from "./alignment";
 
