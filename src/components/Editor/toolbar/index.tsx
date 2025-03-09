@@ -20,14 +20,14 @@ export const Toolbar: React.FC<ToolbarProps> = ({ editor }) => {
           disabled={!editor.can().chain().focus().toggleBold().run()}
           className="toolbar_button"
         >
-          <IconBold />
+          <IconBold size={"1rem"} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleItalic().run()}
           disabled={!editor.can().chain().focus().toggleItalic().run()}
           className="toolbar_button"
         >
-          <IconItalic />
+          <IconItalic size={"1rem"} />
         </button>
 
         <div className="flex">
@@ -40,7 +40,7 @@ export const Toolbar: React.FC<ToolbarProps> = ({ editor }) => {
         disabled={!editor.can().chain().focus().setUnderline().run()}
         className="toolbar_button"
       >
-        <IconUnderline />
+        <IconUnderline size={"1rem"} />
       </button>
     </BubbleMenu>
   );

@@ -5,7 +5,7 @@ function Alignment({editor}: {editor:Editor}) {
   return (
         <div className="tooltip-container">
             <button aria-describedby="help-tooltip" className="help-button">
-              <IconAlignCenter />
+              <IconAlignCenter size={"1rem"} />
             </button>
             <div role="tooltip" id="help-tooltip" className="tooltip">
             <button
@@ -13,28 +13,28 @@ function Alignment({editor}: {editor:Editor}) {
             disabled={!editor.can().chain().focus().setTextAlign("center").run()}
             className="toolbar_button"
           >
-            <IconAlignCenter />
+            <IconAlignCenter size={"1rem"} />
           </button>
           <button
             onClick={() => editor.chain().focus().setTextAlign("right").run()}
             disabled={!editor.can().chain().focus().setTextAlign("right").run()}
             className="toolbar_button"
           >
-            <IconAlignRight />
+            <IconAlignRight size={"1rem"} />
           </button>
           <button
             onClick={() => editor.chain().focus().setTextAlign("left").run()}
             disabled={!editor.can().chain().focus().setTextAlign("left").run()}
             className="toolbar_button"
           >
-            <IconAlignLeft />
+            <IconAlignLeft size={"1rem"} />
           </button>
           <button
             onClick={() => editor.chain().focus().setTextAlign("justify").run()}
             disabled={!editor.can().chain().focus().setTextAlign("justify").run()}
             className="toolbar_button"
           >
-            <IconAlignJustified />
+            <IconAlignJustified size={"1rem"} />
           </button>
             </div>
           </div>
