@@ -1,16 +1,30 @@
-import { useEditor, EditorContent } from '@tiptap/react';
+import { useEditor, EditorContent, Editor } from '@tiptap/react';
+import { } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { Heading } from '@tiptap/extension-heading';
 import { Underline } from '@tiptap/extension-underline';
-import { TextAlign } from '@tiptap/extension-text-align';
+import TextAlign from '@tiptap/extension-text-align';
+import bubble_menu from '@tiptap/extension-bubble-menu'
+import textStyle from '@tiptap/extension-text-style';
 import { Toolbar } from './toolbar';
+
+import color from '@tiptap/extension-color';
 import './style.css';
+
 
 const RichTextEditor = () => {
     const editor = useEditor({
-        extensions: [StarterKit, Heading, Underline, TextAlign.configure({types:["heading", "paragraph"]})],
+        extensions: [
+            StarterKit,
+            Underline,
+            TextAlign.configure({
+                types: ["heading", 'paragraph'],
+            }),
+            color.configure({
+                types: ["heading", 'paragraph'],
+            }),
+            textStyle,
+        ],
         content: '<p>Hello, world!</p>',
-        injectCSS: true,
         editorProps: {
             attributes: {
                 class: 'editor',
