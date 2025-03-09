@@ -10,13 +10,13 @@ import {
 import {
   SortableContext,
   arrayMove,
-  horizontalListSortingStrategy,
-  verticalListSortingStrategy,
+
 } from '@dnd-kit/sortable'
 import { useState } from 'react'
 import Grid from './main/Grid'
 import Card from './main/Card'
 import { Area, Card as Cardtype } from '../../types/area'
+import { SwappingStrategy } from './Strategy'
 
 const Board = ({ area }: { area?: Area }) => {
   let [schema, setShema] = useState(area?.ui_schema.item)
@@ -41,7 +41,8 @@ const Board = ({ area }: { area?: Area }) => {
       let newSort = arrayMove(sort, oldIndex, newIndex);
       let newShema = newSort.map((id) => schema?.find(item => String(item.id) == id) || {} as Cardtype)
       setShema(newShema)
-      updateSort(arrayMove(sort, oldIndex, newIndex))
+      updateSort(newSort)
+
     }
     setActiveId(null)
   }
@@ -54,7 +55,7 @@ const Board = ({ area }: { area?: Area }) => {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <SortableContext items={sort} strategy={horizontalListSortingStrategy || verticalListSortingStrategy}>
+        <SortableContext items={sort} strategy={SwappingStrategy}>
           <Grid columns={8}>
             {schema?.map(item => (
               <Card cla={activeId === String(item.id) ? 'dragging' : ''} key={String(item.id)} id={String(item.id)} element={item} />
