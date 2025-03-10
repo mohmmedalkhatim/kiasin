@@ -1,5 +1,4 @@
 import { Note } from "./notes"
-import { Project } from "./project"
 import { Todo } from "./todos"
 
 export  interface Card{
@@ -15,15 +14,15 @@ export interface Area {
   ui_schema: {item:Card[]}
   cover: number[]  | string
   icon: number[] | string,
-  links: string[]
+  links: {list: string[]}
   id:number
 }
 
 export interface AreaPage {
   info: Area
-  projects: Project[]
   notes: Note[]
   todos: Todo[]
+  media: string[] | number[]
 }
 export interface Payload {
   command: String

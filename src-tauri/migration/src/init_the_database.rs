@@ -5,7 +5,8 @@ use crate::entities::note;
 use crate::entities::user;
 use crate::entities::db;
 use crate::entities::media;
-
+use crate::entities::todo;
+use crate::entities::template;
 #[derive(DeriveMigrationName)]
 pub struct Migration;
 
@@ -20,6 +21,9 @@ impl MigrationTrait for Migration {
         manager.create_table(schema.create_table_from_entity(note::Entity)).await?;
         manager.create_table(schema.create_table_from_entity(db::Entity)).await?;
         manager.create_table(schema.create_table_from_entity(user::Entity)).await?;
+        manager.create_table(schema.create_table_from_entity(todo::Entity)).await?;
+        manager.create_table(schema.create_table_from_entity(template::Entity)).await?;
+        
         Ok(())
     }
 

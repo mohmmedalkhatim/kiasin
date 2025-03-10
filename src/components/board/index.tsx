@@ -17,13 +17,14 @@ import Grid from './main/Grid'
 import Card from './main/Card'
 import { Area, Card as Cardtype } from '../../types/area'
 import { SwappingStrategy } from './Strategy'
-import { Channel, invoke } from '@tauri-apps/api/core'
+import { Channel } from '@tauri-apps/api/core'
+import { useAreas } from '../../context/para/areas'
 
 const Board = ({ area }: { area?: Area }) => {
   let [schema, setShema] = useState(area?.ui_schema.item)
   let [sort, updateSort] = useState(schema?.map(item => item.id.toString()))
   const [activeId, setActiveId] = useState<string | null>(null)
-
+  let update = useAreas((state) => state.update)
   // Configure sensors for drag-and-drop
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -42,8 +43,8 @@ const Board = ({ area }: { area?: Area }) => {
       let newSchema = newSort.map((id) => schema?.find(item => String(item.id) == id) || {} as Cardtype)
       let channel = new Channel()
       setShema(newSchema)
+      update({ ...area, ui_schema: { item: newSchema } } as Area)
       updateSort(newSort)
-      await invoke('area_control', { command: "update", payload: { id: area?.id, item: { ...area, ui_schema: { item: newSchema } } as Area }, channel })
     }
     setActiveId(null)
   }
