@@ -18,6 +18,7 @@ export let useAreas = create<Areas>((set) => ({
         let channel = new Channel<Area[]>();
         channel.onmessage = (data) => {
             data.map((item) => {
+                console.log("area", item);
                 let icon = URL.createObjectURL(new Blob([new Uint8Array(item.icon as number[])], { type: "image/jpeg" }))
                 item.icon = icon;
                 let cover = URL.createObjectURL(new Blob([new Uint8Array(item.cover as number[])], { type: "image/jpeg" }))

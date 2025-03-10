@@ -10,13 +10,14 @@ pub async fn create_area(db: &DatabaseConnection) -> Result<u32,DbErr> {
             {"id":4,"cols":3,"rows":3},
         ]
     });
-
+    let links = json!({ "list": [] });
     let new = ActiveModel {
         title: Set(Some("untitled".to_string())),
         user_id: Set(1),
         descrption: Set(Some("set a discrption".to_string())),
         icon: Set(None),
         cover: Set(None),
+        links: Set(links),
         ui_schema: Set(shema),
         in_archive:Set(false),
         ..Default::default()

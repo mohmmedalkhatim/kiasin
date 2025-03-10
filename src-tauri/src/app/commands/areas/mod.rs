@@ -13,7 +13,7 @@ pub async fn areas_control(
     app: AppHandle,
     payload: Payload,
     data: State<'_, Arc<Mutex<DbConnection>>>,
-    channel: Option<Channel<Vec<Model>>>,
+    channel: Channel<Vec<Model>>,
 ) -> Result<(), String> {
     let db = data.lock().await.db.clone().unwrap();
     let server = app.app_handle();
@@ -43,13 +43,13 @@ pub async fn areas_control(
             let list = functions::find_many(&db).await;
             match list {
                 Ok(state) => {
-                    let _ = channel.unwrap().send(state);
+                    let _ = channel.send(state);
+                    Ok(())
                 }
                 Err(e) => {
-                    println!("{}", e.to_string())
+                    Err(e.to_string())
                 }
             }
-            Ok(())
         }
 
         "delete_one" => match payload.id {
