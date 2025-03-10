@@ -8,7 +8,7 @@
   "scripts": {
     "tauri": "tauri",
     "dev": "vite",
-    "build": "vite build", 
+    "build": "vite build",
     "test": "jest"
   },
   "author": "mohammedalkhatim",
@@ -22,6 +22,7 @@
     "@tauri-apps/api": "^2.2.0",
     "@tauri-apps/cli": "^2.2.7",
     "@tauri-apps/plugin-shell": "^2.2.0",
+    "@tauri-apps/plugin-store": "^2.2.0",
     "@tiptap/extension-highlight": "^2.11.5",
     "@tiptap/extension-text-align": "^2.11.5",
     "@tiptap/extension-underline": "^2.11.5",
@@ -33,6 +34,7 @@
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.2.0",
     "styled-components": "^6.1.15",
+    "tauri-plugin-store-api": "^0.0.0",
     "zustand": "^5.0.3"
   },
   "devDependencies": {

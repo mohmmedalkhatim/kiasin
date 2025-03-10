@@ -11,8 +11,8 @@ mod objects;
 #[command]
 pub async fn media_control(
     payload: Payload,
-    data: State<'_,Arc<Mutex<DbConnection>>>,
-    app:AppHandle
+    data: State<'_, Arc<Mutex<DbConnection>>>,
+    app: AppHandle,
 ) -> Result<(), String> {
     let db = data.lock_arc().await.db.clone().unwrap();
     let server = app.app_handle();
@@ -33,7 +33,7 @@ pub async fn media_control(
                     let list = functions::find_many(&db).await;
                     match list {
                         Ok(v) => {
-                            let _ = server.emit("media",v);
+                            let _ = server.emit("media", v);
                         }
                         Err(e) => {
                             return Err(e);
@@ -49,12 +49,12 @@ pub async fn media_control(
             let list = functions::find_many(&db).await;
             match list {
                 Ok(v) => {
-                    let _ = server.emit("media",v);
+                    let _ = server.emit("media", v);
                     Ok(())
                 }
                 Err(e) => Err(e),
             }
-        },
+        }
         _ => Err("you are trying to call unregisted command".to_string()),
     }
 }

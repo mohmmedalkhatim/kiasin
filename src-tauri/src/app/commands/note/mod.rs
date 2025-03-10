@@ -1,8 +1,8 @@
-use std::sync::Arc;
-use tokio::sync::Mutex;
 use crate::DbConnection;
 use objects::Payload;
+use std::sync::Arc;
 use tauri::{command, AppHandle, Emitter, Manager, State};
+use tokio::sync::Mutex;
 mod functions;
 mod objects;
 
@@ -10,7 +10,7 @@ mod objects;
 pub async fn notes_control(
     payload: Payload,
     data: State<'_, Arc<Mutex<DbConnection>>>,
-    app:AppHandle
+    app: AppHandle,
 ) -> Result<(), String> {
     let db = &data.lock().await.db.clone().unwrap();
     let server = app.app_handle();

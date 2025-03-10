@@ -18,6 +18,7 @@ sea-orm = { version = "1", features = [
     "sqlx-sqlite",
     "runtime-tokio-native-tls",
 ] }
+tauri-plugin-store = "2"
 sea-orm-macros = "1"
 base64 = "0.13"
 thiserror = "1.0"

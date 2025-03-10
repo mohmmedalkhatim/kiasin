@@ -1,8 +1,7 @@
-use sea_orm::{DatabaseConnection, Set, prelude::*};
-use serde_json::json;
-use migration::entities::tag::{ActiveModel,Entity};
+use migration::entities::tag::{ActiveModel, Entity};
 use migration::DbErr;
-
+use sea_orm::{prelude::*, DatabaseConnection, Set};
+use serde_json::json;
 
 pub async fn create_tag(db: &DatabaseConnection, tag_name: &str) -> Result<(), DbErr> {
     let tag = ActiveModel {

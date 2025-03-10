@@ -14,6 +14,7 @@ struct DbConnection {
 #[tokio::main]
 async fn main() {
     tauri::Builder::default()
+        .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![
             app::areas_control,
@@ -34,7 +35,8 @@ async fn main() {
             tauri::async_runtime::spawn(async move {
                 shadow.lock_arc().await.db =
                     Some(app::database_connection(database_url.display().to_string()).await);
-                let _ = migration::Migrator::up(&shadow.lock_arc().await.db.clone().unwrap(),None).await;
+                let _ = migration::Migrator::up(&shadow.lock_arc().await.db.clone().unwrap(), None)
+                    .await;
             });
             app.manage(database);
             Ok(())

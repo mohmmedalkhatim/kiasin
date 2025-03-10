@@ -17,7 +17,6 @@ import Grid from './main/Grid'
 import Card from './main/Card'
 import { Area, Card as Cardtype } from '../../types/area'
 import { SwappingStrategy } from './Strategy'
-import { Channel } from '@tauri-apps/api/core'
 import { useAreas } from '../../context/para/areas'
 
 const Board = ({ area }: { area?: Area }) => {
@@ -41,7 +40,6 @@ const Board = ({ area }: { area?: Area }) => {
       const newIndex = sort?.indexOf(event.over.id)
       let newSort = arrayMove(sort, oldIndex, newIndex);
       let newSchema = newSort.map((id) => schema?.find(item => String(item.id) == id) || {} as Cardtype)
-      let channel = new Channel()
       setShema(newSchema)
       update({ ...area, ui_schema: { item: newSchema } } as Area)
       updateSort(newSort)

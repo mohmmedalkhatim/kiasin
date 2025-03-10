@@ -8,7 +8,7 @@ pub struct User {
     pub icon: Option<String>,
 }
 
-#[derive(Serialize, Deserialize, Clone,Debug)]
+#[derive(Serialize, Deserialize, Clone, Debug)]
 
 pub struct Payload {
     pub command: String,

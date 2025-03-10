@@ -22,32 +22,29 @@ pub async fn areas_control(
             let res = functions::create_area(&db).await;
             match res {
                 Ok(id) => {
-                    let state = functions::find_one(id,&db).await;
+                    let state = functions::find_one(id, &db).await;
                     let _ = channel.send(vec![state.unwrap()]);
                     Ok(())
                 }
-                Err(e) => {
-                    Err(e.to_string())
-                }
+                Err(e) => Err(e.to_string()),
             }
         }
-        "updata" => match payload.item {
+        "update" => match payload.item {
             Some(area) => {
                 if let Some(id) = payload.id {
                     let data = functions::updata_area(&db, id, area).await;
                     match data {
                         Ok(state) => {
                             let _ = channel.send(vec![state]);
-                            return Ok(())
+                            return Ok(());
                         }
                         Err(e) => return Err(e.to_string()),
-                        
                     }
                 }
                 Err("you have to add an id".to_string())
             }
             None => Err("you have to provide an area".to_string()),
-        },            
+        },
         "many" => {
             let list = functions::find_many(&db).await;
             match list {
@@ -55,9 +52,7 @@ pub async fn areas_control(
                     let _ = channel.send(state);
                     Ok(())
                 }
-                Err(e) => {
-                    Err(e.to_string())
-                }
+                Err(e) => Err(e.to_string()),
             }
         }
 
@@ -65,9 +60,7 @@ pub async fn areas_control(
             Some(id) => {
                 let done = functions::delete_area(id, &db).await;
                 match done {
-                    Ok(_) => {
-                        Ok(())
-                    }
+                    Ok(_) => Ok(()),
                     Err(_) => Err("I didn't found the area".to_string()),
                 }
             }

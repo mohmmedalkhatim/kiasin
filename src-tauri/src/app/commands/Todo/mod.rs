@@ -1,15 +1,15 @@
 use std::sync::{Arc, Mutex};
 
+use crate::DbConnection;
 use objects::{Payload, Todo};
 use tauri::{command, AppHandle, Emitter, Manager, State};
-use crate::DbConnection;
 mod functions;
 mod objects;
 
 #[command]
 pub async fn todo_control(
     payload: Payload,
-    app:AppHandle,
+    app: AppHandle,
     data: State<'_, Arc<Mutex<DbConnection>>>,
 ) -> Result<(), String> {
     let server = app.app_handle();

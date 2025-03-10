@@ -3,7 +3,7 @@ use sea_orm::{entity::*, DatabaseConnection, DbErr, EntityTrait, QueryFilter, Se
 
 use crate::app::commands::todo::Todo;
 
-pub async fn updata_note(note: Todo,id:i32, db: &DatabaseConnection) -> Result<(), DbErr> {
+pub async fn updata_note(note: Todo, id: i32, db: &DatabaseConnection) -> Result<(), DbErr> {
     let time = chrono::Local::now();
     let new = ActiveModel {
         title: Set(note.title),
@@ -15,7 +15,9 @@ pub async fn updata_note(note: Todo,id:i32, db: &DatabaseConnection) -> Result<(
         created: Set(time.date_naive()),
         ..Default::default()
     };
-    let _ = Entity::update(new).filter(todo::Column::Id.eq(id)).exec(db).await?;
+    let _ = Entity::update(new)
+        .filter(todo::Column::Id.eq(id))
+        .exec(db)
+        .await?;
     Ok(())
 }
-

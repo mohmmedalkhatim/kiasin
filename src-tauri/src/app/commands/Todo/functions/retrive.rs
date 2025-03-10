@@ -2,7 +2,7 @@ use migration::{
     entities::todo::{self, Entity, Model},
     Expr,
 };
-use sea_orm::{DatabaseConnection, EntityTrait, QueryFilter,};
+use sea_orm::{DatabaseConnection, EntityTrait, QueryFilter};
 
 pub async fn find_many(db: &DatabaseConnection) -> Result<Vec<Model>, String> {
     Ok(Entity::find().all(db).await.unwrap())

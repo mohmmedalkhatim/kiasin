@@ -54,7 +54,6 @@ export let useAreas = create<Areas>((set) => ({
     },
     update: (area: Area) => {
         let channel = new Channel<Area[]>();
-        invoke("areas_control", { payload: { command: "update", area }, channel });
         channel.onmessage = (data) => {
             data.map((item) => {
                 let icon = URL.createObjectURL(new Blob([new Uint8Array(item.icon as number[])], { type: "image/jpeg" }))
@@ -64,5 +63,6 @@ export let useAreas = create<Areas>((set) => ({
                 set(state => ({ list: [...state.list.filter((item) => item.id != area.id), item] }))
             })
         }
+        invoke("areas_control", { payload: { command: "update", id:area.id, item:area }, channel });
     }
 }))

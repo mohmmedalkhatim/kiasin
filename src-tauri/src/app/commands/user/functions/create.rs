@@ -14,7 +14,7 @@ pub async fn create_user(user: User, db: &DatabaseConnection) -> Result<i32, DbE
         email: Set(user.email),
         password: Set(user.password),
         icon: Set(icon_file),
-        key:Set("hello".to_string()),
+        key: Set("hello".to_string()),
         ..Default::default()
     };
     let res = Entity::insert(new).exec(db).await?;
