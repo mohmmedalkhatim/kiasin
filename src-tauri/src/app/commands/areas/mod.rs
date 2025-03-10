@@ -22,6 +22,8 @@ pub async fn areas_control(
             let res = functions::create_area(&db).await;
             match res {
                 Ok(id) => {
+                    let state = functions::find_one(id,&db).await;
+                    let _ = channel.send(vec![state.unwrap()]);
                     Ok(())
                 }
                 Err(e) => {
@@ -32,8 +34,15 @@ pub async fn areas_control(
         "updata" => match payload.item {
             Some(area) => {
                 if let Some(id) = payload.id {
-                    let a = functions::updata_area(&db, id, area);
-                    return Ok(());
+                    let data = functions::updata_area(&db, id, area).await;
+                    match data {
+                        Ok(state) => {
+                            let _ = channel.send(vec![state]);
+                            return Ok(())
+                        }
+                        Err(e) => return Err(e.to_string()),
+                        
+                    }
                 }
                 Err("you have to add an id".to_string())
             }

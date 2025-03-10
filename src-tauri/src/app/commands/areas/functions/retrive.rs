@@ -15,7 +15,6 @@ pub async fn find_one(id: i32, db: &DatabaseConnection) -> Result<Model, DbErr> 
 }
 
 pub async fn find_many(db: &DatabaseConnection) -> Result<Vec<Model>, DbErr> {
-    println!("find_many");
     let list = Entity::find().all(db).await?;
     Ok(list)
 }

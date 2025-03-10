@@ -1,9 +1,9 @@
-use migration::entities::area::{ActiveModel, self, Entity};
-use sea_orm::{entity::*, DatabaseConnection, EntityTrait, QueryFilter, Set};
+use migration::entities::area::{self, ActiveModel, Entity, Model};
+use sea_orm::{entity::*, DatabaseConnection, DbErr, EntityTrait, QueryFilter, Set};
 
 use crate::app::commands::areas::objects::*;
 
-pub fn updata_area(db: &DatabaseConnection,id:i32, area: Area) -> Result<(), String> {
+pub async  fn updata_area(db: &DatabaseConnection,id:i32, area: Area) -> Result<Model, DbErr> {
     let mut cover = None;
     if area.cover.is_some() {
         cover =
@@ -21,10 +21,10 @@ pub fn updata_area(db: &DatabaseConnection,id:i32, area: Area) -> Result<(), Str
         descrption: Set(area.discription),
         icon: Set(icon),
         cover: Set(cover),
+        links: Set(area.links),
         ui_schema:Set(area.ui_schema),
         ..Default::default()
     };
-    let _ = Entity::update(new).filter(area::Column::Id.eq(id)).exec(db);
-
-    Ok(())
+    let new = Entity::update(new).filter(area::Column::Id.eq(id)).exec(db).await?;
+    Ok(new)
 }

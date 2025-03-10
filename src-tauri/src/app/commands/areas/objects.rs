@@ -9,6 +9,7 @@ pub struct Area {
     pub discription: Option<String>,
     pub ui_schema:Value,
     pub cover: Option<String>,
+    pub links: Value,
     pub icon: Option<String>,
 }
 

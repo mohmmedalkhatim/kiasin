@@ -8,6 +8,7 @@ interface Areas {
     init: () => void
     area: (id: number, setArea: React.Dispatch<React.SetStateAction<boolean>>) => void
     create: () => void
+    update: (area: Area) => void
 }
 
 
@@ -48,6 +49,19 @@ export let useAreas = create<Areas>((set) => ({
                 let cover = URL.createObjectURL(new Blob([new Uint8Array(item.cover as number[])], { type: "image/jpeg" }))
                 item.cover = cover;
                 set(state => ({ list: [...state.list, item] }))
+            })
+        }
+    },
+    update: (area: Area) => {
+        let channel = new Channel<Area[]>();
+        invoke("areas_control", { payload: { command: "update", area }, channel });
+        channel.onmessage = (data) => {
+            data.map((item) => {
+                let icon = URL.createObjectURL(new Blob([new Uint8Array(item.icon as number[])], { type: "image/jpeg" }))
+                item.icon = icon;
+                let cover = URL.createObjectURL(new Blob([new Uint8Array(item.cover as number[])], { type: "image/jpeg" }))
+                item.cover = cover;
+                set(state => ({ list: [...state.list.filter((item) => item.id != area.id), item] }))
             })
         }
     }

@@ -1,7 +1,7 @@
 use migration::entities::area::{ActiveModel, Entity};
 use sea_orm::{DatabaseConnection, DbErr, EntityTrait, Set};
 use serde_json::json;
-pub async fn create_area(db: &DatabaseConnection) -> Result<u32,DbErr> {
+pub async fn create_area(db: &DatabaseConnection) -> Result<i32,DbErr> {
     let shema = json!({
         "item":[
             {"id":1,"cols":6,"rows":3},
@@ -23,5 +23,5 @@ pub async fn create_area(db: &DatabaseConnection) -> Result<u32,DbErr> {
         ..Default::default()
     };
 
-    Ok(Entity::insert(new).exec(db).await?.last_insert_id)
+    Ok(Entity::insert(new).exec(db).await?.last_insert_id as i32)
 }
