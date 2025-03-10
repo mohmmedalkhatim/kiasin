@@ -22,14 +22,12 @@ pub async fn areas_control(
             let res = functions::create_area(&db).await;
             match res {
                 Ok(id) => {
-                    let one = functions::find_one(id as i32, &db).await.unwrap();
-                    let _ = channel.send(vec![one]);
+                    Ok(())
                 }
                 Err(e) => {
-                    println!("{}", e.to_string())
+                    Err(e.to_string())
                 }
             }
-            Ok(())
         }
         "updata" => match payload.item {
             Some(area) => {
@@ -45,7 +43,7 @@ pub async fn areas_control(
             let list = functions::find_many(&db).await;
             match list {
                 Ok(state) => {
-                    let _ = channel.send(state);
+                    let _ = channel.unwrap().send(state);
                 }
                 Err(e) => {
                     println!("{}", e.to_string())
@@ -59,11 +57,6 @@ pub async fn areas_control(
                 let done = functions::delete_area(id, &db).await;
                 match done {
                     Ok(_) => {
-                        let _ = channel.send(
-                            functions::find_many(&db)
-                                .await
-                                .expect("there an error with the database"),
-                        );
                         Ok(())
                     }
                     Err(_) => Err("I didn't found the area".to_string()),

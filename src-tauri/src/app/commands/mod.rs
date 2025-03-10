@@ -1,4 +1,4 @@
-pub mod area;
+pub mod areas;
 pub mod media;
 pub mod note;
 pub mod todo;

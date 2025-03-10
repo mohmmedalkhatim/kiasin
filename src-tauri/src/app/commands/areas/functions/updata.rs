@@ -1,7 +1,7 @@
 use migration::entities::area::{ActiveModel, self, Entity};
 use sea_orm::{entity::*, DatabaseConnection, EntityTrait, QueryFilter, Set};
 
-use crate::app::commands::area::objects::*;
+use crate::app::commands::areas::objects::*;
 
 pub fn updata_area(db: &DatabaseConnection,id:i32, area: Area) -> Result<(), String> {
     let mut cover = None;

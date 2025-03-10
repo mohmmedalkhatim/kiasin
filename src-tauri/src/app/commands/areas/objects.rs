@@ -1,4 +1,4 @@
-use migration::entities::{area, note, project, todo};
+use migration::entities::{area, note, todo};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
@@ -15,7 +15,6 @@ pub struct Area {
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct AreaPage {
     pub info: area::Model,
-    pub projects: Vec<project::Model>,
     pub notes: Vec<note::Model>,
     pub todos: Vec<todo::Model>,
 }
