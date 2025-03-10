@@ -1,5 +1,5 @@
 import './style.css'
-import Borad from '../../components/board'
+import Borad from '../../board'
 import { invoke } from '@tauri-apps/api/core';
 import { Area } from '../../types/area';
 import { useQuery } from '@tanstack/react-query';

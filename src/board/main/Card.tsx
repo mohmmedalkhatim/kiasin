@@ -10,7 +10,7 @@ import {
   IconRowInsertBottom,
   IconRowRemove
 } from '@tabler/icons-react'
-import { Card as Cardtype } from '../../../types/area';
+import { Card as Cardtype } from '../../types/area';
 
 const CardContainer = styled.div<{
   rowSpan: number

@@ -15,7 +15,7 @@ import {
 import { useState } from 'react'
 import Grid from './main/Grid'
 import Card from './main/Card'
-import { Area, Card as Cardtype } from '../../types/area'
+import { Area, Card as Cardtype } from '../types/area'
 import { SwappingStrategy } from './Strategy'
 
 const Board = ({ area }: { area?: Area }) => {
