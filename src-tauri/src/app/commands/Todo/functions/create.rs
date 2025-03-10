@@ -10,7 +10,6 @@ pub async fn create_note(note: Todo, db: &DatabaseConnection) -> Result<i32, Str
     let new = ActiveModel {
         title: Set(note.title),
         area_id: Set(note.area_id),
-        project_id: Set(note.project_id),
         update: Set(time.date_naive()),
         user_assgin_id: Set(note.user_assgin_id),
         creator_id: Set(note.creator_id),

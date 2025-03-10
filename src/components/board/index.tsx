@@ -15,8 +15,9 @@ import {
 import { useState } from 'react'
 import Grid from './main/Grid'
 import Card from './main/Card'
-import { Area, Card as Cardtype } from '../types/area'
+import { Area, Card as Cardtype } from '../../types/area'
 import { SwappingStrategy } from './Strategy'
+import { Channel, invoke } from '@tauri-apps/api/core'
 
 const Board = ({ area }: { area?: Area }) => {
   let [schema, setShema] = useState(area?.ui_schema.item)
@@ -33,16 +34,16 @@ const Board = ({ area }: { area?: Area }) => {
     setActiveId(event.active.id)
   }
 
-  const handleDragEnd = (event: any) => {
-
+  const handleDragEnd = async (event: any) => {
     if (event.active.id !== event.over.id && sort) {
       const oldIndex = sort?.indexOf(event.active.id)
       const newIndex = sort?.indexOf(event.over.id)
       let newSort = arrayMove(sort, oldIndex, newIndex);
-      let newShema = newSort.map((id) => schema?.find(item => String(item.id) == id) || {} as Cardtype)
-      setShema(newShema)
+      let newSchema = newSort.map((id) => schema?.find(item => String(item.id) == id) || {} as Cardtype)
+      let channel = new Channel()
+      setShema(newSchema)
       updateSort(newSort)
-
+      await invoke('area_control', { command: "update", payload: { id: area?.id, item: { ...area, ui_schema: { item: newSchema } } as Area }, channel })
     }
     setActiveId(null)
   }

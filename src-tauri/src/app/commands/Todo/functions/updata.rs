@@ -8,7 +8,6 @@ pub async fn updata_note(note: Todo,id:i32, db: &DatabaseConnection) -> Result<(
     let new = ActiveModel {
         title: Set(note.title),
         area_id: Set(note.area_id),
-        project_id: Set(note.project_id),
         update: Set(time.date_naive()),
         user_assgin_id: Set(note.user_assgin_id),
         creator_id: Set(note.creator_id),

@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom"
-import Board from "../../../board";
+import Board from "../../../components/board";
 import type { Area } from "../../../types/area";
 import { act, useEffect, useState } from "react";
 import { useAreas } from "../../../context/para/areas";

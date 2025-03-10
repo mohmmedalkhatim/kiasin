@@ -15,6 +15,7 @@ pub struct Model{
     pub created:Option<Date>,
     pub in_archive:bool,
     pub ui_schema:Json,
+    pub links:Json,
 
 }
  impl Related<super::note::Entity> for Entity {
@@ -22,12 +23,7 @@ pub struct Model{
          Relation::Notes.def()
      }
  }
- impl Related<super::project::Entity> for Entity {
-     fn to() -> RelationDef {
-         Relation::Project.def()
-     }
- }
- 
+
 impl ActiveModelBehavior for ActiveModel {
     
 }
@@ -35,6 +31,5 @@ impl ActiveModelBehavior for ActiveModel {
 pub enum Relation {
     #[sea_orm(has_many = "super::note::Entity")]
     Notes,
-    #[sea_orm(has_many = "super::project::Entity")]
-    Project,
+
 }

@@ -13,7 +13,7 @@ pub async fn areas_control(
     app: AppHandle,
     payload: Payload,
     data: State<'_, Arc<Mutex<DbConnection>>>,
-    channel: Channel<Vec<Model>>,
+    channel: Option<Channel<Vec<Model>>>,
 ) -> Result<(), String> {
     let db = data.lock().await.db.clone().unwrap();
     let server = app.app_handle();
@@ -35,9 +35,6 @@ pub async fn areas_control(
             Some(area) => {
                 if let Some(id) = payload.id {
                     let a = functions::updata_area(&db, id, area);
-                    let list = functions::find_many(&db).await.unwrap();
-                    let _ = channel.send(list);
-
                     return Ok(());
                 }
                 Err("you have to add an id".to_string())

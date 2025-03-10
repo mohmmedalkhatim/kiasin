@@ -29,9 +29,9 @@ pub enum Relation {
     )]
     Note,
     #[sea_orm(
-        belongs_to = "super::project::Entity"
+        belongs_to = "super::area::Entity"
         from = "super::media::Column::ProjectId"
-        to = "super::project::Column::Id"
+        to = "super::area::Column::Id"
     )]
     Project
     

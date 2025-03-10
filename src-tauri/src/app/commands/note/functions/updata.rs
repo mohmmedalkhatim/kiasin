@@ -8,7 +8,6 @@ pub async fn updata_note(note_dto: Note,id:i32, db: &DatabaseConnection) -> Resu
     let new = ActiveModel {
         title: Set(note_dto.title),
         area_id: Set(note_dto.area_id),
-        project_id: Set(note_dto.project_id),
         content: Set(note_dto.content),
         description: Set(note_dto.discription),
         ..Default::default()

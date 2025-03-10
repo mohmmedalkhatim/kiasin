@@ -10,7 +10,6 @@ pub async fn create_note(note: Note, db: &DatabaseConnection) -> Result<(), Stri
     let new = ActiveModel {
         title: Set(note.title),
         area_id: Set(note.area_id),
-        project_id: Set(note.project_id),
         content: Set(note.content),
         description: Set(note.discription),
         ..Default::default()

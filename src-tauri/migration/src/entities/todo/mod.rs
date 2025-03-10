@@ -11,7 +11,6 @@ pub struct Model {
     pub update:Date,
     pub user_assgin_id:Option<i32>,
     pub creator_id:i32,
-    pub project_id:Option<i32>,
     pub area_id:Option<i32>
 }
 impl ActiveModelBehavior for ActiveModel {}
@@ -22,16 +21,7 @@ impl Related<super::area::Entity> for Entity {
     }
 }
 
-impl Related<super::resources::Entity> for Entity {
-    fn to() -> RelationDef {
-        Relation::Area.def()
-    }
-}
-impl Related<super::project::Entity> for Entity {
-    fn to() -> RelationDef{
-        Relation::Project.def()
-    }
-}
+
 
 
 
@@ -43,10 +33,5 @@ pub enum Relation {
         to = "super::area::Column::Id"
         )]
     Area,
-    #[sea_orm(
-        belongs_to="super::project::Entity",
-        from = "super::todo::Column::ProjectId",
-        to = "super::project::Column::Id"
-        )]
-    Project,
+
 }

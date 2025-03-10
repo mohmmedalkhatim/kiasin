@@ -17,8 +17,6 @@ async fn main() {
         .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![
             app::areas_control,
-            app::projects_control,
-            app::resources_control,
             app::user_control,
             app::notes_control,
             app::todo_control,
