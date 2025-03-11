@@ -46,6 +46,39 @@ const Board = ({ area }: { area?: Area }) => {
     }
     setActiveId(null)
   }
+  const handlesizeChange = (id: number, operation: { Col: "col" | "row", increase: boolean }) => {
+    let card = schema?.find(item => id == item.id);
+    let filetred = schema?.filter((item) => item?.id != id) as Cardtype[];
+    if (card) {
+      switch (operation.Col) {
+        case "col": {
+          if (operation.increase) {
+            card.cols = card.cols + 1;
+
+          } else {
+            card.cols = Math.max(1, card.cols - 1)
+          }
+          break;
+        }
+
+        case "row": {
+          if (operation.increase) {
+            card.rows = card.rows + 1;
+          } else {
+            card.rows = Math.max(1, card.rows - 1)
+          }
+          break;
+        }
+        default: () => { }
+      }
+      let newschema = [...filetred, card]
+      let sorted = sort?.map(id=>{
+        return newschema?.find(item=>item.id == Number(id)) as Cardtype
+      }) as Cardtype[]
+      setShema(sorted)
+      update({ ...area, ui_schema: { item: sorted } } as Area)
+    }
+  }
 
   if (sort) {
     return (
@@ -58,11 +91,11 @@ const Board = ({ area }: { area?: Area }) => {
         <SortableContext items={sort} strategy={SwappingStrategy}>
           <Grid columns={8}>
             {schema?.map(item => (
-              <Card cla={activeId === String(item.id) ? 'dragging' : ''} key={String(item.id)} id={String(item.id)} element={item} />
+              <Card cla={activeId === String(item.id) ? 'dragging' : ''} key={String(item.id)} id={String(item.id)} card={item} setCardlist={handlesizeChange} />
             ))}
           </Grid>
         </SortableContext>
-        <DragOverlay>{activeId ? <Card cla='' id={activeId} element={undefined} /> : null}</DragOverlay>
+        <DragOverlay>{activeId ? <Card cla='' setCardlist={() => { }} id={activeId} card={undefined} /> : null}</DragOverlay>
       </DndContext>
     )
   }

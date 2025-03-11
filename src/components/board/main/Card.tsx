@@ -37,11 +37,12 @@ const CardHeader = styled.div`
 interface CardProps {
   id: string
   cla: string
-  element: Cardtype | undefined
+  card: Cardtype | undefined
+  setCardlist: (id: number, operation: { Col: "col" | "row", increase: boolean }) => void
 }
 
 const Card: React.FC<CardProps> = ({
-  id, cla,element
+  id, cla, card, setCardlist
 }) => {
 
   const { attributes, listeners, setNodeRef, transform, isDragging, transition } =
@@ -52,13 +53,13 @@ const Card: React.FC<CardProps> = ({
     transition,
   }
 
-  if (element) {
+  if (card) {
     return (
       <CardContainer
         ref={setNodeRef}
         style={style}
-        rowSpan={element.rows}
-        colSpan={element.cols}
+        rowSpan={card.rows}
+        colSpan={card.cols}
         isDragging={isDragging}
         {...attributes}
         className={`relative rounded ${cla} card`}
@@ -70,19 +71,19 @@ const Card: React.FC<CardProps> = ({
 
           <div>
             <div className='flex'>
-              <div>
-                <button onClick={() => { element.rows = Math.max(1, element.rows - 1);  }}>
+              <div className='size_control'>
+                <button onClick={() => setCardlist(card.id, { Col: "row", increase: false })}>
                   <IconRowRemove />
                 </button>
-                <button onClick={() => { element.rows = element.rows + 1; console.log(element);  }}>
+                <button onClick={() => setCardlist(card.id, { Col: "row", increase: true })}>
                   <IconRowInsertBottom />
                 </button>
               </div>
               <div>
-                <button onClick={() => { element.cols = Math.max(1, element.cols - 1); }}>
+                <button onClick={() => setCardlist(card.id, { Col: "col", increase: false })}>
                   <IconLayoutSidebarLeftCollapseFilled />
                 </button>
-                <button onClick={() => { element.cols = element.cols + 1; }}>
+                <button onClick={() => setCardlist(card.id, { Col: "col", increase: true })}>
                   <IconLayoutSidebarLeftExpandFilled />
                 </button>
               </div>
