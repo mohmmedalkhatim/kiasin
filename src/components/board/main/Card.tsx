@@ -64,14 +64,10 @@ const Card: React.FC<CardProps> = ({
         {...attributes}
         className={`relative rounded ${cla} card`}
       >
-        <div className='flex items-center justify-between'>
-          <CardHeader {...listeners}>
-            <IconGridDots />
-          </CardHeader>
-
-          <div>
+        <div className='flex items-center justify-between relative'>
+          <div className='size_control'>
             <div className='flex'>
-              <div className='size_control'>
+              <div>
                 <button onClick={() => setCardlist(card.id, { Col: "row", increase: false })}>
                   <IconRowRemove />
                 </button>
@@ -89,6 +85,9 @@ const Card: React.FC<CardProps> = ({
               </div>
             </div>
           </div>
+          <CardHeader {...listeners} className='absolute right-0 top-1'>
+            <IconGridDots />
+          </CardHeader>
         </div>
       </CardContainer>
     )

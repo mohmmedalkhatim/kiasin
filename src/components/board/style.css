@@ -1,3 +1,7 @@
 @import "tailwindcss";
 
-@layer components{}
+@layer components{
+    .size_control{
+        @apply absolute left-0 -top-10
+    }
+}

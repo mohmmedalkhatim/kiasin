@@ -18,6 +18,7 @@ import Card from './main/Card'
 import { Area, Card as Cardtype } from '../../types/area'
 import { SwappingStrategy } from './Strategy'
 import { useAreas } from '../../context/para/areas'
+import "./style.css"
 
 const Board = ({ area }: { area?: Area }) => {
   let [schema, setShema] = useState(area?.ui_schema.item)
@@ -93,6 +94,7 @@ const Board = ({ area }: { area?: Area }) => {
             {schema?.map(item => (
               <Card cla={activeId === String(item.id) ? 'dragging' : ''} key={String(item.id)} id={String(item.id)} card={item} setCardlist={handlesizeChange} />
             ))}
+            <div></div>
           </Grid>
         </SortableContext>
         <DragOverlay>{activeId ? <Card cla='' setCardlist={() => { }} id={activeId} card={undefined} /> : null}</DragOverlay>
