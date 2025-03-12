@@ -15,6 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Build
-      run: npm run i && npm run tauri build
+      - name: Install Dependencies
+        run: npm install
+      
+      - uses: actions/checkout@v4
+      - name: Build
+        run: npm run tauri build
+    
