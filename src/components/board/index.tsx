@@ -26,7 +26,7 @@ const Board = ({ area }: { area?: Area }) => {
   let [sort, updateSort] = useState(schema?.map(item => item.id.toString()))
   const [activeId, setActiveId] = useState<string | null>(null)
   let update = useAreas((state) => state.update)
-  let editable = useAreas((state) => state.eidtable)
+  let editable = useAreas((state) => state.editable)
   // Configure sensors for drag-and-drop
   const sensors = useSensors(
     useSensor(PointerSensor),

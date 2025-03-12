@@ -64,25 +64,6 @@ a:hover {
 h1 {
   text-align: center;
 }
-
-
-button {
-  cursor: pointer;
-}
-
-button:hover {
-  border-color: #396cd8;
-}
-button:active {
-  border-color: #396cd8;
-  background-color: #e8e8e8;
-}
-
-input,
-button {
-  outline: none;
-}
-
 #greet-input {
   margin-right: 5px;
 }
@@ -97,12 +78,6 @@ button {
     color: #24c8db;
   }
 
-  input,
-  button {
-    color: #ffffff;
-    background-color: #181818;
-    border: 1px solid #e2e2e220;
-  }
   button:active {
     background-color: #0f0f0f69;
   }
