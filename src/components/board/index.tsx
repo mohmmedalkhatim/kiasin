@@ -19,12 +19,14 @@ import { Area, Card as Cardtype } from '../../types/area'
 import { SwappingStrategy } from './Strategy'
 import { useAreas } from '../../context/para/areas'
 import "./style.css"
+import { IconPlus } from '@tabler/icons-react'
 
 const Board = ({ area }: { area?: Area }) => {
-  let [schema, setShema] = useState(area?.ui_schema.item)
+  let [schema, setSchema] = useState(area?.ui_schema.item)
   let [sort, updateSort] = useState(schema?.map(item => item.id.toString()))
   const [activeId, setActiveId] = useState<string | null>(null)
   let update = useAreas((state) => state.update)
+  let editable = useAreas((state) => state.eidtable)
   // Configure sensors for drag-and-drop
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -41,7 +43,7 @@ const Board = ({ area }: { area?: Area }) => {
       const newIndex = sort?.indexOf(event.over.id)
       let newSort = arrayMove(sort, oldIndex, newIndex);
       let newSchema = newSort.map((id) => schema?.find(item => String(item.id) == id) || {} as Cardtype)
-      setShema(newSchema)
+      setSchema(newSchema)
       update({ ...area, ui_schema: { item: newSchema } } as Area)
       updateSort(newSort)
     }
@@ -73,15 +75,22 @@ const Board = ({ area }: { area?: Area }) => {
         default: () => { }
       }
       let newschema = [...filetred, card]
-      let sorted = sort?.map(id=>{
-        return newschema?.find(item=>item.id == Number(id)) as Cardtype
+      let sorted = sort?.map(id => {
+        return newschema?.find(item => item.id == Number(id)) as Cardtype
       }) as Cardtype[]
-      setShema(sorted)
+      setSchema(sorted)
       update({ ...area, ui_schema: { item: sorted } } as Area)
     }
   }
 
-  if (sort) {
+
+  if (sort && schema) {
+    let handleadding = () => {
+      let newSchema = { item: [...schema, { id: schema?.length, cols: 1, rows: 1, title: "new" }] }
+      update({ ...area, ui_schema: newSchema } as Area)
+      setSchema(newSchema.item as Cardtype[])
+      updateSort([...sort, String(schema?.length)])
+    }
     return (
       <DndContext
         sensors={sensors}
@@ -94,7 +103,11 @@ const Board = ({ area }: { area?: Area }) => {
             {schema?.map(item => (
               <Card cla={activeId === String(item.id) ? 'dragging' : ''} key={String(item.id)} id={String(item.id)} card={item} setCardlist={handlesizeChange} />
             ))}
-            <div></div>
+            {editable ? <div className='col-span-2 row-span-2 m_border flex justify-center items-center'>
+              <button onClick={handleadding}>
+                <IconPlus size={20} />
+              </button>
+            </div> : null}
           </Grid>
         </SortableContext>
         <DragOverlay>{activeId ? <Card cla='' setCardlist={() => { }} id={activeId} card={undefined} /> : null}</DragOverlay>
