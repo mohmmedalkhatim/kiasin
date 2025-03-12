@@ -44,6 +44,26 @@
   .login_illustration{
     grid-column: 1 / span 2;
   }
+  button {
+    @apply text-sm;
+    padding: 15px 20px;
+    border: none;
+    outline: none;
+    background-color: #151515;
+    color: #eee;
+    border-radius: 7px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease-out;
+  
+    span {
+      color: #aaa;
+    }
+  
+    &:hover {
+      transform: translateY(-1px);
+    }
+  }
   .login_form_container{
     display: flex;
 
