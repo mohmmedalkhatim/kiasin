@@ -30,6 +30,10 @@ async fn main() {
                 .path()
                 .resolve("Database\\test.db", BaseDirectory::AppData)
                 .unwrap();
+            if !database_url.exists() {
+                std::fs::create_dir_all(database_url.parent().unwrap()).unwrap();
+                std::fs::File::create(&database_url).unwrap();
+            }
             let database = Arc::new(Mutex::new(DbConnection { db: None }));
             let shadow = database.clone();
             tauri::async_runtime::spawn(async move {
