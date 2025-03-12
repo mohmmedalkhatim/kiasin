@@ -11,6 +11,7 @@ import {
   IconRowRemove
 } from '@tabler/icons-react'
 import { Card as Cardtype } from '../../../types/area';
+import { useAreas } from '../../../context/para/areas'
 
 const CardContainer = styled.div<{
   rowSpan: number
@@ -44,7 +45,7 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({
   id, cla, card, setCardlist
 }) => {
-
+  let editable = useAreas(state=>state.editable)
   const { attributes, listeners, setNodeRef, transform, isDragging, transition } =
     useSortable({ id })
 
@@ -64,7 +65,7 @@ const Card: React.FC<CardProps> = ({
         {...attributes}
         className={`relative rounded ${cla} card`}
       >
-        <div className='flex items-center justify-between relative'>
+        {editable && (<div className='flex items-center justify-between relative'>
           <div className='size_control'>
             <div className='flex'>
               <div>
@@ -88,7 +89,7 @@ const Card: React.FC<CardProps> = ({
           <CardHeader {...listeners} className='absolute right-0 top-1'>
             <IconGridDots />
           </CardHeader>
-        </div>
+        </div>)}
       </CardContainer>
     )
   }

@@ -5,7 +5,7 @@ import { Channel, invoke } from '@tauri-apps/api/core';
 interface Areas {
     list: Area[],
     active: Area | undefined
-    eidtable: boolean
+    editable: boolean
     init: () => void
     area: (id: number, setArea: React.Dispatch<React.SetStateAction<boolean>>) => void
     create: () => void
@@ -17,9 +17,9 @@ interface Areas {
 export let useAreas = create<Areas>((set) => ({
     list: [],
     active: undefined,
-    eidtable: false,
+    editable: false,
     taggleEditable: () => {
-        set(state => ({ eidtable: !state.eidtable }))  
+        set(state => ({ editable: !state.editable }))  
     },
     init: () => {
         let channel = new Channel<Area[]>();
