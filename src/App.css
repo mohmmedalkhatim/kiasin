@@ -46,17 +46,22 @@
   }
   button {
     @apply text-sm;
-    padding: 15px 20px;
+    padding: 8px 12px;
     border: none;
     outline: none;
-    background-color: #151515;
+    background-color: #181818;
     color: #eee;
     border-radius: 7px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.25s ease-out;
+    display: flex;
+    align-items: center;
+    border: 1px solid #e2e2e220;
   
+    gap: 0.5rem;
     span {
+      display: inline;
       color: #aaa;
     }
   

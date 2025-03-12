@@ -86,7 +86,7 @@ const Board = ({ area }: { area?: Area }) => {
 
   if (sort && schema) {
     let handleadding = () => {
-      let newSchema = { item: [...schema, { id: schema?.length, cols: 1, rows: 1, title: "new" }] }
+      let newSchema = { item: [...schema, { id: schema?.length, cols: 2, rows: 2, title: "new" }] }
       update({ ...area, ui_schema: newSchema } as Area)
       setSchema(newSchema.item as Cardtype[])
       updateSort([...sort, String(schema?.length)])

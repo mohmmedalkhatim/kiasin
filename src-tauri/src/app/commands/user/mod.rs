@@ -54,7 +54,7 @@ pub async fn user_control(
                 let list = functions::updata_user(state, &db).await;
                 if let Some(id) = payload.id {
                     let user = functions::find_one(id, &db).await;
-                    let _ = server.emit("user", user.expect("some thing went worng").unwrap());
+                    let _ = server.emit("user", user.expect("some thing went worng").expect("some thing went worng"));
                     return Ok(list?);
                 }
                 Err("som".to_string())
