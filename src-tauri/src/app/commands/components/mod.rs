@@ -1,4 +1,5 @@
 mod objects;
+mod functions;
 use objects::Payload;
 
 #[tauri::command]

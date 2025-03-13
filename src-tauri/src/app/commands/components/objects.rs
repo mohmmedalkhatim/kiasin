@@ -2,13 +2,13 @@ use serde_json::{Serilazed,Deserilazed};
 
 #[derive(Clone,Debug,Serilazed,Deserilazed,)]
 pub struct Component{
-    id:String,
-    name:String,
-    code:String,    
+    pub id:String,
+    pub name:String,
+    pub code:String,    
 }
 
 pub struct Payload {
-    command:String,
-    id:Option<i32>, 
-    item:Component,
+    pub command:String,
+    pub id:Option<i32>, 
+    pub item:Component,
 }
