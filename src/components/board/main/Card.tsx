@@ -12,6 +12,7 @@ import {
 } from '@tabler/icons-react'
 import { Card as Cardtype } from '../../../types/area';
 import { useAreas } from '../../../context/para/areas'
+import CardContent from '../../CardContent'
 
 const CardContainer = styled.div<{
   rowSpan: number
@@ -90,6 +91,7 @@ const Card: React.FC<CardProps> = ({
             <IconGridDots />
           </CardHeader>
         </div>)}
+        <CardContent/>
       </CardContainer>
     )
   }

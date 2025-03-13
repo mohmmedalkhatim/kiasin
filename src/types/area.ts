@@ -1,21 +1,22 @@
-import { Note } from "./notes"
-import { Todo } from "./todos"
+import { Note } from './notes'
+import { Todo } from './todos'
 
-export  interface Card{
-  id:number
-  cols:number,
-  rows:number,
-  props:any | undefined,
+export interface Card {
+  id: number
+  cols: number
+  rows: number
+  type: string
+  props: any | undefined
 }
 
 export interface Area {
   title: string
   discription: string
-  ui_schema: {item:Card[]}
-  cover: number[]  | string
-  icon: number[] | string,
-  links: {list: string[]}
-  id:number
+  ui_schema: { item: Card[] }
+  cover: number[] | string
+  icon: number[] | string
+  links: { list: string[] }
+  id: number
 }
 
 export interface AreaPage {
