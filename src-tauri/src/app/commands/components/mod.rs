@@ -33,10 +33,10 @@ async fn compoents_control(
         }
         "create" => {
             match payload.item {
-                Some()=>{},
+                Some(state)=>{},
                 None=>{}
             }
-         let item =  functions::create(db, item) 
+         let item =  functions::create(&db, item);
         }
         "update" => {}
         "delete" => {}

@@ -9,7 +9,7 @@ pub async fn create(db: &DatabaseConnaction, item: Component) -> Result<i32, DbE
     let active = ActiveModel {
         id: Set(item.id),
         name: Set(item.name),
-        content: Set(item.code),
+        content: Set(item.content),
     };
     Entity::insert(active).exec(db).await?.last_insert_id
 }

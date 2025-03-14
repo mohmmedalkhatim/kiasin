@@ -12,5 +12,6 @@ pub async fn update(item:Component,db:&DatabaseConnection)->Result<(),DbErr> {
         name:Set(item.name),
         content:Set(item.code)
     };
-    Entity::update(model).exec(db).await?
+    Entity::update(model).exec(db).await?;
+    Ok(())
 }

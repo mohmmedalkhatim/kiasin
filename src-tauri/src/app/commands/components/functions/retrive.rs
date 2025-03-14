@@ -4,5 +4,5 @@ use sea_orm::{DbErr, EntityTrait};
 
 
 pub async fn find_mauy()->Result<Vec<Model>,DbErr> {
-    Entity::find().all(db).await?
+    Entity::find().all(db).await
 }

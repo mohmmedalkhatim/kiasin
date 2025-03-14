@@ -8,7 +8,7 @@ pub struct Component{
 }
 
 pub struct Payload {
-    pub command:String,
+    pub command:Option<String>,
     pub id:Option<i32>, 
-    pub item:Component,
+    pub item:Option<Component>,
 }

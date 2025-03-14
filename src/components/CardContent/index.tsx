@@ -5,8 +5,9 @@ import List from "../List";
 
 function CardConten({ T, props }: { T: string, props: any }) {
     let [map,setMap] = useState(new Map([
-        ["editor",<Editor/>],
-        ["list",<List {...props}/>]
+        ["editor",<Editor {...props}/>],
+        ["list",<List {...props}/>],
+        
     ]));
     useEffect(()=>{
         

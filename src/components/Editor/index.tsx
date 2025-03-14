@@ -9,7 +9,7 @@ import { Toolbar } from './toolbar';
 import './style.css';
 
 
-const RichTextEditor = () => {
+const RichTextEditor = ({content}:{content:string}) => {
     const editor = useEditor({
         extensions: [
             StarterKit,
@@ -19,7 +19,7 @@ const RichTextEditor = () => {
             }),
             textStyle,
         ],
-        content: '<p>Hello, world!</p>',
+        content,
         editorProps: {
             attributes: {
                 class: 'editor',
