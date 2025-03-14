@@ -1,20 +1,20 @@
-import { use, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Editor from "../Editor";
-import List from "../List";
+import AreasList from "../List";
 
 
 function CardConten({ T, props }: { T: string, props: any }) {
     let [map,setMap] = useState(new Map([
         ["editor",<Editor {...props}/>],
-        ["list",<List {...props}/>],
-        
+        ["Areaslist",<AreasList list={props}/>],
+        ["default",<div>no content</div>]
     ]));
     useEffect(()=>{
         
     },[])
     let action = map.get(T) || map.get('default');
     if (action) {
-        action;
+        return action;
     }
 }
 export default CardConten;

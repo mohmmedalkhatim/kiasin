@@ -11,6 +11,7 @@ interface Areas {
     create: () => void
     update: (area: Area) => void
     taggleEditable: () => void
+    getArea:(id:number)=>Area
 }
 
 
@@ -57,6 +58,15 @@ export let useAreas = create<Areas>((set) => ({
                 set(state => ({ list: [...state.list, item] }))
             })
         }
+    },
+    getArea:(id)=>{
+        let area:Area|undefined;
+        set(state=>{
+            area = state.list.find(item=>item.id == id);
+            return(state)
+        })
+        return area as Area
+
     },
     update: (area: Area) => {
         let channel = new Channel<Area[]>();

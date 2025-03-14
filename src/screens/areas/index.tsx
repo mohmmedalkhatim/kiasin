@@ -1,4 +1,4 @@
-import Card from "../../components/List/Card"
+import Card from "../../components/Card"
 import { IconPlus } from '@tabler/icons-react';
 import { useAreas } from "../../context/para/areas";
 import { Link } from "react-router-dom";

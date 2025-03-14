@@ -1,23 +1,16 @@
-import Card from "./Card"
-
-type Item = {
-    name:string,
-    url:string,
-    image:string,
-    id:string,
-}
+import Card from "../Card"
 
 
-function List(props:{list:Item[]}) {
+function AreasList(props:{list:number[]}) {
     return (
-      <main className="content">
+      <div>
         <div className="boxs_grid">
             {props.list.map((item)=>(
-                <Card {...item} />
+                <Card key={item} id={item} />
             ))}
         </div>
-      </main>
+      </div>
     )
   }
   
-  export default List
+  export default AreasList

@@ -91,7 +91,7 @@ const Card: React.FC<CardProps> = ({
             <IconGridDots />
           </CardHeader>
         </div>)}
-        <CardContent/>
+        {card.type && <CardContent T={card.type} props={card.props}/>}
       </CardContainer>
     )
   }
