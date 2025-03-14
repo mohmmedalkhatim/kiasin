@@ -1,14 +1,14 @@
-use serde_json::{Serilazed,Deserilazed};
+use serde::{Deserialize, Serialize};
 
-#[derive(Clone,Debug,Serilazed,Deserilazed,)]
+#[derive(Clone,Debug,Serialize,Deserialize)]
 pub struct Component{
-    pub id:String,
+    pub id:i32,
     pub name:String,
     pub content:String,    
 }
 
 pub struct Payload {
-    pub command:Option<String>,
+    pub command:String,
     pub id:Option<i32>, 
     pub item:Option<Component>,
 }

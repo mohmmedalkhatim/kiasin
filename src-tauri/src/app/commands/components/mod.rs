@@ -1,10 +1,8 @@
 mod functions;
 mod objects;
 use async_std::{channel, sync::Mutex};
-use functions;
 use migration::{entities::{component::Model, db}, Function};
 use objects::Payload;
-use sea_orm::{sqlx::types::uuid::Error, DatabaseConnection};
 use std::sync::Arc;
 use tauri::{ipc::Channel, Manager};
 
@@ -17,33 +15,41 @@ async fn compoents_control(
     channel: Channel<Vec<Model>>,
 ) -> Result<(), String> {
     let state = app.state::<Arc<Mutex<DbConnection>>>();
-    let db = state.get_mut().db.unwrap();
+    let db = state.lock().await.db.clone().unwrap();
 
     match payload.command.as_str() {
         "many" => {
-            let list = functions::find_mauy().await;
+            let list = functions::find_mauy(&db).await;
             match list {
                 Ok(state) => {
-                  let a = channel.send(data);
+                  let a = channel.send(state);
+                  Ok(())
                 }
                 Err(e) => {
-                  Err(e.to_string());
+                  Err(e.to_string())
+                }
+            }
+        }
+        "update" => {
+            match payload.item {
+                Some(state)=>{
+                let item =  functions::update(state,&db).await;
+                Ok(())
+            },
+                None=>{
+                    Err("you have o".to_string())
                 }
             }
         }
         "create" => {
-            match payload.item {
-                Some(state)=>{},
-                None=>{}
-            }
-         let item =  functions::create(&db, item);
+            Ok(())
         }
-        "update" => {}
-        "delete" => {}
+        "delete" => {
+            Ok(())
+        }
         _ => {
-            println!("database connaction")
+            Err("database connaction".to_string())
         }
     }
 
-    Ok(())
 }
