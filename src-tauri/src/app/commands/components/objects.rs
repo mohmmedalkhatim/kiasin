@@ -4,7 +4,7 @@ use serde_json::{Serilazed,Deserilazed};
 pub struct Component{
     pub id:String,
     pub name:String,
-    pub code:String,    
+    pub content:String,    
 }
 
 pub struct Payload {
