@@ -48,6 +48,7 @@
   .login_illustration{
     grid-column: 1 / span 2;
   }
+  
   button {
     @apply text-sm;
     padding: 8px 12px;
@@ -83,8 +84,12 @@
   .login_form button{
     @apply py-2 rounded-md
   }
-  .login_form input{
-    @apply py-2 px-3
+  input{
+    @apply py-2 px-3 rounded-md;
+    border: 1px solid #e2e2e235;
+    &:focus{
+      outline: none
+    }
   }
   .login_illustration img {
     

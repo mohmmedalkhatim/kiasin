@@ -5,7 +5,7 @@
     @apply flex overflow-hidden bg-white border divide-x rounded-t-lg  rtl:flex-row-reverse dark:bg-gray-600 dark:border-gray-600 dark:divide-gray-700;
   }
   .toolbar_button {
-    @apply px-2 py-1 font-medium text-white transition-colors duration-200  dark:hover:bg-gray-800 dark:text-black hover:bg-gray-100 hover:text-white rounded-md;
+    @apply px-2 py-1 font-medium text-white transition-colors duration-200  dark:hover:bg-gray-800 dark:text-black dark:hover:text-gray-100 hover:text-white rounded-md;
   }
   .bubble_menu{
     @apply absolute z-10 flex gap-1 p-1 bg-white  -top-10 -left-[5rem] rounded-lg shadow-lg  dark:border-gray-700;
@@ -43,11 +43,10 @@
 }
 
 .editor_container {
+ overflow: none;
   display: flex;
-  flex-direction: column;
   background-color: #181818;
-  margin-top:10rem ;
-  padding: 10px;
+  height: 100%;
   border-radius: 5px 5px 0px 0px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
@@ -60,10 +59,10 @@
   border: 1px solid #e2e2e220;
   border-radius: 0px 0px 5px 5px;
   background-color: #181818;
+  height: 100%;
+  width: 100%;
   color: wheat;
   padding: 8px;
-  min-height: 200px;
-  max-height: 800px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   &:focus-visible {
     outline: none;
@@ -78,7 +77,6 @@
 }
 
 .help-button {
-  color: black;
   border: none;
   padding: 6px 8px;
   border-radius: 8px;

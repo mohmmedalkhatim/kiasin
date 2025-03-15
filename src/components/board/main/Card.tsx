@@ -12,7 +12,7 @@ import {
 } from '@tabler/icons-react'
 import { Card as Cardtype } from '../../../types/area';
 import { useAreas } from '../../../context/para/areas'
-import CardContent from '../../CardContent'
+import CardContent from '../CardContent'
 
 const CardContainer = styled.div<{
   rowSpan: number
@@ -22,10 +22,10 @@ const CardContainer = styled.div<{
   grid-row: span ${props => props.rowSpan};
   grid-column: span ${props => props.colSpan};
   border: 1px solid #e2e2e220;
-  padding: 16px;
   outline-right: ${props => (props.isDragging ? '2px solid #ddd' : 'none')};
   transition: all 0.3s ease;
   opacity: ${props => (props.isDragging ? 0.5 : 1)};
+  overflow-y:auto;
 `
 
 const CardHeader = styled.div`
@@ -46,7 +46,7 @@ interface CardProps {
 const Card: React.FC<CardProps> = ({
   id, cla, card, setCardlist
 }) => {
-  let editable = useAreas(state=>state.editable)
+  let editable = useAreas(state => state.editable)
   const { attributes, listeners, setNodeRef, transform, isDragging, transition } =
     useSortable({ id })
 
@@ -91,7 +91,7 @@ const Card: React.FC<CardProps> = ({
             <IconGridDots />
           </CardHeader>
         </div>)}
-        {card.type && <CardContent T={card.type} props={card.props}/>}
+        {card.type && <CardContent T={card.type} props={card.props} />}
       </CardContainer>
     )
   }

@@ -5,7 +5,6 @@ import { Underline } from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import textStyle from '@tiptap/extension-text-style';
 import { Toolbar } from './toolbar';
-
 import './style.css';
 
 
@@ -30,7 +29,7 @@ const RichTextEditor = ({content}:{content:string}) => {
     return (
         <div className='eidtor_container'>
             <Toolbar editor={editor} />
-            <EditorContent className='editor' editor={editor} />
+            <EditorContent cols={10} className='editor' editor={editor} />
         </div>
     )
 };
