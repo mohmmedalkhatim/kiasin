@@ -12,7 +12,7 @@ pub async fn dashboard() -> Area {
             "item":[
                 {"id":0,"cols":6,"rows":4,"type":"Areaslist","props":[1,2,3,4]},
                 {"id":1,"cols":2,"rows":8},
-                {"id":2,"cols":3,"rows":4},
+                {"id":2,"cols":3,"rows":4,"type":"editor","props":"hello world"},
                 {"id":3,"cols":3,"rows":4},
                 {"id":4,"cols":8,"rows":4},
             ]
