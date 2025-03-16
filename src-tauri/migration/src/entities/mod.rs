@@ -7,6 +7,7 @@ pub mod media;
 pub mod tag;
 pub mod template;
 pub mod component;
+pub mod categorie;
 use sea_orm::prelude::*;
 use sea_orm_migration::prelude::*;
 use serde::{Deserialize, Serialize};
