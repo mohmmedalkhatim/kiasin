@@ -1,7 +1,10 @@
 
 
 .Task{
-    
+    border: 1px solid #e2e2e235;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 .list{
     display: flex;

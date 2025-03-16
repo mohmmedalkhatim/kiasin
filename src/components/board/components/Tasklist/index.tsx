@@ -25,11 +25,8 @@ function TaskList({ list }: { list: number[] }) {
         setSchema(arrayMove(schema, oldIndex, newIndex))
       }
       setActiveId(null)
-    }
-  
-  
+    }  
     if (schema) {
-
       return (
         <DndContext
           sensors={sensors}
@@ -42,6 +39,9 @@ function TaskList({ list }: { list: number[] }) {
               {schema?.map(item => (
                 <Task id={item} classn={activeId === String(item) ? 'dragging' : ''} />
               ))}
+              <div className="">
+
+              </div>
             </div>
           </SortableContext>
           <DragOverlay></DragOverlay>

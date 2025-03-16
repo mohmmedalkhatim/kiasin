@@ -1,8 +1,9 @@
 import { useEditor, EditorContent} from '@tiptap/react';
-import { } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import TextAlign from '@tiptap/extension-text-align';
+import {Placeholder} from '@tiptap/extension-placeholder';
 import './style.css';
+
 
 
 const Editor_card = ({content,title}:{content:string,title:string}) => {
@@ -12,7 +13,9 @@ const Editor_card = ({content,title}:{content:string,title:string}) => {
             TextAlign.configure({
                 types: ['paragraph'],
             }),
+            Placeholder.configure({placeholder:"start writing.."})
         ],
+        
         content,
         editorProps: {
             attributes: {
@@ -23,7 +26,7 @@ const Editor_card = ({content,title}:{content:string,title:string}) => {
 
     return (
         <div className='eidtor_container'>
-            <EditorContent className='editor' editor={editor} />
+            <EditorContent className='editor' placeholder='start writing' editor={editor} />
         </div>
     )
 };
