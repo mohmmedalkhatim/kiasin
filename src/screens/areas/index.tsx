@@ -18,7 +18,7 @@ function Areas() {
           {list.map((item) => {
             return (
               <Link to={`/Area/${item.id}`} key={item.id}>
-                <Card image={item.cover as string} id={String(item.id)} />
+                <Card id={item.id} />
               </Link>
             )
           })}
