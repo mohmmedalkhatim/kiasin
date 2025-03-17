@@ -44,16 +44,28 @@ pub async fn areas_control(
             }
             None => Err("you have to provide an area".to_string()),
         },
-        "many" => {
-            let list = functions::find_many(&db).await;
-            match list {
-                Ok(state) => {
-                    let _ = channel.send(state);
-                    Ok(())
+        "find" => match payload.id {
+            Some(id) => {
+                let res = functions::find_one(id, &db).await;
+                match res {
+                    Ok(model) => {
+                        let _ = app.emit("area", model);
+                        Ok(())
+                    }
+                    Err(e) => Err(e.to_string()),
                 }
-                Err(e) => Err(e.to_string()),
             }
-        }
+            None => {
+                let list = functions::find_many(&db).await;
+                match list {
+                    Ok(state) => {
+                        let _ = channel.send(state);
+                        Ok(())
+                    }
+                    Err(e) => Err(e.to_string()),
+                }
+            }
+        },
 
         "delete_one" => match payload.id {
             Some(id) => {
@@ -65,9 +77,7 @@ pub async fn areas_control(
             }
             None => Err("you have to provided an ID".to_string()),
         },
-        "create_template"=>{
-            Ok(())
-        }
+        "one" => Ok(()),
         _ => {
             println!(
                 "you are trying to access unregistered command {:?}",
