@@ -4,8 +4,8 @@ use sea_orm::{entity::*, DatabaseConnection, DbErr, EntityTrait, QueryFilter, Se
 use crate::app::commands::areas::objects::*;
 
 pub async fn updata_area(db: &DatabaseConnection, id: i32, area: Area) -> Result<Model, DbErr> {
-    let mut cover = None;
-    let mut icon = None;
+    let cover = None;
+    let icon = None;
 
     let new = ActiveModel {
         id: Set(id as u32),

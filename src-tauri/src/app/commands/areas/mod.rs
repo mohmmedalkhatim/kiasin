@@ -4,7 +4,7 @@ use crate::DbConnection;
 use async_std::sync::Mutex;
 use migration::entities::area::Model;
 pub use objects::{Area, Payload};
-use tauri::{command, ipc::Channel, AppHandle, Emitter, Manager, State};
+use tauri::{command, ipc::Channel, AppHandle, Emitter, State};
 mod functions;
 mod objects;
 
