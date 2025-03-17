@@ -1,4 +1,4 @@
-
+use super::*;
 
 pub async fn create(id: u32, db: &DatabaseConnection) -> Result<(), DbErr> {
     let model = Entity::find_by_id(id).one(db).await?.unwrap();

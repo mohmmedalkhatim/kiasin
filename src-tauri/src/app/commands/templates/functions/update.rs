@@ -1,3 +1,4 @@
+use super::*;
 
 pub async fn update(id: u32, db: &DatabaseConnection,item:Area) -> Result<(), DbErr> {
     let template = ActiveModel {
