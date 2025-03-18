@@ -10,6 +10,7 @@ pub struct Area {
     pub cover: Option<String>,
     pub links: Value,
     pub icon: Option<String>,
+    pub categorie:i32
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -18,7 +18,7 @@ pub async fn areas_control(
     let db = data.lock().await.db.clone().unwrap();
     match payload.command.as_str() {
         "create" => {
-            let res = functions::create_area(&db).await;
+            let res = functions::create_area(&db,payload.id.unwrap()).await;
             match res {
                 Ok(id) => {
                     let state = functions::find_one(id, &db).await;

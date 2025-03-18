@@ -1,7 +1,7 @@
 use migration::entities::area::{ActiveModel, Entity};
 use sea_orm::{DatabaseConnection, DbErr, EntityTrait, Set};
 use serde_json::json;
-pub async fn create_area(db: &DatabaseConnection) -> Result<i32, DbErr> {
+pub async fn create_area(db: &DatabaseConnection, id: i32) -> Result<i32, DbErr> {
     let shema = json!({
         "item":[
             {"id":0,"cols":6,"rows":3},
@@ -20,6 +20,7 @@ pub async fn create_area(db: &DatabaseConnection) -> Result<i32, DbErr> {
         links: Set(links),
         ui_schema: Set(shema),
         in_archive: Set(false),
+        cagetogrie: Set(id as u32),
         ..Default::default()
     };
 
