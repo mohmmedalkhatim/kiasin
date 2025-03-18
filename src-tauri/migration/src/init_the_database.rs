@@ -1,6 +1,11 @@
+use sea_orm::sqlx::types::Json;
+use sea_orm::EntityTrait;
 use sea_orm::Schema;
+use sea_orm::Set;
 use sea_orm_migration::prelude::*;
+use serde_json::json;
 use crate::entities::area;
+use crate::entities::categorie::ActiveModel;
 use crate::entities::note;
 use crate::entities::user;
 use crate::entities::db;
@@ -16,6 +21,7 @@ pub struct Migration;
 #[async_trait::async_trait]
 impl MigrationTrait for Migration {
     async fn up(&self, manager: &SchemaManager) -> Result<(), DbErr> {
+        let arr = json!({"items":[]});
         // Replace the sample below with your own migration scripts
         let backend = manager.get_database_backend();
         let schema = Schema::new(backend);
@@ -28,6 +34,10 @@ impl MigrationTrait for Migration {
         manager.create_table(schema.create_table_from_entity(template::Entity)).await?;
         manager.create_table(schema.create_table_from_entity(component::Entity)).await?;
         manager.create_table(schema.create_table_from_entity(categorie::Entity)).await?;
+        categorie::Entity::insert(ActiveModel{name:Set("project".to_string()),areas:Set(arr.clone()),..Default::default()});
+        categorie::Entity::insert(ActiveModel{name:Set("area".to_string()),areas:Set(arr.clone()),..Default::default()});
+        categorie::Entity::insert(ActiveModel{name:Set("resource".to_string()),areas:Set(arr.clone()),..Default::default()});
+        categorie::Entity::insert(ActiveModel{name:Set("archive".to_string()),areas:Set(arr.clone()),..Default::default()});
         Ok(())
     }
 
