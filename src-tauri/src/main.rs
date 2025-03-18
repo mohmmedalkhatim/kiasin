@@ -23,6 +23,7 @@ async fn main() {
             app::todo_control,
             app::media_control,
             app::dashboard,
+            app::compoents_control
         ])
         .setup(|app| {
             let database_url = app

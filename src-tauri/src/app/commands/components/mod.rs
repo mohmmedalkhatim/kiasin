@@ -9,7 +9,7 @@ use crate::DbConnection;
 
 
 #[tauri::command]
-async fn compoents_control(
+pub async fn compoents_control(
     app: tauri::AppHandle,
     payload: Payload,
     channel: Channel<Vec<Model>>,

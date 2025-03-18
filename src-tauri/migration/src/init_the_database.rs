@@ -28,7 +28,6 @@ impl MigrationTrait for Migration {
         manager.create_table(schema.create_table_from_entity(template::Entity)).await?;
         manager.create_table(schema.create_table_from_entity(component::Entity)).await?;
         manager.create_table(schema.create_table_from_entity(categorie::Entity)).await?;
-        
         Ok(())
     }
 
@@ -36,8 +35,13 @@ impl MigrationTrait for Migration {
         // Replace the sample below with your own migration scripts
         manager.drop_table(Table::drop().table(area::Entity).to_owned()).await?;
         manager.drop_table(Table::drop().table(note::Entity).to_owned()).await?;
+        manager.drop_table(Table::drop().table(media::Entity).to_owned()).await?;
         manager.drop_table(Table::drop().table(db::Entity).to_owned()).await?;
         manager.drop_table(Table::drop().table(user::Entity).to_owned()).await?;
+        manager.drop_table(Table::drop().table(todo::Entity).to_owned()).await?;
+        manager.drop_table(Table::drop().table(template::Entity).to_owned()).await?;
+        manager.drop_table(Table::drop().table(component::Entity).to_owned()).await?;
+        manager.drop_table(Table::drop().table(categorie::Entity).to_owned()).await?;
         Ok(())
     }
 }

@@ -6,7 +6,7 @@ pub struct Component{
     pub name:String,
     pub content:String,    
 }
-
+#[derive(Serialize,Deserialize)]
 pub struct Payload {
     pub command:String,
     pub id:Option<i32>, 
