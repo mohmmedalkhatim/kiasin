@@ -77,7 +77,6 @@ pub async fn areas_control(
             }
             None => Err("you have to provided an ID".to_string()),
         },
-        "one" => Ok(()),
         _ => {
             println!(
                 "you are trying to access unregistered command {:?}",

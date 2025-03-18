@@ -7,5 +7,6 @@ pub use commands::{
     note::{__cmd__notes_control, notes_control},
     todo::{__cmd__todo_control, todo_control},
     user::{__cmd__user_control, user_control},
+    components::{__cmd}
 };
 pub use util::database_connection;

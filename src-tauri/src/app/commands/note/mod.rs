@@ -15,7 +15,7 @@ pub async fn notes_control(
     let db = &data.lock().await.db.clone().unwrap();
     let server = app.app_handle();
     match payload.command.as_str() {
-        "one" => match payload.id {
+        "find" => match payload.id {
             Some(id) => {
                 let model = functions::find_one(id, db).await;
                 if let Ok(model) = model {

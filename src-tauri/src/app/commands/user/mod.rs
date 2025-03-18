@@ -1,9 +1,8 @@
 use crate::DbConnection;
 use async_std::sync::Mutex;
-use migration::entities::user::Model;
 use objects::Payload;
 use std::sync::Arc;
-use tauri::{command, ipc::Channel, AppHandle, Emitter, Manager, State};
+use tauri::{command, AppHandle, Emitter, Manager, State};
 mod functions;
 mod objects;
 
