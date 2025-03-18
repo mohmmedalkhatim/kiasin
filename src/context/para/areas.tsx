@@ -8,7 +8,7 @@ interface Areas {
     editable: boolean
     init: () => void
     area: (id: number, setArea: React.Dispatch<React.SetStateAction<boolean>>) => void
-    create: () => void
+    create: (id:number) => void
     update: (area: Area) => void
     taggleEditable: () => void
     getArea:(id:number)=>Area
@@ -36,7 +36,7 @@ export let useAreas = create<Areas>((set) => ({
                 set(state => ({ list: [...list] }))
             })
         }
-        return invoke("areas_control", { payload: { command: "many" }, channel });
+        return invoke("areas_control", { payload: { command: "find" }, channel });
     },
     area: (id, setarea) => {
 
@@ -46,7 +46,7 @@ export let useAreas = create<Areas>((set) => ({
         })
         setarea(true)
     },
-    create: () => {
+    create: (id:number) => {
         let channel = new Channel<Area[]>();
         invoke("areas_control", { payload: { command: "create" }, channel });
         channel.onmessage = (data) => {

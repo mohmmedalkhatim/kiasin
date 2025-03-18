@@ -22,7 +22,7 @@ function Areas() {
               </Link>
             )
           })}
-          <button className="flex items-center justify-center" onClick={create}>
+          <button className="flex items-center justify-center" onClick={()=>create(2)}>
             <IconPlus />
           </button>
         </div>
