@@ -66,28 +66,26 @@ const Card: React.FC<CardProps> = ({
         {...attributes}
         className={`relative rounded ${cla} card`}
       >
-        {editable && (<div className='flex items-center justify-between relative'>
-          <div className='size_control'>
+        {editable && (<div className='flex items-center justify-between px-4 py-4'>
+          <div className='flex'>
             <div className='flex'>
-              <div>
-                <button onClick={() => setCardlist(card.id, { Col: "row", increase: false })}>
-                  <IconRowRemove />
-                </button>
-                <button onClick={() => setCardlist(card.id, { Col: "row", increase: true })}>
-                  <IconRowInsertBottom />
-                </button>
-              </div>
-              <div>
-                <button onClick={() => setCardlist(card.id, { Col: "col", increase: false })}>
-                  <IconLayoutSidebarLeftCollapseFilled />
-                </button>
-                <button onClick={() => setCardlist(card.id, { Col: "col", increase: true })}>
-                  <IconLayoutSidebarLeftExpandFilled />
-                </button>
-              </div>
+              <button onClick={() => setCardlist(card.id, { Col: "row", increase: false })}>
+                <IconRowRemove />
+              </button>
+              <button onClick={() => setCardlist(card.id, { Col: "row", increase: true })}>
+                <IconRowInsertBottom />
+              </button>
+            </div>
+            <div className='flex'>
+              <button onClick={() => setCardlist(card.id, { Col: "col", increase: false })}>
+                <IconLayoutSidebarLeftCollapseFilled />
+              </button>
+              <button onClick={() => setCardlist(card.id, { Col: "col", increase: true })}>
+                <IconLayoutSidebarLeftExpandFilled />
+              </button>
             </div>
           </div>
-          <CardHeader {...listeners} className='absolute right-0 top-1'>
+          <CardHeader {...listeners}>
             <IconGridDots />
           </CardHeader>
         </div>)}
