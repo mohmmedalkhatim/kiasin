@@ -6,6 +6,7 @@ import TextAlign from '@tiptap/extension-text-align';
 import textStyle from '@tiptap/extension-text-style';
 import { Toolbar } from './toolbar';
 import './style.css';
+import Placeholder from '@tiptap/extension-placeholder';
 
 
 const RichTextEditor = ({content}:{content:string}) => {
@@ -17,6 +18,7 @@ const RichTextEditor = ({content}:{content:string}) => {
                 types: ["heading", 'paragraph'],
             }),
             textStyle,
+            Placeholder.configure({placeholder:"start writing ..."})
         ],
         content,
         editorProps: {
