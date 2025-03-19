@@ -20,7 +20,7 @@ pub async fn create_area(db: &DatabaseConnection, id: i32) -> Result<i32, DbErr>
         links: Set(links),
         ui_schema: Set(shema),
         in_archive: Set(false),
-        cagetogrie: Set(id as u32),
+        categorie: Set(id as u32),
         ..Default::default()
     };
 

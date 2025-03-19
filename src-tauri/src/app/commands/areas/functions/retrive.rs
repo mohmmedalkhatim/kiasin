@@ -11,7 +11,7 @@ pub async fn find_many(db: &DatabaseConnection) -> Result<Vec<Model>, DbErr> {
     Ok(list)
 }
 pub async fn find_by_catergorie(db:&DatabaseConnection,id:i32)-> Result<Vec<Model>,DbErr>{
-    let list = Entity::find().filter(Column::Cagetogrie.eq(id)).all(db).await?;
+    let list = Entity::find().filter(Column::Categorie.eq(id)).all(db).await?;
     Ok(list)
 
 }

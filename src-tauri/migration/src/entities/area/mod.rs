@@ -16,7 +16,7 @@ pub struct Model{
     pub in_archive:bool,
     pub ui_schema:Json,
     pub links:Json,
-    pub cagetogrie:u32
+    pub categorie:u32
 }
  impl Related<super::note::Entity> for Entity {
      fn to() -> RelationDef {
@@ -38,7 +38,7 @@ pub enum Relation {
     #[sea_orm(has_many = "super::note::Entity")]
     Notes,
     #[sea_orm(belongs_to= "super::categorie::Entity",
-        from = "super::area::Column::Cagetogrie",
+        from = "super::area::Column::Categorie",
         to = "super::categorie::Column::Id"
     )]
     Categorie

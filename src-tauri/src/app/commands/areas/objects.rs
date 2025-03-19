@@ -5,7 +5,7 @@ use serde_json::Value;
 #[derive(Debug, Clone, Serialize, Default, Deserialize)]
 pub struct Area {
     pub title: Option<String>,
-    pub discription: Option<String>,
+    pub description: Option<String>,
     pub ui_schema: Value,
     pub cover: Option<String>,
     pub links: Value,
