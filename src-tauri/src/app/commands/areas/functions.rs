@@ -2,6 +2,8 @@ mod create;
 mod delete;
 mod retrive;
 mod updata;
+mod init_categorie;
+pub use init_categorie::init_categories;
 pub use create::create_area;
 pub use delete::delete_area;
 pub use retrive::*;

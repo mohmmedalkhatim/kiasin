@@ -48,7 +48,7 @@ export let useAreas = create<Areas>((set) => ({
     },
     create: (id:number) => {
         let channel = new Channel<Area[]>();
-        invoke("areas_control", { payload: { command: "create" }, channel });
+        invoke("areas_control", { payload: { command: "create",id }, channel });
         channel.onmessage = (data) => {
             data.map((item) => {
                 let icon = URL.createObjectURL(new Blob([new Uint8Array(item.icon as number[])], { type: "image/jpeg" }))

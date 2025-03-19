@@ -16,6 +16,7 @@ pub async fn areas_control(
     channel: Channel<Vec<Model>>,
 ) -> Result<(), String> {
     let db = data.lock().await.db.clone().unwrap();
+    functions::init_categories(&db).await;
     match payload.command.as_str() {
         "create" => {
             let res = functions::create_area(&db,payload.id.unwrap()).await;

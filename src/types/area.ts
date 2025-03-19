@@ -11,12 +11,13 @@ export interface Card {
 
 export interface Area {
   title: string
-  discription: string
+  description: string
   ui_schema: { item: Card[] }
   cover: number[] | string
   icon: number[] | string
   links: { list: string[] }
   id: number
+  categorie:number
 }
 
 export interface AreaPage {
