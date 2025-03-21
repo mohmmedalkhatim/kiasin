@@ -1,5 +1,5 @@
 pub mod areas;
-pub mod dashborad;
+pub mod dashboard;
 pub mod media;
 pub mod note;
 pub mod tag;
