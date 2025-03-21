@@ -1,14 +1,14 @@
 import "./style.css"
+import { IconCheck } from '@tabler/icons-react';
 
-function Checkbox({state,title}:{state:boolean,title:string}) {
+function Checkbox({ state, title, setState }: { state: boolean, title: string, setState: any }) {
     return (
-        <div className="checkbox-wrapper-46">
-            <input className="inp-cbx" id="cbx-46" type="checkbox"  />
-            <label className="cbx" htmlFor="cbx-46"><span>
-                <svg width="12px" height="10px" viewBox="0 0 12 10">
-                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
-                </svg></span>{title?<span>{title}</span>:""}
-            </label>
+        <div className="m_border border rounded w-5 h-5 flex items-center justify-center" onClick={()=>setState(!state)}>
+            <div  className={`bg-blue-500 ${state && "opacity-0"}   rounded transition-all duration-100`}>
+                <IconCheck size={"1rem"} color="white">
+
+                </IconCheck>
+            </div>
         </div>
     )
 }
