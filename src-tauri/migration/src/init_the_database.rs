@@ -1,11 +1,6 @@
-use sea_orm::sqlx::types::Json;
-use sea_orm::EntityTrait;
 use sea_orm::Schema;
-use sea_orm::Set;
 use sea_orm_migration::prelude::*;
-use serde_json::json;
 use crate::entities::area;
-use crate::entities::categorie::ActiveModel;
 use crate::entities::note;
 use crate::entities::user;
 use crate::entities::db;
