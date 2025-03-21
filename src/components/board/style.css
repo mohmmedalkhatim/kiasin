@@ -2,6 +2,6 @@
 
 @layer components{
     .size_control{
-        @apply absolute left-0 -top-10
+        @apply absolute left-0 -top-10;
     }
 }

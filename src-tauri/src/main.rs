@@ -2,8 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use async_std::sync::Mutex;
 use migration::{entities::categorie::{self, ActiveModel}, MigratorTrait};
-use sea_orm::{DatabaseConnection, EntityTrait, Set};
-use serde_json::json;
+use sea_orm::DatabaseConnection;
 use std::sync::Arc;
 use tauri::{path::BaseDirectory, Manager};
 mod app;

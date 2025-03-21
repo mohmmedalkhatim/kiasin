@@ -17,13 +17,25 @@ let useNote = create<Notes>((set) => ({
         let list: Note[] = []
         channel.onmessage = (data) => {
             data.map((item) => list.push(item))
-            set(({list}))
+            set(({ list }))
         }
-        invoke("notes_control", { payload: { command: "area_notes", id }, channel }).then((e) => { })
-        
-    },
-    updata_note: (id, item) => {
+        invoke("notes_control", { payload: { command: "area_notes", id }, channel }).then((e) => { }).catch(e => {
+            console.log(e);
+        })
 
     },
-    note: (id: number) => { }
+    updata_note: (id, item) => {
+        let channel = new Channel<Note[]>()
+        set(state => {
+            let list: Note[] = state.list.map(ele =>
+                ele.id != String(id) ? ele : item
+            );
+            return ({ list })
+        })
+        invoke("notes_control", { payload: { command: "update_note", id }, channel }).then((e) => { }).catch(e => console.log(e))
+
+    },
+    note: (id: number) => {
+
+    }
 }))
