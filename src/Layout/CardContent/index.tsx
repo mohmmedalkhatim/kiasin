@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import AreasList from "../components/List";
 import Editor_card from "../components/Editor";
 import TaskList from "../components/Tasklist";
+import Image from "../components/Image";
 
 
 function CardContent({ T, props }: { T: string, props: any }) {
@@ -9,6 +10,7 @@ function CardContent({ T, props }: { T: string, props: any }) {
         ["editor",<Editor_card content={props.content} title={"untitled"} />],
         ["Areaslist",<AreasList list={props}/>],
         ["tasks",<TaskList list={props}/>],
+        ["image",<Image url={props}/>],
         ["default",<div>no content</div>]
     ]));
     useEffect(()=>{

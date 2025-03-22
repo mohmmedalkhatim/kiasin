@@ -21,7 +21,7 @@ import { useAreas } from '../context/para/areas'
 import "./style.css"
 import { IconPlus } from '@tabler/icons-react'
 
-const Board = ({ area }: { area?: Area }) => {
+const Layout = ({ area }: { area?: Area }) => {
   let [schema, setSchema] = useState(area?.ui_schema.item)
   let [sort, updateSort] = useState(schema?.map(item => item.id.toString()))
   const [activeId, setActiveId] = useState<string | null>(null)
@@ -116,4 +116,4 @@ const Board = ({ area }: { area?: Area }) => {
   }
 }
 
-export default Board
+export default Layout
