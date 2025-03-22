@@ -5,6 +5,7 @@ import { Channel, invoke } from "@tauri-apps/api/core";
 
 interface Notes {
     list: Note[],
+    active: Note[],
     area_notes: (area_id: number) => void,
     updata_note: (id: number, item: Note) => void,
     note: (id: number) => void
@@ -12,6 +13,7 @@ interface Notes {
 
 let useNote = create<Notes>((set) => ({
     list: [],
+    active: [],
     area_notes: (id) => {
         let channel = new Channel<Note[]>()
         let list: Note[] = []
@@ -36,6 +38,17 @@ let useNote = create<Notes>((set) => ({
 
     },
     note: (id: number) => {
+        let channel = new Channel<Note[]>();
+        set(state => {
+            let list = new Set(state.active);
+            channel.onmessage = (data) => {
+                list.add(data[0]);
 
+            }
+            return ({
+                active: [...list]
+            })
+        })
+        invoke("notes_control", { payload: { command: "find", id }, channel })
     }
 }))
