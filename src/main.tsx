@@ -5,7 +5,6 @@ import { router } from './router'
 import Lenis from 'lenis';
 import ScrollTrigger from 'gsap/ScrollTrigger'
 import gsap from 'gsap'
-import { useAreas } from './context/para/areas';
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query';
 
 const lenis = new Lenis();
@@ -20,7 +19,6 @@ gsap.ticker.lagSmoothing(0);
 
 gsap.registerPlugin(ScrollTrigger)
 
-let init = useAreas.getState().init()
 
 let Client = new QueryClient()
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(

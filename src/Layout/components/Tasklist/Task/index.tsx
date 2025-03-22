@@ -1,5 +1,5 @@
 import { useState } from "react"
-import Checkbox from "../../../../Checkbox"
+import Checkbox from "../../../../components/Checkbox"
 
 function Task({id,classn}:{id:number,classn:string}) {
   let [checked,setChecked] = useState(false)

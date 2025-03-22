@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom"
-import Board from "../../../components/board";
 import type { Area } from "../../../types/area";
 import { useEffect, useState } from "react";
 import { useAreas } from "../../../context/para/areas";
+import Layout from "../../../Layout";
 
 
 
@@ -18,7 +18,7 @@ function Area() {
   if (done) {
     console.log()
     return <main className="content">
-      <Board area={active} />
+      <Layout area={active} />
     </main>
   }
 

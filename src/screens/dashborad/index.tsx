@@ -1,10 +1,10 @@
 import './style.css'
-import Borad from '../../components/board'
+import Layout from '../../Layout'
 import { invoke } from '@tauri-apps/api/core';
 import { Area } from '../../types/area';
 import { useQuery } from '@tanstack/react-query';
 
-function Dashborad({ }: {}) {
+function DashBoard({ }: {}) {
   let { data, error, isLoading } = useQuery({
     queryKey: ['area'],
     queryFn: async () => await invoke<Area>('dashboard')
@@ -13,8 +13,8 @@ function Dashborad({ }: {}) {
   if (error) return <main  className='content'>Error: {error.message}</main>
   if (data) {
     return <main className="content">
-      <Borad area={data} />
+      <Layout area={data} />
     </main>
   }
 }
-export default Dashborad
+export default DashBoard

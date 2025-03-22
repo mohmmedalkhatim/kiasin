@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
-import Editor from "../../Editor";
-import AreasList from "../../List";
+import AreasList from "../components/List";
 import Editor_card from "../components/Editor";
 import TaskList from "../components/Tasklist";
 

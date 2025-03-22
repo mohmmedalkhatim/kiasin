@@ -10,8 +10,8 @@ import {
   IconRowInsertBottom,
   IconRowRemove
 } from '@tabler/icons-react'
-import { Card as Cardtype } from '../../../types/area';
-import { useAreas } from '../../../context/para/areas'
+import { Card as Cardtype } from '../../types/area';
+import { useAreas } from '../../context/para/areas'
 import CardContent from '../CardContent'
 
 const CardContainer = styled.div<{
