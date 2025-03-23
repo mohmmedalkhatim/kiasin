@@ -16,7 +16,9 @@ function NotePage() {
         })
     }, [])
     if (done) {
-        return <Editor content={notes?.content as string} />
+        return <div className="container">
+            <Editor content={notes?.content as string} />
+        </div>
     }
 }
 export default NotePage
