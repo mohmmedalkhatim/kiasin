@@ -1,0 +1,90 @@
+import React, { useState } from "react";
+import dayjs from "dayjs";
+import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+
+const Calendar: React.FC = () => {
+  const [currentDate, setCurrentDate] = useState(dayjs());
+  const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<dayjs.Dayjs | null>(null);
+
+  const startOfMonth = currentDate.startOf("month");
+  const endOfMonth = currentDate.endOf("month");
+  const startDay = startOfMonth.day();
+  const daysInMonth = endOfMonth.date();
+
+  const prevMonth = () => setCurrentDate(currentDate.subtract(1, "month"));
+  const nextMonth = () => setCurrentDate(currentDate.add(1, "month"));
+
+  const handleDateSelection = (day: dayjs.Dayjs) => {
+    if (!startDate || (startDate && endDate)) {
+      setStartDate(day);
+      setEndDate(null);
+    } else if (day.isAfter(startDate)) {
+      setEndDate(day);
+    } else {
+      setStartDate(day);
+      setEndDate(null);
+    }
+  };
+
+  const saveSelection = () => {
+    console.log("Selected Range:", {
+      startDate: startDate ? startDate.format("YYYY-MM-DD") : null,
+      endDate: endDate ? endDate.format("YYYY-MM-DD") : null,
+    });
+  };
+
+  const days = Array.from({ length: daysInMonth }, (_, i) => startOfMonth.add(i, "day"));
+
+  return (
+    <div className="p-4 max-w-md mx-auto">
+      <div className="flex justify-between items-center mb-1">
+        <button onClick={prevMonth} className="p-1 hover:bg-gray-200 hover:text-black">
+          <IconChevronLeft />
+        </button>
+        <h2 className="text-lg font-bold">{currentDate.format("MMMM YYYY")}</h2>
+        <button onClick={nextMonth} className="p-2 hover:bg-gray-200 hover:text-black">
+          <IconChevronRight />
+        </button>
+      </div>
+      <div className="grid grid-cols-7 text-center font-semibold">
+        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+          <div key={day} className="py-1">{day}</div>
+        ))}
+      </div>
+      <div className="grid grid-cols-7">
+        {Array.from({ length: startDay }).map((_, i) => (
+          <div key={i}></div>
+        ))}
+        {days.map((day) => (
+          <div
+            key={day.toString()}
+            className={`p-2 text-center hover:text-black transition cursor-pointer border border-transparent ${
+              startDate && day.isSame(startDate, "day")
+                ? "bg-blue-500 text-black border-blue-700"
+                : endDate && day.isSame(endDate, "day")
+                ? "bg-blue-500  text-black border-blue-700"
+                : startDate && endDate && day.isAfter(startDate) && day.isBefore(endDate)
+                ? "bg-blue-300"
+                : "hover:bg-gray-200"
+            } ${
+              (startDate && day.isSame(startDate, "day")) 
+                ? "rounded-tl-md text-black"
+                : startDate && endDate && day.isSame(endDate, "day")
+                ? "rounded-br-md text-black"
+                : ""
+            }`}
+            onClick={() => handleDateSelection(day)}
+          >
+            {day.date()}
+          </div>
+        ))}
+      </div>
+      <button onClick={saveSelection} className="mt-2 w-full p-2 bg-blue-500 text-white hover:bg-blue-600">
+        Save Selection
+      </button>
+    </div>
+  );
+};
+
+export default Calendar;

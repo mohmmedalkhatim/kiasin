@@ -3,6 +3,7 @@ import AreasList from "../components/List";
 import Editor_card from "../components/Editor";
 import TaskList from "../components/Tasklist";
 import Image from "../components/Image";
+import Calendar from "../components/Calender";
 
 
 function CardContent({ T, props }: { T: string, props: any }) {
@@ -11,6 +12,7 @@ function CardContent({ T, props }: { T: string, props: any }) {
         ["Areaslist",<AreasList list={props}/>],
         ["tasks",<TaskList list={props}/>],
         ["image",<Image url={props}/>],
+        ["calender",<Calendar/>],
         ["default",<div>no content</div>]
     ]));
     useEffect(()=>{
