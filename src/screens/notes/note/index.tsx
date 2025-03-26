@@ -1,8 +1,8 @@
 import { useParams } from "react-router-dom"
-import Editor from "../../components/Editor"
-import { useNotes } from "../../context/para/notes"
+import Editor from "../../../components/Editor"
+import { useNotes } from "../../../context/para/notes"
 import { useEffect, useState } from "react";
-import { Note } from "../../types/notes";
+import { Note } from "../../../types/notes";
 
 function NotePage() {
     let get = useNotes(state => state.note);
