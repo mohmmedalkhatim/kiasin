@@ -37,52 +37,47 @@ const Calendar: React.FC = () => {
   const days = Array.from({ length: daysInMonth }, (_, i) => startOfMonth.add(i, "day"));
 
   return (
-    <div className="p-4 max-w-md mx-auto">
+    <div className="p-4 max-w-xs font-light flex flex-col gap-y-2 ">
       <div className="flex justify-between items-center mb-1">
-        <button onClick={prevMonth} className="p-1 hover:bg-gray-200 hover:text-black">
-          <IconChevronLeft />
+        <button onClick={prevMonth} className="p-1 rounded-none border-none hover:bg-gray-200 hover:opacity-5 ">
+          <IconChevronLeft size={"1.2rem"} />
         </button>
-        <h2 className="text-lg font-bold">{currentDate.format("MMMM YYYY")}</h2>
-        <button onClick={nextMonth} className="p-2 hover:bg-gray-200 hover:text-black">
-          <IconChevronRight />
+        <h2 className="text-md">{currentDate.format("MMMM YYYY")}</h2>
+        <button onClick={nextMonth} className="p-1 rounded-none border-none hover:bg-gray-200  hover:opacity-5 ">
+          <IconChevronRight size={"1.2rem"} />
         </button>
       </div>
-      <div className="grid grid-cols-7 text-center font-semibold">
+      <div className="grid grid-cols-7 text-center gap-y-4 text-[#e2e2e298]">
         {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
-          <div key={day} className="py-1">{day}</div>
+          <div key={day} className="py-1 text-sm">{day}</div>
         ))}
       </div>
-      <div className="grid grid-cols-7">
+      <div className="grid grid-cols-7 gap-y-2 ">
         {Array.from({ length: startDay }).map((_, i) => (
           <div key={i}></div>
         ))}
         {days.map((day) => (
           <div
             key={day.toString()}
-            className={`p-2 text-center hover:text-black transition cursor-pointer border border-transparent ${
-              startDate && day.isSame(startDate, "day")
+            className={`p-1 text-center hover:text-black transition cursor-pointer border border-transparent ${startDate && day.isSame(startDate, "day")
                 ? "bg-blue-500 text-black border-blue-700"
                 : endDate && day.isSame(endDate, "day")
-                ? "bg-blue-500  text-black border-blue-700"
-                : startDate && endDate && day.isAfter(startDate) && day.isBefore(endDate)
-                ? "bg-blue-300"
-                : "hover:bg-gray-200"
-            } ${
-              (startDate && day.isSame(startDate, "day")) 
+                  ? "bg-blue-500  text-black border-blue-700"
+                  : startDate && endDate && day.isAfter(startDate) && day.isBefore(endDate)
+                    ? "bg-blue-300"
+                    : "hover:bg-gray-200 text-[#e2e2e295]"
+              } ${(startDate && day.isSame(startDate, "day"))
                 ? "rounded-tl-md text-black"
                 : startDate && endDate && day.isSame(endDate, "day")
-                ? "rounded-br-md text-black"
-                : ""
-            }`}
+                  ? "rounded-br-md text-black"
+                  : ""
+              }`}
             onClick={() => handleDateSelection(day)}
           >
             {day.date()}
           </div>
         ))}
       </div>
-      <button onClick={saveSelection} className="mt-2 w-full p-2 bg-blue-500 text-white hover:bg-blue-600">
-        Save Selection
-      </button>
     </div>
   );
 };

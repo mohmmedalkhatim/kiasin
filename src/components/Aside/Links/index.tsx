@@ -1,17 +1,19 @@
 import { Link } from 'react-router-dom'
+import { IconDashboard, IconLayersIntersect } from '@tabler/icons-react'
 
-function Links () {
+
+function Links() {
   let arr = [
-    { name: 'Dashboard', link: '/' },
-    { name: 'areas & recourses', link: '/areas' },
+    { name: 'Dashboard', link: '/', Icon: <IconDashboard /> },
+    { name: 'areas & recourses', link: '/areas',Icon: <IconLayersIntersect /> },
     { name: 'Projects_hub', link: '/' },
     { name: 'DataTree', link: '/' }
   ]
   return (
     <div className='links'>
-      {arr.map((item,i) => (
+      {arr.map((item, i) => (
         <Link key={i} className='link' to={item.link}>
-          <div className='hidden md:block'>{item.name}</div>
+          <div>{item.Icon}</div><div className='hidden md:block'>{item.name}</div>
         </Link>
       ))}
     </div>
