@@ -37,7 +37,6 @@ pub async fn user_control(
             }
             None => Err("you have to add an id".to_string()),
         },
-
         "delete" => match payload.id {
             Some(id) => {
                 let res = functions::delete_user(id, &db).await;
