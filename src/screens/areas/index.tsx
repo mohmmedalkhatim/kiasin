@@ -1,4 +1,4 @@
-import Card from "../../components/Card"
+import AreaCard from "../../components/Cards/area_card"
 import { IconPlus } from '@tabler/icons-react';
 import { useAreas } from "../../context/para/areas";
 import { Link } from "react-router-dom";
@@ -18,7 +18,7 @@ function Areas() {
           {list.map((item) => {
             return (
               <Link to={`/Area/${item.id}`} key={item.id}>
-                <Card id={item.id} />
+                <AreaCard id={item.id} />
               </Link>
             )
           })}

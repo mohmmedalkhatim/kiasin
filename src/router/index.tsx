@@ -2,7 +2,7 @@ import { createBrowserRouter, Route, createRoutesFromElements } from 'react-rout
 import App from '../App'
 import Dashborad from '../screens/dashborad'
 import Areas from '../screens/areas'
-import Area from '../screens/areas/area_card'
+import Area from '../screens/areas/area'
 import Archive from '../screens/archive'
 import Notes from '../screens/notes'
 import Note from '../screens/notes/note'

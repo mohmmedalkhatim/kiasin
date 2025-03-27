@@ -11,7 +11,7 @@ function NotePage() {
     let { id } = useParams()
     let activeList = useNotes(state => state.active);
     useEffect(() => {
-        get(Number(id), setDone).then(data => {
+        get(Number(id)).then(data => {
             setnotes(activeList.at(-1));
         })
     }, [])

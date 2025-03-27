@@ -1,6 +1,8 @@
 function Notes() {
   return (
-    <div>Notes</div>
+    <main className="content">
+      
+    </main>
   )
 }
 export default Notes

@@ -8,7 +8,7 @@ interface Notes {
     active: Note[],
     area_notes: (area_id: number) => void,
     updata_note: (id: number, item: Note) => void,
-    note:  (id: number,setDone:any) => Promise<void>
+    note:  (id: number) => Promise<void>
 }
 
 export let useNotes = create<Notes>((set) => ({
@@ -37,13 +37,12 @@ export let useNotes = create<Notes>((set) => ({
         invoke("notes_control", { payload: { command: "update_note", id }, channel }).then((e) => { }).catch(e => console.log(e))
 
     },
-    note: async (id: number, setDone: any) => {
+    note: async (id: number) => {
         let channel = new Channel<Note[]>();
         set(state => {
             let list = new Set(state.active);
             channel.onmessage = (data) => {
                 list.add(data[0]);
-                setDone(true)
             }
             return ({
                 active: [...list]

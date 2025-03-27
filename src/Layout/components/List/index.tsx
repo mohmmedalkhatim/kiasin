@@ -1,4 +1,4 @@
-import Card from "../../../components/Card"
+import Card from "../../../components/Cards/area_card"
 
 
 function AreasList(props:{list:number[]}) {
