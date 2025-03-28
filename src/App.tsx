@@ -6,18 +6,20 @@ import { useEffect, useState } from 'react'
 import { useAuth } from './context/User'
 import Login from './screens/login'
 import { useAreas } from './context/para/areas'
-
-function App(){
+import Navbar from './components/Navbar';
+import { useAside } from './context/aside'
+function App() {
   const email = useAuth((state) => state.email);
   const auth = useAuth((state) => state.auth);
   const [done, setdone] = useState(false)
   const areas = useAreas(state => state.init);
-
+  const [aside_state, t] = useAside(state => ([state.active, state.T]))
   const page = (
     <>
       <Header />
       <Outlet />
-      <Aside />
+      <Navbar />
+      <Aside active={aside_state} T={t} />
     </>
   );
   const login = <Login />;
@@ -25,15 +27,15 @@ function App(){
   const content = email === '' ? login : page;
 
   useEffect(() => {
-     auth(setdone);
+    auth(setdone);
     areas();
   }, [auth, areas]);
 
-    return (
-      <>
-        {content}
-      </>
-    );
-  }
+  return (
+    <>
+      {content}
+    </>
+  );
+}
 
 export default App;
