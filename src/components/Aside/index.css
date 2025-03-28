@@ -1,0 +1,15 @@
+
+
+.Aside{
+    width: 50vw;
+    height: 100vh;
+    display: fixed;
+    right: 0;
+    top: 0;
+}
+.hide{
+    right: -50vw;
+}
+.show{
+    right: 0;
+}

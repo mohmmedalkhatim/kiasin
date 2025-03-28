@@ -1,12 +1,12 @@
-import './style.css'
-import Links from './Links'
-import Profile_link from './profile'
+import Cards_List from "./cards_list"
+import Templates_List from "./templates"
 
-
-function Aside () {
-  return <aside className='aside'>
-    <Profile_link/>
-    <Links/>
-  </aside>
+function Aside({ active, T }: { active: boolean, T: string }) {
+    let content = T == "area" ? <Templates_List /> : <Cards_List />;
+    return (
+        <aside className={`${active ? "show" : "hide"} Aside`}>
+            {content}
+        </aside>
+    )
 }
 export default Aside
