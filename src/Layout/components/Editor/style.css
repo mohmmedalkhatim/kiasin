@@ -7,12 +7,11 @@
   .toolbar_button {
     @apply px-2 py-1 font-medium text-white transition-colors duration-200  dark:hover:bg-gray-800 dark:text-black dark:hover:text-gray-100 hover:text-white rounded-md;
   }
-  .bubble_menu{
+  .bubble_menu {
     @apply absolute z-10 flex gap-1 p-1 bg-white  -top-10 -left-[5rem] rounded-lg shadow-lg  dark:border-gray-700;
   }
-  
-  .buble{
-    @apply text-white
+  .buble {
+    @apply text-white;
   }
   .tiptap h1,
   .tiptap h2,
@@ -43,7 +42,7 @@
 }
 
 .editor_container {
- overflow: none;
+  overflow: none;
   display: flex;
   background-color: #181818;
   height: 100%;
@@ -68,6 +67,8 @@
 p.is-editor-empty:first-child::before {
   color: #e2e2e280;
   content: attr(data-placeholder);
+  outline: none;
+  border: none;
   float: left;
   height: 0;
   pointer-events: none;
@@ -76,7 +77,3 @@ p.is-editor-empty:first-child::before {
   position: relative;
   display: inline-block;
 }
-
-
-
-

@@ -31,7 +31,7 @@ const Editor_card = ({ content }: { content: string, title: string }) => {
     },[])
 
     return (
-        <div className='eidtor_container'>
+        <div className='eidtor_container border-none outline-none'>
             <EditorContent className='editor' placeholder='start writing' editor={editor} />
         </div>
     )

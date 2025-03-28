@@ -62,19 +62,6 @@ p.is-editor-empty:first-child::before {
   pointer-events: none;
 }
 
-.editor {
-  border: 1px solid #e2e2e220;
-  border-radius: 0px 0px 5px 5px;
-  background-color: #181818;
-  height: 100%;
-  width: 100%;
-  padding: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  &:focus-visible {
-    outline: none;
-    border: none;
-  }
-}
 .tiptap {
 }
 .tooltip-container {
