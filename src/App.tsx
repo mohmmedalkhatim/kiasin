@@ -11,9 +11,9 @@ import { useAside } from './context/aside'
 function App() {
   const email = useAuth((state) => state.email);
   const auth = useAuth((state) => state.auth);
-  const [done, setdone] = useState(false)
   const areas = useAreas(state => state.init);
-  const [aside_state, t] = useAside(state => ([state.active, state.T]))
+  const aside_state = useAside(state => state.active)
+  const t = useAside(state => state.T)
   const page = (
     <>
       <Header />
@@ -27,7 +27,7 @@ function App() {
   const content = email === '' ? login : page;
 
   useEffect(() => {
-    auth(setdone);
+    auth(() => { });
     areas();
   }, [auth, areas]);
 

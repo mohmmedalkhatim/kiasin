@@ -5,7 +5,7 @@ import { IconDashboard, IconLayersIntersect, IconNotes } from '@tabler/icons-rea
 function Links() {
   let arr = [
     { name: 'Dashboard', link: '/', Icon: <IconDashboard /> },
-    { name: 'areas & recourses', link: '/areas',Icon: <IconLayersIntersect /> },
+    { name: 'areas', link: '/areas',Icon: <IconLayersIntersect /> },
     { name: 'Notes', link: '/notes',Icon:<IconNotes/> },
     { name: 'DataTree', link: '/' }
   ]

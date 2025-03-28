@@ -2,8 +2,8 @@ use crate::DbConnection;
 use migration::entities::note::Model;
 use objects::Payload;
 use std::sync::Arc;
+use async_std::sync::Mutex;
 use tauri::{command, ipc::Channel, AppHandle, Emitter, Manager, State};
-use tokio::sync::Mutex;
 mod functions;
 mod objects;
 
