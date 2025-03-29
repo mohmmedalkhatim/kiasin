@@ -15,7 +15,7 @@ pub async fn updata_area(db: &DatabaseConnection, id: i32, area: Area) -> Result
         icon: Set(icon),
         cover: Set(cover),
         links: Set(area.links),
-        categorie:Set(area.categorie as u32),
+        categorie: Set(area.categorie as u32),
         ui_schema: Set(area.ui_schema),
         ..Default::default()
     };

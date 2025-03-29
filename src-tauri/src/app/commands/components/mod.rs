@@ -1,12 +1,11 @@
 mod functions;
 mod objects;
+use crate::DbConnection;
 use async_std::sync::Mutex;
 use migration::entities::component::Model;
 use objects::Payload;
 use std::sync::Arc;
 use tauri::{ipc::Channel, Emitter, Manager};
-use crate::DbConnection;
-
 
 #[tauri::command]
 pub async fn components_control(

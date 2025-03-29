@@ -1,4 +1,3 @@
-
 use super::*;
 
 pub async fn delete(id: u32, db: &DatabaseConnection) -> Result<(), DbErr> {

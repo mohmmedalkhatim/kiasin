@@ -1,7 +1,5 @@
-use serde_json::json;
 use super::areas::Area;
-
-
+use serde_json::json;
 
 #[tauri::command]
 pub async fn dashboard() -> Area {

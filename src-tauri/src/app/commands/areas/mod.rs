@@ -19,7 +19,7 @@ pub async fn areas_control(
     functions::init_categories(&db).await;
     match payload.command.as_str() {
         "create" => {
-            let res = functions::create_area(&db,payload.id.unwrap()).await;
+            let res = functions::create_area(&db, payload.id.unwrap()).await;
             match res {
                 Ok(id) => {
                     let state = functions::find_one(id, &db).await;

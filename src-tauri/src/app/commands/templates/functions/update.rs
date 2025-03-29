@@ -1,6 +1,6 @@
 use super::*;
 
-pub async fn update(id: u32, db: &DatabaseConnection,item:Area) -> Result<(), DbErr> {
+pub async fn update(id: u32, db: &DatabaseConnection, item: Area) -> Result<(), DbErr> {
     let template = ActiveModel {
         title: Set(item.title),
         description: Set(item.description),
@@ -9,6 +9,6 @@ pub async fn update(id: u32, db: &DatabaseConnection,item:Area) -> Result<(), Db
         ui_schema: Set(item.ui_schema),
         ..Default::default()
     };
-   let _ = template::Entity::update(template).exec(db).await;
+    let _ = template::Entity::update(template).exec(db).await;
     Ok(())
 }

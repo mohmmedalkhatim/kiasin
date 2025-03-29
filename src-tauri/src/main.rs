@@ -1,7 +1,10 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use async_std::sync::Mutex;
-use migration::{entities::categorie::{self, ActiveModel}, MigratorTrait};
+use migration::{
+    entities::categorie::{self, ActiveModel},
+    MigratorTrait,
+};
 use sea_orm::DatabaseConnection;
 use std::sync::Arc;
 use tauri::{path::BaseDirectory, Manager};
@@ -42,7 +45,6 @@ async fn main() {
                     Some(app::database_connection(database_url.display().to_string()).await);
                 let _ = migration::Migrator::up(&shadow.lock_arc().await.db.clone().unwrap(), None)
                     .await;
-
             });
             app.manage(database);
             Ok(())

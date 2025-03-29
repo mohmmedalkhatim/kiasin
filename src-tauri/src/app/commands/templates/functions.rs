@@ -8,6 +8,6 @@ use sea_orm::{DatabaseConnection, DbErr, EntityTrait, Set};
 use crate::app::commands::areas::Area;
 
 mod create;
-mod update;
-mod retrive;
 mod delete;
+mod retrive;
+mod update;

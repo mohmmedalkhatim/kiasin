@@ -11,9 +11,7 @@ pub async fn init_categories(db: &DatabaseConnection) {
         .await
         .unwrap();
     match res {
-        Some(state) => {
-            
-        }
+        Some(state) => {}
         None => {
             let arr = json!({"items":[]});
             let _ = categorie::Entity::insert(ActiveModel {
