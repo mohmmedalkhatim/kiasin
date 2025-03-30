@@ -7,7 +7,7 @@ interface Aside_state {
   SwichType: () => void
 }
 export let useAside = create<Aside_state>(set => ({
-  active: false,
+  active: true,
   T: '',
   toggle: () => {
     set(state => ({ active: !state.active }))
