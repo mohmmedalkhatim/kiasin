@@ -2,12 +2,13 @@
   width: 50vw;
   height: 100vh;
   display: fixed;
-  right: 0;
+  left: 100vw;
   top: 0;
-  background: white;
+  background: #181818;
   transition: ease 200ms left;
   z-index: 1000;
+  padding: 2rem;
 }
 .hide {
-  left: -50vw;
+  left: 50vw;
 }
