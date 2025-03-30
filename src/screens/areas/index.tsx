@@ -3,12 +3,13 @@ import { IconPlus } from '@tabler/icons-react';
 import { useAreas } from "../../context/para/areas";
 import { Link } from "react-router-dom";
 import { useEffect } from "react";
+import { useAside } from "../../context/aside";
 
 
 function Areas() {
   let init = useAreas(state => state.init);
   let list = useAreas(state => state.list);
-  let create = useAreas(state => state.create)
+  let toggle = useAside(state=>state.toggle)
   useEffect(() => {
     init()
   },[])
@@ -22,7 +23,7 @@ function Areas() {
               </Link>
             )
           })}
-          <button className="flex items-center justify-center" onClick={()=>create(2)}>
+          <button className="flex items-center justify-center" onClick={()=>toggle()}>
             <IconPlus />
           </button>
         </div>

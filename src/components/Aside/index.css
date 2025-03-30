@@ -1,15 +1,13 @@
-
-
-.Aside{
-    width: 50vw;
-    height: 100vh;
-    display: fixed;
-    right: 0;
-    top: 0;
+.Aside {
+  width: 50vw;
+  height: 100vh;
+  display: fixed;
+  right: 0;
+  top: 0;
+  background: white;
+  transition: ease 200ms left;
+  z-index: 1000;
 }
-.hide{
-    right: -50vw;
-}
-.show{
-    right: 0;
+.hide {
+  left: -50vw;
 }

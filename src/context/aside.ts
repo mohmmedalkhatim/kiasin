@@ -10,7 +10,7 @@ export let useAside = create<Aside_state>(set => ({
   active: false,
   T: '',
   toggle: () => {
-    set(state => ({ active: state.active }))
+    set(state => ({ active: !state.active }))
   },
   SwichType: () => {
     set(state => ({ T: state.T == 'area' ? 'cards' : 'area' }))
