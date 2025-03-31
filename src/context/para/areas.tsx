@@ -4,23 +4,31 @@ import { Channel, invoke } from '@tauri-apps/api/core';
 
 interface Areas {
     list: Area[],
-    active: Area | undefined
+    active: Area[] | undefined
     editable: boolean
     init: () => void
-    area: (id: number, setArea: React.Dispatch<React.SetStateAction<boolean>>) => void
-    create: (id:number) => void
+    create: (id: number) => void
     update: (area: Area) => void
     taggleEditable: () => void
-    getArea:(id:number)=>Area
+    getArea: (id: number,setArea: React.Dispatch<React.SetStateAction<boolean>>) => Area
+    get_list_item: (id: number) => Area | undefined;
 }
 
 
 export let useAreas = create<Areas>((set) => ({
     list: [],
-    active: undefined,
+    active: [],
     editable: false,
     taggleEditable: () => {
-        set(state => ({ editable: !state.editable }))  
+        set(state => ({ editable: !state.editable }))
+    },
+    get_list_item: (id: number) => {
+        let s = {} as Area;
+        set(state => {
+            s = state.list.filter((item) => item.id == id)[0];
+            return { ...state }; // Ensure the function returns the updated state
+        })
+        return s;
     },
     init: () => {
         let channel = new Channel<Area[]>();
@@ -38,17 +46,10 @@ export let useAreas = create<Areas>((set) => ({
         }
         return invoke("areas_control", { payload: { command: "find" }, channel });
     },
-    area: (id, setarea) => {
 
-        set(state => {
-            let area = state.list.filter((item) => item.id == id)[0]
-            return { active: area }
-        })
-        setarea(true)
-    },
-    create: (id:number) => {
+    create: (id: number) => {
         let channel = new Channel<Area[]>();
-        invoke("areas_control", { payload: { command: "create",id }, channel });
+        invoke("areas_control", { payload: { command: "create", id }, channel });
         channel.onmessage = (data) => {
             data.map((item) => {
                 let icon = URL.createObjectURL(new Blob([new Uint8Array(item.icon as number[])], { type: "image/jpeg" }))
@@ -59,14 +60,19 @@ export let useAreas = create<Areas>((set) => ({
             })
         }
     },
-    getArea:(id)=>{
-        let area:Area|undefined;
-        set(state=>{
-            area = state.list.find(item=>item.id == id);
-            return(state)
-        })
-        return area as Area
-
+    getArea: (id,setdone) => {
+        let channel = new Channel<Area[]>();
+        let area: Area = {} as Area;
+        channel.onmessage = (data) => {
+            set(state => {
+                let s = state.active?.filter((item => item.id !== id)) as Area[];
+                area = data[0];
+                return ({ active: [...s,area] })
+            })
+            setdone(true)
+        }
+        invoke("areas_control", { payload: { command: "find", id }, channel });
+        return area;
     },
     update: (area: Area) => {
         let channel = new Channel<Area[]>();
@@ -79,6 +85,6 @@ export let useAreas = create<Areas>((set) => ({
                 set(state => ({ list: [...state.list.filter((item) => item.id != area.id), item] }))
             })
         }
-        invoke("areas_control", { payload: { command: "update", id:area.id, item:area }, channel });
+        invoke("areas_control", { payload: { command: "update", id: area.id, item: area }, channel });
     }
 }))

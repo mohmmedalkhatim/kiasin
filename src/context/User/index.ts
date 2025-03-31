@@ -23,12 +23,11 @@ export let useAuth = create<User>(set => ({
       payload: { command: 'create', item: { email, password, name } }
     })
   },
-  auth: async (set) => {
+  auth: () => {
     listen<User>('user', e => {
       set({ name: e.payload.name, email: e.payload.email })
-      set(true)
     })
-    invoke('user_control', { payload: { command: 'one', id: 1 } }).then(_ => {})
+    invoke('user_control', { payload: { command: 'one', id: 3 } }).then(_ => {})
   },
   update: () => {},
   delete: () => {}

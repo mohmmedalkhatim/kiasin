@@ -50,7 +50,7 @@ pub async fn areas_control(
                 let res = functions::find_one(id, &db).await;
                 match res {
                     Ok(model) => {
-                        let _ = app.emit("area", model);
+                        let _ = channel.send(vec![model]);
                         Ok(())
                     }
                     Err(e) => Err(e.to_string()),

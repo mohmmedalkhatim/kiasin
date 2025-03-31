@@ -2,8 +2,8 @@ import { useAreas } from "../../../context/para/areas"
 import { Link } from 'react-router-dom';
 
 const AreaCard = ({ id }: { id: number }) => {
-  let getArea = useAreas(state => state.getArea)
-  let area = getArea(id)
+  let get_list_item = useAreas(state => state.get_list_item)
+  let area = get_list_item(id)
   if (area) {
     return (
       <Link to={`/Area/${area.id}`}>

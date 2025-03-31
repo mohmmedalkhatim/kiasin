@@ -8,19 +8,18 @@ import Layout from "../../../Layout";
 
 function Area() {
   let { id } = useParams();
-  let init = useAreas(state => state.area)
+  let init = useAreas(state => state.getArea)
   let active = useAreas(state => state.active);
   let [done, setdone] = useState<boolean>(false)
 
   useEffect(() => {
     init(Number(id), setdone)
+    console.log("active", active)
   }, [])
   if (done) {
-    console.log()
     return <main className="content">
-      <Layout area={active} />
+      {active && active.at(-1) && <Layout area={active.at(-1) as Area} />}
     </main>
   }
-
 }
 export default Area
