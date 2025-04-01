@@ -9,7 +9,7 @@ interface Areas {
   init: () => void;
   create: (id: number) => void;
   update: (area: Area) => void;
-  taggleEditable: () => void;
+  toggleEditable: () => void;
   getArea: (
     id: number,
     setArea: React.Dispatch<React.SetStateAction<boolean>>
@@ -21,7 +21,7 @@ export const useAreas = create<Areas>((set) => ({
   list: [],
   active: [],
   editable: false,
-  taggleEditable: () => {
+  toggleEditable: () => {
     set((state) => ({ editable: !state.editable }));
   },
   get_list_item: (id: number) => {
@@ -31,6 +31,9 @@ export const useAreas = create<Areas>((set) => ({
       return { ...state }; // Ensure the function returns the updated state
     });
     return s;
+  },
+  get_list:(ids:number[])=>{
+
   },
   init: () => {
     const channel = new Channel<Area[]>();
@@ -78,7 +81,7 @@ export const useAreas = create<Areas>((set) => ({
       });
     };
   },
-  getArea: (id, setdone) => {
+  getArea: (id, set_Done) => {
     const channel = new Channel<Area[]>();
     let area: Area = {} as Area;
     channel.onmessage = (data) => {
@@ -87,7 +90,7 @@ export const useAreas = create<Areas>((set) => ({
         area = data[0];
         return { active: [...s, area] };
       });
-      setdone(true);
+      set_Done(true);
     };
     invoke('areas_control', { payload: { command: 'find', id }, channel });
     return area;

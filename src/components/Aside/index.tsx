@@ -1,5 +1,3 @@
-import Cards_List from './cards_list';
-import Templates_List from './templates';
 import './index.css';
 import { useAside } from '../../context/aside';
 import { IconChevronsRight } from '@tabler/icons-react';

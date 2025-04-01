@@ -1,3 +1,5 @@
+use std::iter;
+
 use migration::entities::area::{Column, Entity, Model};
 use sea_orm::{ColumnTrait, DatabaseConnection, DbErr, EntityTrait, QueryFilter};
 use serde_json::json;
@@ -8,9 +10,9 @@ pub async fn find_one(id: i32, db: &DatabaseConnection) -> Result<Model, DbErr> 
 }
 
 pub async fn find_many(db: &DatabaseConnection) -> Result<Vec<Model>, DbErr> {
-    let list = Entity::find().all(db).await?;
+    let mut list = Entity::find().all(db).await?;
     let transformed_list = list
-        .iter()
+        .iter_mut()
         .map(|area| {
             let mut new = area.clone();
             new.ui_schema = json!(null); // Use `null` if the schema is intentionally empty

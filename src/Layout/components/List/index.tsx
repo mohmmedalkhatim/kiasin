@@ -1,6 +1,7 @@
 import Card from '../../../components/Cards/area_card';
 
 function AreasList(props: { list: number[] }) {
+  
   return (
     <div className="p-4">
       <div className="boxs_grid">

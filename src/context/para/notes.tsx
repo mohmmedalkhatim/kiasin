@@ -21,7 +21,7 @@ export const useNotes = create<Notes>((set) => ({
       set({ list });
     };
     invoke('notes_control', { payload: { command: 'area_notes', id }, channel })
-      .then((e) => {})
+      .then((e) => { })
       .catch((e) => {
         console.log(e);
       });
@@ -38,7 +38,7 @@ export const useNotes = create<Notes>((set) => ({
       payload: { command: 'update_note', id },
       channel,
     })
-      .then((e) => {})
+      .then((e) => { })
       .catch((e) => console.log(e));
   },
   note: async (id: number) => {
@@ -46,7 +46,12 @@ export const useNotes = create<Notes>((set) => ({
     set((state) => {
       const list = new Set(state.active);
       channel.onmessage = (data) => {
-        list.add(data[0]);
+        if (list.has(data[0])) {
+          list.delete(data[0])
+          list.add(data[0])
+        } else {
+          list.add(data[0]);
+        }
       };
       return {
         active: [...list],
