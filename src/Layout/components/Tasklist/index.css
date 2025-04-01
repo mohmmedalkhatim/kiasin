@@ -1,15 +1,13 @@
-
-
-.Task{
-    padding: 12px 16px;
-    border: 1px solid #e2e2e220;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+.Task {
+  padding: 12px 16px;
+  border: 1px solid #e2e2e220;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
-.list{
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    padding: 8px;
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 8px;
 }

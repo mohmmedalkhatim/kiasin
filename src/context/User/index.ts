@@ -1,34 +1,36 @@
-import { invoke } from '@tauri-apps/api/core'
-import { listen } from '@tauri-apps/api/event'
-import { create } from 'zustand'
+import { invoke } from '@tauri-apps/api/core';
+import { listen } from '@tauri-apps/api/event';
+import { create } from 'zustand';
 
 interface User {
-  name: string
-  email: string
-  create: (email: string, password: string, name: string) => void
-  update: () => void
-  delete: () => void
-  auth: (setdone:any) => void
+  name: string;
+  email: string;
+  create: (email: string, password: string, name: string) => void;
+  update: () => void;
+  delete: () => void;
+  auth: (setdone: any) => void;
 }
 
-export let useAuth = create<User>(set => ({
+export const useAuth = create<User>((set) => ({
   name: '',
   email: '',
   create: (email, password, name) => {
-    listen<User>('user', e => {
-      console.log(`user event ${e.payload.name}`)
-      set({ name: e.payload.name, email: e.payload.email })
-    })
+    listen<User>('user', (e) => {
+      console.log(`user event ${e.payload.name}`);
+      set({ name: e.payload.name, email: e.payload.email });
+    });
     invoke('user_control', {
-      payload: { command: 'create', item: { email, password, name } }
-    })
+      payload: { command: 'create', item: { email, password, name } },
+    });
   },
   auth: () => {
-    listen<User>('user', e => {
-      set({ name: e.payload.name, email: e.payload.email })
-    })
-    invoke('user_control', { payload: { command: 'one', id: 3 } }).then(_ => {})
+    listen<User>('user', (e) => {
+      set({ name: e.payload.name, email: e.payload.email });
+    });
+    invoke('user_control', { payload: { command: 'one', id: 3 } }).then(
+      (_) => {}
+    );
   },
   update: () => {},
-  delete: () => {}
-}))
+  delete: () => {},
+}));

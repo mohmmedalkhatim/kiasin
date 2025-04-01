@@ -1,4 +1,4 @@
-export interface Todo{
-    title:string,
-    status:boolean
+export interface Todo {
+  title: string;
+  status: boolean;
 }

@@ -1,8 +1,8 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 type InputProps = {
   label?: string;
-  type?: "text" | "email" | "password" | "number";
+  type?: 'text' | 'email' | 'password' | 'number';
   placeholder?: string;
   value?: string;
   onChange?: (value: string) => void;
@@ -13,13 +13,13 @@ type InputProps = {
 
 export default function Input({
   label,
-  type = "text",
+  type = 'text',
   placeholder,
   value,
   onChange,
   error,
   required = false,
-  className = "",
+  className = '',
 }: InputProps) {
   const [touched, setTouched] = useState(false);
 
@@ -37,10 +37,12 @@ export default function Input({
         onChange={(e) => onChange?.(e.target.value)}
         onBlur={() => setTouched(true)}
         className={`border-[1px] border-[#e2e2e220] rounded-md p-2 outline-none bg-transparent text-white  focus:ring-blue-100 transition-all ${
-          error && touched ? "border-red-500" : ""
+          error && touched ? 'border-red-500' : ''
         }`}
       />
-      {error && touched && <span className="text-red-500 text-xs">{error}</span>}
+      {error && touched && (
+        <span className="text-red-500 text-xs">{error}</span>
+      )}
     </div>
   );
 }

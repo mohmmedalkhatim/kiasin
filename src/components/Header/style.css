@@ -1,8 +1,6 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
-
-@layer components{
-    .a{
-        
-    }
+@layer components {
+  .a {
+  }
 }

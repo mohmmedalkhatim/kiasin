@@ -1,4 +1,4 @@
-import { SortingStrategy } from "@dnd-kit/sortable";
+import { SortingStrategy } from '@dnd-kit/sortable';
 
 export const SwappingStrategy: SortingStrategy = ({
   activeIndex,

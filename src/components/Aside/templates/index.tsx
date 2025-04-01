@@ -1,6 +1,4 @@
 function Templates_List() {
-  return (
-    <div>Templates_List</div>
-  )
+  return <div>Templates_List</div>;
 }
-export default Templates_List
+export default Templates_List;

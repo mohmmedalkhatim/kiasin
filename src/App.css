@@ -1,12 +1,12 @@
 @import 'tailwindcss';
 
-:root{
-  
+:root {
 }
 
 @font-face {
   font-family: 'OpenSans';
-  src: url('/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf') format('truetype-variations');
+  src: url('/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf')
+    format('truetype-variations');
   font-weight: 100 900;
   font-stretch: 75% 125%;
   font-style: normal;
@@ -14,41 +14,40 @@
 
 @font-face {
   font-family: 'OpenSans Italic';
-  src: url('/fonts/Open_Sans/OpenSans-Italic-VariableFont_wdth,wght.ttf') format('truetype-variations');
+  src: url('/fonts/Open_Sans/OpenSans-Italic-VariableFont_wdth,wght.ttf')
+    format('truetype-variations');
   font-weight: 100 900;
   font-stretch: 75% 125%;
   font-style: italic;
 }
 
 @font-face {
-  font-family: "AverageSans";
-  src: url("/fonts/Average_Sans/AverageSans-Regular.ttf") format("truetype");
+  font-family: 'AverageSans';
+  src: url('/fonts/Average_Sans/AverageSans-Regular.ttf') format('truetype');
   font-weight: 100 900;
   font-stretch: 75% 125%;
   font-style: normal;
 }
 
-@theme { 
-  --color-dark:#181818;
+@theme {
+  --color-dark: #181818;
   --color-light: '#F9F7F7';
   --color-muted: '#DBE2EF';
   --color-primary: '#3F72AF';
-  --color-primary-border:#e2e2e220;
-  --font-OpenSans:'OpenSans';
-  --font-AverageSans:'AverageSans';
+  --color-primary-border: #e2e2e220;
+  --font-OpenSans: 'OpenSans';
+  --font-AverageSans: 'AverageSans';
 }
 
-
-
 @layer components {
-  .login_page{
-    grid-template-columns: repeat(auto-fill,minmax(25rem,1fr));
+  .login_page {
+    grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
     @apply bg-dark my-16 grid mx-32;
   }
-  .login_illustration{
+  .login_illustration {
     grid-column: 1 / span 2;
   }
-  
+
   button {
     @apply text-sm;
     padding: 8px 12px;
@@ -63,38 +62,36 @@
     display: flex;
     align-items: center;
     border: 1px solid #e2e2e220;
-  
+
     gap: 0.5rem;
     span {
       display: inline;
       color: #aaa;
     }
-  
+
     &:hover {
       transform: translateY(-1px);
     }
   }
-  .login_form_container{
+  .login_form_container {
     display: flex;
-
   }
-  .login_form{
-    @apply flex flex-col gap-4 p-12 ;
+  .login_form {
+    @apply flex flex-col gap-4 p-12;
   }
-  .login_form button{
-    @apply py-2 rounded-md
+  .login_form button {
+    @apply py-2 rounded-md;
   }
-  input{
+  input {
     @apply py-2 px-3 rounded-md;
     border: 1px solid #e2e2e235;
-    &:focus{
-      outline: none
+    &:focus {
+      outline: none;
     }
   }
   .login_illustration img {
-    
   }
-  body{
+  body {
     @apply font-OpenSans;
   }
   .app_header {
@@ -102,8 +99,7 @@
   }
   input {
     @apply rounded-sm px-[0.5rem] py-[0.25rem] bg-dark text-light;
-    &:hover{
-
+    &:hover {
     }
   }
   aside {

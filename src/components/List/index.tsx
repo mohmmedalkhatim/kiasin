@@ -1,16 +1,15 @@
-import AreaCard from "../Cards/area_card"
+import AreaCard from '../Cards/area_card';
 
-
-function AreasList(props:{list:number[]}) {
-    return (
-      <div className="p-4">
-        <div className="boxs_grid">
-            {props.list.map((item)=>(
-                <AreaCard key={item} id={item} />
-            ))}
-        </div>
+function AreasList(props: { list: number[] }) {
+  return (
+    <div className="p-4">
+      <div className="boxs_grid">
+        {props.list.map((item) => (
+          <AreaCard key={item} id={item} />
+        ))}
       </div>
-    )
-  }
-  
-  export default AreasList
+    </div>
+  );
+}
+
+export default AreasList;

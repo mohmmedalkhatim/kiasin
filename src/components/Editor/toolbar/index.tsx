@@ -1,13 +1,12 @@
-import React from "react";
-import { BubbleMenu, Editor } from "@tiptap/react";
-import { IconBold, IconItalic, IconUnderline } from "@tabler/icons-react"
-import Heading from "./heading";
-import Alignment from "./alignment";
+import React from 'react';
+import { BubbleMenu, Editor } from '@tiptap/react';
+import { IconBold, IconItalic, IconUnderline } from '@tabler/icons-react';
+import Heading from './heading';
+import Alignment from './alignment';
 
 interface ToolbarProps {
   editor: Editor | null;
 }
-
 
 export const Toolbar: React.FC<ToolbarProps> = ({ editor }) => {
   if (!editor) return null;
@@ -20,19 +19,19 @@ export const Toolbar: React.FC<ToolbarProps> = ({ editor }) => {
           disabled={!editor.can().chain().focus().toggleBold().run()}
           className="toolbar_button"
         >
-          <IconBold size={"1rem"} />
+          <IconBold size={'1rem'} />
         </button>
         <button
           onClick={() => editor.chain().focus().toggleItalic().run()}
           disabled={!editor.can().chain().focus().toggleItalic().run()}
           className="toolbar_button"
         >
-          <IconItalic size={"1rem"} />
+          <IconItalic size={'1rem'} />
         </button>
 
         <div className="flex">
-          <Alignment editor={editor}/>
-          <Heading editor={editor}/>
+          <Alignment editor={editor} />
+          <Heading editor={editor} />
         </div>
       </div>
       <button
@@ -40,9 +39,8 @@ export const Toolbar: React.FC<ToolbarProps> = ({ editor }) => {
         disabled={!editor.can().chain().focus().setUnderline().run()}
         className="toolbar_button"
       >
-        <IconUnderline size={"1rem"} />
+        <IconUnderline size={'1rem'} />
       </button>
     </BubbleMenu>
   );
-
 };

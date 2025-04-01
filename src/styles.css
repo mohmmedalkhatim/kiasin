@@ -20,9 +20,9 @@
   -webkit-text-size-adjust: 100%;
   scrollbar-gutter: stable both-edges;
 }
-.boxs_grid{
+.boxs_grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(10rem,1fr));
+  grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
   grid-auto-rows: 10rem;
   gap: 1rem;
 }
