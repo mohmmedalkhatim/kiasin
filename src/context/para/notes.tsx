@@ -8,6 +8,7 @@ interface Notes {
   area_notes: (area_id: number) => void;
   updata_note: (id: number, item: Note) => void;
   note: (id: number) => Promise<void>;
+  create: (id: number) => void;
 }
 
 export const useNotes = create<Notes>((set) => ({
@@ -25,6 +26,13 @@ export const useNotes = create<Notes>((set) => ({
       .catch((e) => {
         console.log(e);
       });
+  },
+  create: (id) => {
+    let channel = new Channel()
+    channel.onmessage = () => {
+      
+    }
+    invoke('notes_control', { payload: { command: 'create', id }, channel })
   },
   updata_note: (id, item) => {
     const channel = new Channel<Note[]>();
