@@ -1,9 +1,9 @@
 import { useNotes } from "../../../context/para/notes"
 
-function notes_templates() {
+function Notes_templates() {
     let note = useNotes()
   return (
-    <div>notes_templates</div>
+    <div>Notes_templates</div>
   )
 }
-export default notes_templates
+export default Notes_templates

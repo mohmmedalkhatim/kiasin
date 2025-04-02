@@ -12,7 +12,6 @@ function Area() {
 
   useEffect(() => {
     init(Number(id), setdone);
-    console.log('active', active);
   }, []);
   if (done) {
     return (

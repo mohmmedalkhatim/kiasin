@@ -13,13 +13,17 @@ function App() {
   const auth = useAuth((state) => state.auth);
   const areas = useAreas((state) => state.init);
   const aside_state = useAside((state) => state.active);
-  const inside = useAside((state) => state.inside);
+  const init = useAreas((state) => state.init);
+
+  useEffect(() => {
+    init();
+  }, []);
   const page = (
     <>
       <Header />
       <Outlet />
       <Navbar />
-      <Aside active={aside_state} children={inside} />
+      <Aside active={aside_state} />
     </>
   );
   const login = <Login />;
