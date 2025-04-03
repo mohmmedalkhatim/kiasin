@@ -35,7 +35,7 @@ function App() {
     areas();
   }, [auth, areas]);
 
-  return <>{content}</>;
+  return content;
 }
 
 export default App;
