@@ -24,4 +24,5 @@ pub struct Payload {
     pub command: String,
     pub item: Option<Area>,
     pub id: Option<i32>,
+    pub template:Option<i32>
 }

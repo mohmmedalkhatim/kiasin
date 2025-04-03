@@ -16,7 +16,7 @@ pub struct Model{
     pub in_archive:bool,
     pub ui_schema:Json,
     pub links:Json,
-    pub categorie:u32
+    pub categorie:u32,
 }
  impl Related<super::note::Entity> for Entity {
      fn to() -> RelationDef {

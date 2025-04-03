@@ -2,6 +2,8 @@ import './index.css';
 import { useAside } from '../../context/aside';
 import { IconChevronsRight } from '@tabler/icons-react';
 import Button from '../Button';
+import Notes_templates from './notes_templates';
+import Areas_templates from './areas_templates';
 
 function Aside({
   active,
@@ -9,9 +11,8 @@ function Aside({
   active: boolean;
 }) {
   const toggle = useAside((state) => state.toggle);
-  const inside = new Map([["notes", <div>notes</div>], ["areas", <div>areas</div>]])
+  const inside = new Map([["notes", <Notes_templates />], ["areas", <Areas_templates />]])
   const t = useAside((state) => state.t);
-
   return (
     <aside className={`${active && 'hide'} Aside`}>
       <div className="aside_header">

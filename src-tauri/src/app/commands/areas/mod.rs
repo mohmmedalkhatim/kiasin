@@ -18,17 +18,30 @@ pub async fn areas_control(
     let db = data.lock().await.db.clone().unwrap();
     functions::init_categories(&db).await;
     match payload.command.as_str() {
-        "create" => {
-            let res = functions::create_area(&db, payload.id.unwrap()).await;
-            match res {
-                Ok(id) => {
-                    let state = functions::find_one(id, &db).await;
-                    let _ = channel.send(vec![state.unwrap()]);
-                    Ok(())
+        "create" => match payload.template {
+            Some(id) => {
+                let res = functions::create_from_templates(&db, id).await;
+                match res {
+                    Ok(id) => {
+                        let state = functions::find_one(id, &db).await;
+                        let _ = channel.send(vec![state.unwrap()]);
+                        Ok(())
+                    }
+                    Err(e) => Err(e.to_string()),
                 }
-                Err(e) => Err(e.to_string()),
             }
-        }
+            None => {
+                let res = functions::create_area(&db, payload.id.unwrap()).await;
+                match res {
+                    Ok(id) => {
+                        let state = functions::find_one(id, &db).await;
+                        let _ = channel.send(vec![state.unwrap()]);
+                        Ok(())
+                    }
+                    Err(e) => Err(e.to_string()),
+                }
+            }
+        },
         "update" => match payload.item {
             Some(area) => {
                 if let Some(id) = payload.id {
