@@ -1,4 +1,3 @@
-use std::iter;
 
 use migration::entities::area::{Column, Entity, Model};
 use sea_orm::{ColumnTrait, DatabaseConnection, DbErr, EntityTrait, QueryFilter};

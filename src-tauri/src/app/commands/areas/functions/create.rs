@@ -2,8 +2,8 @@ use migration::entities::{
     area::{ActiveModel, Entity},
     template,
 };
-use sea_orm::{schema, DatabaseConnection, DbErr, EntityTrait, IntoActiveModel, Set};
-use serde_json::{json, Value};
+use sea_orm::{DatabaseConnection, DbErr, EntityTrait, IntoActiveModel, Set};
+use serde_json::json;
 
 pub async fn create_area(db: &DatabaseConnection, id: i32) -> Result<i32, DbErr> {
     let shema = json!({

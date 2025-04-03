@@ -4,13 +4,12 @@ use crate::DbConnection;
 use async_std::sync::Mutex;
 use migration::entities::area::Model;
 pub use objects::{Area, Payload};
-use tauri::{command, ipc::Channel, AppHandle, Emitter, State};
+use tauri::{command, ipc::Channel, State};
 mod functions;
 mod objects;
 
 #[command]
 pub async fn areas_control(
-    app: AppHandle,
     payload: Payload,
     data: State<'_, Arc<Mutex<DbConnection>>>,
     channel: Channel<Vec<Model>>,
