@@ -10,7 +10,6 @@ import {
 import './index.css';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import { useState } from 'react';
-import { SwappingStrategy } from '../../Strategy';
 import Task from './Task';
 
 function TaskList({ list }: { list: number[] }) {
@@ -42,7 +41,7 @@ function TaskList({ list }: { list: number[] }) {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <SortableContext items={schema} strategy={SwappingStrategy}>
+        <SortableContext items={schema}>
           <div className="list">
             {schema?.map((item) => (
               <Task
