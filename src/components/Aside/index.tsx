@@ -5,9 +5,7 @@ import Button from '../Button';
 import Notes_templates from './notes_templates';
 import Areas_templates from './areas_templates';
 
-function Aside({
-}: {
-  }) {
+function Aside() {
   const active = useAside(state => state.active)
   const toggle = useAside((state) => state.toggle);
   const inside = new Map([["notes", <Notes_templates />], ["areas", <Areas_templates />]])

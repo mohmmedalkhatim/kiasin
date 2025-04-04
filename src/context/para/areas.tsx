@@ -68,7 +68,6 @@ export const useAreas = create<Areas>((set) => ({
     };
     return invoke('areas_control', { payload: { command: 'find' }, channel });
   },
-
   create: (id: number) => {
     const channel = new Channel<Area[]>();
     invoke('areas_control', { payload: { command: 'create', id }, channel });
@@ -88,6 +87,27 @@ export const useAreas = create<Areas>((set) => ({
         item.cover = cover;
         set((state) => ({ list: [...state.list, item] }));
       });
+    };
+  },
+  create_from_Template: (template: number) => {
+    const channel = new Channel<Area[]>();
+    channel.onmessage = (data) => {
+      data.map((item) => {
+        const icon = URL.createObjectURL(
+          new Blob([new Uint8Array(item.icon as number[])], {
+            type: 'image/jpeg',
+          })
+        );
+        item.icon = icon;
+        const cover = URL.createObjectURL(
+          new Blob([new Uint8Array(item.cover as number[])], {
+            type: 'image/jpeg',
+          })
+        );
+        item.cover = cover;
+        set((state) => ({ list: [...state.list, item] }));
+      });
+      invoke('areas_control', { payload: { command: 'create', template }, channel });
     };
   },
   getArea: (id, set_Done) => {

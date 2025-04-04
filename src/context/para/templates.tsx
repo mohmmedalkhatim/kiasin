@@ -6,6 +6,7 @@ interface templates_action {
     list: Area[]
     create_template_form_area: (id: number) => void,
     update: (id: number) => void,
+    get_list_item:(id:number)=>Area
 }
 
 export let useTemplates = create<templates_action>((set) => ({
@@ -17,6 +18,14 @@ export let useTemplates = create<templates_action>((set) => ({
         }
         invoke("templates_control", { payload: { command: "find" }, channel })
     },
+    get_list_item: (id) => {
+        let s = {} as Area;
+        set((state) => {
+          s = state.list.filter((item) => item.id == id)[0];
+          return { ...state }; // Ensure the function returns the updated state
+        });
+        return s;
+      },
     create_template_form_area: (id) => {
         let channel = new Channel<Area[]>()
         channel.onmessage = (data) => {
