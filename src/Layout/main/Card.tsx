@@ -75,38 +75,38 @@ const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist }) => {
       >
         {editable && (
           <div className="flex items-center justify-between px-4 py-4">
-            <div className="flex">
-              <div className="flex">
-                <button
+            <div className="flex gap-2">
+              <div className="flex gap-2">
+                <div
                   onClick={() =>
                     setCardlist(card.id, { Col: 'row', increase: false })
                   }
                 >
                   <IconRowRemove />
-                </button>
-                <button
+                </div>
+                <div
                   onClick={() =>
                     setCardlist(card.id, { Col: 'row', increase: true })
                   }
                 >
                   <IconRowInsertBottom />
-                </button>
+                </div>
               </div>
-              <div className="flex">
-                <button
+              <div className="flex gap-2">
+                <div
                   onClick={() =>
                     setCardlist(card.id, { Col: 'col', increase: false })
                   }
                 >
                   <IconLayoutSidebarLeftCollapseFilled />
-                </button>
-                <button
+                </div>
+                <div
                   onClick={() =>
                     setCardlist(card.id, { Col: 'col', increase: true })
                   }
                 >
                   <IconLayoutSidebarLeftExpandFilled />
-                </button>
+                </div>
               </div>
             </div>
             <CardHeader {...listeners}>

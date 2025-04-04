@@ -10,6 +10,7 @@ interface Areas {
   create: (id: number) => void;
   update: (area: Area) => void;
   toggleEditable: () => void;
+  update_active_area: (area: Area) => void;
   getArea: (
     id: number,
     setArea: React.Dispatch<React.SetStateAction<boolean>>
@@ -24,6 +25,14 @@ export const useAreas = create<Areas>((set) => ({
   toggleEditable: () => {
     set((state) => ({ editable: !state.editable }));
   },
+  update_active_area: (area) => {
+    set(state => {
+      let filtered = state.active?.filter(item => item.id !== area.id);
+      return {
+        active: [...filtered as Area[], area]
+      }
+    })
+  },
   get_list_item: (id: number) => {
     let s = {} as Area;
     set((state) => {
@@ -32,7 +41,7 @@ export const useAreas = create<Areas>((set) => ({
     });
     return s;
   },
-  get_list:(ids:number[])=>{
+  get_list: (ids: number[]) => {
 
   },
   init: () => {

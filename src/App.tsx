@@ -23,7 +23,7 @@ function App() {
       <Header />
       <Outlet />
       <Navbar />
-      <Aside active={aside_state} />
+      <Aside />
     </>
   );
   const login = <Login />;

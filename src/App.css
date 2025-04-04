@@ -82,6 +82,7 @@
   .login_form button {
     @apply py-2 rounded-md;
   }
+
   input {
     @apply py-2 px-3 rounded-md;
     border: 1px solid #e2e2e235;

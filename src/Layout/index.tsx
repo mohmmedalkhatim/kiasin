@@ -23,7 +23,8 @@ const Layout = ({ area }: { area?: Area }) => {
   const [activeId, setActiveId] = useState<string | null>(null);
   const update = useAreas((state) => state.update);
   const editable = useAreas((state) => state.editable);
-  // Configure sensors for drag-and-drop
+
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor)
@@ -63,7 +64,7 @@ const Layout = ({ area }: { area?: Area }) => {
             card.cols = Math.max(1, card.cols - 1);
           }
           break;
-        }
+        };
         case 'row': {
           if (operation.increase) {
             card.rows = card.rows + 1;
@@ -71,7 +72,7 @@ const Layout = ({ area }: { area?: Area }) => {
             card.rows = Math.max(1, card.rows - 1);
           }
           break;
-        }
+        };
         default:
           () => {};
       }
@@ -85,12 +86,13 @@ const Layout = ({ area }: { area?: Area }) => {
   };
 
   if (sort && schema) {
-    const handleadding = () => {
+    const handleadding = (s:string) => {
       const newSchema = {
         item: [
           ...schema,
-          { id: schema?.length, cols: 2, rows: 2, title: 'new' },
+          { id: schema?.length, cols: 2, rows: 2, title: 'new',type:"string"},
         ],
+        
       };
       update({ ...area, ui_schema: newSchema } as Area);
       setSchema(newSchema.item as Cardtype[]);
@@ -116,7 +118,7 @@ const Layout = ({ area }: { area?: Area }) => {
             ))}
             {editable ? (
               <div className="col-span-2 row-span-2 m_border flex justify-center items-center">
-                <button onClick={handleadding}>
+                <button onClick={(e)=>handleadding("")}>
                   <IconPlus size={20} />
                 </button>
               </div>
