@@ -9,6 +9,7 @@ use crate::entities::todo;
 use crate::entities::template;
 use crate::entities::component;
 use crate::entities::categorie;
+use crate::entities::card;
 
 #[derive(DeriveMigrationName)]
 pub struct Migration;
@@ -28,6 +29,7 @@ impl MigrationTrait for Migration {
         manager.create_table(schema.create_table_from_entity(template::Entity)).await?;
         manager.create_table(schema.create_table_from_entity(component::Entity)).await?;
         manager.create_table(schema.create_table_from_entity(categorie::Entity)).await?;
+        manager.create_table(schema.create_table_from_entity(card::Entity)).await?;
         Ok(())
     }
 
