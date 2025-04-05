@@ -3,6 +3,7 @@ import type { Area } from '../../../types/area';
 import { useEffect, useState } from 'react';
 import { useAreas } from '../../../context/para/areas';
 import Layout from '../../../Layout';
+import { IconDots, IconDotsVertical, IconMenu, IconMenu2, IconMenu3, IconMenu4, IconMenuDeep, IconMenuOrder } from '@tabler/icons-react';
 
 function Area() {
   const { id } = useParams();
@@ -17,6 +18,7 @@ function Area() {
     return (
       <main className="content">
         {active && active.at(-1) && <Layout area={active.at(-1) as Area} />}
+        <div className="fixed top-16 right-6"><IconDotsVertical size={"1.5rem"}/></div>
       </main>
     );
   }

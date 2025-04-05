@@ -17,8 +17,9 @@ function Areas_templates() {
       <div className="grid area_templates_grid ">
         {list.map((area) => <Template_Card id={area.id} />)}
 
-        <div className="m_border area_templates_element" onClick={(id) => create(1)}>
-          create blank
+        <div className="m_border flex flex-col justify-between  rounded-sm area_templates_element" onClick={(id) => create(1)}>
+          <div></div>
+          <div className="text-center">create blank</div>
         </div>
       </div>
     </div>

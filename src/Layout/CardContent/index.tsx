@@ -17,9 +17,11 @@ function CardContent({ T, props }: { T: string; props: any }) {
     ])
   );
   useEffect(() => {}, []);
-  const action = map.get(T) || map.get('default');
-  if (action) {
-    return action;
+  if(T&&props){
+    const action = map.get(T) || map.get('default');
+    if (action) {
+      return action;
+    }
   }
 }
 export default CardContent;

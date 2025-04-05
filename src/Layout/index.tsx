@@ -74,7 +74,7 @@ const Layout = ({ area }: { area?: Area }) => {
           break;
         };
         default:
-          () => {};
+          () => { };
       }
       const newschema = [...filetred, card];
       const sorted = sort?.map((id) => {
@@ -86,13 +86,13 @@ const Layout = ({ area }: { area?: Area }) => {
   };
 
   if (sort && schema) {
-    const handleadding = (s:string) => {
+    const handleadding = (s: string) => {
       const newSchema = {
         item: [
           ...schema,
-          { id: schema?.length, cols: 2, rows: 2, title: 'new',type:"string"},
+          { id: schema?.length, cols: 2, rows: 2, title: 'new', },
         ],
-        
+
       };
       update({ ...area, ui_schema: newSchema } as Area);
       setSchema(newSchema.item as Cardtype[]);
@@ -118,7 +118,7 @@ const Layout = ({ area }: { area?: Area }) => {
             ))}
             {editable ? (
               <div className="col-span-2 row-span-2 m_border flex justify-center items-center">
-                <button onClick={(e)=>handleadding("")}>
+                <button onClick={(e) => handleadding("")}>
                   <IconPlus size={20} />
                 </button>
               </div>
@@ -129,7 +129,7 @@ const Layout = ({ area }: { area?: Area }) => {
           {activeId ? (
             <Card
               cla=""
-              setCardlist={() => {}}
+              setCardlist={() => { }}
               id={activeId}
               card={undefined}
             />
