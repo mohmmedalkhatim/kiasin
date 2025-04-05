@@ -17,7 +17,6 @@ function Links() {
       {arr.map((item, i) => (
         <Link key={i} className="link" to={item.link}>
           <div>{item.Icon}</div>
-          <div className="hidden md:block">{item.name}</div>
         </Link>
       ))}
     </div>

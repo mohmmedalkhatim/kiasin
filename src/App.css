@@ -101,7 +101,8 @@
     @apply font-OpenSans;
   }
   .app_header {
-    @apply flex bg-dark fixed items-center top-0 h-12 w-screen justify-between;
+    border-bottom: 1px solid #2e2e2e90;
+    @apply flex bg-dark fixed items-center top-0 h-16 w-screen justify-between;
   }
   input {
     @apply rounded-sm px-[0.5rem] py-[0.25rem] bg-dark text-light;
@@ -114,8 +115,7 @@
     top: 4rem;
     left: 0;
     z-index: -1;
-
-    @apply w-12 md:w-[200px];
+    @apply w-12 md:w-[88px];
   }
   a {
     text-decoration: none;
@@ -123,9 +123,7 @@
   }
 
   .content {
-    border-top: 1px solid #2e2e2e90;
-    border-left: 1px solid #2e2e2e90;
-    @apply rounded-tl-md p-4 md:ml-[200px] md:mr-0 bg-dark mx-[60px] mt-12   pb-0 relative border-l  border-[#e2e2e2e];
+    @apply rounded-t-md p-4 md:ml-[120px] md:mr-[120px] bg-dark mx-[60px] mt-16   pb-0 relative;
   }
   .cover {
     @apply fixed top-0 w-full;

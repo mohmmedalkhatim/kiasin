@@ -4,10 +4,10 @@ import Profile_link from './profile';
 
 function Aside() {
   return (
-    <aside className="aside">
+    <nav className="navbar">
       <Profile_link />
       <Links />
-    </aside>
+    </nav>
   );
 }
 export default Aside;
