@@ -1,4 +1,4 @@
-use migration::entities::component::Entity;
+use migration::entities::card::Entity;
 use sea_orm::{DatabaseConnection, DbErr, DeleteResult, EntityTrait};
 
 async fn delete(id: i32, db: &DatabaseConnection) -> Result<(), DbErr> {

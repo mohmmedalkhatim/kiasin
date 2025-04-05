@@ -1,4 +1,4 @@
-use migration::entities::component::{ActiveModel, Entity};
+use migration::entities::card::{ActiveModel, Entity};
 use sea_orm::{DatabaseConnection, DbErr, EntityTrait, Set};
 
 use crate::app::commands::components::objects::Component;
