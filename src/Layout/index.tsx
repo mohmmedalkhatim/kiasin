@@ -16,6 +16,7 @@ import { SwappingStrategy } from './Strategy';
 import { useAreas } from '../context/para/areas';
 import './style.css';
 import { IconPlus } from '@tabler/icons-react';
+import Cards_menu from '../components/bubble_menu';
 
 const Layout = ({ area }: { area?: Area }) => {
   const [schema, setSchema] = useState(area?.ui_schema.item);
@@ -117,11 +118,7 @@ const Layout = ({ area }: { area?: Area }) => {
               />
             ))}
             {editable ? (
-              <div className="col-span-2 row-span-2 m_border flex justify-center items-center">
-                <button onClick={(e) => handleadding("")}>
-                  <IconPlus size={20} />
-                </button>
-              </div>
+              <Cards_menu handleadding={handleadding}/>
             ) : null}
           </Grid>
         </SortableContext>
