@@ -114,7 +114,7 @@
     @apply hidden;
   }
   .menu{
-    @apply w-[120px] h-[80px] border rounded text-sky-500 p-4 absolute
+    @apply w-[240px] h-[200px] border rounded  p-4 absolute
   }
   aside {
     position: fixed;
