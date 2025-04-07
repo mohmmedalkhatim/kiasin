@@ -15,8 +15,15 @@ import { Area, Card as Cardtype } from '../types/area';
 import { SwappingStrategy } from './Strategy';
 import { useAreas } from '../context/para/areas';
 import './style.css';
-import { IconPlus } from '@tabler/icons-react';
-import Cards_menu from '../components/bubble_menu';
+import Cards_menu from './bubble_menu';
+
+
+export type element_props = {
+  type: string,
+  content: string,
+  cols: number,
+  rows: number
+}
 
 const Layout = ({ area }: { area?: Area }) => {
   const [schema, setSchema] = useState(area?.ui_schema.item);
@@ -87,11 +94,12 @@ const Layout = ({ area }: { area?: Area }) => {
   };
 
   if (sort && schema) {
-    const handleadding = (s: string) => {
+    const handleadding = (ele: element_props) => {
+      let { cols, rows, type, content } = ele;
       const newSchema = {
         item: [
           ...schema,
-          { id: schema?.length, cols: 2, rows: 2, title: 'new', },
+          { id: schema?.length, cols, rows, title: 'new', type, content },
         ],
 
       };
@@ -118,7 +126,7 @@ const Layout = ({ area }: { area?: Area }) => {
               />
             ))}
             {editable ? (
-              <Cards_menu handleadding={handleadding}/>
+              <Cards_menu handleadding={handleadding} />
             ) : null}
           </Grid>
         </SortableContext>

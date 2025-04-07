@@ -1,7 +1,5 @@
 @import 'tailwindcss';
 
-:root {
-}
 
 @font-face {
   font-family: 'OpenSans';
@@ -106,15 +104,16 @@
   }
   input {
     @apply rounded-sm px-[0.5rem] py-[0.25rem] bg-dark text-light;
-    &:hover {
-    }
   }
   
   .hide{
     @apply hidden;
   }
   .menu{
-    @apply w-[240px] h-[200px] border rounded  p-4 absolute
+    @apply w-[240px] h-[240px] bg-[#181818] shadow shadow-[#e2e2e250] absolute flex flex-col;
+  }
+  .elements_container{
+    @apply grow;
   }
   aside {
     position: fixed;
