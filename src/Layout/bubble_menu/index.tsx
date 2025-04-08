@@ -38,7 +38,7 @@ function Cards_menu({ handleadding }: { handleadding: (ele:element_props) => voi
                     <IconPlus size={20} />
                 </button>
             </div>
-            <div ref={menuRef} className={`${menu ? "menu" : "hide"} z-1000`}>
+            <div ref={menuRef} className={`${menu ? "menu" : "hidden"} z-1000`}>
                 <div className="p-4">
                     <Input placeholder="Search" icon={<IconSearch size={"1rem"} color="#e2e2e260"/>}/>
                 </div>

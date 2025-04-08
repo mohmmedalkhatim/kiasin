@@ -104,9 +104,6 @@
   }
 
   
-  .hide{
-    @apply hidden;
-  }
   .menu{
     @apply w-[240px] h-[240px] bg-[#181818] shadow shadow-[#e2e2e250] absolute flex flex-col;
   }
