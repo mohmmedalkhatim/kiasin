@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Input from '../Input';
-import { IconEdit } from '@tabler/icons-react';
+import { IconEdit, IconSearch } from '@tabler/icons-react';
 import { useAreas } from '../../context/para/areas';
 
 function Header() {
@@ -13,6 +13,7 @@ function Header() {
         type={'text'}
         value={search}
         onChange={setSearch}
+        icon={<IconSearch size={"1rem"}/>}
       />
       <div></div>
       <button onClick={taggle}>

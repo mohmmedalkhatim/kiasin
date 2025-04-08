@@ -1,10 +1,5 @@
 import { ButtonHTMLAttributes } from 'react';
-
-function classNames(
-  ...classes: (string | undefined | null | boolean)[]
-): string {
-  return classes.filter(Boolean).join(' ');
-}
+import { classNames } from '../../util';
 
 type ButtonProps = {
   variant?: 'primary' | 'secondary' | 'danger';
