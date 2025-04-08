@@ -75,7 +75,7 @@
     display: flex;
   }
   .login_form {
-    @apply flex flex-col gap-4 p-12;
+    @apply flex flex-col gap-4 p-12 ;
   }
   .login_form button {
     @apply py-2 rounded-md;
@@ -102,9 +102,7 @@
     border-bottom: 1px solid #2e2e2e90;
     @apply flex bg-dark fixed items-center top-0 h-16 w-screen justify-between;
   }
-  input {
-    @apply rounded-sm px-[0.5rem] py-[0.25rem] bg-dark text-light;
-  }
+
   
   .hide{
     @apply hidden;

@@ -9,7 +9,7 @@ type InputProps = {
   error?: string;
   required?: boolean;
   className?: string;
-  icon?:ReactElement
+  icon?: ReactElement;
 };
 
 export default function Input({
@@ -24,6 +24,7 @@ export default function Input({
   className = '',
 }: InputProps) {
   const [touched, setTouched] = useState(false);
+  const hasError = error && touched;
 
   return (
     <div className={`flex flex-col gap-1 ${className}`}>
@@ -32,22 +33,29 @@ export default function Input({
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}
-      <div className='flex group'>
+
+      <div
+        className={`group flex items-center border rounded-sm  transition-all
+          ${hasError ? 'border-red-500' : 'border-[#e2e2e240]'} 
+          focus-within:ring focus-within:ring-[#e2e2e250]`}
+      >
         <input
           type={type}
           value={value}
           placeholder={placeholder}
           onChange={(e) => onChange?.(e.target.value)}
           onBlur={() => setTouched(true)}
-          className={`border-[1px] border-r-0 grow border-[#e2e2e220] rounded-l-xs  text-sm focus-within:ring-[#e2e2e250] focus-within:ring p-2 outline-none bg-transparent text-white transition-all ${error && touched ? 'border-red-500' : ''
-            }`}
+          className="grow outline-none border-none text-xs rounded-l-sm text-sm bg-transparent text-white "
         />
-        <div className={`border-[1px] border-l-0 border-[#e2e2e220] rounded-r-xs text-sm focus-within:ring-[#e2e2e250] focus-within:ring p-2 pt-[10px] outline-none bg-transparent text-white  focus:ring-blue-100 transition-all ${error && touched ? 'border-red-500' : ''
-          }`}>
-            {icon}
-          </div>
+        <div
+          className={`rounded-r-sm pb-1 pt-[4px] pr-2 text-white transition-colors
+            ${hasError ? 'text-red-500' : 'group-focus-within:text-white'}`}
+        >
+          {icon}
+        </div>
       </div>
-      {error && touched && (
+
+      {hasError && (
         <span className="text-red-500 text-xs">{error}</span>
       )}
     </div>
