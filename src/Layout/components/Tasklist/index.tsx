@@ -49,7 +49,7 @@ function TaskList({ list }: { list: number[] }) {
                 classn={activeId === String(item) ? 'dragging' : ''}
               />
             ))}
-            <div className=""></div>
+            <div className="Task">+</div>
           </div>
         </SortableContext>
         <DragOverlay></DragOverlay>
