@@ -20,7 +20,7 @@ import Cards_menu from './bubble_menu';
 
 export type element_props = {
   type: string,
-  content: string,
+  content: any,
   cols: number,
   rows: number
 }
