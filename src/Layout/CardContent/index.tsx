@@ -6,9 +6,10 @@ import Image from '../components/Image';
 import Calendar from '../components/Calender';
 
 function CardContent({ T, props }: { T: string; props: any }) {
+  console.log("you have rendered " + T);
   const [map, setMap] = useState(
     new Map([
-      ['editor', <Editor_card content={props.content} title={'untitled'} />],
+      ['editor', <Editor_card content={props} title={'untitled'} />],
       ['Areaslist', <AreasList list={props} />],
       ['tasks', <TaskList list={props} />],
       ['image', <Image url={props} />],
@@ -17,7 +18,7 @@ function CardContent({ T, props }: { T: string; props: any }) {
     ])
   );
   useEffect(() => {}, []);
-  if(T&&props){
+  if(T){
     const action = map.get(T) || map.get('default');
     if (action) {
       return action;
