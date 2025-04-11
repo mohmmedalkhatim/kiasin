@@ -99,10 +99,11 @@ const Layout = ({ area }: { area?: Area }) => {
       const newSchema = {
         item: [
           ...schema,
-          { id: schema?.length, cols, rows, title: 'new', type, content },
+          { id: schema?.length, cols, rows, title: 'new', type, props:content },
         ],
 
       };
+      console.table(schema)
       update({ ...area, ui_schema: newSchema } as Area);
       setSchema(newSchema.item as Cardtype[]);
       updateSort([...sort, String(schema?.length)]);

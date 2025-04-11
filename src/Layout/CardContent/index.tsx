@@ -17,12 +17,8 @@ function CardContent({ T, props }: { T: string; props: any }) {
       ['default', <div>no content</div>],
     ])
   );
-  useEffect(() => {}, []);
-  if(T){
-    const action = map.get(T) || map.get('default');
-    if (action) {
-      return action;
-    }
-  }
+  useEffect(() => { }, []);
+  const action = map.get(T) || map.get('default');
+  return action;
 }
 export default CardContent;
