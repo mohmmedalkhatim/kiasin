@@ -25,13 +25,13 @@ export type element_props = {
   rows: number
 }
 
-const Layout = ({ area }: { area?: Area }) => {
+const Layout = () => {
+  let area = useAreas(state=>state.active?.at(-1))
   const [schema, setSchema] = useState(area?.ui_schema.item);
   const [sort, updateSort] = useState(schema?.map((item) => item.id.toString()));
   const [activeId, setActiveId] = useState<string | null>(null);
   const update = useAreas((state) => state.update);
   const editable = useAreas((state) => state.editable);
-
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -103,11 +103,11 @@ const Layout = ({ area }: { area?: Area }) => {
         ],
 
       };
-      console.table(schema)
       update({ ...area, ui_schema: newSchema } as Area);
       setSchema(newSchema.item as Cardtype[]);
       updateSort([...sort, String(schema?.length)]);
     };
+    console.table(schema)
     return (
       <DndContext
         sensors={sensors}
@@ -118,7 +118,8 @@ const Layout = ({ area }: { area?: Area }) => {
         <SortableContext items={sort} strategy={SwappingStrategy}>
           <Grid columns={8}>
             {schema?.map((item) => (
-              <Card
+              <Card setShema={setSchema}
+                setSort={updateSort}
                 cla={activeId === String(item.id) ? 'dragging' : ''}
                 key={String(item.id)}
                 id={String(item.id)}
@@ -133,11 +134,12 @@ const Layout = ({ area }: { area?: Area }) => {
         </SortableContext>
         <DragOverlay>
           {activeId ? (
-            <Card
+            <Card setShema={setSchema}
               cla=""
               setCardlist={() => { }}
               id={activeId}
               card={undefined}
+              setSort={updateSort}
             />
           ) : null}
         </DragOverlay>
