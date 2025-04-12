@@ -6,7 +6,6 @@ import Image from '../components/Image';
 import Calendar from '../components/Calender';
 
 function CardContent({ T, props }: { T: string; props: any }) {
-  console.log("you have rendered " + T);
   const [map, setMap] = useState(
     new Map([
       ['editor', <Editor_card content={props} title={'untitled'} />],

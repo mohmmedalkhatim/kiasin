@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import {
+  IconDelta,
   IconGridDots,
   IconLayoutSidebarLeftCollapseFilled,
   IconLayoutSidebarLeftExpandFilled,
@@ -40,14 +41,20 @@ interface CardProps {
   id: string;
   cla: string;
   card: Cardtype | undefined;
+  setShema: React.Dispatch<React.SetStateAction<Cardtype[] | undefined>>,
+  setSort:React.Dispatch<React.SetStateAction<string[] | undefined>>,
   setCardlist: (
     id: number,
     operation: { Col: 'col' | 'row'; increase: boolean }
   ) => void;
 }
 
-const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist }) => {
+const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist, setShema,setSort, }) => {
   const editable = useAreas((state) => state.editable);
+  let active = useAreas(state => state.active?.at(-1))
+  let update = useAreas(state => state.update)
+  let delete_card = useAreas(state => state.delete_card)
+
   const {
     attributes,
     listeners,
@@ -108,6 +115,9 @@ const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist }) => {
                   <IconLayoutSidebarLeftExpandFilled />
                 </div>
               </div>
+            </div>
+            <div onClick={() => { delete_card(Number(id)) }}>
+              <IconDelta />
             </div>
             <CardHeader {...listeners}>
               <IconGridDots />

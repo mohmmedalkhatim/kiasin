@@ -11,6 +11,7 @@ interface Areas {
   update: (area: Area) => void;
   toggleEditable: () => void;
   update_active_area: (area: Area) => void;
+  delete_card: (id: number) => void
   getArea: (
     id: number,
     setArea: React.Dispatch<React.SetStateAction<boolean>>
@@ -31,6 +32,21 @@ export const useAreas = create<Areas>((set) => ({
       return {
         active: [...filtered as Area[], area]
       }
+    })
+  },
+  delete_card: (id) => {
+    set(state => {
+      let list = state.active as Area[];
+      let active = state.active?.pop();
+      let ui = active?.ui_schema.item.filter(item => item.id != id);
+      let act = { ...active, ui_schema: { item: ui } } as Area;
+      console.log(act)
+      console.log(state)
+      let update = useAreas.getState().update
+      console.log(update)
+      update(act)
+
+      return ({ active: [...list, act] })
     })
   },
   get_list_item: (id: number) => {
@@ -124,6 +140,7 @@ export const useAreas = create<Areas>((set) => ({
     invoke('areas_control', { payload: { command: 'find', id }, channel });
     return area;
   },
+
   update: (area: Area) => {
     const channel = new Channel<Area[]>();
     channel.onmessage = (data) => {
