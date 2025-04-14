@@ -22,7 +22,7 @@ const CardContainer = styled.div<{
 }>`
   grid-row: span ${(props) => props.rowSpan};
   grid-column: span ${(props) => props.colSpan};
-  border: 1px solid #e2e2e220;
+  border: 1px solid #e2e2e215;
   outline-right: ${(props) => (props.isDragging ? '2px solid #ddd' : 'none')};
   transition: all 0.3s ease;
   opacity: ${(props) => (props.isDragging ? 0.5 : 1)};
