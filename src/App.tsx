@@ -7,12 +7,10 @@ import { useAuth } from './context/User';
 import Login from './screens/login';
 import { useAreas } from './context/para/areas';
 import Navbar from './components/Navbar';
-import { useAside } from './context/aside';
 function App() {
   const email = useAuth((state) => state.email);
   const auth = useAuth((state) => state.auth);
   const areas = useAreas((state) => state.init);
-  const aside_state = useAside((state) => state.active);
   const init = useAreas((state) => state.init);
 
   useEffect(() => {
