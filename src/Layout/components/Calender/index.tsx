@@ -71,14 +71,14 @@ const Calendar: React.FC = () => {
             key={day.toString()}
             className={`p-1 text-center hover:text-black transition cursor-pointer border border-transparent ${
               startDate && day.isSame(startDate, 'day')
-                ? 'bg-blue-500 text-black border-blue-700'
+                ? 'bg-sky-500 text-black border-sky-700'
                 : endDate && day.isSame(endDate, 'day')
-                  ? 'bg-blue-500  text-black border-blue-700'
+                  ? 'bg-sky-500  text-black border-sky-700'
                   : startDate &&
                       endDate &&
                       day.isAfter(startDate) &&
                       day.isBefore(endDate)
-                    ? 'bg-blue-300'
+                    ? 'bg-sky-700'
                     : 'hover:bg-gray-200 text-[#e2e2e295]'
             } ${
               startDate && day.isSame(startDate, 'day')
