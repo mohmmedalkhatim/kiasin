@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { IconGrid4x4,  IconList, IconPlus, IconSearch, IconWriting } from "@tabler/icons-react";
+import { IconGrid4x4, IconList, IconPlus, IconSearch, IconWriting } from "@tabler/icons-react";
 import { element_props } from "..";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
@@ -23,7 +23,7 @@ function Cards_menu({ handleadding }: { handleadding: (ele: element_props) => vo
         {
             name: "Areaslist",
             props: {
-                min_cols: 3,
+                min_cols: 6,
                 min_rows: 3,
 
             },
@@ -33,8 +33,8 @@ function Cards_menu({ handleadding }: { handleadding: (ele: element_props) => vo
         {
             name: "editor",
             props: {
-                min_cols: 3,
-                min_rows: 3,
+                min_cols: 4,
+                min_rows: 4,
 
             },
             content: "",
@@ -43,7 +43,7 @@ function Cards_menu({ handleadding }: { handleadding: (ele: element_props) => vo
         {
             name: "tasks",
             props: {
-                min_cols: 3,
+                min_cols: 2,
                 min_rows: 3,
             },
             content: [],
@@ -58,7 +58,6 @@ function Cards_menu({ handleadding }: { handleadding: (ele: element_props) => vo
             menuRef.current.style.top = `${e.pageY - calculate_menu_appernce(e.pageY)}px`;
         }
         setmenu(!menu)
-
     }
     return (
         <>

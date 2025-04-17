@@ -26,10 +26,11 @@ export type element_props = {
 }
 
 const Layout = () => {
-  let area = useAreas(state => state.active)?.at(-1)
+  let active = useAreas(state => state.active)
+  let area = active?.at(-1)
   const [sort, updateSort] = useState(area?.ui_schema.item.map((item) => item.id.toString()));
   const [activeId, setActiveId] = useState<string | null>(null);
-  const  update_active_area = useAreas(state=>state.update_active_area)
+  const update_active_area = useAreas(state => state.update_active_area)
   const update = useAreas((state) => state.update);
   const editable = useAreas((state) => state.editable);
 
@@ -105,7 +106,7 @@ const Layout = () => {
 
       };
       console.log(newSchema.item);
-      let uparea ={ ...area, ui_schema: newSchema } as Area;
+      let uparea = { ...area, ui_schema: newSchema } as Area;
       update_active_area(uparea);
       update(uparea);
       updateSort([...sort, String(area.ui_schema.item?.length)]);

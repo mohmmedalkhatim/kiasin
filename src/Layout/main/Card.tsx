@@ -51,7 +51,7 @@ interface CardProps {
 
 const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist }) => {
   const editable = useAreas((state) => state.editable);
-  let delete_card = useAreas(state => state.delete_card)
+  const delete_card = useAreas(state => state.delete_card)
 
   const {
     attributes,

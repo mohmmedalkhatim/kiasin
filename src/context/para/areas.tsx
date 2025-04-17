@@ -5,6 +5,7 @@ import { Channel, invoke } from '@tauri-apps/api/core';
 interface Areas {
   list: Area[];
   active: Area[] | undefined;
+  sort:string[],
   editable: boolean;
   init: () => void;
   create: (id: number) => void;
@@ -22,6 +23,7 @@ interface Areas {
 export const useAreas = create<Areas>((set) => ({
   list: [],
   active: [],
+  sort:[],
   editable: false,
   toggleEditable: () => {
     set((state) => ({ editable: !state.editable }));
@@ -36,13 +38,19 @@ export const useAreas = create<Areas>((set) => ({
   },
   delete_card: (id) => {
     set(state => {
+      let conut = 0;
       let list = state.active as Area[];
       let active = state.active?.pop();
       let ui = active?.ui_schema.item.filter(item => item.id != id);
+      console.log(ui)
+      ui = ui?.map(item => {
+        item.id = conut++
+        return item
+      })
       let act = { ...active, ui_schema: { item: ui } } as Area;
       let update = useAreas.getState().update
+      
       update(act)
-
       return ({ active: [...list, act] })
     })
   },
