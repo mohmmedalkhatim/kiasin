@@ -26,10 +26,10 @@ export type element_props = {
 }
 
 const Layout = () => {
-  let area = useAreas(state=>state.active?.at(-1))
-  const [schema, setSchema] = useState(area?.ui_schema.item);
-  const [sort, updateSort] = useState(schema?.map((item) => item.id.toString()));
+  let area = useAreas(state => state.active)?.at(-1)
+  const [sort, updateSort] = useState(area?.ui_schema.item.map((item) => item.id.toString()));
   const [activeId, setActiveId] = useState<string | null>(null);
+  const  update_active_area = useAreas(state=>state.update_active_area)
   const update = useAreas((state) => state.update);
   const editable = useAreas((state) => state.editable);
 
@@ -49,9 +49,9 @@ const Layout = () => {
       const newSort = arrayMove(sort, oldIndex, newIndex);
       const newSchema = newSort.map(
         (id) =>
-          schema?.find((item) => String(item.id) == id) || ({} as Cardtype)
+          area?.ui_schema.item?.find((item) => String(item.id) == id) || ({} as Cardtype)
       );
-      setSchema(newSchema);
+      update_active_area({ ...area, ui_schema: { item: newSchema } } as Area)
       update({ ...area, ui_schema: { item: newSchema } } as Area);
       updateSort(newSort);
     }
@@ -61,8 +61,8 @@ const Layout = () => {
     id: number,
     operation: { Col: 'col' | 'row'; increase: boolean }
   ) => {
-    const card = schema?.find((item) => id == item.id);
-    const filetred = schema?.filter((item) => item?.id != id) as Cardtype[];
+    const card = area?.ui_schema.item?.find((item) => id == item.id);
+    const filetred = area?.ui_schema.item?.filter((item) => item?.id != id) as Cardtype[];
     if (card) {
       switch (operation.Col) {
         case 'col': {
@@ -88,26 +88,28 @@ const Layout = () => {
       const sorted = sort?.map((id) => {
         return newschema?.find((item) => item.id == Number(id)) as Cardtype;
       }) as Cardtype[];
-      setSchema(sorted);
-      update({ ...area, ui_schema: { item: sorted } } as Area);
+      let uparea = { ...area, ui_schema: { item: sorted } } as Area
+      update_active_area(uparea);
+      update(uparea);
     }
   };
 
-  if (sort && schema) {
+  if (sort && area?.ui_schema.item) {
     const handleadding = (ele: element_props) => {
       let { cols, rows, type, content } = ele;
       const newSchema = {
         item: [
-          ...schema,
-          { id: schema?.length, cols, rows, title: 'new', type, props:content },
+          ...area?.ui_schema.item,
+          { id: area?.ui_schema.item?.length, cols, rows, title: 'new', type, props: content },
         ],
 
       };
-      update({ ...area, ui_schema: newSchema } as Area);
-      setSchema(newSchema.item as Cardtype[]);
-      updateSort([...sort, String(schema?.length)]);
+      console.log(newSchema.item);
+      let uparea ={ ...area, ui_schema: newSchema } as Area;
+      update_active_area(uparea);
+      update(uparea);
+      updateSort([...sort, String(area.ui_schema.item?.length)]);
     };
-    console.table(schema)
     return (
       <DndContext
         sensors={sensors}
@@ -117,15 +119,14 @@ const Layout = () => {
       >
         <SortableContext items={sort} strategy={SwappingStrategy}>
           <Grid columns={8}>
-            {schema?.map((item) => (
-              <Card setShema={setSchema}
+            {area.ui_schema.item?.map((item) => (
+              <Card
                 setSort={updateSort}
                 cla={activeId === String(item.id) ? 'dragging' : ''}
                 key={String(item.id)}
                 id={String(item.id)}
                 card={item}
-                setCardlist={handlesizeChange}
-              />
+                setCardlist={handlesizeChange} />
             ))}
             {editable ? (
               <Cards_menu handleadding={handleadding} />
@@ -134,7 +135,7 @@ const Layout = () => {
         </SortableContext>
         <DragOverlay>
           {activeId ? (
-            <Card setShema={setSchema}
+            <Card
               cla=""
               setCardlist={() => { }}
               id={activeId}

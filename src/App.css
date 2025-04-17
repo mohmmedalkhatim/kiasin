@@ -124,7 +124,7 @@
   }
 
   .content {
-    @apply rounded-t-md p-4 md:ml-[120px] md:mr-[120px] bg-dark mx-[60px] mt-16   pb-0 relative;
+    @apply rounded-t-md p-4 md:ml-[120px] md:mr-[100px] bg-dark mx-[60px] mt-16   pb-0 relative;
   }
   .cover {
     @apply fixed top-0 w-full;

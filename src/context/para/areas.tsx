@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { Area } from '../../types/area';
+import { Area, Card } from '../../types/area';
 import { Channel, invoke } from '@tauri-apps/api/core';
 
 interface Areas {
@@ -40,10 +40,7 @@ export const useAreas = create<Areas>((set) => ({
       let active = state.active?.pop();
       let ui = active?.ui_schema.item.filter(item => item.id != id);
       let act = { ...active, ui_schema: { item: ui } } as Area;
-      console.log(act)
-      console.log(state)
       let update = useAreas.getState().update
-      console.log(update)
       update(act)
 
       return ({ active: [...list, act] })

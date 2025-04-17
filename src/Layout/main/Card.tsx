@@ -25,6 +25,7 @@ const CardContainer = styled.div<{
   border: 1px solid #e2e2e215;
   outline-right: ${(props) => (props.isDragging ? '2px solid #ddd' : 'none')};
   transition: all 0.3s ease;
+  position:relative;
   opacity: ${(props) => (props.isDragging ? 0.5 : 1)};
   overflow-y: auto;
 `;
@@ -41,18 +42,15 @@ interface CardProps {
   id: string;
   cla: string;
   card: Cardtype | undefined;
-  setShema: React.Dispatch<React.SetStateAction<Cardtype[] | undefined>>,
-  setSort:React.Dispatch<React.SetStateAction<string[] | undefined>>,
+  setSort: React.Dispatch<React.SetStateAction<string[] | undefined>>,
   setCardlist: (
     id: number,
     operation: { Col: 'col' | 'row'; increase: boolean }
   ) => void;
 }
 
-const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist, setShema,setSort, }) => {
+const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist }) => {
   const editable = useAreas((state) => state.editable);
-  let active = useAreas(state => state.active?.at(-1))
-  let update = useAreas(state => state.update)
   let delete_card = useAreas(state => state.delete_card)
 
   const {
@@ -81,7 +79,7 @@ const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist, setShema,setSor
         className={`relative rounded ${cla} card`}
       >
         {editable && (
-          <div className="flex items-center justify-between px-4 py-4">
+          <div className="flex items-center bg-sky-600 absolute z-10 w-full justify-between px-4 py-4">
             <div className="flex gap-2">
               <div className="flex gap-2">
                 <div

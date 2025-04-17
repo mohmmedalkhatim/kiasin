@@ -3,16 +3,18 @@ import type { Area } from '../../../types/area';
 import { useEffect, useState } from 'react';
 import { useAreas } from '../../../context/para/areas';
 import Layout from '../../../Layout';
-import { IconDots, IconDotsVertical, IconMenu, IconMenu2, IconMenu3, IconMenu4, IconMenuDeep, IconMenuOrder } from '@tabler/icons-react';
+import { IconDotsVertical } from '@tabler/icons-react';
 
 function Area() {
   const { id } = useParams();
   const init = useAreas((state) => state.getArea);
   const active = useAreas((state) => state.active);
   const [done, setdone] = useState<boolean>(false);
-
+  
   useEffect(() => {
+
     init(Number(id), setdone);
+  
   }, []);
   if (done) {
     return (
