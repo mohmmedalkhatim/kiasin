@@ -49,7 +49,7 @@ interface CardProps {
   ) => void;
 }
 
-const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist }) => {
+const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist,setSort }) => {
   const editable = useAreas((state) => state.editable);
   const delete_card = useAreas(state => state.delete_card)
 
@@ -114,7 +114,7 @@ const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist }) => {
                 </div>
               </div>
             </div>
-            <div onClick={() => { delete_card(Number(id)) }}>
+            <div onClick={() => { delete_card(Number(id),setSort) }}>
               <IconDelta />
             </div>
             <CardHeader {...listeners}>

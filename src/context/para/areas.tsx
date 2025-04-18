@@ -5,14 +5,16 @@ import { Channel, invoke } from '@tauri-apps/api/core';
 interface Areas {
   list: Area[];
   active: Area[] | undefined;
-  sort:string[],
+  sort: string[],
   editable: boolean;
   init: () => void;
   create: (id: number) => void;
   update: (area: Area) => void;
   toggleEditable: () => void;
   update_active_area: (area: Area) => void;
-  delete_card: (id: number) => void
+  delete_card: (id: number,update_sort:any) => void
+  get_Card: (id: number) => void,
+  update_card: (id: number, card: Card) => void,
   getArea: (
     id: number,
     setArea: React.Dispatch<React.SetStateAction<boolean>>
@@ -23,10 +25,35 @@ interface Areas {
 export const useAreas = create<Areas>((set) => ({
   list: [],
   active: [],
-  sort:[],
+  sort: [],
   editable: false,
   toggleEditable: () => {
     set((state) => ({ editable: !state.editable }));
+  },
+  get_Card: (id) => {
+    let card = {} as Card;
+    set(state => {
+      let active = state.active?.at(-1);
+      card = active?.ui_schema.item.find(item => item.id == id) as Card
+      return { ...state }
+    })
+    return card
+  },
+  update_card: (id, data) => {
+    set(state => {
+      let active = state.active?.pop();
+      let newShema = active?.ui_schema.item.map(item => {
+        if (item.id == id) {
+          item = data
+        }
+        return item
+      })
+      if (active) {
+        active.ui_schema = { item: newShema as Card[] };
+        state.active?.push(active)
+      }
+      return { ...state }
+    })
   },
   update_active_area: (area) => {
     set(state => {
@@ -36,21 +63,23 @@ export const useAreas = create<Areas>((set) => ({
       }
     })
   },
-  delete_card: (id) => {
+  delete_card: (id,update_sort) => {
     set(state => {
       let conut = 0;
       let list = state.active as Area[];
       let active = state.active?.pop();
+      let sort:string[] = []
       let ui = active?.ui_schema.item.filter(item => item.id != id);
       console.log(ui)
       ui = ui?.map(item => {
         item.id = conut++
+        sort.push(String(item.id))
         return item
       })
       let act = { ...active, ui_schema: { item: ui } } as Area;
       let update = useAreas.getState().update
-      
       update(act)
+      update_sort(sort)
       return ({ active: [...list, act] })
     })
   },
