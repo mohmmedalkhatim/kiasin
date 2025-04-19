@@ -27,7 +27,7 @@ export const useAuth = create<User>((set) => ({
     listen<User>('user', (e) => {
       set({ name: e.payload.name, email: e.payload.email });
     });
-    invoke('user_control', { payload: { command: 'one', id: 3 } }).then(
+    invoke('user_control', { payload: { command: 'one', id: 1 } }).then(
       (_) => {}
     );
   },
