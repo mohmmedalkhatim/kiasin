@@ -4,12 +4,12 @@ import styled from 'styled-components';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import {
-  IconDelta,
   IconGridDots,
   IconLayoutSidebarLeftCollapseFilled,
   IconLayoutSidebarLeftExpandFilled,
   IconRowInsertBottom,
   IconRowRemove,
+  IconTrashFilled,
 } from '@tabler/icons-react';
 import { Card as Cardtype } from '../../types/area';
 import { useAreas } from '../../context/para/areas';
@@ -115,7 +115,7 @@ const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist,setSort }) => {
               </div>
             </div>
             <div onClick={() => { delete_card(Number(id),setSort) }}>
-              <IconDelta />
+              <IconTrashFilled />
             </div>
             <CardHeader {...listeners}>
               <IconGridDots />

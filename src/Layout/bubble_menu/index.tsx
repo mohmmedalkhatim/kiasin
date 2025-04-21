@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { IconGrid4x4, IconList, IconPlus, IconSearch, IconWriting } from "@tabler/icons-react";
+import { IconCalendar, IconGrid4x4, IconList, IconPlus, IconSearch, IconWriting } from "@tabler/icons-react";
 import { element_props } from "..";
 import Button from "../../components/Button";
 import Input from "../../components/Input";
@@ -49,14 +49,27 @@ function Cards_menu({ handleadding }: { handleadding: (ele: element_props) => vo
             content: [],
             icon: <IconList />
         },
+        {
+            name: "calender",
+            props: {
+                min_cols: 3,
+                min_rows: 4,
 
+            },
+            content: [1, 2],
+            icon: <IconCalendar />
+        },
 
     ]
     let change = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
+        menuRef.current?.focus()
         if (menuRef.current) {
             menuRef.current.style.left = `${e.pageX - 260}px`;
             menuRef.current.style.top = `${e.pageY - calculate_menu_appernce(e.pageY)}px`;
         }
+        menuRef.current?.addEventListener("focusout",(e)=>{
+            setmenu(!menu)
+        })
         setmenu(!menu)
     }
     return (
