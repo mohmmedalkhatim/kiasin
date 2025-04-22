@@ -28,7 +28,7 @@ function Cards_menu({ handleadding }: { handleadding: (ele: element_props) => vo
 
             },
             content: [1, 2],
-            icon: <IconGrid4x4 />
+            icon: <IconGrid4x4 size={"1.7rem"} />
         },
         {
             name: "editor",
@@ -38,7 +38,7 @@ function Cards_menu({ handleadding }: { handleadding: (ele: element_props) => vo
 
             },
             content: "",
-            icon: <IconWriting />
+            icon: <IconWriting size={"1.7rem"} />
         },
         {
             name: "tasks",
@@ -47,7 +47,7 @@ function Cards_menu({ handleadding }: { handleadding: (ele: element_props) => vo
                 min_rows: 3,
             },
             content: [],
-            icon: <IconList />
+            icon: <IconList size={"1.7rem"}/>
         },
         {
             name: "calender",
@@ -57,7 +57,17 @@ function Cards_menu({ handleadding }: { handleadding: (ele: element_props) => vo
 
             },
             content: [1, 2],
-            icon: <IconCalendar />
+            icon: <IconCalendar size={"1.7rem"} />
+        },
+        {
+            name: "calender",
+            props: {
+                min_cols: 3,
+                min_rows: 4,
+
+            },
+            content: [1, 2],
+            icon: <IconCalendar size={"1.7rem"} />
         },
 
     ]
@@ -80,11 +90,11 @@ function Cards_menu({ handleadding }: { handleadding: (ele: element_props) => vo
                 </button>
             </div>
             <div ref={menuRef} className={`${menu ? "menu" : "hidden"} z-1000`}>
-                <div className="p-4">
+                <div className="pt-4 px-4">
                     <Input placeholder="Search" icon={<IconSearch size={"1rem"} color="#e2e2e260" />} />
                 </div>
                 <nav className="elements_container">
-                    {map.map((item) => (<div onClick={() => handleadding({ cols: item.props.min_cols, rows: item.props.min_rows, type: item.name, content: item.content })}>{item.icon}</div>))}
+                    {map.map((item) => (<div className="flex justify-center items-center" onClick={() => handleadding({ cols: item.props.min_cols, rows: item.props.min_rows, type: item.name, content: item.content })}>{item.icon}</div>))}
                 </nav>
                 <Button className="rounded-none border-none text-center text-xs" type="reset">
                     Browser All
