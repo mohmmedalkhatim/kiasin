@@ -68,7 +68,7 @@ const Layout = () => {
       switch (operation.Col) {
         case 'col': {
           if (operation.increase) {
-            card.cols = card.cols + 1;
+            card.cols = Math.min(8,card.cols + 1);
           } else {
             card.cols = Math.max(1, card.cols - 1);
           }
