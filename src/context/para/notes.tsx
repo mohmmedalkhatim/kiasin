@@ -7,6 +7,7 @@ interface Notes {
   active: Note[];
   area_notes: (area_id: number) => void;
   updata_note: (id: number, item: Note) => void;
+  create_blank:()=>void;
   note: (id: number) => Promise<void>;
   create: (id: number) => void;
 }
@@ -29,10 +30,17 @@ export const useNotes = create<Notes>((set) => ({
   },
   create: (id) => {
     let channel = new Channel()
-    channel.onmessage = () => {
-      
+    channel.onmessage = (msg) => {
+      set(state=>({active:[msg as Note]}))
     }
     invoke('notes_control', { payload: { command: 'create', id }, channel })
+  },
+  create_blank:()=>{
+    let channel = new Channel()
+    channel.onmessage = (msg) => {
+      set(state=>({active:[...state.active,msg as Note]}))
+    }
+    invoke('notes_control', { payload: { command: 'create_blank' }, channel })
   },
   updata_note: (id, item) => {
     const channel = new Channel<Note[]>();
