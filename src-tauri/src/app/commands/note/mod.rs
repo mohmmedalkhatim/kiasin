@@ -28,6 +28,11 @@ pub async fn notes_control(
             }
             None => Err("you have to add an id".to_string()),
         },
+        "create_blank"=>{
+            let item  = functions::create_emty(db).await.expect("conldn't c");
+            let _ = channel.send(vec![item]);
+            Ok(())
+        },
         "create" => match payload.item {
             Some(model) => {
                 let _ = functions::create_note(model, db)

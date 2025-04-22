@@ -1,8 +1,8 @@
 use migration::entities::{
     media,
-    note::{ActiveModel, Entity},
+    note::{self, ActiveModel, Entity, Model},
 };
-use sea_orm::{DatabaseConnection, EntityTrait, Set};
+use sea_orm::{DatabaseConnection, DbErr, EntityTrait, Set};
 
 use crate::app::commands::note::objects::Note;
 
@@ -31,6 +31,16 @@ pub async fn create_note(note: Note, db: &DatabaseConnection) -> Result<(), Stri
         }
         None => {}
     }
-
     Ok(())
+}
+
+pub async fn create_emty(db:&DatabaseConnection)->Result<Model,DbErr> {
+    let active=  note::ActiveModel{
+        title:Set(Some("untitled".to_string())),
+        in_archive:Set(false),
+        ..Default::default()
+    };
+    let id = note::Entity::insert(active.clone()).exec(db).await?;
+    let result = note::Entity::find_by_id(id.last_insert_id).one(db).await?;
+    Ok(result.unwrap())
 }

@@ -11,7 +11,7 @@ pub struct Model{
     pub description:Option<String>,
     pub content:Option<String>,
     pub in_archive:bool,
-    pub create_date:Date,
+    pub create_date:Option<Date>,
     pub area_id:Option<i32>,
 }
 impl ActiveModelBehavior for ActiveModel {
