@@ -13,7 +13,7 @@ interface Areas {
   toggleEditable: () => void;
   update_active_area: (area: Area) => void;
   delete_card: (id: number, update_sort: any) => void;
-  get_Card: (id: number) => void;
+  get_Card: (id: number) => Card;
   update_card: (id: number, card: Card) => void;
   getArea: (
     id: number,

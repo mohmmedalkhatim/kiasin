@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { Note } from '../../types/notes';
 import { Channel, invoke } from '@tauri-apps/api/core';
+import { data } from 'react-router-dom';
 
 interface Notes {
   list: Note[];
@@ -8,6 +9,7 @@ interface Notes {
   area_notes: (area_id: number) => void;
   updata_note: (id: number, item: Note) => void;
   create_blank: () => void;
+  get_notes:(ids:number[])=> Note[];
   note: (id: number) => Promise<void>;
   create: (id: number) => void;
 }
@@ -15,6 +17,14 @@ interface Notes {
 export const useNotes = create<Notes>((set) => ({
   list: [],
   active: [],
+  get_notes:(ids)=>{
+    let list:Note[] = [];
+    let channel = new Channel<Note[]>()
+    channel.onmessage = (data)=>{
+      list.push(...data)
+    }
+    return list
+  },
   area_notes: (id) => {
     const channel = new Channel<Note[]>();
     const list: Note[] = [];
@@ -28,6 +38,7 @@ export const useNotes = create<Notes>((set) => ({
         console.log(e);
       });
   },
+
   create: (id) => {
     let channel = new Channel();
     channel.onmessage = (msg) => {
