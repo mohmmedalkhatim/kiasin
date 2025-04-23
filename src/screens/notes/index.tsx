@@ -8,7 +8,7 @@ import { useAside } from '../../context/aside';
 function Notes() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [loading, set_loading] = useState(true);
-  const toggle = useAside(state=>state.toggle) 
+  const toggle = useAside((state) => state.toggle);
   useEffect(() => {
     const channel = new Channel<Note[]>();
     channel.onmessage = (res) => {
@@ -22,12 +22,15 @@ function Notes() {
   }
   return (
     <main className="content">
-      <div className='notes_page'>
+      <div className="notes_page">
         {notes.map((item) => (
           <Note_card id={Number(item.id)} />
         ))}
-        <button className='m_border flex items-center justify-center' onClick={()=>toggle("notes")}>
-          <IconBookUpload/>
+        <button
+          className="m_border flex items-center justify-center"
+          onClick={() => toggle('notes')}
+        >
+          <IconBookUpload />
         </button>
       </div>
     </main>

@@ -1,6 +1,4 @@
 function CalendarPage() {
-  return (
-    <div></div>
-    )
+  return <div></div>;
 }
-export default CalendarPage
+export default CalendarPage;

@@ -29,7 +29,7 @@ function App() {
   const content = email === '' ? login : page;
 
   useEffect(() => {
-    auth(() => { });
+    auth(() => {});
     areas();
   }, [auth, areas]);
 

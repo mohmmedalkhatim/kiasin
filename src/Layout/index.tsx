@@ -17,20 +17,21 @@ import { useAreas } from '../context/para/areas';
 import './style.css';
 import Cards_menu from './bubble_menu';
 
-
 export type element_props = {
-  type: string,
-  content: any,
-  cols: number,
-  rows: number
-}
+  type: string;
+  content: any;
+  cols: number;
+  rows: number;
+};
 
 const Layout = () => {
-  let active = useAreas(state => state.active)
-  let area = active?.at(-1)
-  const [sort, updateSort] = useState(area?.ui_schema.item.map((item) => item.id.toString()));
+  let active = useAreas((state) => state.active);
+  let area = active?.at(-1);
+  const [sort, updateSort] = useState(
+    area?.ui_schema.item.map((item) => item.id.toString())
+  );
   const [activeId, setActiveId] = useState<string | null>(null);
-  const update_active_area = useAreas(state => state.update_active_area)
+  const update_active_area = useAreas((state) => state.update_active_area);
   const update = useAreas((state) => state.update);
   const editable = useAreas((state) => state.editable);
 
@@ -50,9 +51,10 @@ const Layout = () => {
       const newSort = arrayMove(sort, oldIndex, newIndex);
       const newSchema = newSort.map(
         (id) =>
-          area?.ui_schema.item?.find((item) => String(item.id) == id) || ({} as Cardtype)
+          area?.ui_schema.item?.find((item) => String(item.id) == id) ||
+          ({} as Cardtype)
       );
-      update_active_area({ ...area, ui_schema: { item: newSchema } } as Area)
+      update_active_area({ ...area, ui_schema: { item: newSchema } } as Area);
       update({ ...area, ui_schema: { item: newSchema } } as Area);
       updateSort(newSort);
     }
@@ -63,17 +65,19 @@ const Layout = () => {
     operation: { Col: 'col' | 'row'; increase: boolean }
   ) => {
     const card = area?.ui_schema.item?.find((item) => id == item.id);
-    const filetred = area?.ui_schema.item?.filter((item) => item?.id != id) as Cardtype[];
+    const filetred = area?.ui_schema.item?.filter(
+      (item) => item?.id != id
+    ) as Cardtype[];
     if (card) {
       switch (operation.Col) {
         case 'col': {
           if (operation.increase) {
-            card.cols = Math.min(8,card.cols + 1);
+            card.cols = Math.min(8, card.cols + 1);
           } else {
             card.cols = Math.max(1, card.cols - 1);
           }
           break;
-        };
+        }
         case 'row': {
           if (operation.increase) {
             card.rows = card.rows + 1;
@@ -81,15 +85,15 @@ const Layout = () => {
             card.rows = Math.max(1, card.rows - 1);
           }
           break;
-        };
+        }
         default:
-          () => { };
+          () => {};
       }
       const newschema = [...filetred, card];
       const sorted = sort?.map((id) => {
         return newschema?.find((item) => item.id == Number(id)) as Cardtype;
       }) as Cardtype[];
-      let uparea = { ...area, ui_schema: { item: sorted } } as Area
+      let uparea = { ...area, ui_schema: { item: sorted } } as Area;
       update_active_area(uparea);
       update(uparea);
     }
@@ -101,9 +105,15 @@ const Layout = () => {
       const newSchema = {
         item: [
           ...area?.ui_schema.item,
-          { id: area?.ui_schema.item?.length, cols, rows, title: 'new', type, props: content },
+          {
+            id: area?.ui_schema.item?.length,
+            cols,
+            rows,
+            title: 'new',
+            type,
+            props: content,
+          },
         ],
-
       };
       console.log(newSchema.item);
       let uparea = { ...area, ui_schema: newSchema } as Area;
@@ -127,18 +137,17 @@ const Layout = () => {
                 key={String(item.id)}
                 id={String(item.id)}
                 card={item}
-                setCardlist={handlesizeChange} />
+                setCardlist={handlesizeChange}
+              />
             ))}
-            {editable ? (
-              <Cards_menu handleadding={handleadding} />
-            ) : null}
+            {editable ? <Cards_menu handleadding={handleadding} /> : null}
           </Grid>
         </SortableContext>
         <DragOverlay>
           {activeId ? (
             <Card
               cla=""
-              setCardlist={() => { }}
+              setCardlist={() => {}}
               id={activeId}
               card={undefined}
               setSort={updateSort}

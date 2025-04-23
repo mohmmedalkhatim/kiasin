@@ -18,11 +18,13 @@ function Task({ id, classn }: { id: number; classn: string }) {
     transition,
   };
   return (
-    <div className={`${classn} Task rounded-xs`}
+    <div
+      className={`${classn} Task rounded-xs`}
       ref={setNodeRef}
       style={style}
       {...attributes}
-      {...listeners}>
+      {...listeners}
+    >
       <div>Task</div>
       <Checkbox state={checked} setState={setChecked} title={''} />
     </div>

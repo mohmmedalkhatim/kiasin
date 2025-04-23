@@ -5,7 +5,7 @@ import { useAreas } from '../../context/para/areas';
 import Button from '../Button';
 
 function Header() {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const toggle = useAreas((state) => state.toggleEditable);
   return (
     <header className="app_header">
@@ -14,10 +14,19 @@ function Header() {
         type={'text'}
         value={search}
         onChange={setSearch}
-        icon={<IconSearch size={"1rem"} />}
+        icon={<IconSearch size={'1rem'} />}
       />
       <div></div>
-      <Button size='sm' className='bg-[#181818]' children={<>edit{' '}<IconEdit  size={"1.2rem"} /></>} onClick={toggle} />
+      <Button
+        size="sm"
+        className="bg-[#181818]"
+        children={
+          <>
+            edit <IconEdit size={'1.2rem'} />
+          </>
+        }
+        onClick={toggle}
+      />
       <div></div>
     </header>
   );

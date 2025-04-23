@@ -55,9 +55,7 @@ export default function Input({
         </div>
       </div>
 
-      {hasError && (
-        <span className="text-red-500 text-xs">{error}</span>
-      )}
+      {hasError && <span className="text-red-500 text-xs">{error}</span>}
     </div>
   );
 }

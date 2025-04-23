@@ -25,7 +25,7 @@ const CardContainer = styled.div<{
   border: 1px solid #e2e2e215;
   outline-right: ${(props) => (props.isDragging ? '2px solid #ddd' : 'none')};
   transition: all 0.3s ease;
-  position:relative;
+  position: relative;
   opacity: ${(props) => (props.isDragging ? 0.5 : 1)};
   overflow-y: auto;
 `;
@@ -42,16 +42,16 @@ interface CardProps {
   id: string;
   cla: string;
   card: Cardtype | undefined;
-  setSort: React.Dispatch<React.SetStateAction<string[] | undefined>>,
+  setSort: React.Dispatch<React.SetStateAction<string[] | undefined>>;
   setCardlist: (
     id: number,
     operation: { Col: 'col' | 'row'; increase: boolean }
   ) => void;
 }
 
-const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist,setSort }) => {
+const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist, setSort }) => {
   const editable = useAreas((state) => state.editable);
-  const delete_card = useAreas(state => state.delete_card)
+  const delete_card = useAreas((state) => state.delete_card);
 
   const {
     attributes,
@@ -114,7 +114,11 @@ const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist,setSort }) => {
                 </div>
               </div>
             </div>
-            <div onClick={() => { delete_card(Number(id),setSort) }}>
+            <div
+              onClick={() => {
+                delete_card(Number(id), setSort);
+              }}
+            >
               <IconTrashFilled />
             </div>
             <CardHeader {...listeners}>

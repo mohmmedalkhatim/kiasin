@@ -10,17 +10,17 @@ function Area() {
   const init = useAreas((state) => state.getArea);
   const active = useAreas((state) => state.active);
   const [done, setdone] = useState<boolean>(false);
-  
-  useEffect(() => {
 
+  useEffect(() => {
     init(Number(id), setdone);
-  
   }, []);
   if (done) {
     return (
       <main className="content">
         {active && active.at(-1) && <Layout />}
-        <div className="fixed top-16 right-6"><IconDotsVertical size={"1.5rem"}/></div>
+        <div className="fixed top-16 right-6">
+          <IconDotsVertical size={'1.5rem'} />
+        </div>
       </main>
     );
   }

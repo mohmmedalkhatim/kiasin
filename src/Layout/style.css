@@ -4,7 +4,7 @@
   .size_control {
     @apply absolute left-0 -top-10;
   }
-  .elements_container{
-    @apply grid-cols-3 grow grid  ;
-  }  
+  .elements_container {
+    @apply grid-cols-3 grow grid;
+  }
 }

@@ -16,7 +16,7 @@ function CardContent({ T, props }: { T: string; props: any }) {
       ['default', <div>no content</div>],
     ])
   );
-  useEffect(() => { }, []);
+  useEffect(() => {}, []);
   const action = map.get(T) || map.get('default');
   return action;
 }

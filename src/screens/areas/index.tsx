@@ -20,7 +20,7 @@ function Areas() {
         })}
         <button
           className="flex items-center justify-center"
-          onClick={() => toggle("areas")}
+          onClick={() => toggle('areas')}
         >
           <IconPlus />
         </button>

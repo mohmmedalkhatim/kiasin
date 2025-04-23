@@ -7,7 +7,7 @@ interface Notes {
   active: Note[];
   area_notes: (area_id: number) => void;
   updata_note: (id: number, item: Note) => void;
-  create_blank:()=>void;
+  create_blank: () => void;
   note: (id: number) => Promise<void>;
   create: (id: number) => void;
 }
@@ -23,24 +23,24 @@ export const useNotes = create<Notes>((set) => ({
       set({ list });
     };
     invoke('notes_control', { payload: { command: 'area_notes', id }, channel })
-      .then((e) => { })
+      .then((e) => {})
       .catch((e) => {
         console.log(e);
       });
   },
   create: (id) => {
-    let channel = new Channel()
+    let channel = new Channel();
     channel.onmessage = (msg) => {
-      set(state=>({active:[msg as Note]}))
-    }
-    invoke('notes_control', { payload: { command: 'create', id }, channel })
+      set((state) => ({ active: [msg as Note] }));
+    };
+    invoke('notes_control', { payload: { command: 'create', id }, channel });
   },
-  create_blank:()=>{
-    let channel = new Channel()
+  create_blank: () => {
+    let channel = new Channel();
     channel.onmessage = (msg) => {
-      set(state=>({active:[...state.active,msg as Note]}))
-    }
-    invoke('notes_control', { payload: { command: 'create_blank' }, channel })
+      set((state) => ({ active: [...state.active, msg as Note] }));
+    };
+    invoke('notes_control', { payload: { command: 'create_blank' }, channel });
   },
   updata_note: (id, item) => {
     const channel = new Channel<Note[]>();
@@ -54,7 +54,7 @@ export const useNotes = create<Notes>((set) => ({
       payload: { command: 'update_note', id },
       channel,
     })
-      .then((e) => { })
+      .then((e) => {})
       .catch((e) => console.log(e));
   },
   note: async (id: number) => {
@@ -63,8 +63,8 @@ export const useNotes = create<Notes>((set) => ({
       const list = new Set(state.active);
       channel.onmessage = (data) => {
         if (list.has(data[0])) {
-          list.delete(data[0])
-          list.add(data[0])
+          list.delete(data[0]);
+          list.add(data[0]);
         } else {
           list.add(data[0]);
         }

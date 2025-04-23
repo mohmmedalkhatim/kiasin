@@ -6,7 +6,7 @@ const Template_Card = ({ id }: { id: number }) => {
   const area = get_list_item(id);
   if (area) {
     return (
-      <div onClick={()=>{}}>
+      <div onClick={() => {}}>
         <div className="relative flex flex-col rounded-md m_border bg-clip-border text-gray-700 shadow-md">
           <div
             style={{ backgroundImage: `url()` }}
