@@ -1,3 +1,4 @@
+use chrono::Local;
 use migration::entities::{
     media,
     note::{self, ActiveModel, Entity, Model},
@@ -35,9 +36,11 @@ pub async fn create_note(note: Note, db: &DatabaseConnection) -> Result<(), Stri
 }
 
 pub async fn create_emty(db:&DatabaseConnection)->Result<Model,DbErr> {
+    let data = Local::now();
     let active=  note::ActiveModel{
         title:Set(Some("untitled".to_string())),
         in_archive:Set(false),
+        create_date:Set(Some(data.date_naive())),
         ..Default::default()
     };
     let id = note::Entity::insert(active.clone()).exec(db).await?;

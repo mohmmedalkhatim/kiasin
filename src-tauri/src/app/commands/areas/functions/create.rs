@@ -1,3 +1,4 @@
+use chrono::Local;
 use migration::entities::{
     area::{ActiveModel, Entity},
     template,
@@ -9,6 +10,7 @@ pub async fn create_area(db: &DatabaseConnection, id: i32) -> Result<i32, DbErr>
     let shema = json!({
         "item":[]
     });
+    let data = Local::now();
     let links = json!({ "list": [] });
     let new = ActiveModel {
         title: Set(Some("untitled".to_string())),
@@ -17,6 +19,7 @@ pub async fn create_area(db: &DatabaseConnection, id: i32) -> Result<i32, DbErr>
         icon: Set(None),
         cover: Set(None),
         links: Set(links),
+        created:Set(Some(data.date_naive())),
         ui_schema: Set(shema),
         in_archive: Set(false),
         categorie: Set(id as u32),
