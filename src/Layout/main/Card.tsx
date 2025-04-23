@@ -126,7 +126,7 @@ const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist, setSort }) => {
             </CardHeader>
           </div>
         )}
-        {card.type && <CardContent T={card.type} props={card.props} />}
+        {card.type && <CardContent id={Number(id)} T={card.type} props={card.props} />}
       </CardContainer>
     );
   }
