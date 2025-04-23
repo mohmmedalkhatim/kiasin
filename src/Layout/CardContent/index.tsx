@@ -5,12 +5,14 @@ import TaskList from '../components/Tasklist';
 import Image from '../components/Image';
 import Calendar from '../components/Calender';
 
-function CardContent({ id, T, props }: { id: number, T: string; props: any }) {
+type Card_content = { id: number, T: string; props?: any }
+
+function CardContent({ id, T, props }: Card_content) {
   const [map, setMap] = useState(
     new Map([
       ['editor', <Editor_card content={props} title={'untitled'} />],
-      ['Areaslist', <AreasList id={id} list={props} />],
-      ['tasks', <TaskList list={props} />],
+      ['Areaslist', <AreasList id={id} />],
+      ['tasks', <TaskList list={props.list} />],
       ['image', <Image url={props} />],
       ['calender', <Calendar />],
       ['default', <div>no content</div>],
