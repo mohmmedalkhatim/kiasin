@@ -26,7 +26,14 @@ pub async fn notes_control(
                 }
                 Err("couldn't find the project".to_string())
             }
-            None => Err("you have to add an id".to_string()),
+            None => {
+                let model = functions::find_many(db).await;
+                if let Ok(model) = model {
+                    let _ = channel.send(model);
+                    return Ok(());
+                }
+                Err("couldn't find the project".to_string()) 
+            },
         },
         "create_blank"=>{
             let item  = functions::create_emty(db).await.expect("conldn't c");

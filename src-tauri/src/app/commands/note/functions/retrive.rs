@@ -1,8 +1,8 @@
 use migration::entities::note::{self, Column, Entity, Model};
 use sea_orm::{entity::*, DatabaseConnection, DbErr, EntityTrait, QueryFilter, QueryOrder};
 
-pub async fn find_many(db: &DatabaseConnection) -> Result<Vec<Model>, String> {
-    Ok(Entity::find().all(db).await.unwrap())
+pub async fn find_many(db: &DatabaseConnection) -> Result<Vec<Model>, DbErr> {
+    Ok(Entity::find().all(db).await?)
 }
 pub async fn find_one(id: i32, db: &DatabaseConnection) -> Result<Model, DbErr> {
     let item = Entity::find_by_id(id).one(db).await?;
