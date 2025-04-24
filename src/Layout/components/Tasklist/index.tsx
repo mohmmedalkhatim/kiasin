@@ -46,6 +46,7 @@ function TaskList({ list }: { list: number[] }) {
             {schema?.map((item) => (
               <Task
                 id={item}
+                key={item}
                 classn={activeId === String(item) ? 'dragging' : ''}
               />
             ))}

@@ -10,12 +10,11 @@ function NotePage() {
   const { id } = useParams();
   const activeList = useNotes((state) => state.active);
   useEffect(() => {
-    get(Number(id)).then((data) => {
-      set_notes(activeList.at(-1));
-    });
+    get(Number(id));
+    set_notes(activeList.at(-1));
   }, []);
   return (
-    <div className="container">
+    <div className="content">
       <Editor content={notes?.content as string} />
     </div>
   );
