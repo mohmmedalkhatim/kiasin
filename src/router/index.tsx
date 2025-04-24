@@ -17,7 +17,7 @@ export const router = createBrowserRouter(
       <Route path="/" element={<Dashborad />} index />
       <Route path="/Areas" element={<Areas />} />
       <Route path="/Notes" element={<Notes />} />
-      <Route path="/Note" element={<Note />} />
+      <Route path="/note/:id" element={<Note />} />
       <Route path="/Area/:id" element={<Area />} />
       <Route path="/Archive" element={<Archive />} />
     </Route>

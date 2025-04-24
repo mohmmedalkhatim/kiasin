@@ -1,39 +1,35 @@
-import { Channel, invoke } from '@tauri-apps/api/core';
 import { useEffect, useState } from 'react';
-import { Note } from '../../types/notes';
 import Note_card from '../../components/Cards/note_card';
 import { IconBookUpload } from '@tabler/icons-react';
 import { useAside } from '../../context/aside';
+import { useNotes } from '../../context/para/notes';
+import { Note } from '../../types/notes';
 
 function Notes() {
-  const [notes, setNotes] = useState<Note[]>([]);
-  const [loading, set_loading] = useState(true);
+  let init = useNotes(state => state.init)
   const toggle = useAside((state) => state.toggle);
+  let notes = useNotes(state => state.list)
+  const [list, setlist] = useState<Note[]>()
   useEffect(() => {
-    const channel = new Channel<Note[]>();
-    channel.onmessage = (res) => {
-      setNotes(res);
-      set_loading(false);
-    };
-    invoke('notes_control', { payload: { command: 'find' }, channel });
-  }, []);
-  if (loading) {
-    <main className="content">loading...</main>;
+    init()
+    setlist(notes)
+  }, [])
+  if (list) {
+    return (
+      <main className="content">
+        <div className="notes_page">
+          {list.map((item) => (
+            <Note_card note={item} />
+          ))}
+          <button
+            className="m_border flex items-center justify-center"
+            onClick={() => toggle('notes')}
+          >
+            <IconBookUpload />
+          </button>
+        </div>
+      </main>
+    );
   }
-  return (
-    <main className="content">
-      <div className="notes_page">
-        {notes.map((item) => (
-          <Note_card id={Number(item.id)} />
-        ))}
-        <button
-          className="m_border flex items-center justify-center"
-          onClick={() => toggle('notes')}
-        >
-          <IconBookUpload />
-        </button>
-      </div>
-    </main>
-  );
 }
 export default Notes;
