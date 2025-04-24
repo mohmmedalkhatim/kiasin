@@ -2,10 +2,10 @@
 
 @layer Components {
   .toolbar {
-    @apply flex overflow-hidden  border divide-x rounded-t-lg  rtl:flex-row-reverse dark:bg-gray-600 dark:border-gray-600 dark:divide-gray-700;
+    @apply flex overflow-hidden  border divide-x rounded-sm  rtl:flex-row-reverse dark:bg-gray-600 dark:border-gray-600 dark:divide-gray-700;
   }
   .toolbar_button {
-    @apply px-2 py-1 flex font-medium text-white transition-colors duration-200  dark:hover:bg-gray-800  dark:text-white dark:hover:text-gray-100 hover:text-gray-400 rounded-md;
+    @apply px-2 py-1 flex font-medium rounded-sm text-white transition-colors duration-200    dark:text-white dark:hover:text-gray-100 hover:text-gray-400 ;
   }
   .bubble_menu {
     @apply absolute z-10 flex gap-1 p-1 bg-white  -top-10 -left-[5rem] rounded-lg shadow-lg  dark:border-gray-700;
@@ -47,7 +47,6 @@
   display: flex;
   background-color: #181818;
   height: 100%;
-  border-radius: 5px 5px 0px 0px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 .toolbar {
@@ -72,7 +71,6 @@ p.is-editor-empty:first-child::before {
 .help-button {
   border: none;
   padding: 6px 8px;
-  border-radius: 8px;
   cursor: pointer;
   font-size: 16px;
   font-weight: 600;
@@ -96,16 +94,16 @@ p.is-editor-empty:first-child::before {
   display: flex;
   transform: translateX(-50%) translateY(10px);
   padding: 12px 12px;
-  background: linear-gradient(135deg, #ffffff, #f8f9fa);
-  border-radius: 10px;
+  background: #181818;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  
   color: #1f2937;
   font-size: 14px;
   white-space: nowrap;
   opacity: 0;
   visibility: hidden;
   transition: all 0.3s ease;
-  border: 1px solid rgba(229, 231, 235, 1);
+  border: 1px solid rgba(229, 231, 235, 0.13);
 }
 
 /* Tooltip arrow */

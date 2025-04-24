@@ -7,6 +7,7 @@ import textStyle from '@tiptap/extension-text-style';
 import { Toolbar } from './toolbar';
 import './style.css';
 import Placeholder from '@tiptap/extension-placeholder';
+import { useNotes } from '../../context/para/notes';
 
 const RichTextEditor = ({ content }: { content: string }) => {
   const editor = useEditor({
@@ -30,7 +31,7 @@ const RichTextEditor = ({ content }: { content: string }) => {
   return (
     <div className="eidtor_container">
       <Toolbar editor={editor} />
-      <EditorContent cols={10} className="editor" editor={editor} />
+      <EditorContent cols={10}  className="editor" editor={editor} />
     </div>
   );
 };
