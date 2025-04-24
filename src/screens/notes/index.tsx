@@ -6,12 +6,10 @@ import { useNotes } from '../../context/para/notes';
 import { Note } from '../../types/notes';
 
 function Notes() {
-  let init = useNotes(state => state.init)
   const toggle = useAside((state) => state.toggle);
   let notes = useNotes(state => state.list)
   const [list, setlist] = useState<Note[]>()
   useEffect(() => {
-    init()
     setlist(notes)
   }, [])
   if (list) {
@@ -23,7 +21,7 @@ function Notes() {
           ))}
           <button
             className="m_border flex items-center justify-center"
-            onClick={() => toggle('notes')}
+            onClick={() =>  toggle('notes')}
           >
             <IconBookUpload />
           </button>

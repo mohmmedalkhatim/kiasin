@@ -2,10 +2,10 @@
 
 @layer Components {
   .toolbar {
-    @apply flex overflow-hidden bg-white border divide-x rounded-t-lg  rtl:flex-row-reverse dark:bg-gray-600 dark:border-gray-600 dark:divide-gray-700;
+    @apply flex overflow-hidden  border divide-x rounded-t-lg  rtl:flex-row-reverse dark:bg-gray-600 dark:border-gray-600 dark:divide-gray-700;
   }
   .toolbar_button {
-    @apply px-2 py-1 font-medium text-white transition-colors duration-200  dark:hover:bg-gray-800 dark:text-black dark:hover:text-gray-100 hover:text-white rounded-md;
+    @apply px-2 py-1 flex font-medium text-white transition-colors duration-200  dark:hover:bg-gray-800  dark:text-white dark:hover:text-gray-100 hover:text-gray-400 rounded-md;
   }
   .bubble_menu {
     @apply absolute z-10 flex gap-1 p-1 bg-white  -top-10 -left-[5rem] rounded-lg shadow-lg  dark:border-gray-700;
@@ -84,6 +84,7 @@ p.is-editor-empty:first-child::before {
 
 .help-button:hover,
 .help-button:focus {
+  display: flex;
   transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
@@ -92,8 +93,9 @@ p.is-editor-empty:first-child::before {
   position: absolute;
   bottom: calc(100% + 15px);
   left: 50%;
+  display: flex;
   transform: translateX(-50%) translateY(10px);
-  padding: 12px 20px;
+  padding: 12px 12px;
   background: linear-gradient(135deg, #ffffff, #f8f9fa);
   border-radius: 10px;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
