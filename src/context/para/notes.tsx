@@ -1,7 +1,6 @@
 import { create } from 'zustand';
 import { Note } from '../../types/notes';
 import { Channel, invoke } from '@tauri-apps/api/core';
-import { data } from 'react-router-dom';
 
 interface Notes {
   list: Note[];
@@ -9,18 +8,28 @@ interface Notes {
   area_notes: (area_id: number) => void;
   updata_note: (id: number, item: Note) => void;
   create_blank: () => void;
-  get_notes:(ids:number[])=> Note[];
-  note: (id: number) => Promise<void>;
+  get_notes: (ids: number[]) => Note[];
+  init: () => void;
+  note: (id: number) => void;
   create: (id: number) => void;
 }
 
 export const useNotes = create<Notes>((set) => ({
   list: [],
   active: [],
-  get_notes:(ids)=>{
-    let list:Note[] = [];
+  init: () => {
+    let list: Note[] = [];
     let channel = new Channel<Note[]>()
-    channel.onmessage = (data)=>{
+    channel.onmessage = (data) => {
+      list.push(...data)
+    }
+    invoke("notes_control", { payload: { command: "find" }, channel })
+    set({ list })
+  },
+  get_notes: (ids) => {
+    let list: Note[] = [];
+    let channel = new Channel<Note[]>()
+    channel.onmessage = (data) => {
       list.push(...data)
     }
     return list
@@ -33,7 +42,7 @@ export const useNotes = create<Notes>((set) => ({
       set({ list });
     };
     invoke('notes_control', { payload: { command: 'area_notes', id }, channel })
-      .then((e) => {})
+      .then((e) => { })
       .catch((e) => {
         console.log(e);
       });
@@ -65,25 +74,14 @@ export const useNotes = create<Notes>((set) => ({
       payload: { command: 'update_note', id },
       channel,
     })
-      .then((e) => {})
+      .then((e) => { })
       .catch((e) => console.log(e));
   },
-  note: async (id: number) => {
+  note: (id: number) => {
     const channel = new Channel<Note[]>();
-    set((state) => {
-      const list = new Set(state.active);
-      channel.onmessage = (data) => {
-        if (list.has(data[0])) {
-          list.delete(data[0]);
-          list.add(data[0]);
-        } else {
-          list.add(data[0]);
-        }
-      };
-      return {
-        active: [...list],
-      };
-    });
-    invoke('notes_control', { payload: { command: 'find', id }, channel });
+    channel.onmessage = (note) => {
+      set(state => ({ active: [...state.active, note[0]] }))
+    }
+    invoke("notes_control", { payload: { command: "find", id }, channel })
   },
-}));
+}))
