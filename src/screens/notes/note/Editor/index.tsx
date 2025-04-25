@@ -28,7 +28,7 @@ const RichTextEditor = ({ editor, id }: { editor: Editor, id: number }) => {
       editor.getJSON()
     })
     return (
-      <div className="eidtor_container">
+      <div className="editor_container">
         <Toolbar editor={editor} />
         <EditorContent cols={10} className="editor" editor={editor} />
       </div>
