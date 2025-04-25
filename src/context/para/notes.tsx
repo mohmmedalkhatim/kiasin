@@ -71,10 +71,10 @@ export const useNotes = create<Notes>((set) => ({
       return { list };
     });
     invoke('notes_control', {
-      payload: { command: 'update_note', id },
+      payload: { command: 'update', id, item },
       channel,
     })
-      .then((e) => { })
+      .then((e) => { console.log("the note with the title " + item.title + " has been save") })
       .catch((e) => console.log(e));
   },
   note: (id: number) => {

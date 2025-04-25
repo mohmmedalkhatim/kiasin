@@ -10,6 +10,8 @@ import Underline from '@tiptap/extension-underline';
 import Highlight from '@tiptap/extension-highlight';
 import textStyle from '@tiptap/extension-text-style';
 import StarterKit from '@tiptap/starter-kit';
+import HeaderBar from './headersbar';
+import "./style.css"
 
 function NotePage() {
   const get = useNotes((state) => state.note);
@@ -42,7 +44,8 @@ function NotePage() {
   if (editor) {
     return (
       <div className="content">
-        <Editor editor={editor} />
+        <HeaderBar editor={editor}/>
+        <Editor editor={editor} id={Number(id)} />
       </div>
     );
   }
