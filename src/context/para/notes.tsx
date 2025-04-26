@@ -66,7 +66,7 @@ export const useNotes = create<Notes>((set) => ({
     const channel = new Channel<Note[]>();
     set((state) => {
       const list: Note[] = state.list.map((ele) =>
-        ele.id != String(id) ? ele : item
+        ele.id != id ? ele : item
       );
       return { list };
     });

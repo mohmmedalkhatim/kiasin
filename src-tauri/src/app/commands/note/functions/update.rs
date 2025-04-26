@@ -6,12 +6,11 @@ use sea_orm::{entity::*, DatabaseConnection, DbErr, EntityTrait, QueryFilter, Se
 
 use crate::app::commands::note::objects::*;
 
-pub async fn updata_note(note_dto: Note, id: i32, db: &DatabaseConnection) -> Result<(), DbErr> {
+pub async fn update_note(note_dto: Note, id: i32, db: &DatabaseConnection) -> Result<(), DbErr> {
     let new = ActiveModel {
         title: Set(note_dto.title),
         area_id: Set(note_dto.area_id),
         content: Set(note_dto.content),
-        description: Set(note_dto.discription),
         ..Default::default()
     };
     let _ = Entity::update(new)

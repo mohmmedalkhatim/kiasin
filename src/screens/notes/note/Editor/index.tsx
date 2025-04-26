@@ -9,7 +9,6 @@ const RichTextEditor = ({ editor, id }: { editor: Editor, id: number }) => {
   let [note, setNote] = useState<Note>({} as Note)
   let update = useNotes(state => state.updata_note)
   if (editor) {
-
     editor.once('create', (e) => {
       e.editor.chain().focus()
         .setHeading({ level: 2 })
@@ -20,8 +19,10 @@ const RichTextEditor = ({ editor, id }: { editor: Editor, id: number }) => {
       })
     })
     editor.on("update", (e) => {
-      let content = e.editor.getJSON();
-      setNote({ title: content[0].text, content, id })
+      let content = editor.getJSON();
+      console.log(content.content)
+      
+      setNote({ title: content.content?.at(1)?.text, content, id })
       update(id, note)
     })
     editor.on("destroy", (e) => {
