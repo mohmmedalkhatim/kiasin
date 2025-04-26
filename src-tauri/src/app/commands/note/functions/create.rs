@@ -12,7 +12,6 @@ pub async fn create_note(note: Note, db: &DatabaseConnection) -> Result<(), Stri
         title: Set(note.title),
         area_id: Set(note.area_id),
         content: Set(note.content),
-        description: Set(note.discription),
         ..Default::default()
     };
     let id = Entity::insert(new).exec(db).await.unwrap().last_insert_id;

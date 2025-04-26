@@ -8,7 +8,6 @@ pub struct Model{
     #[sea_orm(primary_key)]
     pub id:i32,
     pub title:Option<String>,
-    pub description:Option<String>,
     pub content:Option<Json>,
     pub in_archive:bool,
     pub create_date:Option<Date>,
