@@ -60,10 +60,10 @@ pub async fn notes_control(
             }
             None => Err("you have to add an id".to_string()),
         },
-        "updata" => match payload.item {
+        "update" => match payload.item {
             Some(model) => {
                 if let Some(id) = payload.id {
-                    let _ = functions::updata_note(model, id, db)
+                    let _ = functions::update_note(model, id, db)
                         .await
                         .expect("there is a problem with the database");
                     return Ok(());
