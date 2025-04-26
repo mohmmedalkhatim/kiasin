@@ -9,6 +9,7 @@ pub struct Model{
     pub id:i32,
     pub title:Option<String>,
     pub content:Option<Json>,
+    pub description:Option<String>,
     pub in_archive:bool,
     pub create_date:Option<Date>,
     pub area_id:Option<i32>,

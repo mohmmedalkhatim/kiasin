@@ -1,6 +1,6 @@
 use migration::entities::{
     media,
-    note::{self, ActiveModel, Entity},
+    note::{ActiveModel, Entity},
 };
 use sea_orm::{entity::*, DatabaseConnection, DbErr, EntityTrait, QueryFilter, Set};
 
@@ -8,13 +8,13 @@ use crate::app::commands::note::objects::*;
 
 pub async fn update_note(note_dto: Note, id: i32, db: &DatabaseConnection) -> Result<(), DbErr> {
     let new = ActiveModel {
+        id:Set(note_dto.id),
         title: Set(note_dto.title),
-        area_id: Set(note_dto.area_id),
+        description:Set(note_dto.description),
         content: Set(note_dto.content),
         ..Default::default()
     };
     let _ = Entity::update(new)
-        .filter(note::Column::Id.eq(id))
         .exec(db)
         .await?;
     match note_dto.media {
