@@ -18,12 +18,17 @@ const RichTextEditor = ({ editor, id }: { editor: Editor, id: number }) => {
         e.transaction.setNodeAttribute(1, "headding", { level: 2 })
       })
     })
-    editor.on("update", (e) => {
+    editor.once("update", (e) => {
       let content = editor.getJSON();
-      console.log(content.content)
-      
-      setNote({ title: content.content?.at(1)?.text, content, id })
-      update(id, note)
+      let text = editor.getText().split("\n")
+      let title = text.shift()
+      let description = text.join(" ");
+      console.log(content)
+      if (content && title) {
+        let note = { title, content, description } as Note
+        setNote(note)
+        update(id, note)
+      }
     })
     editor.on("destroy", (e) => {
       editor.getJSON()

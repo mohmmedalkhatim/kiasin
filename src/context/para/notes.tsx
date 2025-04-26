@@ -4,7 +4,7 @@ import { Channel, invoke } from '@tauri-apps/api/core';
 
 interface Notes {
   list: Note[];
-  active: Note[];
+  active: Note;
   area_notes: (area_id: number) => void;
   updata_note: (id: number, item: Note) => void;
   create_blank: () => void;
@@ -16,15 +16,13 @@ interface Notes {
 
 export const useNotes = create<Notes>((set) => ({
   list: [],
-  active: [],
+  active: {} as Note,
   init: () => {
-    let list: Note[] = [];
     let channel = new Channel<Note[]>()
     channel.onmessage = (data) => {
-      list.push(...data)
+      set({ list:[...data] })
     }
     invoke("notes_control", { payload: { command: "find" }, channel })
-    set({ list })
   },
   get_notes: (ids) => {
     let list: Note[] = [];
@@ -49,16 +47,16 @@ export const useNotes = create<Notes>((set) => ({
   },
 
   create: (id) => {
-    let channel = new Channel();
+    let channel = new Channel<Note[]>();
     channel.onmessage = (msg) => {
-      set((state) => ({ active: [msg as Note] }));
+      set({ active: msg[0] });
     };
     invoke('notes_control', { payload: { command: 'create', id }, channel });
   },
   create_blank: () => {
-    let channel = new Channel();
+    let channel = new Channel<Note[]>();
     channel.onmessage = (msg) => {
-      set((state) => ({ active: [...state.active, msg as Note] }));
+      set(state => ({ list: [...state.list, msg[0]] }))
     };
     invoke('notes_control', { payload: { command: 'create_blank' }, channel });
   },
@@ -80,7 +78,7 @@ export const useNotes = create<Notes>((set) => ({
   note: (id: number) => {
     const channel = new Channel<Note[]>();
     channel.onmessage = (note) => {
-      set(state => ({ active: [...state.active, note[0]] }))
+      set(state => ({ active: note[0] }))
     }
     invoke("notes_control", { payload: { command: "find", id }, channel })
   },

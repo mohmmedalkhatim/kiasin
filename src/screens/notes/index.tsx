@@ -3,25 +3,24 @@ import Note_card from '../../components/Cards/note_card';
 import { IconBookUpload } from '@tabler/icons-react';
 import { useAside } from '../../context/aside';
 import { useNotes } from '../../context/para/notes';
-import { Note } from '../../types/notes';
 
 function Notes() {
   const toggle = useAside((state) => state.toggle);
   let notes = useNotes(state => state.list)
-  const [list, setlist] = useState<Note[]>()
+  let init = useNotes(state => state.init)
   useEffect(() => {
-    setlist(notes)
+    init()
   }, [])
-  if (list) {
+  if (notes) {
     return (
       <main className="content">
         <div className="notes_page">
-          {list.map((item) => (
+          {notes.map((item) => (
             <Note_card note={item} />
           ))}
           <button
             className="m_border flex items-center justify-center"
-            onClick={() =>  toggle('notes')}
+            onClick={() => toggle('notes')}
           >
             <IconBookUpload />
           </button>
