@@ -11,7 +11,7 @@ pub async fn create_note(note: Note, db: &DatabaseConnection) -> Result<(), Stri
     let new = ActiveModel {
         title: Set(note.title),
         area_id: Set(note.area_id),
-        description:Set(note.description),
+        description: Set(note.description),
         content: Set(note.content),
         ..Default::default()
     };
@@ -35,12 +35,12 @@ pub async fn create_note(note: Note, db: &DatabaseConnection) -> Result<(), Stri
     Ok(())
 }
 
-pub async fn create_emty(db:&DatabaseConnection)->Result<Model,DbErr> {
+pub async fn create_emty(db: &DatabaseConnection) -> Result<Model, DbErr> {
     let data = Local::now();
-    let active=  note::ActiveModel{
-        title:Set(Some("untitled".to_string())),
-        in_archive:Set(false),
-        create_date:Set(Some(data.date_naive())),
+    let active = note::ActiveModel {
+        title: Set(Some("untitled".to_string())),
+        in_archive: Set(false),
+        create_date: Set(Some(data.date_naive())),
         ..Default::default()
     };
     let id = note::Entity::insert(active.clone()).exec(db).await?;

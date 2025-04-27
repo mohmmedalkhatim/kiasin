@@ -19,7 +19,7 @@ pub async fn create_area(db: &DatabaseConnection, id: i32) -> Result<i32, DbErr>
         icon: Set(None),
         cover: Set(None),
         links: Set(links),
-        created:Set(Some(data.date_naive())),
+        created: Set(Some(data.date_naive())),
         ui_schema: Set(shema),
         in_archive: Set(false),
         categorie: Set(id as u32),
@@ -29,7 +29,7 @@ pub async fn create_area(db: &DatabaseConnection, id: i32) -> Result<i32, DbErr>
     Ok(Entity::insert(new).exec(db).await?.last_insert_id as i32)
 }
 
-pub async fn create_from_templates(db: &DatabaseConnection, id: i32)->Result<i32, DbErr> {
+pub async fn create_from_templates(db: &DatabaseConnection, id: i32) -> Result<i32, DbErr> {
     let links = json!({ "list": [] });
     let model = template::Entity::find_by_id(id as u32).one(db).await;
     let schema = model.unwrap().unwrap().into_active_model().ui_schema;
@@ -45,6 +45,6 @@ pub async fn create_from_templates(db: &DatabaseConnection, id: i32)->Result<i32
         categorie: Set(id as u32),
         ..Default::default()
     };
-    
+
     Ok(Entity::insert(new).exec(db).await?.last_insert_id as i32)
 }

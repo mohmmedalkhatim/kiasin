@@ -1,8 +1,6 @@
-
 use migration::entities::area::{Column, Entity, Model};
 use sea_orm::{ColumnTrait, DatabaseConnection, DbErr, EntityTrait, QueryFilter};
 use serde_json::json;
-
 
 pub async fn find_one(id: i32, db: &DatabaseConnection) -> Result<Model, DbErr> {
     Ok(Entity::find_by_id(id as u32).one(db).await?.unwrap())

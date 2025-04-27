@@ -8,15 +8,13 @@ use crate::app::commands::note::objects::*;
 
 pub async fn update_note(note_dto: Note, id: i32, db: &DatabaseConnection) -> Result<(), DbErr> {
     let new = ActiveModel {
-        id:Set(note_dto.id),
+        id: Set(note_dto.id),
         title: Set(note_dto.title),
-        description:Set(note_dto.description),
+        description: Set(note_dto.description),
         content: Set(note_dto.content),
         ..Default::default()
     };
-    let _ = Entity::update(new)
-        .exec(db)
-        .await?;
+    let _ = Entity::update(new).exec(db).await?;
     match note_dto.media {
         Some(v) => {
             for med in v {

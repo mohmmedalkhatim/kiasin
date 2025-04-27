@@ -1,12 +1,12 @@
-use serde::{Deserialize, Serialize,};
+use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Note {
-    pub id:i32,
+    pub id: i32,
     pub title: Option<String>,
     pub content: Option<Value>,
-    pub description:Option<String>,
+    pub description: Option<String>,
     pub media: Option<Vec<Media>>,
     pub area_id: Option<i32>,
     pub project_id: Option<i32>,
