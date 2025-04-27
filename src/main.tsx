@@ -1,11 +1,10 @@
-import ReactDOM from 'react-dom/client';
-import './styles.css';
-import { RouterProvider } from 'react-router-dom';
-import { router } from './router';
-import Lenis from 'lenis';
-import ScrollTrigger from 'gsap/ScrollTrigger';
-
 import gsap from 'gsap';
+import Lenis from 'lenis';
+import { router } from './router';
+import ReactDOM from 'react-dom/client';
+import ScrollTrigger from 'gsap/ScrollTrigger';
+import { RouterProvider } from 'react-router-dom';
+import './styles.css';
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 

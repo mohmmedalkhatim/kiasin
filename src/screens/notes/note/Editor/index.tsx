@@ -5,19 +5,21 @@ import './style.css';
 import { useNotes } from '../../../../context/para/notes';
 import { Note } from '../../../../types/notes';
 
-const RichTextEditor = ({ editor, id }: { editor: Editor, id: number }) => {
+const RichTextEditor = ({ editor, id ,store}: { editor: Editor, id: number,store:Note }) => {
   let [note, setNote] = useState<Note>({} as Note)
   let update = useNotes(state => state.updata_note)
   if (editor) {
-    editor.once('create', (e) => {
-      e.editor.chain().focus()
-        .setHeading({ level: 2 })
-        .insertContent("<h1>untitle</h1>").setHighlight()
-        .setTextAlign("left").setNodeSelection(1).run();
-      editor.once("selectionUpdate", (e) => {
-        e.transaction.setNodeAttribute(1, "headding", { level: 2 })
+    if(store.title){
+      editor.once('create', (e) => {
+        e.editor.chain().focus()
+          .setHeading({ level: 2 })
+          .insertContent("<h1>untitle</h1>").setHighlight()
+          .setTextAlign("left").setNodeSelection(1).run();
+        editor.once("selectionUpdate", (e) => {
+          e.transaction.setNodeAttribute(1, "headding", { level: 2 })
+        })
       })
-    })
+    }
     editor.once("update", (e) => {
       let content = editor.getJSON();
       let text = editor.getText().split("\n")
@@ -25,7 +27,7 @@ const RichTextEditor = ({ editor, id }: { editor: Editor, id: number }) => {
       let description = text.join(" ");
       console.log(content)
       if (content && title) {
-        let note = { title, content, description } as Note
+        let note = { title, content, description,id } as Note
         setNote(note)
         update(id, note)
       }

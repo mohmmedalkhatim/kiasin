@@ -43,7 +43,7 @@ function NotePage() {
     return (
       <div className="content">
         <HeaderBar editor={editor} />
-        <Editor editor={editor} id={Number(id)} />
+        <Editor editor={editor} store={note} id={Number(id)} />
       </div>
     );
   }
