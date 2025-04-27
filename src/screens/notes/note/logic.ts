@@ -1,3 +1,2 @@
-let NoteLogic = ()=>{
-}
-export default NoteLogic
+let NoteLogic = () => {};
+export default NoteLogic;

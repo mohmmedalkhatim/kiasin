@@ -5,7 +5,7 @@
     @apply flex overflow-hidden  border divide-x rounded-sm  rtl:flex-row-reverse dark:bg-gray-600 dark:border-gray-600 dark:divide-gray-700;
   }
   .toolbar_button {
-    @apply px-2 py-1 flex font-medium rounded text-white transition-colors duration-200    dark:text-white dark:hover:text-gray-100 hover:text-gray-400 ;
+    @apply px-2 py-1 flex font-medium rounded text-white transition-colors duration-200    dark:text-white dark:hover:text-gray-100 hover:text-gray-400;
   }
   .bubble_menu {
     @apply absolute z-10 flex gap-1 p-1 bg-[#181818] rounded-sm  -top-10 -left-[5rem]  shadow-lg  dark:border-gray-700;
@@ -98,7 +98,7 @@ p.is-editor-empty:first-child::before {
   padding: 12px 12px;
   background: #181818;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  
+
   color: #1f2937;
   font-size: 14px;
   white-space: nowrap;

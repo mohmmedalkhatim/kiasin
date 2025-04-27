@@ -1,8 +1,6 @@
-import { Editor } from "@tiptap/react"
+import { Editor } from '@tiptap/react';
 
-function HeaderBar({editor}:{editor:Editor}) {
-  return (
-    <nav className="HeaderBar m_border"></nav>
-  )
+function HeaderBar({ editor }: { editor: Editor }) {
+  return <nav className="HeaderBar m_border"></nav>;
 }
-export default HeaderBar
+export default HeaderBar;

@@ -5,7 +5,7 @@ import TaskList from '../components/Tasklist';
 import Image from '../components/Image';
 import Calendar from '../components/Calender';
 
-type Card_content = { id: number, T: string; props?: any }
+type Card_content = { id: number; T: string; props?: any };
 
 function CardContent({ id, T, props }: Card_content) {
   const [map, setMap] = useState(
@@ -18,7 +18,7 @@ function CardContent({ id, T, props }: Card_content) {
       ['default', <div>no content</div>],
     ])
   );
-  useEffect(() => { }, []);
+  useEffect(() => {}, []);
   const action = map.get(T) || map.get('default');
   return action;
 }

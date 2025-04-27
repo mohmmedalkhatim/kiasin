@@ -10,16 +10,15 @@ import Highlight from '@tiptap/extension-highlight';
 import textStyle from '@tiptap/extension-text-style';
 import StarterKit from '@tiptap/starter-kit';
 import HeaderBar from './headersbar';
-import "./style.css"
+import './style.css';
 
 function NotePage() {
   const get = useNotes((state) => state.note);
-  let note = useNotes(state => state.active)
+  let note = useNotes((state) => state.active);
   const { id } = useParams();
   let content = note?.content;
   useEffect(() => {
     get(Number(id));
-
   }, []);
   const editor = useEditor({
     extensions: [

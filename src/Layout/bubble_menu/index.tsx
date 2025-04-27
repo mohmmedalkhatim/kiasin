@@ -65,7 +65,6 @@ function Cards_menu({
       content: { list: [1, 2] },
       icon: <IconCalendar size={'1.7rem'} />,
     },
-
   ];
   let change = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     menuRef.current?.focus();

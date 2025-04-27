@@ -6,11 +6,11 @@ import { useNotes } from '../../context/para/notes';
 
 function Notes() {
   const toggle = useAside((state) => state.toggle);
-  let notes = useNotes(state => state.list)
-  let init = useNotes(state => state.init)
+  let notes = useNotes((state) => state.list);
+  let init = useNotes((state) => state.init);
   useEffect(() => {
-    init()
-  }, [])
+    init();
+  }, []);
   if (notes) {
     return (
       <main className="content">

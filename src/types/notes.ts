@@ -1,8 +1,8 @@
-import { JSONContent } from "@tiptap/react";
+import { JSONContent } from '@tiptap/react';
 
 export interface Note {
   title?: string;
   content?: JSONContent;
-  description:string;
+  description: string;
   id: number;
 }

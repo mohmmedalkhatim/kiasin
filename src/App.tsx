@@ -13,11 +13,11 @@ function App() {
   const auth = useAuth((state) => state.auth);
   const areas = useAreas((state) => state.init);
   const init = useAreas((state) => state.init);
-  let initNotes = useNotes(state => state.init)
+  let initNotes = useNotes((state) => state.init);
 
   useEffect(() => {
     init();
-    initNotes()
+    initNotes();
   }, []);
   const page = (
     <>
