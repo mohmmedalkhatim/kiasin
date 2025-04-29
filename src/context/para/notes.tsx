@@ -5,18 +5,20 @@ import { Channel, invoke } from '@tauri-apps/api/core';
 interface Notes {
   list: Note[];
   active: Note;
+  loading: boolean;
   area_notes: (area_id: number) => void;
   updata_note: (id: number, item: Note) => void;
   create_blank: () => void;
   get_notes: (ids: number[]) => Note[];
   init: () => void;
-  note: (id: number) => void;
+  note: (id: number, loading: React.Dispatch<React.SetStateAction<boolean>>) => Promise<void>;
   create: (id: number) => void;
 }
 
 export const useNotes = create<Notes>((set) => ({
   list: [],
   active: {} as Note,
+  loading: false,
   init: () => {
     let channel = new Channel<Note[]>();
     channel.onmessage = (data) => {
@@ -30,6 +32,7 @@ export const useNotes = create<Notes>((set) => ({
     channel.onmessage = (data) => {
       list.push(...data);
     };
+    set({ list })
     return list;
   },
   area_notes: (id) => {
@@ -40,7 +43,7 @@ export const useNotes = create<Notes>((set) => ({
       set({ list });
     };
     invoke('notes_control', { payload: { command: 'area_notes', id }, channel })
-      .then((e) => {})
+      .then((e) => { })
       .catch((e) => {
         console.log(e);
       });
@@ -75,10 +78,12 @@ export const useNotes = create<Notes>((set) => ({
       })
       .catch((e) => console.log(e));
   },
-  note: (id: number) => {
+  note: async (id: number, loading) => {
+    set({ loading: true })
     const channel = new Channel<Note[]>();
     channel.onmessage = (note) => {
-      set((state) => ({ active: note[0] }));
+      set(({ active: note[0], loading: false }));
+      loading(false)
     };
     invoke('notes_control', { payload: { command: 'find', id }, channel });
   },

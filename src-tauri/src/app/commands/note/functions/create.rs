@@ -4,6 +4,7 @@ use migration::entities::{
     note::{self, ActiveModel, Entity, Model},
 };
 use sea_orm::{DatabaseConnection, DbErr, EntityTrait, Set};
+use serde_json::json;
 
 use crate::app::commands::note::objects::Note;
 
@@ -39,6 +40,7 @@ pub async fn create_emty(db: &DatabaseConnection) -> Result<Model, DbErr> {
     let data = Local::now();
     let active = note::ActiveModel {
         title: Set(Some("untitled".to_string())),
+        content: Set(Some(json!(""))),
         in_archive: Set(false),
         create_date: Set(Some(data.date_naive())),
         ..Default::default()

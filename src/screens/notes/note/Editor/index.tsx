@@ -1,4 +1,4 @@
-import { EditorContent, JSONContent, Editor } from '@tiptap/react';
+import { EditorContent, Editor } from '@tiptap/react';
 import { Toolbar } from './toolbar';
 import { useState } from 'react';
 import './style.css';
@@ -8,14 +8,12 @@ import { Note } from '../../../../types/notes';
 const RichTextEditor = ({
   editor,
   id,
-  store,
 }: {
   editor: Editor;
   id: number;
-  store: Note;
 }) => {
-  let [note, setNote] = useState<Note>({} as Note);
-  let update = useNotes((state) => state.updata_note);
+  const store = useNotes(state => state.active)
+  const update = useNotes((state) => state.updata_note);
   if (editor) {
     if (store.title) {
       editor.once('create', (e) => {
@@ -34,14 +32,13 @@ const RichTextEditor = ({
       });
     }
     editor.once('update', (e) => {
-      let content = editor.getJSON();
-      let text = editor.getText().split('\n');
-      let title = text.shift();
-      let description = text.join(' ');
+      const content = editor.getJSON();
+      const text = editor.getText().split('\n');
+      const title = text.shift();
+      const description = text.join(' ');
       console.log(content);
       if (content && title) {
-        let note = { title, content, description, id } as Note;
-        setNote(note);
+        const note = { title, content, description, id } as Note;
         update(id, note);
       }
     });
