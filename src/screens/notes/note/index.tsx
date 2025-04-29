@@ -11,6 +11,7 @@ function NotePageProvider() {
   const content = useNotes(state => state.active).content
   useEffect(() => {
     get(Number(id), setloading);
+    console.log(JSON.stringify(content))
   }, []);
   if (content && !loading) {
     return (
