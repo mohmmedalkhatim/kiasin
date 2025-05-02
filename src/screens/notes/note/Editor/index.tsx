@@ -35,8 +35,8 @@ const RichTextEditor = ({
       const content = editor.getJSON();
       const text = editor.getText().split('\n');
       const title = text.shift();
-      const description = text.join(' ');
-      console.log(content);
+      const description = text.filter(s => s.trim()).map(s => s.replace(/\s+/g, ' ').trim()).join(' ');
+      console.log(description)
       if (content && title) {
         const note = { title, content, description, id } as Note;
         update(id, note);

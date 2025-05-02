@@ -11,7 +11,7 @@ const NoteCard = ({ note }: { note: Note }) => {
         <h5 className="block text-md font-sans font-semibold leading-snug tracking-normal text-white antialiased">
           {note.title}
         </h5>
-        <div className="px-4 py-3 flex items-center justify-between">
+        <div className="px-4 py-3 flex items-center text-xs flex justify-between">
           <p>{note.description}</p>
         </div>
       </div>
