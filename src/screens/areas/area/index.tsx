@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAreas } from '../../../context/para/areas';
 import Layout from '../../../Layout';
 import { IconDotsVertical } from '@tabler/icons-react';
+import Header from '../../../components/Headers/Area_Header';
 
 function Area() {
   const { id } = useParams();
@@ -16,12 +17,14 @@ function Area() {
   }, []);
   if (done) {
     return (
-      <main className="content">
-        {active && active.at(-1) && <Layout />}
-        <div className="fixed top-16 right-6">
-          <IconDotsVertical size={'1.5rem'} />
-        </div>
-      </main>
+      <>
+      <Header/>
+        <main className="content">
+          {active && active.at(-1) && <Layout />}
+          <div className="fixed top-16 right-6">
+            <IconDotsVertical size={'1.5rem'} />
+          </div>
+        </main></>
     );
   }
 }

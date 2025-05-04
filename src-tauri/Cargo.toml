@@ -28,6 +28,7 @@ async-std = "1.10"
 migration = { path = "./migration" }
 tauri-plugin-shell = "2"
 chrono = "0.4.39"
+rand = "0.9.1"
 
 [features]
 # This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!

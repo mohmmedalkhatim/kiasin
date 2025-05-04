@@ -1,8 +1,8 @@
 import { useState } from 'react';
-import Input from '../Input';
+import Input from '../../Input';
 import { IconEdit, IconSearch } from '@tabler/icons-react';
-import { useAreas } from '../../context/para/areas';
-import Button from '../Button';
+import { useAreas } from '../../../context/para/areas';
+import Button from '../../Button';
 
 function Header() {
   const [search, setSearch] = useState('');

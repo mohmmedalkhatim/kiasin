@@ -1,8 +1,7 @@
 import { Outlet } from 'react-router-dom';
 import Aside from './components/Aside';
-import Header from './components/Header';
 import './App.css';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useAuth } from './context/User';
 import Login from './screens/login';
 import { useAreas } from './context/para/areas';
@@ -21,7 +20,6 @@ function App() {
   }, []);
   const page = (
     <>
-      <Header />
       <Outlet />
       <Navbar />
       <Aside />
