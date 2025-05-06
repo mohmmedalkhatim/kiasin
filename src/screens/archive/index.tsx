@@ -1,4 +1,4 @@
 function Archive() {
-  return <div className=" bg-sky-600">Archive</div>;
+  return <main className="content bg-sky-600">Archive</main>;
 }
 export default Archive;
