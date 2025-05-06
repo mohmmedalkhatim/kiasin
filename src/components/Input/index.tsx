@@ -36,7 +36,7 @@ export default function Input({
 
       <div
         className={`group flex items-center border rounded-sm  transition-all
-          ${hasError ? 'border-red-500' : 'border-[#e2e2e240]'} 
+          ${hasError ? 'border-red-500' : 'border-[#e2e2e220]'} 
           focus-within:ring focus-within:ring-[#e2e2e250]`}
       >
         <input
