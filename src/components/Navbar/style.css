@@ -9,9 +9,12 @@
   }
   .link {
     text-decoration: none;
-    @apply px-6 py-3 hover:bg-[#e2e2e208] flex gap-4 hover:font-medium font-normal text-white font-sans tracking-normal capitalize antialiased;
+    @apply px-6 py-3  flex gap-4 hover:font-medium font-normal text-white font-sans tracking-normal capitalize antialiased;
   }
   .navbar {
     @apply top-0 pt-24 h-screen border-r-[#e2e2e220] w-[88px] bg-[#181818] border-r z-10 fixed;
+  }
+  .tip {
+    @apply fixed left-14 text-xs -translate-y-4 rounded-xs py-1 px-2 bg-[#e2e2e2] text-[#181818] align-middle;
   }
 }
