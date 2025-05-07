@@ -12,7 +12,7 @@ function Links() {
     { name: 'dashboard', link: '/', Icon: <IconDashboard /> },
     { name: 'areas', link: '/areas', Icon: <IconLayersIntersect /> },
     { name: 'notes', link: '/notes', Icon: <IconNotes /> },
-    { name: 'dataTree', link: '/', Icon: <IconDatabase /> },
+    { name: 'dataTypes', link: '/', Icon: <IconDatabase /> },
   ];
   return (
     <div className="links">
