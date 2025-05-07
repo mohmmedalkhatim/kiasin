@@ -46,13 +46,10 @@ pub async fn todo_control(
         },
         "updata" => match payload.item {
             Some(model) => {
-                if let Some(id) = payload.id {
-                    let _ = functions::updata_note(model, id, &db)
+                    let _ = functions::updata_note(model, &db)
                         .await
                         .expect("there is a problem with the database");
                     return Ok(());
-                }
-
                 Err("you have to add an id".to_string())
             }
             None => Err("you have add a project".to_string()),
