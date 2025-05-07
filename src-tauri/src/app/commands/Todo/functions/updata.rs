@@ -3,14 +3,12 @@ use sea_orm::{entity::*, DatabaseConnection, DbErr, EntityTrait, QueryFilter, Se
 
 use crate::app::commands::todo::Todo;
 
-pub async fn updata_note(note: Todo, id: i32, db: &DatabaseConnection) -> Result<(), DbErr> {
+pub async fn updata_note(todo: Todo, id: i32, db: &DatabaseConnection) -> Result<(), DbErr> {
     let time = chrono::Local::now();
     let new = ActiveModel {
-        title: Set(note.title),
-        area_id: Set(note.area_id),
-        update: Set(time.date_naive()),
-        user_assgin_id: Set(note.user_assgin_id),
-        creator_id: Set(note.creator_id),
+        id: Set(todo.id.unwrap()),
+        title: Set(todo.title),
+        area_id: Set(todo.area_id),
         checked: Set(false),
         created: Set(time.date_naive()),
         ..Default::default()
