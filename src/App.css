@@ -100,7 +100,7 @@
   }
   .app_header {
     border-bottom: 1px solid #2e2e2e90;
-    @apply flex bg-dark fixed items-center top-0 h-16 w-screen justify-between;
+    @apply flex bg-[#181818] fixed items-center top-0 h-16 w-screen justify-between;
   }
 
   .menu {
