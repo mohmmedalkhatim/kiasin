@@ -5,14 +5,8 @@ import './style.css';
 import { useNotes } from '../../../../context/para/notes';
 import { Note } from '../../../../types/notes';
 
-const RichTextEditor = ({
-  editor,
-  id,
-}: {
-  editor: Editor;
-  id: number;
-}) => {
-  const store = useNotes(state => state.active)
+const RichTextEditor = ({ editor, id }: { editor: Editor; id: number }) => {
+  const store = useNotes((state) => state.active);
   const update = useNotes((state) => state.updata_note);
   if (editor) {
     if (store.title) {
@@ -35,8 +29,11 @@ const RichTextEditor = ({
       const content = editor.getJSON();
       const text = editor.getText().split('\n');
       const title = text.shift();
-      const description = text.filter(s => s.trim()).map(s => s.replace(/\s+/g, ' ').trim()).join(' ');
-      console.log(description)
+      const description = text
+        .filter((s) => s.trim())
+        .map((s) => s.replace(/\s+/g, ' ').trim())
+        .join(' ');
+      console.log(description);
       if (content && title) {
         const note = { title, content, description, id } as Note;
         update(id, note);
