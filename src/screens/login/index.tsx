@@ -19,7 +19,7 @@ function Login() {
   const create = useAuth((state) => state.create);
 
   return (
-    <div className="login_page">
+    <main className="login_page">
       <div className="login_illustration">
         <img className="" />
       </div>
@@ -34,7 +34,7 @@ function Login() {
           <button type="submit">Login</button>
         </form>
       </div>
-    </div>
+    </main>
   );
 }
 export default Login;

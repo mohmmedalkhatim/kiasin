@@ -18,13 +18,14 @@ function Area() {
   if (done) {
     return (
       <>
-      <Header/>
+        <Header />
         <main className="content">
           {active && active.at(-1) && <Layout />}
           <div className="fixed top-16 right-6">
             <IconDotsVertical size={'1.5rem'} />
           </div>
-        </main></>
+        </main>
+      </>
     );
   }
 }

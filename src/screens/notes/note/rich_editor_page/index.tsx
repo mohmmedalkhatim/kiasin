@@ -10,7 +10,7 @@ import '../style.css';
 import HeaderBar from '../headersbar';
 import Editor from '../Editor';
 
-function NotePage({content}:{content:JSONContent}) {
+function NotePage({ content }: { content: JSONContent }) {
   const { id } = useParams();
   const editor = useEditor({
     extensions: [

@@ -11,7 +11,10 @@ interface Notes {
   create_blank: () => void;
   get_notes: (ids: number[]) => Note[];
   init: () => void;
-  note: (id: number, loading: React.Dispatch<React.SetStateAction<boolean>>) => Promise<void>;
+  note: (
+    id: number,
+    loading: React.Dispatch<React.SetStateAction<boolean>>
+  ) => Promise<void>;
   create: (id: number) => void;
 }
 
@@ -32,7 +35,7 @@ export const useNotes = create<Notes>((set) => ({
     channel.onmessage = (data) => {
       list.push(...data);
     };
-    set({ list })
+    set({ list });
     return list;
   },
   area_notes: (id) => {
@@ -43,7 +46,7 @@ export const useNotes = create<Notes>((set) => ({
       set({ list });
     };
     invoke('notes_control', { payload: { command: 'area_notes', id }, channel })
-      .then((e) => { })
+      .then((e) => {})
       .catch((e) => {
         console.log(e);
       });
@@ -79,11 +82,11 @@ export const useNotes = create<Notes>((set) => ({
       .catch((e) => console.log(e));
   },
   note: async (id: number, loading) => {
-    set({ loading: true })
+    set({ loading: true });
     const channel = new Channel<Note[]>();
     channel.onmessage = (note) => {
-      set(({ active: note[0], loading: false }));
-      loading(false)
+      set({ active: note[0], loading: false });
+      loading(false);
     };
     invoke('notes_control', { payload: { command: 'find', id }, channel });
   },
