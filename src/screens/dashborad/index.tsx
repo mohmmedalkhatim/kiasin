@@ -4,6 +4,7 @@ import { invoke } from '@tauri-apps/api/core';
 import { Area } from '../../types/area';
 import { useQuery } from '@tanstack/react-query';
 import { useAreas } from '../../context/para/areas';
+import Header from '../../components/Headers/Area_Header';
 
 function DashBoard({}: {}) {
   let setActive = useAreas((state) => state.update_active_area);
@@ -16,9 +17,12 @@ function DashBoard({}: {}) {
   if (data) {
     setActive(data);
     return (
-      <main className="content">
-        <Layout />
-      </main>
+      <>
+        <Header />
+        <main className="content">
+          <Layout />
+        </main>
+      </>
     );
   }
 }
