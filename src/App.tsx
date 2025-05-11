@@ -18,23 +18,20 @@ function App() {
     init();
     initNotes();
   }, []);
-  const page = (
-    <>
-      <Outlet />
-      <Navbar />
-      <Aside />
-    </>
-  );
+
   const login = <Login />;
 
-  const content = email === '' ? login : page;
 
   useEffect(() => {
     auth(() => {});
     areas();
   }, [auth, areas]);
 
-  return content;
+  return     <>
+      <Outlet />
+      <Navbar />
+      <Aside />
+    </>;
 }
 
 export default App;

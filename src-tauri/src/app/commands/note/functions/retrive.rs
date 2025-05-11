@@ -9,14 +9,14 @@ pub async fn find_one(id: i32, db: &DatabaseConnection) -> Result<Model, DbErr> 
     Ok(item.unwrap())
 }
 
-pub async fn find_for_area(
-    area_id: i32,
+pub async fn find_list(
+    ids: Vec<i32>,
     db: &DatabaseConnection,
 ) -> Result<Vec<note::Model>, DbErr> {
-    let list = Entity::find()
-        .filter(note::Column::AreaId.eq(area_id))
-        .all(db)
-        .await?;
+    let mut list = Vec::new();
+    for id in ids.iter()  {
+        list.push(Entity::find_by_id(*id).one(db).await.unwrap().unwrap());
+    }
     Ok(list)
 }
 pub async fn recent_for_area(

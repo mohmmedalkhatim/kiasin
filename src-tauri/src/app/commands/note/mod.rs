@@ -72,9 +72,9 @@ pub async fn notes_control(
             }
             None => Err("you have to fill all felid".to_string()),
         },
-        "area_notes" => match payload.id {
+        "area_notes" => match payload.ids {
             Some(id) => {
-                let list = functions::find_for_area(id, &db).await;
+                let list = functions::find_list(id, &db).await;
                 if let Ok(list) = list {
                     let _ = channel.send(list);
                 }
