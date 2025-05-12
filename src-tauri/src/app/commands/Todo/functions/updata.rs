@@ -1,7 +1,7 @@
 use migration::entities::todo::{self, ActiveModel, Entity};
 use sea_orm::{entity::*, DatabaseConnection, DbErr, EntityTrait, QueryFilter, Set};
 
-use crate::app::commands::todo::Todo;
+use crate::app::commands::todo::objects::Todo;
 
 pub async fn updata_note(todo: Todo, db: &DatabaseConnection) -> Result<(), DbErr> {
     let time = chrono::Local::now();

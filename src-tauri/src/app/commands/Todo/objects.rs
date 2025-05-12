@@ -13,4 +13,5 @@ pub struct Payload {
     pub command: String,
     pub item: Option<Todo>,
     pub id: Option<i32>,
+    pub ids:Option<Vec<i32>>
 }

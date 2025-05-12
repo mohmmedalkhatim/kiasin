@@ -1,20 +1,19 @@
 use std::sync::{Arc, Mutex};
 
 use crate::DbConnection;
-use objects::{Payload, Todo};
-use tauri::{command, AppHandle, Emitter, Manager, State};
+use migration::entities::todo::Model;
+use objects::Payload;
+use tauri::{command, ipc::Channel, AppHandle, Emitter, Manager, State};
 mod functions;
 mod objects;
 
 #[command]
 pub async fn todo_control(
     payload: Payload,
-    app: AppHandle,
+    server:Channel<Vec<Model>>,
     data: State<'_, Arc<Mutex<DbConnection>>>,
 ) -> Result<(), String> {
-    let server = app.app_handle();
     let db = data.lock().unwrap().db.clone().unwrap();
-
     match payload.command.as_str() {
         "create" => match payload.item {
             Some(model) => {
@@ -25,11 +24,11 @@ pub async fn todo_control(
             }
             None => Err("you have add a project".to_string()),
         },
-        "list" => {
-            let list = functions::find_many(&db).await;
+        "all" => {
+            let list = functions::find_all(&db).await;
             match list {
                 Ok(state)=>{
-                   let _  = server.emit("todos",state);
+                   let _  = server.send(state);
                 },
                 Err(e)=>{
                     return Err(e);
@@ -50,9 +49,41 @@ pub async fn todo_control(
                         .await
                         .expect("there is a problem with the database");
                     return Ok(());
-                Err("you have to add an id".to_string())
             }
-            None => Err("you have add a project".to_string()),
+            None => Err("you have add item to the payload".to_string()),
+        },
+        "find"=>match payload.ids{
+            Some(state)=>{
+                let list = functions::find_list(state, &db).await;
+                match list {
+                    Ok(res)=>{
+                        server.send(res);
+                        return Ok(());
+                    },
+                    Err(e)=>{
+                        return Err(e.to_string());
+                    }
+                }
+            },
+            None=>{
+                match payload.id {
+                    Some(id)=>{
+                        let res = functions::find_one(id, &db).await;
+                        match res {
+                            Ok(state)=>{
+                                server.send(vec![state]);
+                                return Ok(())
+                            } 
+                            Err(e)=>{
+                                return Err(e.to_string())
+                            }
+                        }
+                    },
+                    None=>{
+                        Err("you have to add an id".to_string())
+                    }
+                }
+            }
         },
         "area_todos"=>{
             Ok(())
