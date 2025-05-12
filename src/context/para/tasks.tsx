@@ -25,5 +25,13 @@ let useTasks = create<Tasks>((set) => ({
     };
     invoke('todos_control', { payload: { command: 'create', item: { title, id } } });
   },
-  get_list: (ids) => { },
+  get_list: (ids) => {
+    let list:Todo[] = [];
+    let channel = new Channel<Todo[]>();
+    channel.onmessage = (data) => {
+      data.map(item=>list.push(item))
+    };
+    invoke('todos_control', { payload: { command: 'find', ids } });
+    return list
+  },
 }));
