@@ -35,6 +35,7 @@ export const useAreas = create<Areas>((set) => ({
     set((state) => {
       let active = state.active?.at(-1);
       card = active?.ui_schema.item.find((item) => item.id == id) as Card;
+      console.log(id)
       return { ...state };
     });
     return card;
