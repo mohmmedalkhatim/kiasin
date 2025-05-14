@@ -23,6 +23,6 @@ pub struct Media {
 pub struct Payload {
     pub command: String,
     pub item: Option<Note>,
-    pub ids:Option<Vec<i32>>,
+    pub ids: Option<Vec<i32>>,
     pub id: Option<i32>,
 }
