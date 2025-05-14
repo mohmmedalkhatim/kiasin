@@ -8,10 +8,10 @@ interface Tasks {
   init: () => void;
   create: (title: string, id?: number) => void;
   get_list: (ids: string[]) => void;
-  get_one: (ids: string) => void;
+  get_one: (ids: string) => Todo;
 }
 
-let useTasks = create<Tasks>(set => ({
+export let useTasks = create<Tasks>(set => ({
   list: [],
   init: () => {
     let channel = new Channel<Todo[]>();
@@ -40,10 +40,11 @@ let useTasks = create<Tasks>(set => ({
   },
   get_one: id => {
     let channel = new Channel<Todo[]>();
-    let data: Todo;
+    let data: Todo = {} as Todo;
     channel.onmessage = item => {
       data = item[0];
     };
     invoke('todo_control', { payload: { command: 'find', id } });
+    return data;
   },
 }));
