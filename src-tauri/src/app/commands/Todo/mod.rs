@@ -10,7 +10,7 @@ mod objects;
 #[command]
 pub async fn todo_control(
     payload: Payload,
-    server:Channel<Vec<Model>>,
+    server: Channel<Vec<Model>>,
     data: State<'_, Arc<Mutex<DbConnection>>>,
 ) -> Result<(), String> {
     let db = data.lock().unwrap().db.clone().unwrap();
@@ -73,7 +73,7 @@ pub async fn todo_control(
                             Ok(state)=>{
                                 server.send(vec![state]);
                                 return Ok(())
-                            } 
+                            },
                             Err(e)=>{
                                 return Err(e.to_string())
                             }

@@ -12,8 +12,6 @@ pub async fn updata_note(todo: Todo, db: &DatabaseConnection) -> Result<(), DbEr
         checked: Set(todo.checked.unwrap()),
         ..Default::default()
     };
-    let _ = Entity::update(new)
-        .exec(db)
-        .await?;
+    let _ = Entity::update(new).exec(db).await?;
     Ok(())
 }
