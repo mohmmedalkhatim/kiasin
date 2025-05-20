@@ -34,7 +34,7 @@ async fn main() {
             app::areas_control,
             app::user_control,
             app::notes_control,
-            app::todo_control,
+            app::todos_control,
             app::media_control,
             app::dashboard,
             app::components_control
