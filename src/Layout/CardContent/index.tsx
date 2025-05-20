@@ -12,7 +12,7 @@ function CardContent({ id, T, props }: Card_content) {
     new Map([
       ['editor', <Editor_card content={props} title={'untitled'} />],
       ['Areaslist', <AreasList id={id} />],
-      ['tasks', <TaskList list={props.list} />],
+      ['tasks', <TaskList id={id} />],
       ['image', <Image url={props} />],
       ['calender', <Calendar />],
       ['default', <div>no content</div>],

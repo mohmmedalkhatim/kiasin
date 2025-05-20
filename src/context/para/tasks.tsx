@@ -5,46 +5,55 @@ import { data } from 'react-router-dom';
 
 interface Tasks {
   list: Todo[];
+  temp:Todo;
   init: () => void;
-  create: (title: string, id?: number) => void;
+  create: (title: string) => Todo;
   get_list: (ids: string[]) => void;
-  get_one: (ids: string) => Todo;
+  get_one: (id: string) => void;
 }
 
 export let useTasks = create<Tasks>(set => ({
   list: [],
+  temp:{} as Todo,
   init: () => {
-    let channel = new Channel<Todo[]>();
-    channel.onmessage = list => {
+    let server = new Channel<Todo[]>();
+    server.onmessage = list => {
       set({ list });
     };
-    invoke('todos_control', { payload: { command: 'find' } });
+    invoke('todos_control', { payload: { command: 'find' } ,server});
   },
-  create: (title, id) => {
-    let channel = new Channel<Todo[]>();
-    channel.onmessage = data => {
-      set(state => ({ list: [...state.list, data[0]] }));
+  create: (title) => {
+    let server = new Channel<Todo[]>();
+    let task = [] as Todo[];
+    server.onmessage = data => {
+      task.push(data[0])
+      set(state => {
+        return ({ list: [...state.list, data[0]],temp:data[0] })
+      });
     };
     invoke('todos_control', {
-      payload: { command: 'create', item: { title, id } },
+      payload: { command: 'create',item: { title } },
+      server,
     });
+    console.log(task)
+    return task[0];
   },
   get_list: ids => {
     let list: Todo[] = [];
-    let channel = new Channel<Todo[]>();
-    channel.onmessage = data => {
+    let server = new Channel<Todo[]>();
+    server.onmessage = data => {
       data.map(item => list.push(item));
     };
-    invoke('todos_control', { payload: { command: 'find', ids } });
+    invoke('todos_control', { payload: { command: 'find', ids } ,server});
     return list;
   },
   get_one: id => {
-    let channel = new Channel<Todo[]>();
-    let data: Todo = {} as Todo;
-    channel.onmessage = item => {
-      data = item[0];
+    let server = new Channel<Todo[]>();
+    let data: Todo[] = [] as Todo[];
+    server.onmessage = item => {
+      data.push(item[0])
+      set(state=>({temp:item[0]}))
     };
-    invoke('todo_control', { payload: { command: 'find', id } });
-    return data;
+    invoke('todos_control', { payload: { command: 'find', id:Number(id) } ,server });
   },
 }));
