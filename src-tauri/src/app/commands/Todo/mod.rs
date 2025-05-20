@@ -21,9 +21,9 @@ pub async fn todos_control(
                 let id = functions::create_note(model, &db)
                     .await
                     .expect("there is a problem with the database");
-                let task = functions::find_one(id, &db).await.expect("there a problem when creating an element");
-                println!("{:?}",task);
-                let _ = server.send(vec![task]);
+                let todo = functions::find_one(id, &db).await.expect("there a problem when creating an element");
+                println!("{:?}",todo);
+                let _ = server.send(vec![todo]);
 
                 Ok(())
             }
