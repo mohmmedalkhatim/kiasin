@@ -1,28 +1,33 @@
-use std::sync::{Arc, Mutex};
+use std::sync::Arc;
 
+use async_std::sync::Mutex;
 use crate::DbConnection;
 use migration::entities::todo::Model;
 use objects::Payload;
-use tauri::{command, ipc::Channel, AppHandle, Emitter, Manager, State};
+use tauri::{command, ipc::Channel, State};
 mod functions;
 mod objects;
 
 #[command]
-pub async fn todo_control(
+pub async fn todos_control(
     payload: Payload,
     server: Channel<Vec<Model>>,
     data: State<'_, Arc<Mutex<DbConnection>>>,
 ) -> Result<(), String> {
-    let db = data.lock().unwrap().db.clone().unwrap();
+    let db = data.lock().await.db.clone().unwrap();
     match payload.command.as_str() {
         "create" => match payload.item {
             Some(model) => {
-                let _ = functions::create_note(model, &db)
+                let id = functions::create_note(model, &db)
                     .await
                     .expect("there is a problem with the database");
+                let task = functions::find_one(id, &db).await.expect("there a problem when creating an element");
+                println!("{:?}",task);
+                let _ = server.send(vec![task]);
+
                 Ok(())
             }
-            None => Err("you have add a project".to_string()),
+            None => Err("you have add a todo".to_string()),
         },
         "all" => {
             let list = functions::find_all(&db).await;
@@ -57,7 +62,7 @@ pub async fn todo_control(
                 let list = functions::find_list(state, &db).await;
                 match list {
                     Ok(res)=>{
-                        server.send(res);
+                        let _ = server.send(res);
                         return Ok(());
                     },
                     Err(e)=>{
@@ -71,7 +76,7 @@ pub async fn todo_control(
                         let res = functions::find_one(id, &db).await;
                         match res {
                             Ok(state)=>{
-                                server.send(vec![state]);
+                                let _ =  server.send(vec![state]);
                                 return Ok(())
                             },
                             Err(e)=>{
