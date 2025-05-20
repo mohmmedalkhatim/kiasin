@@ -22,28 +22,29 @@ interface Areas {
   get_list_item: (id: number) => Area | undefined;
 }
 
-export const useAreas = create<Areas>((set) => ({
+export const useAreas = create<Areas>(set => ({
   list: [],
   active: [],
   sort: [],
   editable: false,
   toggleEditable: () => {
-    set((state) => ({ editable: !state.editable }));
+    set(state => ({ editable: !state.editable }));
   },
-  get_Card: (id) => {
+  get_Card: id => {
     let card = {} as Card;
-    set((state) => {
+    set(state => {
       let active = state.active?.at(-1);
-      card = active?.ui_schema.item.find((item) => item.id == id) as Card;
-      console.log(id)
+      if (active) {
+        card = active.ui_schema.item.find(item => item.id == id) as Card;
+      }
       return { ...state };
     });
     return card;
   },
   update_card: (id, data) => {
-    set((state) => {
+    set(state => {
       let active = state.active?.pop();
-      let newShema = active?.ui_schema.item.map((item) => {
+      let newShema = active?.ui_schema.item.map(item => {
         if (item.id == id) {
           item = data;
         }
@@ -51,28 +52,29 @@ export const useAreas = create<Areas>((set) => ({
       });
       if (active) {
         active.ui_schema = { item: newShema as Card[] };
+        let update = useAreas.getState().update;
+        update(active);
         state.active?.push(active);
       }
       return { ...state };
     });
   },
-  update_active_area: (area) => {
-    set((state) => {
-      let filtered = state.active?.filter((item) => item.id !== area.id);
+  update_active_area: area => {
+    set(state => {
+      let filtered = state.active?.filter(item => item.id !== area.id);
       return {
         active: [...(filtered as Area[]), area],
       };
     });
   },
   delete_card: (id, update_sort) => {
-    set((state) => {
+    set(state => {
       let conut = 0;
       let list = state.active as Area[];
       let active = state.active?.pop();
       let sort: string[] = [];
-      let ui = active?.ui_schema.item.filter((item) => item.id != id);
-      console.log(ui);
-      ui = ui?.map((item) => {
+      let ui = active?.ui_schema.item.filter(item => item.id != id);
+      ui = ui?.map(item => {
         item.id = conut++;
         sort.push(String(item.id));
         return item;
@@ -86,8 +88,8 @@ export const useAreas = create<Areas>((set) => ({
   },
   get_list_item: (id: number) => {
     let s = {} as Area;
-    set((state) => {
-      s = state.list.filter((item) => item.id == id)[0];
+    set(state => {
+      s = state.list.filter(item => item.id == id)[0];
       return { ...state }; // Ensure the function returns the updated state
     });
     return s;
@@ -95,9 +97,8 @@ export const useAreas = create<Areas>((set) => ({
   get_list: (ids: number[]) => {},
   init: () => {
     const channel = new Channel<Area[]>();
-    channel.onmessage = (data) => {
-      data.map((item) => {
-        console.log('area', item);
+    channel.onmessage = data => {
+      data.map(item => {
         const icon = URL.createObjectURL(
           new Blob([new Uint8Array(item.icon as number[])], {
             type: 'image/jpeg',
@@ -112,7 +113,7 @@ export const useAreas = create<Areas>((set) => ({
         item.cover = cover;
         const list = new Set<Area>(data);
         list.add(item);
-        set((state) => ({ list: [...list] }));
+        set(state => ({ list: [...list] }));
       });
     };
     return invoke('areas_control', { payload: { command: 'find' }, channel });
@@ -120,8 +121,8 @@ export const useAreas = create<Areas>((set) => ({
   create: (id: number) => {
     const channel = new Channel<Area[]>();
     invoke('areas_control', { payload: { command: 'create', id }, channel });
-    channel.onmessage = (data) => {
-      data.map((item) => {
+    channel.onmessage = data => {
+      data.map(item => {
         const icon = URL.createObjectURL(
           new Blob([new Uint8Array(item.icon as number[])], {
             type: 'image/jpeg',
@@ -134,14 +135,14 @@ export const useAreas = create<Areas>((set) => ({
           })
         );
         item.cover = cover;
-        set((state) => ({ list: [...state.list, item] }));
+        set(state => ({ list: [...state.list, item] }));
       });
     };
   },
   create_from_Template: (template: number) => {
     const channel = new Channel<Area[]>();
-    channel.onmessage = (data) => {
-      data.map((item) => {
+    channel.onmessage = data => {
+      data.map(item => {
         const icon = URL.createObjectURL(
           new Blob([new Uint8Array(item.icon as number[])], {
             type: 'image/jpeg',
@@ -154,7 +155,7 @@ export const useAreas = create<Areas>((set) => ({
           })
         );
         item.cover = cover;
-        set((state) => ({ list: [...state.list, item] }));
+        set(state => ({ list: [...state.list, item] }));
       });
       invoke('areas_control', {
         payload: { command: 'create', template },
@@ -165,9 +166,9 @@ export const useAreas = create<Areas>((set) => ({
   getArea: (id, set_Done) => {
     const channel = new Channel<Area[]>();
     let area: Area = {} as Area;
-    channel.onmessage = (data) => {
-      set((state) => {
-        const s = state.active?.filter((item) => item.id !== id) as Area[];
+    channel.onmessage = data => {
+      set(state => {
+        const s = state.active?.filter(item => item.id !== id) as Area[];
         area = data[0];
         return { active: [...s, area] };
       });
@@ -179,8 +180,8 @@ export const useAreas = create<Areas>((set) => ({
 
   update: (area: Area) => {
     const channel = new Channel<Area[]>();
-    channel.onmessage = (data) => {
-      data.map((item) => {
+    channel.onmessage = data => {
+      data.map(item => {
         const icon = URL.createObjectURL(
           new Blob([new Uint8Array(item.icon as number[])], {
             type: 'image/jpeg',
@@ -193,8 +194,8 @@ export const useAreas = create<Areas>((set) => ({
           })
         );
         item.cover = cover;
-        set((state) => ({
-          list: [...state.list.filter((item) => item.id != area.id), item],
+        set(state => ({
+          list: [...state.list.filter(item => item.id != area.id), item],
         }));
       });
     };
