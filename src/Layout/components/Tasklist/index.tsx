@@ -12,28 +12,25 @@ import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import { useEffect, useState } from 'react';
 import Task from './Task';
 import Input from '../../../components/Input';
-import { IconSend, IconSend2 } from '@tabler/icons-react';
+import { IconSend2 } from '@tabler/icons-react';
 import { useTasks } from '../../../context/para/tasks';
-import Button from '../../../components/Button';
 import { useAreas } from '../../../context/para/areas';
-import { Todo } from '../../../types/todos';
 
-function TaskList({ id }: { id:number }) {
-  const [schema, setSchema] = useState([] as Todo[]);
+function TaskList ({ id }: { id: number }) {
+  const [schema, setSchema] = useState<number[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
-  const [title, setTitle] = useState<string >("");
-  const create_task = useTasks(state=>state.create)
-  const set_Card = useAreas(state=>state.update_card);
-  const get_card = useAreas(state=>state.get_Card);
-
-  useEffect(()=>{
-    console.log(get_card(id))
-  },[])
+  const [title, setTitle] = useState<string>('');
+  const create_task = useTasks(state => state.create);
+  const get_card = useAreas(state => state.get_Card);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor)
   );
+  useEffect(() => {
+    let card = get_card(id);
+    setSchema(card.props.list);
+  }, []);
 
   const handleDragStart = (event: any) => {
     setActiveId(event.active.id);
@@ -56,17 +53,33 @@ function TaskList({ id }: { id:number }) {
         onDragEnd={handleDragEnd}
       >
         <SortableContext items={schema}>
-          <div className="list">
-            <form action={()=>create_task(title)}>
-                <Input placeholder='create a task' onChange={setTitle}  icon={<button type='submit'><IconSend2  size={"1rem"}/></button>}/>
-            </form>
-            {schema?.map((item) => (
-              <Task
-                id={item.id}
-                key={item.id}
-                classn={activeId === String(item) ? 'dragging' : ''}
+          <div className='list'>
+            <form
+              action={() => {
+                create_task(title, id);
+              }}
+            >
+              <Input
+                placeholder='create a task'
+                onChange={setTitle}
+                icon={
+                  <button type='submit'>
+                    <IconSend2 size={'1rem'} />
+                  </button>
+                }
               />
-            ))}
+            </form>
+            {schema?.map(item =>
+              item !== null ? (
+                <Task
+                  id={item}
+                  key={item}
+                  classname={activeId === String(item) ? 'dragging' : ''}
+                />
+              ) : (
+                ''
+              )
+            )}
           </div>
         </SortableContext>
         <DragOverlay></DragOverlay>
