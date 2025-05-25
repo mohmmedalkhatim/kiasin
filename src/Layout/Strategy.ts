@@ -26,7 +26,7 @@ export const SwappingStrategy: SortingStrategy = ({
   return {
     x: newRect.left - oldRect.left,
     y: newRect.top - oldRect.top,
-    scaleX: 0,
-    scaleY: 0,
+    scaleX: 1,
+    scaleY: 1,
   };
 };
