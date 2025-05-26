@@ -35,7 +35,7 @@ function Cards_menu({
         min_cols: 6,
         min_rows: 3,
       },
-      content: { list: [1,2] },
+      content: { list: [1, 2] },
       icon: <IconGrid4x4 size={'1.7rem'} />,
     },
     {

@@ -1,4 +1,4 @@
-use migration::entities::note::{self, Column, Entity, Model};
+use migration::entities::note::{self, Entity, Model};
 use sea_orm::{entity::*, DatabaseConnection, DbErr, EntityTrait, QueryFilter, QueryOrder};
 
 pub async fn find_many(db: &DatabaseConnection) -> Result<Vec<Model>, DbErr> {

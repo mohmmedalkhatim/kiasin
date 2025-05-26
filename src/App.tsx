@@ -20,11 +20,13 @@ function App() {
     areas();
   }, [areas]);
 
-  return <>
+  return (
+    <>
       <Outlet />
       <Navbar />
       <Aside />
-    </>;
+    </>
+  );
 }
 
 export default App;

@@ -2,7 +2,7 @@
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use async_std::sync::Mutex;
 use migration::{
-    entities::categorie::{self, ActiveModel},
+    entities::categorie::{self},
     MigratorTrait,
 };
 use sea_orm::DatabaseConnection;

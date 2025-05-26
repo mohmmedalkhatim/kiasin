@@ -5,8 +5,8 @@ import { useTasks } from '../../../../context/para/tasks';
 import { Todo } from '../../../../types/todos';
 import { useEffect, useState } from 'react';
 
-function Task ({ id, classname }: { id: number; classname: string }) {
-  const one = useTasks(state => state.get_one);
+function Task({ id, classname }: { id: number; classname: string }) {
+  const one = useTasks((state) => state.get_one);
   const [task, setTask] = useState({} as Todo);
   const {
     attributes,
@@ -21,8 +21,8 @@ function Task ({ id, classname }: { id: number; classname: string }) {
     transition,
   };
   useEffect(() => {
-    one(String(id),setTask).then(()=>{
-      console.log(task)
+    one(String(id), setTask).then(() => {
+      console.log(task);
     });
   }, []);
 
@@ -34,7 +34,7 @@ function Task ({ id, classname }: { id: number; classname: string }) {
       {...attributes}
       {...listeners}
     >
-      <div className='text-sm'>{task.title}</div>
+      <div className="text-sm">{task.title}</div>
       <Checkbox state={task.checked} setState={() => {}} title={task.title} />
     </div>
   );

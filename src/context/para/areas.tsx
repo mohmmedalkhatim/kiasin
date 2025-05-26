@@ -31,32 +31,48 @@ export const useAreas = create<Areas>(set => ({
     set(state => ({ editable: !state.editable }));
   },
   get_Card: id => {
-    let card = {} as Card;
-    set(state => {
-      let active = state.active?.at(-1);
-      if (active) {
-        card = active.ui_schema.item.find(item => item.id == id) as Card;
-      }
-      return { ...state };
-    });
-    return card;
+    const state: Areas = useAreas.getState();
+    const active = state.active?.at(-1);
+    const card = active?.ui_schema.item.find(item => item.id === id);
+    if (!card) {
+      throw new Error(`Card with id ${id} not found`);
+    }
+    return card as Card;
   },
-  update_card: (id, data) => {
+  update_card: (id: number, data: Card) => {
     set(state => {
-      let active = state.active?.pop();
-      let newShema = active?.ui_schema.item.map(item => {
-        if (item.id == id) {
-          item = data;
-        }
-        return item;
-      });
-      if (active) {
-        active.ui_schema = { item: newShema as Card[] };
-        let update = useAreas.getState().update;
-        update(active);
-        state.active?.push(active);
-      }
-      return { ...state };
+      // 1. Exit early if no active areas
+      if (!state.active || state.active.length === 0) return state;
+
+      // 2. Immutably get last active area (without mutation)
+      const lastActiveIndex = state.active.length - 1;
+      const lastActive = state.active[lastActiveIndex];
+
+      // 3. Immutably update the card in ui_schema.item
+      const updatedItems = lastActive.ui_schema.item.map(item =>
+        item.id === id ? { ...item, ...data } : item
+      );
+
+      // 4. Create new active area with updated schema
+      const updatedActive = {
+        ...lastActive,
+        ui_schema: {
+          ...lastActive.ui_schema,
+          item: updatedItems,
+        },
+      };
+
+      // 5. Replace the last item immutably
+      const updatedActiveArray = [
+        ...state.active.slice(0, lastActiveIndex),
+        updatedActive,
+      ];
+
+      // 6. Return new state
+      return {
+        ...state,
+        active: updatedActiveArray,
+      };
     });
   },
   update_active_area: area => {

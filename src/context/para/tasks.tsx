@@ -6,7 +6,7 @@ import { useAreas } from './areas';
 interface Tasks {
   list: Todo[];
   init: () => void;
-  create: (title: string,card_id:number,) => void;
+  create: (title: string, card_id: number) => Promise<void>;
   get_list: (ids: string[], setItem: any) => void;
   get_one: (id: string, setItem: any) => Promise<void>;
 }
@@ -20,17 +20,17 @@ export let useTasks = create<Tasks>(set => ({
     };
     invoke('todos_control', { payload: { command: 'find' }, server });
   },
-  create: (title, card_id) => {
+  create: async (title, card_id) => {
     let server = new Channel<Todo[]>();
-    let card = useAreas.getState().get_Card(card_id);
     server.onmessage = data => {
+      let card = useAreas.getState().get_Card(card_id);
       card.props.list.push(data[0].id);
-      useAreas.getState().update_card(card_id,card);
+      useAreas.getState().update_card(card_id, card);
       set(state => {
         return { list: [...state.list, data[0]] };
       });
     };
-    invoke('todos_control', {
+    await invoke('todos_control', {
       payload: { command: 'create', item: { title } },
       server,
     });

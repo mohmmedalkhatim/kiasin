@@ -18,7 +18,11 @@ function NoteList({ id }: { id: number }) {
       </div>
       {notes.map((item, i) => (
         <Note_card
-          key={i} title={item.title?item.title:""} content={''} id={''}        />
+          key={i}
+          title={item.title ? item.title : ''}
+          content={''}
+          id={''}
+        />
       ))}
     </div>
   );

@@ -22,6 +22,11 @@ function TaskList ({ id }: { id: number }) {
   const [title, setTitle] = useState<string>('');
   const create_task = useTasks(state => state.create);
   const get_card = useAreas(state => state.get_Card);
+  const [requst, setReq] = useState(false);
+  const [_, forceUpdate] = useState(0);
+  useEffect(() => {
+    forceUpdate(n => n + 1);
+  }, [schema]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -31,6 +36,13 @@ function TaskList ({ id }: { id: number }) {
     let card = get_card(id);
     setSchema(card.props.list);
   }, []);
+  useEffect(() => {
+    if (title != '') {
+      create_task(title, id);
+    }
+    setTitle('');
+    [];
+  }, [requst]);
 
   const handleDragStart = (event: any) => {
     setActiveId(event.active.id);
@@ -55,13 +67,18 @@ function TaskList ({ id }: { id: number }) {
         <SortableContext items={schema}>
           <div className='list'>
             <form
-              action={() => {
-                create_task(title, id);
+              onSubmit={async e => {
+                e.preventDefault();
+                if (title.trim() !== '') {
+                  await create_task(title, id); // <-- Wait for task creation
+                  setTitle(''); // <-- Clear input ONLY after success
+                }
               }}
             >
               <Input
                 placeholder='create a task'
                 onChange={setTitle}
+                value={title}
                 icon={
                   <button type='submit'>
                     <IconSend2 size={'1rem'} />

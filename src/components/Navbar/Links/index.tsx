@@ -17,7 +17,7 @@ function Links() {
   return (
     <div className="links">
       {arr.map((item, i) => (
-        <Page id={i} {...item} />
+        <Page id={i} key={i} {...item} />
       ))}
     </div>
   );

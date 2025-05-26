@@ -1,4 +1,3 @@
-use migration::entities::{area, note, todo};
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 

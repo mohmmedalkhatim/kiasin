@@ -1,4 +1,4 @@
-use objects::{Payload, Tag};
+use objects::Payload;
 
 mod functions;
 
