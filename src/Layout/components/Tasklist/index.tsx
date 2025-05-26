@@ -22,11 +22,11 @@ function TaskList ({ id }: { id: number }) {
   const [title, setTitle] = useState<string>('');
   const create_task = useTasks(state => state.create);
   const get_card = useAreas(state => state.get_Card);
-  const [requst, setReq] = useState(false);
+  const act = useAreas(state=>state.active)
   const [_, forceUpdate] = useState(0);
   useEffect(() => {
     forceUpdate(n => n + 1);
-  }, [schema]);
+  }, [act]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -36,13 +36,6 @@ function TaskList ({ id }: { id: number }) {
     let card = get_card(id);
     setSchema(card.props.list);
   }, []);
-  useEffect(() => {
-    if (title != '') {
-      create_task(title, id);
-    }
-    setTitle('');
-    [];
-  }, [requst]);
 
   const handleDragStart = (event: any) => {
     setActiveId(event.active.id);
@@ -69,9 +62,9 @@ function TaskList ({ id }: { id: number }) {
             <form
               onSubmit={async e => {
                 e.preventDefault();
-                if (title.trim() !== '') {
-                  await create_task(title, id); // <-- Wait for task creation
-                  setTitle(''); // <-- Clear input ONLY after success
+                if (title != '') {
+                  await create_task(title, id);
+                  setTitle('')
                 }
               }}
             >
