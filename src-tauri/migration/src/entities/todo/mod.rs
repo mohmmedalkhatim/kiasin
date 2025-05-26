@@ -8,6 +8,7 @@ pub struct Model {
     pub title:String,
     pub checked: bool,
     pub created:Date,
+    pub update:Option<Date>,
     pub area_id:Option<i32>
 }
 impl ActiveModelBehavior for ActiveModel {}
