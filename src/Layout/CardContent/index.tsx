@@ -10,7 +10,7 @@ type Card_content = { id: number; T: string; props?: any };
 function CardContent({ id, T, props }: Card_content) {
   const [map, setMap] = useState(
     new Map([
-      ['editor', <Editor_card content={props} title={'untitled'} />],
+      ['editor', <Editor_card content={props} id={id} title={'untitled'} />],
       ['Areaslist', <AreasList id={id} />],
       ['tasks', <TaskList id={id} />],
       ['image', <Image url={props} />],

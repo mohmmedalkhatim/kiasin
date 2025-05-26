@@ -19,7 +19,6 @@ interface Areas {
     id: number,
     setArea: React.Dispatch<React.SetStateAction<boolean>>
   ) => Area;
-  get_list_item: (id: number) => Area | undefined;
 }
 
 export const useAreas = create<Areas>(set => ({
@@ -41,19 +40,15 @@ export const useAreas = create<Areas>(set => ({
   },
   update_card: (id: number, data: Card) => {
     set(state => {
-      // 1. Exit early if no active areas
       if (!state.active || state.active.length === 0) return state;
-
-      // 2. Immutably get last active area (without mutation)
+      console.log(data);
       const lastActiveIndex = state.active.length - 1;
       const lastActive = state.active[lastActiveIndex];
 
-      // 3. Immutably update the card in ui_schema.item
       const updatedItems = lastActive.ui_schema.item.map(item =>
         item.id === id ? { ...item, ...data } : item
       );
 
-      // 4. Create new active area with updated schema
       const updatedActive = {
         ...lastActive,
         ui_schema: {
@@ -62,13 +57,16 @@ export const useAreas = create<Areas>(set => ({
         },
       };
 
-      // 5. Replace the last item immutably
       const updatedActiveArray = [
         ...state.active.slice(0, lastActiveIndex),
         updatedActive,
       ];
+      if (updatedActive) {
+        let update = useAreas.getState().update;
+        update(updatedActive);
+        state.active?.push(updatedActive);
+      }
 
-      // 6. Return new state
       return {
         ...state,
         active: updatedActiveArray,
@@ -110,7 +108,6 @@ export const useAreas = create<Areas>(set => ({
     });
     return s;
   },
-  get_list: (ids: number[]) => {},
   init: () => {
     const channel = new Channel<Area[]>();
     channel.onmessage = data => {
@@ -129,7 +126,8 @@ export const useAreas = create<Areas>(set => ({
         item.cover = cover;
         const list = new Set<Area>(data);
         list.add(item);
-        set(state => ({ list: [...list] }));
+
+        set(_state => ({ list: [...list] }));
       });
     };
     return invoke('areas_control', { payload: { command: 'find' }, channel });
