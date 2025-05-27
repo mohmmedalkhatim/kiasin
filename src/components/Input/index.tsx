@@ -1,4 +1,4 @@
-import { ReactElement, useState } from 'react';
+import { InputHTMLAttributes, ReactElement, useState } from 'react';
 
 type InputProps = {
   label?: string;
@@ -10,7 +10,7 @@ type InputProps = {
   required?: boolean;
   className?: string;
   icon?: ReactElement;
-};
+}& InputHTMLAttributes<HTMLButtonElement>;
 
 export default function Input({
   label,

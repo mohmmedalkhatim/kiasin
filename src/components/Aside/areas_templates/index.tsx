@@ -14,7 +14,7 @@ function Areas_templates() {
         ))}
 
         <div
-          className="m_border flex flex-col justify-between  rounded-sm area_templates_element"
+          className="m_border area_templates_element"
           onClick={() => create(1)}
         >
           <div></div>
