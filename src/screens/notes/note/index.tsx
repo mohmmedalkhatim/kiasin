@@ -1,4 +1,3 @@
-import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
 import { useNotes } from '../../../context/para/notes';
 import { useEffect, useState } from 'react';
@@ -8,13 +7,12 @@ function NotePageProvider() {
   const get = useNotes((state) => state.note);
   const [loading, setloading] = useState(true);
   const { id } = useParams();
-  const content = useNotes((state) => state.active).content;
+  const content = useNotes((state) => state.active);
   useEffect(() => {
     get(Number(id), setloading);
-    console.log(JSON.stringify(content));
   }, []);
-  if (content && !loading) {
-    return <NotePage content={content} />;
+  if (content.content && !loading) {
+    return <NotePage content={content.content} title={content.title} />;
   }
 }
 export default NotePageProvider;
