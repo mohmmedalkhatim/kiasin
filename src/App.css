@@ -1,5 +1,8 @@
 @import 'tailwindcss';
 
+html{
+  color-scheme: dark;
+}
 @font-face {
   font-family: 'OpenSans';
   src: url('/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf')

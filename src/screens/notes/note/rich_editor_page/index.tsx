@@ -7,8 +7,9 @@ import Highlight from '@tiptap/extension-highlight';
 import textStyle from '@tiptap/extension-text-style';
 import StarterKit from '@tiptap/starter-kit';
 import '../style.css';
-import HeaderBar from '../headersbar';
+import HeadingBar from '../headingbar';
 import Editor from '../Editor';
+import NoteHeader from '../NoteHeader/indxe';
 
 function NotePage({ content }: { content: JSONContent }) {
   const { id } = useParams();
@@ -32,10 +33,11 @@ function NotePage({ content }: { content: JSONContent }) {
   });
   if (editor) {
     return (
-      <div className="content">
-        <HeaderBar editor={editor} />
+      <main className='pl-22 listener'>
+        <NoteHeader editor={editor} id={id?0:1}/>
+        <HeadingBar editor={editor} />
         <Editor editor={editor} id={Number(id)} />
-      </div>
+      </main>
     );
   }
 }

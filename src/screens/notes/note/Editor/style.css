@@ -45,8 +45,8 @@
 .editor_container {
   overflow: none;
   display: flex;
-  height: 100%;
-  padding-top: 1rem;
+  height: 100vh;
+  padding: 2rem;
   width: calc(100% - 20rem);
 }
 .toolbar {

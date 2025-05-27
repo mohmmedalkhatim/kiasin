@@ -93,9 +93,9 @@ const Layout = () => {
       const sorted = sort?.map((id) => {
         return newschema?.find((item) => item.id == Number(id)) as Cardtype;
       }) as Cardtype[];
-      let uparea = { ...area, ui_schema: { item: sorted } } as Area;
-      update_active_area(uparea);
-      update(uparea);
+      let upArea = { ...area, ui_schema: { item: sorted } } as Area;
+      update_active_area(upArea);
+      update(upArea);
     }
   };
 
@@ -115,7 +115,6 @@ const Layout = () => {
           },
         ],
       };
-      console.log(newSchema.item);
       let uparea = { ...area, ui_schema: newSchema } as Area;
       update_active_area(uparea);
       update(uparea);
