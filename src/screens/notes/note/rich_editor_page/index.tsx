@@ -11,7 +11,13 @@ import HeadingBar from '../headingbar';
 import Editor from '../Editor';
 import NoteHeader from '../NoteHeader/indxe';
 
-function NotePage({ content }: { content: JSONContent }) {
+function NotePage ({
+  content,
+  title,
+}: {
+  content: JSONContent;
+  title: string | undefined;
+}) {
   const { id } = useParams();
   const editor = useEditor({
     extensions: [
@@ -34,7 +40,7 @@ function NotePage({ content }: { content: JSONContent }) {
   if (editor) {
     return (
       <main className='pl-22 listener'>
-        <NoteHeader editor={editor} id={id?0:1}/>
+        <NoteHeader editor={editor} Title={title} id={Number(id)} />
         <HeadingBar editor={editor} />
         <Editor editor={editor} id={Number(id)} />
       </main>

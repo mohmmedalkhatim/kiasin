@@ -1,33 +1,62 @@
 import { IconWheat } from '@tabler/icons-react';
 import Icon from '../../../../components/Icon';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Editor } from '@tiptap/react';
 import { useNotes } from '../../../../context/para/notes';
 import { Note } from '../../../../types/notes';
+import Input from '../Input';
 
-function NoteHeader ({ editor, id }: { editor: Editor; id: number }) {
+function NoteHeader ({
+  editor,
+  id,
+  Title,
+}: {
+  editor: Editor;
+  id: number;
+  Title: string | undefined;
+}) {
   const update = useNotes(state => state.updata_note);
+  const [title, setTitle] = useState(Title);
   let ref = useRef<HTMLDivElement>(null);
   editor.once('update', e => {
     const content = editor.getJSON();
-    const text = editor.getText().split('\n');
-    const title = text.shift();
-    const description = text
-      .filter(s => s.trim())
-      .map(s => s.replace(/\s+/g, ' ').trim())
-      .join(' ');
-    console.log(description);
+    if (content && title) {
+      const note = { title, content, description: '', id } as Note;
+      update(id, note);
+    }
+  });
+  useEffect(()=>{
+    const content = editor.getJSON();
+    const description = editor.getText();
     if (content && title) {
       const note = { title, content, description, id } as Note;
       update(id, note);
     }
-  });
-  useEffect(() => {}, []);
+  },[title])
+
+  useEffect(() => {
+    document.onscroll = e => {
+      let element = ref.current;
+      if (element) {
+        if (scrollY !== 0) {
+          element.style.height = '5rem';
+        } else {
+          element.style.height = '12rem';
+        }
+      }
+    };
+  }, []);
   return (
-    <header className=' w-full m_borde h-[12rem]' ref={ref}>
-      <div className='bg-[url(/girl.jpg)] bg-cover h-full '></div>
-      <div>
-        <Icon svg={<IconWheat />} />
+    <header className=' w-full m_border'>
+      <div
+        className='bg-[url(/girl.jpg)] h-[12rem] bg-cover 1 transition-all  duration-300'
+        ref={ref}
+      ></div>
+      <div className='flex items-center pl-20 gap-4 py-4'>
+        <Icon svg={<IconWheat size={'3rem'} />} />
+        <form action=''>
+          <Input className='' value={title} onChange={setTitle} />
+        </form>
       </div>
     </header>
   );

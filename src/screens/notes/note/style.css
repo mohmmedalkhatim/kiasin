@@ -2,7 +2,7 @@
 
 @layer components {
   .HeadingBar {
-    @apply not-lg:hidden fixed top-20 p-4 right-0 w-72 h-full;
+    @apply not-lg:hidden fixed top-8 p-4 right-8 w-xs h-[45rem] z-50 bg-[#181818];
   }
   .NoteHeader {
     @apply bg-white;
