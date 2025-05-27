@@ -41,7 +41,7 @@ pub async fn create_emty(db: &DatabaseConnection) -> Result<Model, DbErr> {
     let active = note::ActiveModel {
         title: Set(Some("untitled".to_string())),
         content: Set(Some(
-            json!({"content":[{"attrs":{"level":1,"textAlign":"left"},"content":[{"text":"untitle","type":"text"}],"type":"heading"}],"type":"doc"}),
+            json!({"content":""}),
         )),
         in_archive: Set(false),
         create_date: Set(Some(data.date_naive())),
