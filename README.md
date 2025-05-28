@@ -1,10 +1,12 @@
 
-# kiasin_project
+<h1 style="padding-bottom:2rem;padding-top:3rem"
+>kiasin Project</h1>
 
-<p align="center">
-   <img src="https://mohamed-alkhatim.web.app/icons/favicon.svg" width="160"/>
+<p align="center" style="padding-top:1rem;">
+   <img src="./public/icon.png" width="100"/>
 </p>
-    a tool for build personal information mangament systems
-
+<p style="padding:2rem">
+    a tool for build personal information management systems 
+</p>
   
 
