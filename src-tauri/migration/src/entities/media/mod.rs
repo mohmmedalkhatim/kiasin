@@ -5,11 +5,12 @@ use crate::entities::*;
 pub struct Model {
     #[sea_orm(primary_key)]
     pub id: i32,
-    pub buffer:Vec<u8>,
+    pub file:Vec<u8>,
+    pub media_type:String,
+    pub url:Option<String>,
     pub note_id:Option<i32>,
     pub project_id:Option<i32>,
     pub area_id:Option<i32>,
-    pub media_type:String,
 }
 
 impl Related<super::note::Entity> for ActiveModel {
