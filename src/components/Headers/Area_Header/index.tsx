@@ -7,16 +7,17 @@ import Button from '../../Button';
 function Header() {
   const [search, setSearch] = useState('');
   const toggle = useAreas((state) => state.toggleEditable);
+  const active = useAreas(state=>state.active)
   return (
     <header className="app_header">
       <div></div>
       <Input
         type={'text'}
         value={search}
-        onChange={setSearch}
+        onChange={()=>setSearch}
         icon={<IconSearch size={'1rem'} />}
       />
-      <div></div>
+      <div>{active?.at(-1)?.title}</div>
       <Button
         size="sm"
         className="bg-[#181818]"
