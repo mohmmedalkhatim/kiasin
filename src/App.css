@@ -1,12 +1,12 @@
 @import 'tailwindcss';
 
-html{
+html {
   color-scheme: dark;
 }
+
 @font-face {
   font-family: 'OpenSans';
-  src: url('/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf')
-    format('truetype-variations');
+  src: url('/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf') format('truetype-variations');
   font-weight: 100 900;
   font-stretch: 75% 125%;
   font-style: normal;
@@ -14,8 +14,7 @@ html{
 
 @font-face {
   font-family: 'OpenSans Italic';
-  src: url('/fonts/Open_Sans/OpenSans-Italic-VariableFont_wdth,wght.ttf')
-    format('truetype-variations');
+  src: url('/fonts/Open_Sans/OpenSans-Italic-VariableFont_wdth,wght.ttf') format('truetype-variations');
   font-weight: 100 900;
   font-stretch: 75% 125%;
   font-style: italic;
@@ -40,10 +39,12 @@ html{
 }
 
 @layer components {
+
   .login_page {
     grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
     @apply bg-dark my-16 grid mx-32;
   }
+
   .login_illustration {
     grid-column: 1 / span 2;
   }
@@ -64,6 +65,7 @@ html{
     border: 1px solid #e2e2e220;
 
     gap: 0.5rem;
+
     span {
       display: inline;
       color: #aaa;
@@ -73,12 +75,15 @@ html{
       transform: translateY(-1px);
     }
   }
+
   .login_form_container {
     display: flex;
   }
+
   .login_form {
     @apply flex flex-col gap-4 p-12;
   }
+
   .login_form button {
     @apply py-2 rounded-md;
   }
@@ -86,21 +91,25 @@ html{
   input {
     @apply py-2 px-3 rounded-md;
     border: 1px solid #e2e2e235;
+
     &:focus {
       outline: none;
     }
   }
+
   .notes_page {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
     grid-auto-rows: 14rem;
     gap: 1rem;
   }
-  .login_illustration img {
-  }
+
+  .login_illustration img {}
+
   body {
     @apply font-OpenSans;
   }
+
   .app_header {
     border-bottom: 1px solid #2e2e2e90;
     @apply flex bg-[#181818] fixed items-center z-50 top-0 h-16 w-screen justify-between;
@@ -118,18 +127,21 @@ html{
     z-index: -1;
     @apply w-12 md:w-[88px];
   }
+
   a {
     text-decoration: none;
     color: white !important;
   }
 
   .content {
-    @apply rounded-t-md p-4 md:ml-[100px] md:mr-[100px] bg-dark mx-[60px] mt-16   pb-0 relative;
+    @apply rounded-t-md p-4 md:ml-[100px] md:mr-[100px] bg-dark mx-[60px] mt-16 pb-0 relative;
   }
+
   .cover {
     @apply fixed top-0 w-full;
   }
 }
+
 .logo.vite:hover {
   filter: drop-shadow(0 0 2em #747bff);
 }
@@ -137,12 +149,15 @@ html{
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafb);
 }
+
 .m_border {
   border: 1px solid #e2e2e215;
 }
+
 .dragging {
   transition: none !important;
 }
+
 [role='drag-overlay'] {
   z-index: 1000;
 }
