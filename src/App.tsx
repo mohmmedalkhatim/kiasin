@@ -6,6 +6,7 @@ import { useAuth } from './context/User';
 import { useAreas } from './context/para/areas';
 import Navbar from './components/Navbar';
 import { useNotes } from './context/para/notes';
+import { useMeasure } from 'react-use';
 function App() {
   const areas = useAreas((state) => state.init);
   const init = useAreas((state) => state.init);
@@ -19,6 +20,7 @@ function App() {
   useEffect(() => {
     areas();
   }, [areas]);
+
 
   return (
     <>
