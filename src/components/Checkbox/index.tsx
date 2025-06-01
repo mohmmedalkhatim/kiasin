@@ -3,11 +3,9 @@ import { IconCheck } from '@tabler/icons-react';
 
 function Checkbox({
   state,
-  title,
   setState,
 }: {
   state: boolean;
-  title: string;
   setState: any;
 }) {
   return (
@@ -16,7 +14,7 @@ function Checkbox({
       onClick={() => setState(!state)}
     >
       <div
-        className={`bg-blue-500 ${state && 'opacity-0'}   rounded transition-all duration-100`}
+        className={`bg-blue-500 ${!state && 'opacity-0'}   rounded transition-all duration-100`}
       >
         <IconCheck size={'1rem'} color="white"></IconCheck>
       </div>
