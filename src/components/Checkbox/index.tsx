@@ -10,7 +10,7 @@ function Checkbox({
 }) {
   return (
     <div
-      className="m_border border rounded w-5 h-5 flex items-center justify-center"
+      className="m_border border rounded w-5 h-5 flex items-center justify-center cursor-pointer"
       onClick={() => setState(!state)}
     >
       <div
