@@ -1,4 +1,4 @@
-import { InputHTMLAttributes, ReactElement, useState } from 'react';
+import {  ReactElement, useState } from 'react';
 
 type InputProps = {
   label?: string;
@@ -10,7 +10,7 @@ type InputProps = {
   required?: boolean;
   className?: string;
   icon?: ReactElement;
-}& InputHTMLAttributes<HTMLButtonElement>;
+};
 
 export default function Input({
   label,
@@ -45,7 +45,7 @@ export default function Input({
           placeholder={placeholder}
           onChange={(e) => onChange?.(e.target.value)}
           onBlur={() => setTouched(true)}
-          className="grow outline-none border-none text-xs rounded-l-sm text-sm bg-transparent text-white "
+          className="grow outline-none border-none text-xs rounded-l-sm bg-transparent text-white "
         />
         <div
           className={`rounded-r-sm pb-1 pt-[4px] pr-2 text-white transition-colors
