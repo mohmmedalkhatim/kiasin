@@ -4,7 +4,26 @@
   .size_control {
     @apply absolute left-0 -top-10;
   }
+
   .elements_container {
     @apply grid-cols-3 grow grid;
+  }
+
+  .GridContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(15rem,1fr));
+    grid-auto-rows: 4.07rem;
+    grid-auto-flow: dense;
+    gap: 16px;
+    padding: 16px;
+
+  }
+
+  .upload_area {
+    stroke-width: 2px 5;
+    stroke-dashoffset: 2% 10;
+    outline: 2px gray dashed;
+    outline-offset: 2px;
+    @apply flex rounded-md cursor-pointer items-center h-full w-full justify-center;
   }
 }

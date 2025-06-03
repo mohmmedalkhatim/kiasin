@@ -9,13 +9,14 @@ import {
 } from '@dnd-kit/core';
 import { SortableContext, arrayMove } from '@dnd-kit/sortable';
 import { useState } from 'react';
-import Grid from './main/Grid';
+import { Container } from './main/Grid';
 import Card from './main/Card';
 import { Area, Card as Cardtype } from '../types/area';
 import { SwappingStrategy } from './Strategy';
 import { useAreas } from '../context/para/areas';
 import './style.css';
 import Cards_menu from './bubble_menu';
+import { useMeasure } from 'react-use';
 
 export type element_props = {
   type: string;
@@ -27,6 +28,7 @@ export type element_props = {
 const Layout = () => {
   let active = useAreas((state) => state.active);
   let area = active?.at(-1);
+  let [ref,rect] = useMeasure();
   const [sort, updateSort] = useState(
     area?.ui_schema.item.map((item) => item.id.toString())
   );
@@ -72,7 +74,7 @@ const Layout = () => {
       switch (operation.Col) {
         case 'col': {
           if (operation.increase) {
-            card.cols = Math.min(8, card.cols + 1);
+            card.cols = Math.min(4, card.cols + 1);
           } else {
             card.cols = Math.max(1, card.cols - 1);
           }
@@ -93,9 +95,9 @@ const Layout = () => {
       const sorted = sort?.map((id) => {
         return newschema?.find((item) => item.id == Number(id)) as Cardtype;
       }) as Cardtype[];
-      let upArea = { ...area, ui_schema: { item: sorted } } as Area;
-      update_active_area(upArea);
-      update(upArea);
+      let UpdateArea = { ...area, ui_schema: { item: sorted } } as Area;
+      update_active_area(UpdateArea);
+      update(UpdateArea);
     }
   };
 
@@ -115,9 +117,9 @@ const Layout = () => {
           },
         ],
       };
-      let uparea = { ...area, ui_schema: newSchema } as Area;
-      update_active_area(uparea);
-      update(uparea);
+      let UpdateArea = { ...area, ui_schema: newSchema } as Area;
+      update_active_area(UpdateArea);
+      update(UpdateArea);
       updateSort([...sort, String(area.ui_schema.item?.length)]);
     };
     return (
@@ -127,11 +129,12 @@ const Layout = () => {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <SortableContext items={sort} strategy={SwappingStrategy}>
-          <Grid columns={8}>
+        <SortableContext  items={sort} strategy={SwappingStrategy}>
+          <Container ref={ref}>
             {area.ui_schema.item?.map((item) => (
               <Card
                 setSort={updateSort}
+                container_width={rect.width}
                 cla={activeId === String(item.id) ? 'dragging' : ''}
                 key={String(item.id)}
                 id={String(item.id)}
@@ -140,12 +143,13 @@ const Layout = () => {
               />
             ))}
             {editable ? <Cards_menu handleadding={handleadding} /> : null}
-          </Grid>
+          </Container>
         </SortableContext>
         <DragOverlay>
           {activeId ? (
             <Card
               cla=""
+              container_width={rect.width}
               setCardlist={() => {}}
               id={activeId}
               card={undefined}
