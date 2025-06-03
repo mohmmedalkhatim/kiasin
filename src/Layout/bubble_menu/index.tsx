@@ -3,6 +3,7 @@ import {
   IconCalendar,
   IconGrid4x4,
   IconList,
+  IconPhoto,
   IconPlus,
   IconSearch,
   IconWriting,
@@ -32,7 +33,7 @@ function Cards_menu({
     {
       name: 'Areaslist',
       props: {
-        min_cols: 6,
+        min_cols: 2,
         min_rows: 3,
       },
       content: { list: [1, 2] },
@@ -41,7 +42,7 @@ function Cards_menu({
     {
       name: 'editor',
       props: {
-        min_cols: 4,
+        min_cols: 1,
         min_rows: 4,
       },
       content: '',
@@ -50,7 +51,7 @@ function Cards_menu({
     {
       name: 'tasks',
       props: {
-        min_cols: 2,
+        min_cols: 1,
         min_rows: 3,
       },
       content: { list: [] },
@@ -59,11 +60,20 @@ function Cards_menu({
     {
       name: 'calender',
       props: {
-        min_cols: 3,
+        min_cols: 1,
         min_rows: 4,
       },
       content: { list: [1, 2] },
       icon: <IconCalendar size={'1.7rem'} />,
+    },
+        {
+      name: 'image',
+      props: {
+        min_cols: 1,
+        min_rows: 4,
+      },
+      content: "",
+      icon: <IconPhoto size={'1.7rem'} />,
     },
   ];
   let change = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
