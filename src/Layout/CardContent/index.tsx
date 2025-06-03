@@ -13,7 +13,7 @@ function CardContent({ id, T, props }: Card_content) {
       ['editor', <Editor_card content={props} id={id} title={'untitled'} />],
       ['Areaslist', <AreasList id={id} />],
       ['tasks', <TaskList id={id} />],
-      ['image', <Image url={props} />],
+      ['image', <Image id={id} />],
       ['calender', <Calendar />],
       ['default', <div>no content</div>],
     ])
