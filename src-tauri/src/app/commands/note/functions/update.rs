@@ -21,7 +21,7 @@ pub async fn update_note(note_dto: Note, id: i32, db: &DatabaseConnection) -> Re
                 let file = base64::decode(med.buffer.clone()).unwrap();
                 let obj = media::ActiveModel {
                     media_type: Set(med.structure),
-                    buffer: Set(file),
+                    file: Set(file),
                     note_id: Set(Some(id)),
                     project_id: Set(note_dto.project_id),
                     ..Default::default()

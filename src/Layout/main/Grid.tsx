@@ -1,22 +1,13 @@
-import React from 'react';
-import styled from 'styled-components';
+import  { ReactNode } from 'react';
+import { UseMeasureRef } from 'react-use/lib/useMeasure';
 
-const GridContainer = styled.div<{ columns: number }>`
-  display: grid;
-  grid-template-columns: repeat(${(props) => props.columns}, 1fr);
-  grid-auto-rows: 4.07rem;
-  grid-auto-flow: dense;
-  gap: 16px;
-  padding: 16px;
-`;
 
-interface GridProps {
-  columns: number;
-  children: React.ReactNode;
-}
-
-const Grid: React.FC<GridProps> = ({ columns, children }) => {
-  return <GridContainer columns={columns}>{children}</GridContainer>;
-};
-
-export default Grid;
+export function Container ({
+  children,
+  ref
+}: {
+  children: ReactNode;
+  ref:UseMeasureRef<HTMLDivElement>,
+}) {
+  return <div className='GridContainer' ref={ref}>{children}</div>;
+}export default Container

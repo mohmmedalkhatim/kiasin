@@ -48,11 +48,21 @@ pub async fn todos_control(
             }
             None => Err("you have to add an id".to_string()),
         },
-        "updata" => match payload.item {
+        "update" => match payload.item {
             Some(model) => {
-                    let _ = functions::updata_note(model, &db)
+                    let _ = functions::update_note(model.clone(), &db)
                         .await
                         .expect("there is a problem with the database");
+                  let res = functions::find_one(model.id.unwrap(), &db).await;
+                        match res {
+                            Ok(state)=>{
+                                let _ =  server.send(vec![state]);
+                                return Ok(())
+                            },
+                            Err(e)=>{
+                                return Err(e.to_string())
+                            }
+                        }
                     return Ok(());
             }
             None => Err("you have add item to the payload".to_string()),
@@ -93,6 +103,6 @@ pub async fn todos_control(
         "area_todos"=>{
             Ok(())
         },
-        _ => Err("you try to acess unregieser command \n -create\t -updata\n\t -delete\t -list\n -area_todos".to_string()),
+        _ => Err("you try to acess unregieser command \n -create\t -update\n\t -delete\t -list\n -area_todos".to_string()),
     }
 }

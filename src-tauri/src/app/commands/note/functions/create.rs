@@ -23,7 +23,7 @@ pub async fn create_note(note: Note, db: &DatabaseConnection) -> Result<(), Stri
                 let file = base64::decode(med.buffer.clone()).unwrap();
                 let obj = media::ActiveModel {
                     media_type: Set(med.structure),
-                    buffer: Set(file),
+                    file: Set(file),
                     note_id: Set(Some(id)),
                     project_id: Set(note.project_id),
                     ..Default::default()

@@ -14,19 +14,20 @@ import {
 import { Card as Cardtype } from '../../types/area';
 import { useAreas } from '../../context/para/areas';
 import CardContent from '../CardContent';
+import { get_card_cols } from '../../util';
 
 const CardContainer = styled.div<{
   rowSpan: number;
   colSpan: number;
   isDragging?: boolean;
 }>`
-  grid-row: span ${(props) => props.rowSpan};
-  grid-column: span ${(props) => props.colSpan};
+  grid-row: span ${props => props.rowSpan};
+  grid-column: auto / span ${props => props.colSpan};
   border: 1px solid #e2e2e215;
-  outline-right: ${(props) => (props.isDragging ? '2px solid #ddd' : 'none')};
+  outline-right: ${props => (props.isDragging ? '2px solid #ddd' : 'none')};
   transition: all 0.3s ease;
   position: relative;
-  opacity: ${(props) => (props.isDragging ? 0.5 : 1)};
+  opacity: ${props => (props.isDragging ? 0.5 : 1)};
   overflow-y: auto;
 `;
 
@@ -42,16 +43,24 @@ interface CardProps {
   id: string;
   cla: string;
   card: Cardtype | undefined;
+  container_width: number;
   setSort: React.Dispatch<React.SetStateAction<string[] | undefined>>;
   setCardlist: (
     id: number,
     operation: { Col: 'col' | 'row'; increase: boolean }
   ) => void;
 }
-
-const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist, setSort }) => {
-  const editable = useAreas((state) => state.editable);
-  const delete_card = useAreas((state) => state.delete_card);
+const Card: React.FC<CardProps> = ({
+  id,
+  cla,
+  card,
+  setCardlist,
+  setSort,
+  container_width,
+}) => {
+  console.log(container_width);
+  const editable = useAreas(state => state.editable);
+  const delete_card = useAreas(state => state.delete_card);
 
   const {
     attributes,
@@ -73,15 +82,15 @@ const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist, setSort }) => {
         ref={setNodeRef}
         style={style}
         rowSpan={card.rows}
-        colSpan={card.cols}
+        colSpan={get_card_cols(card.cols, container_width)}
         isDragging={isDragging}
         {...attributes}
         className={`relative rounded ${cla} card`}
       >
         {editable && (
-          <div className="flex items-center bg-sky-600 absolute z-10 w-full justify-between px-4 py-4">
-            <div className="flex gap-2">
-              <div className="flex gap-2">
+          <div className='flex items-center bg-sky-600 absolute z-10 w-full justify-between px-4 py-4'>
+            <div className='flex gap-2'>
+              <div className='flex gap-2'>
                 <div
                   onClick={() =>
                     setCardlist(card.id, { Col: 'row', increase: false })
@@ -97,7 +106,7 @@ const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist, setSort }) => {
                   <IconRowInsertBottom />
                 </div>
               </div>
-              <div className="flex gap-2">
+              <div className='flex gap-2'>
                 <div
                   onClick={() =>
                     setCardlist(card.id, { Col: 'col', increase: false })
@@ -134,3 +143,5 @@ const Card: React.FC<CardProps> = ({ id, cla, card, setCardlist, setSort }) => {
   }
 };
 export default Card;
+
+

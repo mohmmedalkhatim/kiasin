@@ -9,12 +9,13 @@ import {
 } from '@dnd-kit/core';
 import './index.css';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Task from './Task';
 import Input from '../../../components/Input';
 import { IconSend2 } from '@tabler/icons-react';
 import { useTasks } from '../../../context/para/tasks';
 import { useAreas } from '../../../context/para/areas';
+import { useDebounce } from 'react-use';
 
 function TaskList ({ id }: { id: number }) {
   const [schema, setSchema] = useState<number[]>([]);
@@ -24,18 +25,18 @@ function TaskList ({ id }: { id: number }) {
   const get_card = useAreas(state => state.get_Card);
   const act = useAreas(state=>state.active)
   const [_, forceUpdate] = useState(0);
-  useEffect(() => {
+  useDebounce(() => {
     forceUpdate(n => n + 1);
-  }, [act]);
+  },300, [act]);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor)
   );
-  useEffect(() => {
+  useDebounce(() => {
     let card = get_card(id);
     setSchema(card.props.list);
-  }, []);
+  },500, []);
 
   const handleDragStart = (event: any) => {
     setActiveId(event.active.id);

@@ -10,7 +10,7 @@ pub async fn update_note(todo: Todo, db: &DatabaseConnection) -> Result<(), DbEr
         title: Set(todo.title),
         area_id: Set(todo.area_id),
         checked: Set(todo.checked),
-        update:Set(time.date_naive()),
+        update:Set(Some(time.date_naive())),
         ..Default::default()
     };
     let _ = Entity::update(new).exec(db).await?;
