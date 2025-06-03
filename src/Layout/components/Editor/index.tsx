@@ -5,7 +5,6 @@ import { Placeholder } from '@tiptap/extension-placeholder';
 import './style.css';
 import { useEffect, useState } from 'react';
 import { useAreas } from '../../../context/para/areas';
-import { useDebounce } from 'react-use';
 
 const Editor_card = ({
   content,
@@ -36,16 +35,14 @@ const Editor_card = ({
   useEffect(() => {
     editor?.chain().focus().run();
   }, []);
-  useDebounce(() => {
-    editor?.on('update', data => {
-      let content = data.editor.getText();
-      if (content) {
-        let card = useAreas.getState().get_Card(id);
-        card.props = content;
-        useAreas.getState().update_card(id, card);
-      }
-    });
-  }, 2000,[]);
+  editor?.on('update', data => {
+    let content = data.editor.getText();
+    if (content) {
+      let card = useAreas.getState().get_Card(id);
+      card.props = content;
+      useAreas.getState().update_card(id, card);
+    }
+  });
 
   return (
     <div className='eidtor_container border-none outline-none'>
