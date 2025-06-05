@@ -1,11 +1,11 @@
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import TextAlign from '@tiptap/extension-text-align';
 import { Placeholder } from '@tiptap/extension-placeholder';
-import './style.css';
-import { useEffect, useState } from 'react';
+import { useEditor, EditorContent } from '@tiptap/react';
 import { useAreas } from '../../../context/para/areas';
+import TextAlign from '@tiptap/extension-text-align';
+import StarterKit from '@tiptap/starter-kit';
+import { useEffect, useState } from 'react';
 import { useDebounce } from 'react-use';
+import './style.css';
 
 const Editor_card = ({
   content,
@@ -36,19 +36,23 @@ const Editor_card = ({
   useEffect(() => {
     editor?.chain().focus().run();
   }, []);
-  useDebounce(() => {
-    editor?.on('update', data => {
-      let content = data.editor.getText();
-      if (content) {
-        let card = useAreas.getState().get_Card(id);
-        card.props = content;
-        useAreas.getState().update_card(id, card);
-      }
-    });
-  }, 2000,[]);
+  useDebounce(
+    () => {
+      editor?.on('update', data => {
+        let content = data.editor.getText();
+        if (content) {
+          let card = useAreas.getState().get_Card(id);
+          card.props = content;
+          useAreas.getState().update_card(id, card);
+        }
+      });
+    },
+    2000,
+    []
+  );
 
   return (
-    <div className='eidtor_container border-none outline-none'>
+    <div className=' border-none outline-none'>
       <EditorContent
         className='editor'
         placeholder='start writing'
