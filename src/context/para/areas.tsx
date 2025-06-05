@@ -15,6 +15,7 @@ interface Areas {
   delete_card: (id: number, update_sort: any) => void;
   get_Card: (id: number) => Card;
   update_card: (id: number, card: Card) => void;
+  get_list_item:(id:number,setArea:any)=>void;
   getArea: (
     id: number,
     setArea: React.Dispatch<React.SetStateAction<boolean>>
@@ -100,10 +101,11 @@ export const useAreas = create<Areas>(set => ({
       return { active: [...list, act] };
     });
   },
-  get_list_item: (id: number) => {
+  get_list_item: (id: number,setArea) => {
     let s = {} as Area;
     set(state => {
       s = state.list.filter(item => item.id == id)[0];
+      setArea(s);
       return { ...state }; // Ensure the function returns the updated state
     });
     return s;
