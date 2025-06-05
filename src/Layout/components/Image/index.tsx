@@ -19,7 +19,7 @@ function Image ({ id }: { id: number }) {
         one(card.props, setUrl);
       }
     },
-    500,
+    50,
     [active]
   );
   return (
