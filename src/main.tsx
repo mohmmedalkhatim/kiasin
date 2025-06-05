@@ -4,9 +4,9 @@ import { router } from './router';
 import ReactDOM from 'react-dom/client';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { RouterProvider } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './styles.css';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const lenis = new Lenis();
 
