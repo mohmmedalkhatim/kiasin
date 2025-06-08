@@ -5,7 +5,7 @@ interface Dialog {
   state: boolean;
   props: { id: number };
   changeMode: (
-    mode: 'dialog_note' | 'dialog_calender',
+    mode: 'dialog_note' | 'dialog_calender'|'dialog_links',
     props: { id: number }
   ) => void;
   toggle:()=>void;
