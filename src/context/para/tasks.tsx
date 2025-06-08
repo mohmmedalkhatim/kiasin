@@ -8,7 +8,7 @@ interface Tasks {
   init: () => void;
   create: (title: string, card_id: number) => Promise<void>;
   update: (data: Todo, setTask:React.Dispatch<React.SetStateAction<Todo>>,setChecked:(i:boolean)=>void) => Promise<void>;
-  get_list: (ids: string[], setItem: any) => void;
+  get_list: (ids: number[], setItem: any) => void;
   get_one: (id: string, setTask:React.Dispatch<React.SetStateAction<Todo>>,setChecked:(i:boolean)=>void) => Promise<void>;
 }
 
@@ -41,29 +41,24 @@ export let useTasks = create<Tasks>(set => ({
     server.onmessage = data => {
       setTask(data[0])
       setChecked(data[0].checked)
-      console.log(data)
     };
     await invoke('todos_control', {
       payload: { command: 'update', item: todo },
       server,
     });
   },
-  get_list: ids => {
-    let list: Todo[] = [];
+  get_list: (ids,setlist) => {
     let server = new Channel<Todo[]>();
     server.onmessage = data => {
-      data.map(item => list.push(item));
+      setlist(data)
     };
     invoke('todos_control', { payload: { command: 'find', ids }, server });
-    return list;
   },
   get_one: async (id, setItem,setChecked) => {
     let server = new Channel<Todo[]>();
     server.onmessage = data => {
-      data.push(data[0]);
       setItem(data[0]);
       setChecked(data[0].checked)
-      console.log(data)
     };
     invoke('todos_control', {
       payload: { command: 'find', id: Number(id) },
