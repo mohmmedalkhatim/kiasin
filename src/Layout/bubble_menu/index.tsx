@@ -3,6 +3,7 @@ import {
   IconCalendar,
   IconGrid4x4,
   IconList,
+  IconLoader,
   IconPhoto,
   IconPlus,
   IconSearch,
@@ -22,7 +23,7 @@ const calculate_menu_appernce = (y: number): number => {
   return pos;
 };
 
-function Cards_menu({
+function Cards_menu ({
   handleadding,
 }: {
   handleadding: (ele: element_props) => void;
@@ -66,23 +67,34 @@ function Cards_menu({
       content: { list: [1, 2] },
       icon: <IconCalendar size={'1.7rem'} />,
     },
-        {
+    {
       name: 'image',
       props: {
         min_cols: 1,
         min_rows: 4,
       },
-      content: "",
+      content: '',
       icon: <IconPhoto size={'1.7rem'} />,
+    },
+    {
+      name: 'LoadingBar',
+      props: {
+        min_cols: 1,
+        min_rows: 4,
+      },
+      content: '',
+      icon: <IconLoader size={'1.7rem'} />,
     },
   ];
   let change = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
     menuRef.current?.focus();
     if (menuRef.current) {
       menuRef.current.style.left = `${e.pageX - 260}px`;
-      menuRef.current.style.top = `${e.pageY - calculate_menu_appernce(e.pageY)}px`;
+      menuRef.current.style.top = `${
+        e.pageY - calculate_menu_appernce(e.pageY)
+      }px`;
     }
-    menuRef.current?.addEventListener('focusout', (e) => {
+    menuRef.current?.addEventListener('focusout', e => {
       setmenu(!menu);
     });
     setmenu(!menu);
@@ -90,7 +102,7 @@ function Cards_menu({
   return (
     <>
       <div
-        className="col-span-2 row-span-2 m_border transition-all duration-400 flex justify-center items-center"
+        className='col-span-2 row-span-2 m_border transition-all duration-400 flex justify-center items-center'
         onClick={change}
       >
         <button>
@@ -98,16 +110,16 @@ function Cards_menu({
         </button>
       </div>
       <div ref={menuRef} className={`${menu ? 'menu' : 'hidden'} z-1000`}>
-        <div className="pt-4 px-4">
+        <div className='pt-4 px-4'>
           <Input
-            placeholder="Search"
-            icon={<IconSearch size={'1rem'} color="#e2e2e260" />}
+            placeholder='Search'
+            icon={<IconSearch size={'1rem'} color='#e2e2e260' />}
           />
         </div>
-        <nav className="elements_container">
-          {map.map((item) => (
+        <nav className='elements_container'>
+          {map.map(item => (
             <div
-              className="flex justify-center items-center"
+              className='flex justify-center items-center'
               onClick={() =>
                 handleadding({
                   cols: item.props.min_cols,
@@ -122,8 +134,8 @@ function Cards_menu({
           ))}
         </nav>
         <Button
-          className="rounded-none border-none text-center text-xs"
-          type="reset"
+          className='rounded-none border-none text-center text-xs'
+          type='reset'
         >
           Browser All
         </Button>

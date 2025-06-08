@@ -4,6 +4,7 @@ import Editor_card from '../components/Editor';
 import TaskList from '../components/Tasklist';
 import Image from '../components/Image';
 import Calendar from '../components/Calender';
+import { LoadingBar } from '../components/loadingbar/LoadingBar';
 
 type Card_content = { id: number; T: string; props?: any };
 
@@ -15,6 +16,7 @@ function CardContent({ id, T, props }: Card_content) {
       ['tasks', <TaskList id={id} />],
       ['image', <Image id={id} />],
       ['calender', <Calendar />],
+      ['LoadingBar', <LoadingBar id={id} />],
       ['default', <div>no content</div>],
     ])
   );
