@@ -62,7 +62,6 @@ html {
     transition: all 0.25s ease-out;
     display: flex;
     align-items: center;
-    border: 1px solid #e2e2e220;
 
     gap: 0.5rem;
 

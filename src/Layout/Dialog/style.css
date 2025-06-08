@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+
+@layer Components{
+    .dialog{
+        @apply fixed mx-[10%] w-4/5 top-[5rem] z-50 h-[38rem]  p-8 bg-[#181818] flex flex-col gap-8 rounded-md
+
+    }
+
+}
