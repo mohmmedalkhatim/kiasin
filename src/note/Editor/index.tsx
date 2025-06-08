@@ -2,8 +2,6 @@ import { EditorContent, Editor } from '@tiptap/react';
 import { Toolbar } from './toolbar';
 import { useState } from 'react';
 import './style.css';
-import { useNotes } from '../../../../context/para/notes';
-import { Note } from '../../../../types/notes';
 
 const RichTextEditor = ({ editor, id }: { editor: Editor; id: number }) => {
 

@@ -1,9 +1,9 @@
-import { IconWheat } from '@tabler/icons-react';
-import Icon from '../../../../components/Icon';
+import { useNotes } from '../../context/para/notes';
 import { useEffect, useRef, useState } from 'react';
+import { IconWheat } from '@tabler/icons-react';
+import Icon from '../../components/Icon';
+import { Note } from '../../types/notes';
 import { Editor } from '@tiptap/react';
-import { useNotes } from '../../../../context/para/notes';
-import { Note } from '../../../../types/notes';
 import Input from '../Input';
 
 function NoteHeader ({
@@ -26,14 +26,14 @@ function NoteHeader ({
       update(id, note);
     }
   });
-  useEffect(()=>{
+  useEffect(() => {
     const content = editor.getJSON();
     const description = editor.getText();
     if (content && title) {
       const note = { title, content, description, id } as Note;
       update(id, note);
     }
-  },[title])
+  }, [title]);
 
   useEffect(() => {
     document.onscroll = e => {

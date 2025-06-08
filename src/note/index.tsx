@@ -1,7 +1,7 @@
 import { useParams } from 'react-router-dom';
-import { useNotes } from '../../../context/para/notes';
 import { useEffect, useState } from 'react';
 import NotePage from './rich_editor_page';
+import { useNotes } from '../context/para/notes';
 
 function NotePageProvider() {
   const get = useNotes((state) => state.note);
