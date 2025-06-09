@@ -8,12 +8,19 @@ pub struct Model {
     pub title:String,
     pub checked: bool,
     pub created:Date,
+    pub note_id:i32,
     pub update:Option<Date>,
     pub area_id:Option<i32>
 }
 impl ActiveModelBehavior for ActiveModel {}
 
 impl Related<super::area::Entity> for Entity {
+    fn to() -> RelationDef {
+        Relation::Area.def()
+    }
+}
+
+impl Related<super::note::Entity> for Entity {
     fn to() -> RelationDef {
         Relation::Area.def()
     }
@@ -31,5 +38,11 @@ pub enum Relation {
         to = "super::area::Column::Id"
         )]
     Area,
+    #[sea_orm(
+        belongs_to="super::note::Entity",
+        from = "super::todo::Column::NoteId",
+        to = "super::note::Column::Id"
+        )]
+    Note,
 
 }

@@ -14,6 +14,7 @@ pub struct Model{
     pub icon:Option<Vec<u8>>,
     pub created:Option<Date>,
     pub in_archive:bool,
+    pub note_id:i32,
     pub ui_schema:Json,
     pub links:Json,
     pub categorie:u32,
