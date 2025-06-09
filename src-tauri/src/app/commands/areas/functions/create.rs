@@ -1,7 +1,9 @@
-use chrono::Local;
+use core::time;
+
+use chrono::{Date, Local};
 use migration::entities::{
     area::{ActiveModel, Entity},
-    template,
+    note, template,
 };
 use sea_orm::{DatabaseConnection, DbErr, EntityTrait, IntoActiveModel, Set};
 use serde_json::json;
@@ -10,7 +12,17 @@ pub async fn create_area(db: &DatabaseConnection, id: i32) -> Result<i32, DbErr>
     let shema = json!({
         "item":[]
     });
-    let data = Local::now();
+    let mut date = Local::now();
+    let model = template::Entity::find_by_id(id as u32).one(db).await;
+    let active_note = note::ActiveModel {
+        title: Set(Some("untitled".to_string())),
+        content: Set(Some(json!({"content":""}))),
+        in_archive: Set(false),
+        create_date: Set(Some(date.clone().date_naive())),
+        ..Default::default()
+    };
+    let note = note::Entity::insert(active_note).exec(db).await?;
+
     let links = json!({ "list": [] });
     let new = ActiveModel {
         title: Set(Some("untitled".to_string())),
@@ -19,8 +31,9 @@ pub async fn create_area(db: &DatabaseConnection, id: i32) -> Result<i32, DbErr>
         icon: Set(None),
         cover: Set(None),
         links: Set(links),
-        created: Set(Some(data.date_naive())),
+        created: Set(Some(date.date_naive())),
         ui_schema: Set(shema),
+        note_id:Set(note.last_insert_id),
         in_archive: Set(false),
         categorie: Set(id as u32),
         ..Default::default()
@@ -31,7 +44,17 @@ pub async fn create_area(db: &DatabaseConnection, id: i32) -> Result<i32, DbErr>
 
 pub async fn create_from_templates(db: &DatabaseConnection, id: i32) -> Result<i32, DbErr> {
     let links = json!({ "list": [] });
+    let mut date = Local::now();
     let model = template::Entity::find_by_id(id as u32).one(db).await;
+    let active_note = note::ActiveModel {
+        title: Set(Some("untitled".to_string())),
+        content: Set(Some(json!({"content":""}))),
+        in_archive: Set(false),
+        create_date: Set(Some(date.date_naive())),
+        ..Default::default()
+    };
+    let note = note::Entity::insert(active_note).exec(db).await?;
+
     let schema = model.unwrap().unwrap().into_active_model().ui_schema;
     let new = ActiveModel {
         title: Set(Some("untitled".to_string())),
@@ -41,6 +64,7 @@ pub async fn create_from_templates(db: &DatabaseConnection, id: i32) -> Result<i
         cover: Set(None),
         links: Set(links),
         ui_schema: schema,
+        note_id: Set(note.last_insert_id.abs()),
         in_archive: Set(false),
         categorie: Set(id as u32),
         ..Default::default()

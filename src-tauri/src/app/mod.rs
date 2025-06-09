@@ -8,5 +8,6 @@ pub use commands::{
     note::{__cmd__notes_control, notes_control},
     todo::{__cmd__todos_control, todos_control},
     user::{__cmd__user_control, user_control},
+    database::{__cmd__database_control,database_control}
 };
 pub use util::database_connection;
