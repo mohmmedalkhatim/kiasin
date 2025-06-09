@@ -13,8 +13,7 @@ export function LoadingBar ({ id }: { id: number }) {
   const get_list = useTasks(state => state.get_list);
   const [counter, setCounter] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
-  const ids = [7, 8, 9];
-
+  const ids = [1, 2, 3];
   const width = 100 / ids.length;
   useEffect(() => {
     if (!list) {
@@ -30,15 +29,15 @@ export function LoadingBar ({ id }: { id: number }) {
         }
       });
     }
-  }, [list,active]);
+  }, [list, active]);
   if (ref.current) {
     ref.current.style.width = `${counter * width}%`;
   }
   return (
     <div className='h-full'>
-      <div className='bg-white h-full' ref={ref}></div>
+      <div className='bg-white h-full rounded-r-lg' ref={ref}></div>
       <div className='absolute right-5 bottom-5'>
-        <IconLink size={"1.3rem"} color='#e2e2e240' />
+        <IconLink size={'1.3rem'} color='#e2e2e240' />
       </div>
     </div>
   );

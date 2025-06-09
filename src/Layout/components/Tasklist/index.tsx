@@ -12,31 +12,42 @@ import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import { useState } from 'react';
 import Task from './Task';
 import Input from '../../../components/Input';
-import { IconSend2 } from '@tabler/icons-react';
+import { IconLink, IconSend2 } from '@tabler/icons-react';
 import { useTasks } from '../../../context/para/tasks';
 import { useAreas } from '../../../context/para/areas';
 import { useDebounce } from 'react-use';
+import { SwappingStrategy } from '../../Strategy';
+import { useLayoutDialog } from '../../../context/para/Dialog';
 
 function TaskList ({ id }: { id: number }) {
   const [schema, setSchema] = useState<number[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const open_dialog = useLayoutDialog(state => state.changeMode);
   const [title, setTitle] = useState<string>('');
   const create_task = useTasks(state => state.create);
   const get_card = useAreas(state => state.get_Card);
-  const act = useAreas(state=>state.active)
+  const act = useAreas(state => state.active);
   const [_, forceUpdate] = useState(0);
-  useDebounce(() => {
-    forceUpdate(n => n + 1);
-  },300, [act]);
+  useDebounce(
+    () => {
+      forceUpdate(n => n + 1);
+    },
+    10,
+    [act]
+  );
 
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor)
   );
-  useDebounce(() => {
-    let card = get_card(id);
-    setSchema(card.props.list);
-  },500, []);
+  useDebounce(
+    () => {
+      let card = get_card(id);
+      setSchema(card.props.list);
+    },
+    500,
+    []
+  );
 
   const handleDragStart = (event: any) => {
     setActiveId(event.active.id);
@@ -58,14 +69,14 @@ function TaskList ({ id }: { id: number }) {
         onDragStart={handleDragStart}
         onDragEnd={handleDragEnd}
       >
-        <SortableContext items={schema}>
+        <SortableContext items={schema} strategy={SwappingStrategy}>
           <div className='list'>
             <form
               onSubmit={async e => {
                 e.preventDefault();
                 if (title != '') {
                   await create_task(title, id);
-                  setTitle('')
+                  setTitle('');
                 }
               }}
             >
@@ -91,6 +102,12 @@ function TaskList ({ id }: { id: number }) {
                 ''
               )
             )}
+            <div
+              className='absolute bottom-5 right-5'
+              onClick={() => open_dialog('dialog_links', { id })}
+            >
+              <IconLink size={'1.3rem'} color='gray' />
+            </div>
           </div>
         </SortableContext>
         <DragOverlay></DragOverlay>
