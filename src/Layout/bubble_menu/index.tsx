@@ -37,7 +37,7 @@ function Cards_menu ({
         min_cols: 2,
         min_rows: 3,
       },
-      content: { list: [1, 2] },
+      content: { list: [] },
       icon: <IconGrid4x4 size={'1.7rem'} />,
     },
     {
@@ -119,7 +119,7 @@ function Cards_menu ({
         <nav className='elements_container'>
           {map.map(item => (
             <div
-              className='flex justify-center items-center'
+              className='flex justify-center cursor-pointer items-center'
               onClick={() =>
                 handleadding({
                   cols: item.props.min_cols,
