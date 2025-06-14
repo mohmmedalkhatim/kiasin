@@ -3,11 +3,12 @@ import Card from '../../../components/Cards/area_card';
 import { useAreas } from '../../../context/para/areas';
 import { useState } from 'react';
 import { useDebounce } from 'react-use';
+import { useLayoutDialog } from '../../../context/para/Dialog';
 
 function AreasList ({ id }: { id: number }) {
-  let update_card = useAreas(state => state.update_card);
   let list = useAreas(state => state.list);
   let get_card = useAreas(state => state.get_Card);
+  let changeMode = useLayoutDialog(state=>state.changeMode)
   let [areas, setAreas] = useState<number[]>([]);
   useDebounce(
     () => {
@@ -24,7 +25,7 @@ function AreasList ({ id }: { id: number }) {
           <div>areas</div>
           <div className='border'></div>
         </div>
-        <div onClick={() => {}}>
+        <div onClick={() => changeMode("dialog_areas",{id})}>
           <IconLayersIntersect />
         </div>
       </div>
