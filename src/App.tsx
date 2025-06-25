@@ -9,7 +9,6 @@ import { useNotes } from './context/para/notes';
 import { useMeasure } from 'react-use';
 import Dialog from './Layout/Dialog';
 function App() {
-  const areas = useAreas((state) => state.init);
   const init = useAreas((state) => state.init);
   let initNotes = useNotes((state) => state.init);
 
@@ -17,10 +16,6 @@ function App() {
     init();
     initNotes();
   }, []);
-
-  useEffect(() => {
-    areas();
-  }, [areas]);
 
 
   return (
