@@ -7,7 +7,7 @@ interface Areas {
   active: Area[] | undefined;
   sort: string[];
   editable: boolean;
-  init: () => void;
+  init: () => Promise<void>;
   create: (id: number) => void;
   update: (area: Area) => void;
   toggleEditable: () => void;
@@ -15,7 +15,7 @@ interface Areas {
   delete_card: (id: number, update_sort: any) => void;
   get_Card: (id: number) => Card;
   update_card: (id: number, card: Card) => void;
-  get_list_item:(id:number,setArea:any)=>void;
+  get_list_item: (id: number, setArea: any) => void;
   getArea: (
     id: number,
     setArea: React.Dispatch<React.SetStateAction<boolean>>
@@ -101,19 +101,19 @@ export const useAreas = create<Areas>(set => ({
       return { active: [...list, act] };
     });
   },
-  get_list_item: (id: number,setArea) => {
+  get_list_item: (id: number, setArea) => {
     let s = {} as Area;
     set(state => {
       s = state.list.filter(item => item.id == id)[0];
       setArea(s);
-      return { ...state }; // Ensure the function returns the updated state
+      return { ...state }; 
     });
     return s;
   },
-  init: () => {
-    const channel = new Channel<Area[]>();
-    channel.onmessage = data => {
-      data.map(item => {
+  init: async () => {
+    const channel = new Channel<Area[]>(data => {
+      console.log("hello world")
+       data.map(item => {
         const icon = URL.createObjectURL(
           new Blob([new Uint8Array(item.icon as number[])], {
             type: 'image/jpeg',
@@ -128,11 +128,11 @@ export const useAreas = create<Areas>(set => ({
         item.cover = cover;
         const list = new Set<Area>(data);
         list.add(item);
-
+        console.log(data);
         set(_state => ({ list: [...list] }));
       });
-    };
-    return invoke('areas_control', { payload: { command: 'find' }, channel });
+    });
+    await invoke('areas_control', { payload: { command: 'find' }, channel });
   },
   create: (id: number) => {
     const channel = new Channel<Area[]>();
@@ -196,6 +196,7 @@ export const useAreas = create<Areas>(set => ({
 
   update: (area: Area) => {
     const channel = new Channel<Area[]>();
+    console.log(area);
     channel.onmessage = data => {
       data.map(item => {
         const icon = URL.createObjectURL(
