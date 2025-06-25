@@ -6,11 +6,11 @@ import React from 'react';
 type send_Media = {
   id?: number;
   file: string;
+  media_type: string;
   url?: string;
   note_id?: number;
   project_id?: number;
   area_id?: number;
-  media_type: string;
 };
 type Media = {
   id?: number;

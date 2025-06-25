@@ -1,22 +1,18 @@
 import {
-  DndContext,
-  closestCenter,
   KeyboardSensor,
   PointerSensor,
   useSensor,
   useSensors,
-  DragOverlay,
 } from '@dnd-kit/core';
-import { SortableContext, arrayMove } from '@dnd-kit/sortable';
+import { arrayMove } from '@dnd-kit/sortable';
 import { useState } from 'react';
 import { Container } from './main/Grid';
 import Card from './main/Card';
 import { Area, Card as Cardtype } from '../types/area';
-import { SwappingStrategy } from './Strategy';
 import { useAreas } from '../context/para/areas';
 import './style.css';
-import Cards_menu from './bubble_menu';
 import { useMeasure } from 'react-use';
+import Navbar from './Navbar';
 
 export type element_props = {
   type: string;
@@ -26,16 +22,16 @@ export type element_props = {
 };
 
 const Layout = () => {
-  let active = useAreas((state) => state.active);
+  let active = useAreas(state => state.active);
   let area = active?.at(-1);
-  let [ref,rect] = useMeasure();
+  let [ref, rect] = useMeasure();
   const [sort, updateSort] = useState(
-    area?.ui_schema.item.map((item) => item.id.toString())
+    area?.ui_schema.item.map(item => item.id.toString())
   );
   const [activeId, setActiveId] = useState<string | null>(null);
-  const update_active_area = useAreas((state) => state.update_active_area);
-  const update = useAreas((state) => state.update);
-  const editable = useAreas((state) => state.editable);
+  const update_active_area = useAreas(state => state.update_active_area);
+  const update = useAreas(state => state.update);
+  const editable = useAreas(state => state.editable);
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -52,8 +48,8 @@ const Layout = () => {
       const newIndex = sort?.indexOf(event.over.id);
       const newSort = arrayMove(sort, oldIndex, newIndex);
       const newSchema = newSort.map(
-        (id) =>
-          area?.ui_schema.item?.find((item) => String(item.id) == id) ||
+        id =>
+          area?.ui_schema.item?.find(item => String(item.id) == id) ||
           ({} as Cardtype)
       );
       update_active_area({ ...area, ui_schema: { item: newSchema } } as Area);
@@ -66,9 +62,9 @@ const Layout = () => {
     id: number,
     operation: { Col: 'col' | 'row'; increase: boolean }
   ) => {
-    const card = area?.ui_schema.item?.find((item) => id == item.id);
+    const card = area?.ui_schema.item?.find(item => id == item.id);
     const filetred = area?.ui_schema.item?.filter(
-      (item) => item?.id != id
+      item => item?.id != id
     ) as Cardtype[];
     if (card) {
       switch (operation.Col) {
@@ -92,8 +88,8 @@ const Layout = () => {
           () => {};
       }
       const newschema = [...filetred, card];
-      const sorted = sort?.map((id) => {
-        return newschema?.find((item) => item.id == Number(id)) as Cardtype;
+      const sorted = sort?.map(id => {
+        return newschema?.find(item => item.id == Number(id)) as Cardtype;
       }) as Cardtype[];
       let UpdateArea = { ...area, ui_schema: { item: sorted } } as Area;
       update_active_area(UpdateArea);
@@ -123,41 +119,22 @@ const Layout = () => {
       updateSort([...sort, String(area.ui_schema.item?.length)]);
     };
     return (
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-      >
-        <SortableContext  items={sort} strategy={SwappingStrategy}>
-          <Container ref={ref}>
-            {area.ui_schema.item?.map((item) => (
-              <Card
-                setSort={updateSort}
-                container_width={rect.width}
-                cla={activeId === String(item.id) ? 'dragging' : ''}
-                key={String(item.id)}
-                id={String(item.id)}
-                card={item}
-                setCardlist={handlesizeChange}
-              />
-            ))}
-            {editable ? <Cards_menu handleadding={handleadding} /> : null}
-          </Container>
-        </SortableContext>
-        <DragOverlay>
-          {activeId ? (
+      <>
+        <Container ref={ref}>
+          {area.ui_schema.item?.map(item => (
             <Card
-              cla=""
-              container_width={rect.width}
-              setCardlist={() => {}}
-              id={activeId}
-              card={undefined}
               setSort={updateSort}
+              container_width={rect.width}
+              cla={activeId === String(item.id) ? 'dragging' : ''}
+              key={String(item.id)}
+              id={String(item.id)}
+              card={item}
+              setCardlist={handlesizeChange}
             />
-          ) : null}
-        </DragOverlay>
-      </DndContext>
+          ))}
+        </Container>
+        {editable && <Navbar/>}
+      </>
     );
   }
 };
