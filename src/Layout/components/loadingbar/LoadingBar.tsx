@@ -13,7 +13,7 @@ export function LoadingBar ({ id }: { id: number }) {
   const get_list = useTasks(state => state.get_list);
   const [counter, setCounter] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
-  const ids = [1, 2, 3];
+  const ids:number[] = [];
   const width = 100 / ids.length;
   useEffect(() => {
     if (!list) {
