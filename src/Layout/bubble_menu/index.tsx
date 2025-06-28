@@ -1,11 +1,12 @@
-import React, { useRef, useState } from 'react';
+import { MouseEventHandler, useRef, useState } from 'react';
 import {
   IconCalendar,
+  IconChevronDown,
+  IconChevronRight,
   IconGrid4x4,
   IconList,
   IconLoader,
   IconPhoto,
-  IconPlus,
   IconSearch,
   IconWriting,
 } from '@tabler/icons-react';
@@ -86,30 +87,19 @@ function Cards_menu ({
       icon: <IconLoader size={'1.7rem'} />,
     },
   ];
-  let change = (e: React.MouseEvent<HTMLDivElement, MouseEvent>) => {
-    menuRef.current?.focus();
-    if (menuRef.current) {
-      menuRef.current.style.left = `${e.pageX - 260}px`;
-      menuRef.current.style.top = `${
-        e.pageY - calculate_menu_appernce(e.pageY)
-      }px`;
-    }
-    menuRef.current?.addEventListener('focusout', e => {
-      setmenu(!menu);
-    });
-    setmenu(!menu);
-  };
+
   return (
     <>
+      <Button className='w-full mb-2 text-center flex items-center justify-between' onClick={e => setmenu(!menu)}>
+        <div>create new</div>
+        <div>
+          {menu ? <IconChevronDown size={'1.2rem'} /> : <IconChevronRight />}
+        </div>
+      </Button>
       <div
-        className='col-span-2 row-span-2 m_border transition-all duration-400 flex justify-center items-center'
-        onClick={change}
+        ref={menuRef}
+        className={`${menu ? 'menu w-full' : 'hidden'} z-1000`}
       >
-        <button>
-          <IconPlus size={20} />
-        </button>
-      </div>
-      <div ref={menuRef} className={`${menu ? 'menu' : 'hidden'} z-1000`}>
         <div className='pt-4 px-4'>
           <Input
             placeholder='Search'
