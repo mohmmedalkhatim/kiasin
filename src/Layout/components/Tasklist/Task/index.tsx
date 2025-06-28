@@ -7,8 +7,6 @@ import { useState } from 'react';
 import { useDebounce } from 'react-use';
 import { IconGridDots } from '@tabler/icons-react';
 import { useLayoutDialog } from '../../../../context/para/Dialog';
-import { useAreas } from '../../../../context/para/areas';
-import { useNotes } from '../../../../context/para/notes';
 
 function Task ({
   id,
@@ -23,7 +21,6 @@ function Task ({
   const [task, setTask] = useState({} as Todo);
   const [checked, setChecked] = useState(task.checked || false);
   const dialog = useLayoutDialog(state => state.changeMode);
-  const get_card = useAreas(state=>state.get_Card)
   const update = useTasks(state => state.update);
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
