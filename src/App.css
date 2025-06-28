@@ -115,7 +115,7 @@ html {
   }
 
   .menu {
-    @apply w-[240px] h-[240px] bg-[#181818] shadow shadow-[#e2e2e250] absolute flex flex-col;
+    @apply w-[240px] h-[240px] mb-2 bg-[#181818] shadow shadow-[#e2e2e250]  flex flex-col;
   }
 
   aside {
@@ -132,8 +132,9 @@ html {
     color: white !important;
   }
 
+  
   .content {
-    @apply rounded-t-md p-4 md:ml-[100px] md:mr-[100px] bg-dark mx-[60px] mt-16 pb-0 relative;
+    @apply rounded-t-md p-4  md:ml-[100px]  md:mr-[100px] bg-dark mx-[60px] mt-16 pb-0 relative;
   }
 
   .cover {
