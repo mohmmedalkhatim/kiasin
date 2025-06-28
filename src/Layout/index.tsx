@@ -1,9 +1,3 @@
-import {
-  KeyboardSensor,
-  PointerSensor,
-  useSensor,
-  useSensors,
-} from '@dnd-kit/core';
 import { arrayMove } from '@dnd-kit/sortable';
 import { useState } from 'react';
 import { Container } from './main/Grid';
@@ -32,11 +26,6 @@ const Layout = () => {
   const update_active_area = useAreas(state => state.update_active_area);
   const update = useAreas(state => state.update);
   const editable = useAreas(state => state.editable);
-
-  const sensors = useSensors(
-    useSensor(PointerSensor),
-    useSensor(KeyboardSensor)
-  );
 
   const handleDragStart = (event: any) => {
     setActiveId(event.active.id);
@@ -133,7 +122,15 @@ const Layout = () => {
             />
           ))}
         </Container>
-        {editable && <Navbar/>}
+        {editable && (
+          <Navbar
+            start={handleDragStart}
+            create={handleadding}
+            end={handleDragEnd}
+            state={editable}
+            schema={sort}
+          />
+        )}
       </>
     );
   }
