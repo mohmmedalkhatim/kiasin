@@ -4,7 +4,7 @@ use serde::{Deserialize, Serialize};
 pub struct Todo {
     pub id: Option<i32>,
     pub title: String,
-    pub checked: bool,
+    pub checked: Option<bool>,
     pub area_id: Option<i32>,
 }
 
