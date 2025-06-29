@@ -14,12 +14,14 @@ function Aside() {
   ]);
   const t = useAside((state) => state.t);
   return (
+    <>
     <aside className={`${active && 'hide'} Aside`}>
       <div className="aside_header">
         <Button children={<IconChevronsRight />} onClick={() => toggle('')} />
       </div>
       <div className="content_container">{inside.get(t)}</div>
     </aside>
+    </>
   );
 }
 export default Aside;
