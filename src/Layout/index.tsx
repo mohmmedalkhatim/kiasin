@@ -121,16 +121,16 @@ const Layout = () => {
               setCardlist={handlesizeChange}
             />
           ))}
+          {editable && (
+            <Navbar
+              start={handleDragStart}
+              create={handleadding}
+              end={handleDragEnd}
+              state={editable}
+              schema={sort}
+            />
+          )}
         </Container>
-        {editable && (
-          <Navbar
-            start={handleDragStart}
-            create={handleadding}
-            end={handleDragEnd}
-            state={editable}
-            schema={sort}
-          />
-        )}
       </>
     );
   }

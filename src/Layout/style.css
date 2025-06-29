@@ -1,6 +1,12 @@
 @import 'tailwindcss';
 
 @layer components {
+
+  * {
+    transition: margin width right left display  !important;
+    transition-duration: 250ms !important;
+  }
+
   .size_control {
     @apply absolute left-0 -top-10;
   }
@@ -11,12 +17,15 @@
 
   .GridContainer {
     display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(18rem,1fr));
+    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
     grid-auto-rows: 4.07rem;
     grid-auto-flow: dense;
     gap: 16px;
     padding: 16px;
+  }
 
+  .editable_Dashboard {
+    padding: none;
   }
 
   .upload_area {
