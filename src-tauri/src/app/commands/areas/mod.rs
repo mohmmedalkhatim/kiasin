@@ -72,7 +72,7 @@ pub async fn areas_control(
                 let list = functions::find_many(&db).await;
                 match list {
                     Ok(state) => {
-                        let _ = channel.send(state);
+                        let _ = channel.send(state.clone());
                         Ok(())
                     }
                     Err(e) => Err(e.to_string()),
