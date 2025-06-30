@@ -58,7 +58,6 @@ const Card: React.FC<CardProps> = ({
   setSort,
   container_width,
 }) => {
-  console.log(container_width);
   const editable = useAreas(state => state.editable);
   const delete_card = useAreas(state => state.delete_card);
 
@@ -85,7 +84,7 @@ const Card: React.FC<CardProps> = ({
         colSpan={get_card_cols(card.cols, container_width)}
         isDragging={isDragging}
         {...attributes}
-        className={`relative rounded ${cla} card`}
+        className={`relative rounded-sm ${cla} card`}
       >
         {editable && (
           <div className='flex items-center bg-sky-600 absolute z-10 w-full justify-between px-4 py-4'>
