@@ -9,7 +9,7 @@ import Areas from '../screens/areas';
 import Area from '../screens/areas/area';
 import Archive from '../screens/archive';
 import Notes from '../screens/notes';
-import Note from '../screens/notes/note';
+import Note from '../note';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(

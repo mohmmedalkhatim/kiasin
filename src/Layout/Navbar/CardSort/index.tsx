@@ -15,7 +15,7 @@ function CardSort ({ id }: { id: string }) {
       <div className='cursor-grab' {...listeners}>
         <IconGridDots />
       </div>
-      <div>{card.type}</div>
+      <div className='select-none'>{card.type}</div>
     </div>
   );
 }

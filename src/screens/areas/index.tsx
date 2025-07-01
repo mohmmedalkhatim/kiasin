@@ -7,7 +7,6 @@ import { useAside } from '../../context/aside';
 function Areas() {
   const list = useAreas((state) => state.list);
   const toggle = useAside((state) => state.toggle);
-
   return (
     <main className="content">
       <div className="boxs_grid">
