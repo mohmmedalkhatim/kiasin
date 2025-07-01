@@ -4,11 +4,11 @@ use serde::{Deserialize, Serialize};
 pub struct Media {
     pub id: Option<i32>,
     pub file:String,
+    pub media_type:String,
     pub url:Option<String>,
     pub note_id:Option<i32>,
     pub project_id:Option<i32>,
     pub area_id:Option<i32>,
-    pub media_type:String,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

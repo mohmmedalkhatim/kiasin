@@ -18,7 +18,8 @@ pub async fn todos_control(
     match payload.command.as_str() {
         "create" => match payload.item {
             Some(model) => {
-                let id = functions::create_note(model, &db)
+                println!("create todo");
+                let id = functions::create_todo(model, &db)
                     .await
                     .expect("there is a problem with the database");
                 let todo = functions::find_one(id, &db).await.expect("there a problem when creating an element");
@@ -50,7 +51,7 @@ pub async fn todos_control(
         },
         "update" => match payload.item {
             Some(model) => {
-                    let _ = functions::update_note(model.clone(), &db)
+                    let _ = functions::update_todo(model.clone(), &db)
                         .await
                         .expect("there is a problem with the database");
                   let res = functions::find_one(model.id.unwrap(), &db).await;
