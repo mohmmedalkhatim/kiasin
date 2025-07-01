@@ -15,6 +15,7 @@ export interface Area {
   ui_schema: { item: Card[] };
   cover: number[] | string;
   icon: number[] | string;
+  note_id:number;
   links: { list: string[] };
   id: number;
   categorie: number;
