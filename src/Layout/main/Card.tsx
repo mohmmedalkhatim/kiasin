@@ -1,14 +1,11 @@
 // components/Card.tsx
 import React from 'react';
 import styled from 'styled-components';
-import { useSortable } from '@dnd-kit/sortable';
-import { CSS } from '@dnd-kit/utilities';
 import {
-  IconGridDots,
-  IconLayoutSidebarLeftCollapseFilled,
-  IconLayoutSidebarLeftExpandFilled,
-  IconRowInsertBottom,
-  IconRowRemove,
+  IconChevronsDown,
+  IconChevronsLeft,
+  IconChevronsRight,
+  IconChevronsUp,
   IconTrashFilled,
 } from '@tabler/icons-react';
 import { Card as Cardtype } from '../../types/area';
@@ -61,48 +58,35 @@ const Card: React.FC<CardProps> = ({
   const editable = useAreas(state => state.editable);
   const delete_card = useAreas(state => state.delete_card);
 
-  const {
-    attributes,
-    listeners,
-    setNodeRef,
-    transform,
-    isDragging,
-    transition,
-  } = useSortable({ id });
 
-  const style = {
-    transform: CSS.Transform.toString(transform),
-    transition,
-  };
+
+
 
   if (card) {
     return (
       <CardContainer
-        ref={setNodeRef}
-        style={style}
         rowSpan={card.rows}
         colSpan={get_card_cols(card.cols, container_width)}
-        isDragging={isDragging}
-        {...attributes}
-        className={`relative rounded-sm ${cla} card`}
+        className={`relative rounded-xs ${cla} card`}
       >
         {editable && (
           <div className='flex items-center bg-sky-600 absolute z-10 w-full justify-between px-4 py-4'>
             <div className='flex gap-2'>
               <div className='flex gap-2'>
                 <div
+                className='flex items-center'
                   onClick={() =>
                     setCardlist(card.id, { Col: 'row', increase: false })
                   }
-                >
-                  <IconRowRemove />
+                > 
+                  <IconChevronsLeft/>
                 </div>
                 <div
                   onClick={() =>
                     setCardlist(card.id, { Col: 'row', increase: true })
                   }
                 >
-                  <IconRowInsertBottom />
+                  <IconChevronsRight />
                 </div>
               </div>
               <div className='flex gap-2'>
@@ -111,14 +95,14 @@ const Card: React.FC<CardProps> = ({
                     setCardlist(card.id, { Col: 'col', increase: false })
                   }
                 >
-                  <IconLayoutSidebarLeftCollapseFilled />
+                  <IconChevronsUp />
                 </div>
                 <div
                   onClick={() =>
                     setCardlist(card.id, { Col: 'col', increase: true })
                   }
                 >
-                  <IconLayoutSidebarLeftExpandFilled />
+                  <IconChevronsDown />
                 </div>
               </div>
             </div>
@@ -129,9 +113,6 @@ const Card: React.FC<CardProps> = ({
             >
               <IconTrashFilled />
             </div>
-            <CardHeader {...listeners}>
-              <IconGridDots />
-            </CardHeader>
           </div>
         )}
         {card.type && (
