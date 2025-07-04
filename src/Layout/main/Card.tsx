@@ -58,10 +58,6 @@ const Card: React.FC<CardProps> = ({
   const editable = useAreas(state => state.editable);
   const delete_card = useAreas(state => state.delete_card);
 
-
-
-
-
   if (card) {
     return (
       <CardContainer
@@ -74,19 +70,19 @@ const Card: React.FC<CardProps> = ({
             <div className='flex gap-2'>
               <div className='flex gap-2'>
                 <div
-                className='flex items-center'
+                  className='flex items-center'
                   onClick={() =>
                     setCardlist(card.id, { Col: 'row', increase: false })
                   }
-                > 
-                  <IconChevronsLeft/>
+                >
+                  <IconChevronsUp />
                 </div>
                 <div
                   onClick={() =>
                     setCardlist(card.id, { Col: 'row', increase: true })
                   }
                 >
-                  <IconChevronsRight />
+                  <IconChevronsDown />
                 </div>
               </div>
               <div className='flex gap-2'>
@@ -95,14 +91,14 @@ const Card: React.FC<CardProps> = ({
                     setCardlist(card.id, { Col: 'col', increase: false })
                   }
                 >
-                  <IconChevronsUp />
+                  <IconChevronsLeft />
                 </div>
                 <div
                   onClick={() =>
                     setCardlist(card.id, { Col: 'col', increase: true })
                   }
                 >
-                  <IconChevronsDown />
+                  <IconChevronsRight />
                 </div>
               </div>
             </div>
@@ -123,5 +119,3 @@ const Card: React.FC<CardProps> = ({
   }
 };
 export default Card;
-
-
