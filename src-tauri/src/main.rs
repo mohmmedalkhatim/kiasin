@@ -37,7 +37,6 @@ async fn main() {
             app::todos_control,
             app::media_control,
             app::dashboard,
-            app::components_control,
             app::database_control,
         ])
         .setup(|app| {
