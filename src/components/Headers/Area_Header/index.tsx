@@ -5,17 +5,23 @@ import { useAreas } from '../../../context/para/areas';
 import Button from '../../Button';
 import { Link } from 'react-router-dom';
 import { Area } from '../../../types/area';
+import { useNotes } from '../../../context/para/notes';
 
 function Header () {
   const [search, setSearch] = useState('');
   const toggle = useAreas(state => state.toggleEditable);
   const active = useAreas(state => state.active)?.at(-1);
-  let [state, setState] = useState(1);
   const update = useAreas(state => state.update);
   const update_active = useAreas(state => state.update_active_area);
+  const area_note = useNotes(state => state.active);
+  const setActive = useNotes(state => state.note);
+  const update_note = useNotes(state => state.updata_note);
+  const [loading_note, setDone] = useState(true);
   useEffect(() => {
-    setState(state + 1);
-  }, [active]);
+    if (active?.note_id) {
+      setActive(active.note_id, setDone);
+    }
+  }, []);
   return (
     <header className='app_header'>
       <div></div>
@@ -30,6 +36,9 @@ function Header () {
         className='outline-none border-none focus:border'
         onChange={e => {
           let area = { ...active, title: e.target.value } as Area;
+          if(active?.note_id){
+            update_note(active?.note_id,{...area_note,title:e.target.value})
+          }
           update_active(area);
           update(area);
         }}
