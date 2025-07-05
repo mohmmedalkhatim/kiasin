@@ -13,7 +13,7 @@ export function LoadingBar ({ id }: { id: number }) {
   const get_list = useTasks(state => state.get_list);
   const [counter, setCounter] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
-  const ids:number[] = [];
+  const ids: number[] = [];
   const width = 100 / ids.length;
   useEffect(() => {
     if (!list) {
@@ -34,9 +34,14 @@ export function LoadingBar ({ id }: { id: number }) {
     ref.current.style.width = `${counter * width}%`;
   }
   return (
-    <div className='h-full'>
-      <div className='bg-white h-full rounded-r-lg' ref={ref}></div>
-      <div className='absolute right-5 bottom-5'>
+    <div className='h-full py-2'>
+      <div className='bg-[#e2e2e280] h-full rounded-r-lg' ref={ref}></div>
+      <div
+        className='absolute right-5 bottom-5 z-40'
+        onClick={() => {
+          change_mode('dialog_tasks', { id });
+        }}
+      >
         <IconLink size={'1.3rem'} color='#e2e2e240' />
       </div>
     </div>

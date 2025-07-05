@@ -31,7 +31,7 @@ function Navbar ({ start, end, state, schema, create }: Navbar_props) {
 
   return (
     <nav
-      className='fixed w-[16rem] transition-all duration-150 h-screen z-60 pt-5 px-4  bg-[#181818] m_border'
+      className='fixed w-[16rem] transition-all duration-150 h-screen z-60 pt-24 px-4  bg-[#181818] m_border'
       style={{ top: 0, right: state ? '0' : '9999px' }}
     >
       <Cards_menu handleadding={create} />

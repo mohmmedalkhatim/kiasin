@@ -9,6 +9,7 @@ function Content ({ props, mode }: { props: any; mode: string }) {
       ['dialog_note', <Editor id={props.id} content={''} title={''} />],
       ['dialog_links', <Cards id={props.id} />],
       ['dialog_areas', <Areas id={props.id} />],
+      ['dialog_tasks', <Areas id={props.id} />],
       ['default', <div>no Content</div>],
     ])
   );
