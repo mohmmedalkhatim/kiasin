@@ -50,7 +50,7 @@ function NoteHeader ({
   return (
     <header className=' w-full m_border'>
       <div
-        className='bg-[url(/girl.jpg)] h-[12rem] bg-cover 1 transition-all  duration-300'
+        className='bg-[url(/universe.jpg)] h-[12rem] bg-cover 1 transition-all  duration-300'
         ref={ref}
       ></div>
       <div className='flex items-center pl-20 gap-4 py-4'>

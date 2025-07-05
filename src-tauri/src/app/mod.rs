@@ -2,7 +2,6 @@ pub mod commands;
 pub mod util;
 pub use commands::{
     areas::{__cmd__areas_control, areas_control},
-    components::{__cmd__components_control, components_control},
     dashboard::{__cmd__dashboard, dashboard},
     media::{__cmd__media_control, media_control},
     note::{__cmd__notes_control, notes_control},

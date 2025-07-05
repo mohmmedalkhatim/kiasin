@@ -11,11 +11,11 @@ function CardSort ({ id }: { id: string }) {
   };
   const card = useAreas(state=>state.get_Card)(Number(id));
   return (
-    <div ref={setNodeRef} className='flex item-center rounded gap-4 m_border py-3 px-4' style={style} {...attributes}>
+    <div ref={setNodeRef} className='flex item-center rounded-xs gap-4 m_border py-3 px-4' style={style} {...attributes}>
       <div className='cursor-grab' {...listeners}>
-        <IconGridDots />
+        <IconGridDots size={"1rem"} />
       </div>
-      <div className='select-none'>{card.type}</div>
+      <div className='select-none text-sm h-auto'>{card.type}</div>
     </div>
   );
 }
