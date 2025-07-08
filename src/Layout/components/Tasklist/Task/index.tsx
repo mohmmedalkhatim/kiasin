@@ -21,7 +21,7 @@ function Task ({
   const [task, setTask] = useState({} as Todo);
   const [checked, setChecked] = useState(task.checked || false);
   const dialog = useLayoutDialog(state => state.changeMode);
-  const update = useTasks(state => state.update);
+  const update = useTasks(state => state.update);  
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
   const style = {
