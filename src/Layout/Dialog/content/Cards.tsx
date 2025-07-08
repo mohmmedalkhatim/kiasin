@@ -11,8 +11,7 @@ function Cards ({ id }: { id: number }) {
           return (
             <div
               onClick={() => {
-                let card = card_m.props.push(item.id)
-                
+                let card = card_m.props.push(item.id);
                 update(id, card);
               }}
             >
