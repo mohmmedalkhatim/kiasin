@@ -42,6 +42,7 @@ function Task ({
           id: task.id,
           title: task.title,
           checked,
+          note_id:task.note_id,
         },
         setTask,
         setChecked
