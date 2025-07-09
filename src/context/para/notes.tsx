@@ -18,73 +18,73 @@ interface Notes {
   create: (id: number) => void;
 }
 
-export const useNotes = create<Notes>((set) => ({
+export const useNotes = create<Notes>(set => ({
   list: [],
   active: {} as Note,
   loading: false,
   init: () => {
     let channel = new Channel<Note[]>();
-    channel.onmessage = (data) => {
+    channel.onmessage = data => {
       set({ list: [...data] });
     };
     invoke('notes_control', { payload: { command: 'find' }, channel });
   },
-  get_notes: (ids) => {
+  get_notes: ids => {
     let list: Note[] = [];
     let channel = new Channel<Note[]>();
-    channel.onmessage = (data) => {
+    channel.onmessage = data => {
       list.push(...data);
     };
     set({ list });
     return list;
   },
-  area_notes: (id) => {
+  area_notes: id => {
     const channel = new Channel<Note[]>();
     const list: Note[] = [];
-    channel.onmessage = (data) => {
-      data.map((item) => list.push(item));
+    channel.onmessage = data => {
+      data.map(item => list.push(item));
       set({ list });
     };
     invoke('notes_control', { payload: { command: 'area_notes', id }, channel })
-      .then((e) => {})
-      .catch((e) => {
+      .then(e => {})
+      .catch(e => {
         console.log(e);
       });
   },
 
-  create: (id) => {
+  create: id => {
     let channel = new Channel<Note[]>();
-    channel.onmessage = (msg) => {
+    channel.onmessage = msg => {
       set({ active: msg[0] });
     };
     invoke('notes_control', { payload: { command: 'create', id }, channel });
   },
   create_blank: () => {
     let channel = new Channel<Note[]>();
-    channel.onmessage = (msg) => {
-      set((state) => ({ list: [...state.list, msg[0]] }));
+    channel.onmessage = msg => {
+      set(state => ({ list: [...state.list, msg[0]] }));
     };
     invoke('notes_control', { payload: { command: 'create_blank' }, channel });
   },
   updata_note: (id, item) => {
     const channel = new Channel<Note[]>();
-    set((state) => {
-      const list: Note[] = state.list.map((ele) => (ele.id != id ? ele : item));
-      return { list };
-    });
     invoke('notes_control', {
       payload: { command: 'update', id, item },
       channel,
     })
-      .then((e) => {
+      .then(e => {
         console.log('the note with the title ' + item.title + ' has been save');
       })
-      .catch((e) => console.log(e));
+      .catch(e => console.log(e));
+    set(state => {
+      const list: Note[] = state.list.map(ele => (ele.id != id ? ele : item));
+      return { list,active:item };
+    });
   },
   note: async (id: number, loading) => {
     set({ loading: true });
     const channel = new Channel<Note[]>();
-    channel.onmessage = (note) => {
+    channel.onmessage = note => {
       set({ active: note[0], loading: false });
       loading(false);
     };
