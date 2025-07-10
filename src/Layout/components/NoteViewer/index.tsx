@@ -3,18 +3,18 @@ import { useNotes } from '../../../context/para/notes';
 import Rich_Editor from './Editor';
 import { useEffect, useState } from 'react';
 import './style.css';
+import { Note } from '../../../types/notes';
 
 const NoteViewer = ({ id }: { id: number }) => {
   const get_note = useNotes(state => state.note);
-  const active = useNotes(state => state.active);
-  const [loading, setloading] = useState(true);
+  const [note, setNote] = useState({} as Note);
   useEffect(() => {
-    get_note(id , setloading);
+    get_note(id ,setNote);
   }, []);
-  if (!loading) {
+  if (note.content) {
     return (
       <div className=' border-none outline-none'>
-        <Rich_Editor content={active.content} id={id} />
+        <Rich_Editor content={note.content} id={id} />
         <div className='absolute bottom-4 right-4' onClick={() => {}}>
           <IconLink color='#e2e2e280' size={'1.4rem'} />
         </div>
