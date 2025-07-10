@@ -2,17 +2,17 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import NotePage from './rich_editor_page';
 import { useNotes } from '../context/para/notes';
+import { Note } from '../types/notes';
 
 function NotePageProvider() {
   const get = useNotes((state) => state.note);
-  const [loading, setloading] = useState(true);
+  const [note, setNote] = useState({} as Note);
   const { id } = useParams();
-  const content = useNotes((state) => state.active);
   useEffect(() => {
-    get(Number(id), setloading);
+    get(Number(id), setNote);
   }, []);
-  if (content.content && !loading) {
-    return <NotePage content={content.content} title={content.title} />;
+  if (note.content ) {
+    return <NotePage content={note.content} title={note.title} />;
   }
 }
 export default NotePageProvider;
