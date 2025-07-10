@@ -13,7 +13,7 @@ interface Notes {
   init: () => void;
   note: (
     id: number,
-    loading: React.Dispatch<React.SetStateAction<boolean>>
+    setNote: React.Dispatch<React.SetStateAction<Note>>
   ) => Promise<void>;
   create: (id: number) => void;
 }
@@ -78,15 +78,14 @@ export const useNotes = create<Notes>(set => ({
       .catch(e => console.log(e));
     set(state => {
       const list: Note[] = state.list.map(ele => (ele.id != id ? ele : item));
-      return { list,active:item };
+      return { list, active: item };
     });
   },
-  note: async (id: number, loading) => {
-    set({ loading: true });
+  note: async (id: number, setNote) => {
     const channel = new Channel<Note[]>();
     channel.onmessage = note => {
       set({ active: note[0], loading: false });
-      loading(false);
+      setNote(note[0]);
     };
     invoke('notes_control', { payload: { command: 'find', id }, channel });
   },
