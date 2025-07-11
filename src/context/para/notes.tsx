@@ -7,7 +7,7 @@ interface Notes {
   active: Note;
   loading: boolean;
   area_notes: (area_id: number) => void;
-  updata_note: (id: number, item: Note) => void;
+  updata_note: (id: number, item: Note) => Promise<void>;
   create_blank: () => void;
   get_notes: (ids: number[]) => Note[];
   init: () => void;
@@ -66,9 +66,9 @@ export const useNotes = create<Notes>(set => ({
     };
     invoke('notes_control', { payload: { command: 'create_blank' }, channel });
   },
-  updata_note: (id, item) => {
+  updata_note:  async (id, item) => {
     const channel = new Channel<Note[]>();
-    invoke('notes_control', {
+    await invoke('notes_control', {
       payload: { command: 'update', id, item },
       channel,
     })
