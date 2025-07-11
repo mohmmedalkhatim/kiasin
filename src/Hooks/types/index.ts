@@ -1,4 +1,3 @@
-import { usePara } from '../../context/para';
 import { Area } from '../../types/area';
 
 interface requsetparms<T> {
