@@ -28,8 +28,7 @@ function Rich_Editor ({ id, content }: { content: any; id: number }) {
   });
   useEffect(() => {
     editor?.chain().focus().run();
-  if (editor) {
-    editor.once('update', e => {
+    editor?.once('update', e => {
       const content = editor.getJSON();
       const description = editor.getText();
       let card = get_card(id);
@@ -37,17 +36,17 @@ function Rich_Editor ({ id, content }: { content: any; id: number }) {
         const note = { title: active.title, content, description, id } as Note;
         update_note(card.props.note_id, note);
       }
-    });}
+    });
   }, []);
 
   const update_note = useNotes(state => state.updata_note);
 
-    return (
-      <EditorContent
-        className='editor'
-        placeholder='start writing'
-        editor={editor}
-      />
-    );
-  }
+  return (
+    <EditorContent
+      className='editor'
+      placeholder='start writing'
+      editor={editor}
+    />
+  );
+}
 export default Rich_Editor;
