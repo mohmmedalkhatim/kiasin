@@ -19,7 +19,8 @@ function NoteHeader ({
   const [title, setTitle] = useState(Title);
   let ref = useRef<HTMLDivElement>(null);
   editor.once('update', e => {
-    const content = editor.getJSON();
+    console.log("count")
+    const content = e.editor.getJSON();
     const description = editor.getText();
     if (content && title) {
       const note = { title, content, description, id } as Note;

@@ -13,7 +13,7 @@ function CardContent ({ id, T, props }: Card_content) {
   let active = useAreas(State => State.active)?.at(-1);
   const [map, setMap] = useState(
     new Map([
-      ['editor', <NoteViewer id={id || active?.note_id || 0} />],
+      ['editor', <NoteViewer id={active?.note_id || 0} />],
       ['Areaslist', <AreasList id={id} />],
       ['tasks', <TaskList id={id} />],
       ['image', <Image id={id} />],
