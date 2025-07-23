@@ -17,7 +17,7 @@ const AreaCard = ({ id }: { id: number }) => {
   );
   if (Area) {
     return (
-      <Link to={`/Area/${Area.id}`}>
+      <Link to={`/Area/${Area.id}`} viewTransition>
         <div className='relative flex flex-col rounded-md m_border bg-clip-border text-gray-700 shadow-md'>
           <div
             style={{ backgroundImage: `url()` }}

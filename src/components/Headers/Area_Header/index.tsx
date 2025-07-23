@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { Area } from '../../../types/area';
 import { useNotes } from '../../../context/para/notes';
 
-function Header () {
+function Header() {
   const [search, setSearch] = useState('');
   const toggle = useAreas(state => state.toggleEditable);
   const active = useAreas(state => state.active)?.at(-1);
@@ -36,8 +36,8 @@ function Header () {
         className='outline-none border-none focus:border'
         onChange={e => {
           let area = { ...active, title: e.target.value } as Area;
-          if(active?.note_id){
-            update_note(active?.note_id,{...area_note,title:e.target.value})
+          if (active?.note_id) {
+            update_note(active?.note_id, { ...area_note, title: e.target.value })
           }
           update_active(area);
           update(area);
@@ -53,7 +53,7 @@ function Header () {
         }
         onClick={toggle}
       />
-      <Link to={`/note/${active?.note_id}`}>
+      <Link viewTransition to={`/note/${active?.note_id}`}>
         <IconNotebook size={'2rem'} />
       </Link>
       <div></div>
