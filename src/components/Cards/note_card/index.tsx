@@ -4,6 +4,7 @@ import { Note } from '../../../types/notes';
 const NoteCard = ({ note }: { note: Note }) => {
   return (
     <Link
+      viewTransition
       to={`/note/${note.id}`}
       className="relative flex flex-col rounded-md m_border bg-clip-border text-gray-700 shadow-md"
     >
