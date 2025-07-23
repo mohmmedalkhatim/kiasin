@@ -8,7 +8,7 @@ import { useDebounce } from 'react-use';
 import { IconGridDots } from '@tabler/icons-react';
 import { useLayoutDialog } from '../../../../context/para/Dialog';
 
-function Task ({
+function Task({
   id,
   classname,
   link,
@@ -18,35 +18,36 @@ function Task ({
   link?: number;
 }) {
   const one = useTasks(state => state.get_one);
-  const [task, setTask] = useState({} as Todo);
-  const [checked, setChecked] = useState(task.checked || false);
+  const [task, setTask] = useState<Todo | undefined>();
+  const [checked, setChecked] = useState(task?.checked || false);
   const dialog = useLayoutDialog(state => state.changeMode);
-  const update = useTasks(state => state.update);  
+  const update = useTasks(state => state.update);
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id });
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
   };
+  useDebounce(() => {
+    if (!task) {
+      one(String(id), setTask, setChecked).then(() => { });
+    }
+    return task
+  }, 20, [])
   useDebounce(
     () => {
-      one(String(id), setTask, setChecked).then(() => {});
-    },
-    200,
-    []
-  );
-  useDebounce(
-    () => {
-      update(
-        {
-          id: task.id,
-          title: task.title,
-          checked,
-          note_id:task.note_id,
-        },
-        setTask,
-        setChecked
-      );
+      if (task) {
+        update(
+          {
+            id: task?.id,
+            title: task?.title,
+            checked,
+            note_id: task?.note_id,
+          },
+          setTask,
+          setChecked
+        );
+      }
     },
     10,
     [checked]
@@ -65,11 +66,11 @@ function Task ({
           className='cursor-pointer'
           onClick={() => {
             if (!link) {
-              dialog('dialog_note', { id: task.note_id as number });
-            }else{}
+              dialog('dialog_note', { id: task?.note_id as number });
+            } else { }
           }}
         >
-          {task.title}
+          {task?.title}
         </div>
       </div>
       <Checkbox state={checked} setState={setChecked} />

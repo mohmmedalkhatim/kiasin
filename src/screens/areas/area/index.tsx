@@ -11,7 +11,7 @@ function Area() {
   const init = useAreas((state) => state.getArea);
   const active = useAreas((state) => state.active);
   const [done, setdone] = useState<boolean>(false);
-  const editable = useAreas(state=>state.editable);
+  const editable = useAreas(state => state.editable);
   useEffect(() => {
     init(Number(id), setdone);
   }, []);
@@ -19,7 +19,7 @@ function Area() {
     return (
       <>
         <Header />
-        <main className={!editable?"content":"mt-[5rem] mr-[16rem]"}>
+        <main className={!editable ? "content" : "mt-[5rem] mr-[16rem]"}>
           {active && active.at(-1) && <Layout />}
           <div className="fixed top-16 right-6">
             <IconDotsVertical size={'1.5rem'} />

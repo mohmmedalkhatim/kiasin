@@ -9,9 +9,9 @@ interface Notes {
   area_notes: (area_id: number) => void;
   updata_note: (id: number, item: Note) => Promise<void>;
   create_blank: () => void;
-  get_notes: (ids: number[]) => Note[];
+  get_notes:  (ids: number[]) => Note[];
   init: () => void;
-  note: (
+  note:(
     id: number,
     setNote: React.Dispatch<React.SetStateAction<Note>>
   ) => Promise<void>;
@@ -46,7 +46,7 @@ export const useNotes = create<Notes>(set => ({
       set({ list });
     };
     invoke('notes_control', { payload: { command: 'area_notes', id }, channel })
-      .then(e => {})
+      .then(e => { })
       .catch(e => {
         console.log(e);
       });
@@ -66,7 +66,7 @@ export const useNotes = create<Notes>(set => ({
     };
     invoke('notes_control', { payload: { command: 'create_blank' }, channel });
   },
-  updata_note:  async (id, item) => {
+  updata_note: async (id, item) => {
     const channel = new Channel<Note[]>();
     await invoke('notes_control', {
       payload: { command: 'update', id, item },
@@ -83,10 +83,10 @@ export const useNotes = create<Notes>(set => ({
   },
   note: async (id: number, setNote) => {
     const channel = new Channel<Note[]>();
-    channel.onmessage = note => {
+    channel.onmessage = async note => {
       set({ active: note[0], loading: false });
       setNote(note[0]);
     };
-    invoke('notes_control', { payload: { command: 'find', id }, channel });
+    await invoke('notes_control', { payload: { command: 'find', id }, channel });
   },
 }));

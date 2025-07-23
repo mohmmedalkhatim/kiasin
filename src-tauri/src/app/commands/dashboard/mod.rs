@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::{app::commands::areas::Area, DbConnection};
+use crate::DbConnection;
 use async_std::sync::Mutex;
 use migration::entities::area::{Entity, Model};
 use sea_orm::{ EntityTrait};

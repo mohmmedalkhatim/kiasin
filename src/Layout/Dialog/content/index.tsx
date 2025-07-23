@@ -6,7 +6,7 @@ import NoteViewer from '../../components/NoteViewer';
 function Content ({ props, mode }: { props: any; mode: string }) {
   let [element] = useState(
     new Map([
-      ['dialog_note', <NoteViewer id={props.note_id} />],
+      ['dialog_note', <NoteViewer note_id={0} />],
       ['dialog_links', <Cards id={props.id} />],
       ['dialog_areas', <Areas id={props.id} />],
       ['dialog_tasks', <Cards id={props.id} />],
