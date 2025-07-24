@@ -1,7 +1,7 @@
 import { IconLayersIntersect } from '@tabler/icons-react';
 import Card from '../../../components/Cards/area_card';
 import { useAreas } from '../../../context/para/areas';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useDebounce } from 'react-use';
 import { useLayoutDialog } from '../../../context/para/Dialog';
 import Input from '../../../components/Input';
@@ -11,13 +11,13 @@ function AreasList({ id }: { id: number }) {
   let card = useAreas(state => state.get_Card)(id);
   let update_card = useAreas(state => state.update_card);
   let changeMode = useLayoutDialog(state => state.changeMode)
-  let [areas, setAreas] = useState<number[]>([]);
-  useDebounce(
+  let [areas, setAreas] = useState<number[]>();
+  useEffect(
     () => {
+      if(!areas){
       setAreas(card.props.list);
-    },
-    20,
-    [list]
+      }
+    },    [list]
   );
   return (
     <div className='p-4'>
@@ -34,7 +34,7 @@ function AreasList({ id }: { id: number }) {
       </div>
       <div className='m_border  mb-3 '></div>
       <div className='boxs_grid'>
-        {areas.map(item => (
+        {areas?.map(item => (
           <Card key={item} id={item} />
         ))}
       </div>
