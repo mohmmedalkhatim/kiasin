@@ -1,5 +1,5 @@
 // components/Card.tsx
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import {
   IconChevronsDown,
@@ -57,7 +57,6 @@ const Card: React.FC<CardProps> = ({
 }) => {
   const editable = useAreas(state => state.editable);
   const delete_card = useAreas(state => state.delete_card);
-
   if (card) {
     return (
       <CardContainer
@@ -66,48 +65,50 @@ const Card: React.FC<CardProps> = ({
         className={`relative rounded-xs ${cla} card`}
       >
         {editable && (
-          <div className='flex items-center bg-sky-600 absolute z-10 w-full justify-between px-4 py-4'>
-            <div className='flex gap-2'>
+          <div className='absolute z-10 h-full w-full ' style={{background:"linear-gradient(180deg, #181818, #0000006b)"}}>
+            <div className='flex items-center justify-between bg-sky-600 px-4 py-4'>
               <div className='flex gap-2'>
-                <div
-                  className='flex items-center'
-                  onClick={() =>
-                    setCardlist(card.id, { Col: 'row', increase: false })
-                  }
-                >
-                  <IconChevronsUp />
+                <div className='flex gap-2'>
+                  <div
+                    className='flex items-center'
+                    onClick={() =>
+                      setCardlist(card.id, { Col: 'row', increase: false })
+                    }
+                  >
+                    <IconChevronsUp />
+                  </div>
+                  <div
+                    onClick={() =>
+                      setCardlist(card.id, { Col: 'row', increase: true })
+                    }
+                  >
+                    <IconChevronsDown />
+                  </div>
                 </div>
-                <div
-                  onClick={() =>
-                    setCardlist(card.id, { Col: 'row', increase: true })
-                  }
-                >
-                  <IconChevronsDown />
+                <div className='flex gap-2'>
+                  <div
+                    onClick={() =>
+                      setCardlist(card.id, { Col: 'col', increase: false })
+                    }
+                  >
+                    <IconChevronsLeft />
+                  </div>
+                  <div
+                    onClick={() =>
+                      setCardlist(card.id, { Col: 'col', increase: true })
+                    }
+                  >
+                    <IconChevronsRight />
+                  </div>
                 </div>
               </div>
-              <div className='flex gap-2'>
-                <div
-                  onClick={() =>
-                    setCardlist(card.id, { Col: 'col', increase: false })
-                  }
-                >
-                  <IconChevronsLeft />
-                </div>
-                <div
-                  onClick={() =>
-                    setCardlist(card.id, { Col: 'col', increase: true })
-                  }
-                >
-                  <IconChevronsRight />
-                </div>
+              <div
+                onClick={() => {
+                  delete_card(Number(id), setSort);
+                }}
+              >
+                <IconTrashFilled />
               </div>
-            </div>
-            <div
-              onClick={() => {
-                delete_card(Number(id), setSort);
-              }}
-            >
-              <IconTrashFilled />
             </div>
           </div>
         )}
