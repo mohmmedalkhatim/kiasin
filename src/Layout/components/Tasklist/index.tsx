@@ -19,7 +19,7 @@ import { useDebounce } from 'react-use';
 import { SwappingStrategy } from '../../Strategy';
 import { useLayoutDialog } from '../../../context/para/Dialog';
 
-function TaskList ({ id }: { id: number }) {
+function TaskList({ id }: { id: number }) {
   const [schema, setSchema] = useState<number[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const open_dialog = useLayoutDialog(state => state.changeMode);
@@ -70,7 +70,7 @@ function TaskList ({ id }: { id: number }) {
         onDragEnd={handleDragEnd}
       >
         <SortableContext items={schema} strategy={SwappingStrategy}>
-          <div className='list'>
+          <div className='p-2'>
             <form
               onSubmit={async e => {
                 e.preventDefault();
@@ -79,6 +79,7 @@ function TaskList ({ id }: { id: number }) {
                   setTitle('');
                 }
               }}
+              className='cols-full'
             >
               <Input
                 placeholder='create a task'
@@ -91,17 +92,19 @@ function TaskList ({ id }: { id: number }) {
                 }
               />
             </form>
-            {schema?.map(item =>
-              item !== null ? (
-                <Task
-                  id={item}
-                  key={item}
-                  classname={activeId === String(item) ? 'dragging' : ''}
-                />
-              ) : (
-                ''
-              )
-            )}
+            <div className='task_list overflow-hidden'>
+              {schema?.map(item =>
+                item !== null ? (
+                  <Task
+                    id={item}
+                    key={item}
+                    classname={activeId === String(item) ? 'dragging' : ''}
+                  />
+                ) : (
+                  ''
+                )
+              )}
+            </div>
             <div
               className='absolute bottom-5 right-5'
               onClick={() => open_dialog('dialog_links', { id })}
