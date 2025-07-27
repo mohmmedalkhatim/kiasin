@@ -27,7 +27,13 @@
   .editable_Dashboard {
     padding: none;
   }
-
+  .overlay{
+    background: #00000004;
+    z-index: 10;
+    top: 0;
+    right: 0;
+    position: absolute;
+  }
   .upload_area {
     stroke-width: 2px 5;
     stroke-dashoffset: 2% 10;
