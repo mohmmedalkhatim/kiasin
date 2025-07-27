@@ -1,4 +1,4 @@
-import { IconEdit } from "@tabler/icons-react"
+import { IconEdit, IconNotebook } from "@tabler/icons-react"
 import { useBubbleMenu } from "../context/para/BubbleMenu"
 import { useEffect, useRef } from "react"
 import "./style.css"
@@ -28,7 +28,8 @@ function BubbleMenu() {
     }, [])
     return (
         <div className="m_border bubble_menu" ref={ref} style={{ display: opened ? "flex" : "none" }}>
-            <div className="m_border bubble_menu_item" onClick={() => useAreas.getState().toggleEditable()}>edit <IconEdit size={"1rem"} /></div>
+            <div className="m_border bubble_menu_item" onClick={() => useAreas.getState().toggleEditable()}>edit <IconEdit size={"1.3rem"} /></div>
+            <div className="m_border bubble_menu_item" onClick={() => useAreas.getState().toggleEditable()}>note <IconNotebook size={"1.3rem"} /></div>
         </div>
     )
 }
