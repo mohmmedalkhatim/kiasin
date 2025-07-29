@@ -10,11 +10,9 @@ const AreaCard = ({ id }: { id: number }) => {
   const list = useAreas(state => state.list);
   useEffect(
     () => {
-      if (!Area) {
-        get_list_item(id, setArea);
-      }
+      get_list_item(id, setArea);
     },
-    []
+    [list]
   );
   if (Area) {
     return (
