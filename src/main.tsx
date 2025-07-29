@@ -6,8 +6,7 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import { RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './styles.css';
-import { AlteShortCuts } from './shortcuts';
-import { useAreas } from './context/para/areas';
+import { initShortcuts } from './shortcuts';
 
 const lenis = new Lenis();
 
@@ -17,13 +16,8 @@ gsap.ticker.add((time) => {
   lenis.raf(time * 3000);
 });
 
-document.addEventListener("keydown",(e)=>{
-  if(e.altKey){
-    if(e.key == "e"){
-      useAreas.getState().toggleEditable()
-    }
-  }
-})
+initShortcuts()
+
 gsap.ticker.lagSmoothing(0);
 
 gsap.registerPlugin(ScrollTrigger);
