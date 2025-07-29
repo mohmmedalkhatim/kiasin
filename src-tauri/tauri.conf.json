@@ -9,7 +9,7 @@
     "active": true,
     "targets": "all",
     "icon": [
-      "icons/kiasin.ico"
+      "icons/logo.ico"
     ]
   },
   "productName": "kiasin",
