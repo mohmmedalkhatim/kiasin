@@ -112,7 +112,6 @@ export const useAreas = create<Areas>(set => ({
   },
   init: async () => {
     const channel = new Channel<Area[]>(data => {
-      console.log("hello world")
        data.map(item => {
         const icon = URL.createObjectURL(
           new Blob([new Uint8Array(item.icon as number[])], {
@@ -128,7 +127,6 @@ export const useAreas = create<Areas>(set => ({
         item.cover = cover;
         const list = new Set<Area>(data);
         list.add(item);
-        console.log(data);
         set(_state => ({ list: [...list] }));
       });
     });
