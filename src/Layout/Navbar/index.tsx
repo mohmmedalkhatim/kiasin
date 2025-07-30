@@ -43,7 +43,7 @@ function Navbar ({ start, end, state, schema, create }: Navbar_props) {
       >
         <SortableContext items={schema} strategy={verticalListSortingStrategy}>
           <div className='flex flex-col gap-2  select-none'>
-            {schema.map(item => (
+            {schema?.map(item => (
               <CardSort id={item} />
             ))}
           </div>
