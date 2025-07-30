@@ -14,7 +14,7 @@ function Area() {
   const editable = useAreas(state => state.editable);
   useEffect(() => {
     init(Number(id), setdone);
-  }, []);
+  }, [id]);
   if (done) {
     return (
       <>
