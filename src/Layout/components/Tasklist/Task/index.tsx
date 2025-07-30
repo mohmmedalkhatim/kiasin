@@ -63,7 +63,7 @@ function Task({
       <div className='text-sm flex gap-4'>
         <IconGridDots {...listeners} className='cursor-grab' size={'1rem'} />
         <div
-          className='cursor-pointer'
+          className='cursor-pointer text-xs'
           onClick={() => {
             if (!link) {
               dialog('dialog_note', { id: task?.note_id as number });
@@ -72,6 +72,7 @@ function Task({
         >
           {task?.title}
         </div>
+
       </div>
       <Checkbox state={checked} setState={setChecked} />
     </div>
