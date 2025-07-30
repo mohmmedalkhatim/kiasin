@@ -9,7 +9,7 @@ import {
 } from '@dnd-kit/core';
 import './index.css';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Task from './Task';
 import Input from '../../../components/Input';
 import { IconLink, IconSend2 } from '@tabler/icons-react';
@@ -25,29 +25,18 @@ function TaskList({ id }: { id: number }) {
   const open_dialog = useLayoutDialog(state => state.changeMode);
   const [title, setTitle] = useState<string>('');
   const create_task = useTasks(state => state.create);
-  const get_card = useAreas(state => state.get_Card);
+  const card = useAreas(state => state.get_Card)(id);
+  const updateCard = useAreas(state => state.update_card);
   const act = useAreas(state => state.active);
-  const [_, forceUpdate] = useState(0);
-  useDebounce(
-    () => {
-      forceUpdate(n => n + 1);
-    },
-    10,
-    [act]
-  );
+
 
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor)
   );
-  useDebounce(
-    () => {
-      let card = get_card(id);
+  useEffect(() => {
       setSchema(card.props.list);
-    },
-    500,
-    []
-  );
+  }, [act]);
 
   const handleDragStart = (event: any) => {
     setActiveId(event.active.id);
@@ -57,7 +46,9 @@ function TaskList({ id }: { id: number }) {
     if (event.active.id !== event.over.id) {
       const oldIndex = schema?.indexOf(event.active.id);
       const newIndex = schema?.indexOf(event.over.id);
-      setSchema(arrayMove(schema, oldIndex, newIndex));
+      const updated = arrayMove(schema, oldIndex, newIndex);
+      setSchema(updated);
+      updateCard(id, { ...card, props: { list: updated } })
     }
     setActiveId(null);
   };
