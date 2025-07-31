@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { useAreas } from './context/para/areas';
 import Navbar from './components/Navbar';
 import { useNotes } from './context/para/notes';
-import Dialog from './Layout/Dialog';
+import Dialog from './Area/Dialog';
 import BubbleMenu from './App_bubble';
 import { useBubbleMenu } from './context/para/BubbleMenu';
 

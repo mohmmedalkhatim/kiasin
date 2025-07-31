@@ -2,7 +2,7 @@ import { useParams } from 'react-router-dom';
 import type { Area } from '../../../types/area';
 import { useEffect, useState } from 'react';
 import { useAreas } from '../../../context/para/areas';
-import Layout from '../../../Layout';
+import Layout from '../../../Area';
 import { IconDotsVertical } from '@tabler/icons-react';
 import Header from '../../../components/Headers/Area_Header';
 
