@@ -20,10 +20,10 @@ async fn main() {
     #[cfg(desktop)]
     {
         builder = builder.plugin(tauri_plugin_single_instance::init(|app, args, cwd| {
-            let _ = app
+            let window = app
                 .get_webview_window("main")
-                .expect("no main window")
-                .set_focus();
+                .expect("no main window");
+            window.maximize().expect("there is an error");
         }));
     }
 
