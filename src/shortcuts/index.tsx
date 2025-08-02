@@ -15,10 +15,7 @@ export function initShortcuts() {
     AlteShortCuts.forEach((action, key) => {
       if (e.altKey) {
         if (e.key == key) {
-          let item = AlteShortCuts.get(key);
-          if (item) {
-            item()
-          }
+          action()
         }
       }
     })
