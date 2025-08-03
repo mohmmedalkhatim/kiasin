@@ -1,17 +1,39 @@
 import { useEffect, useState } from "react"
 import { useAreas } from "../../../context/para/areas"
+import { useEditor, JSONContent } from '@tiptap/react';
+import { StarterKit } from '@tiptap/starter-kit';
+import { useNotes } from "../../../context/para/notes";
 
 function TextInputArea({ id }: { id: number }) {
-    let card = useAreas(state => state.get_Card)(id)
-    let update = useAreas(state => state.update_card)
-    let [content, setContent] = useState(card.props?.content || "")
+    const card = useAreas(state => state.get_Card)(id)
+    const update = useAreas(state => state.update_card)
+    const [content, setContent] = useState(card.props?.content || "")
+    const active = useAreas(state=>state.active)?.at(-1)
+    const note = useNotes(state=>state.updata_note)
     useEffect(() => {
-        card.props = { content };
+        let json: JSONContent = {
+            "attrs": {
+                "textAlign": null
+            },
+            "content": [
+                {
+                    "text": content,
+                    "type": "text"
+                }
+            ],
+            "type": "paragraph"
+        };
+        if(card.props.link){
+
+        }else{
+
+        }
+        card.props = { ...card.props, content };
         update(id, card)
     }, [content])
     return (
         <form className="p-4 w-full h-full relative">
-            <textarea className="focus:outline-none w-full h-full" placeholder="start writing" value={content} onChange={e => setContent(e.target.value)}/>
+            <textarea className="focus:outline-none w-full h-full" placeholder="start writing" value={content} onChange={e => setContent(e.target.value)} />
         </form >
     )
 }
