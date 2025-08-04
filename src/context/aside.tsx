@@ -4,6 +4,7 @@ interface Aside_state {
   active: boolean;
   t: string;
   toggle: (element: string) => void;
+  close: () => void;
 }
 export const useAside = create<Aside_state>((set) => ({
   active: false,
@@ -11,4 +12,5 @@ export const useAside = create<Aside_state>((set) => ({
   toggle: (t) => {
     set((state) => ({ active: !state.active, t: t }));
   },
+  close:()=>set({active:false})
 }));

@@ -9,6 +9,7 @@ interface Dialog {
     props: { id: number }
   ) => void;
   toggle: () => void;
+  close: () => void;
 }
 
 export let useLayoutDialog = create<Dialog>(set => ({
@@ -21,4 +22,5 @@ export let useLayoutDialog = create<Dialog>(set => ({
   toggle: () => {
     set(info => ({ state: !info.state }));
   },
+  close: () => set({ state: false }),
 }));
