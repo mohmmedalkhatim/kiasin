@@ -1,4 +1,3 @@
-
 use chrono::Local;
 use migration::entities::{
     area::{ActiveModel, Entity},
@@ -6,7 +5,6 @@ use migration::entities::{
 };
 use sea_orm::{DatabaseConnection, DbErr, EntityTrait, IntoActiveModel, Set};
 use serde_json::json;
-
 
 pub async fn create_area(db: &DatabaseConnection, id: i32) -> Result<i32, DbErr> {
     let shema = json!({
@@ -32,27 +30,29 @@ pub async fn create_area(db: &DatabaseConnection, id: i32) -> Result<i32, DbErr>
         links: Set(links),
         created: Set(Some(date.date_naive())),
         ui_schema: Set(shema),
-        note_id:Set(note_id.clone()),
+        note_id: Set(note_id.clone()),
         in_archive: Set(false),
         categorie: Set(id as u32),
         ..Default::default()
     };
     let id = Entity::insert(new).exec(db).await?.last_insert_id as i32;
-   let _ = update_note_area_id(note_id, id, db);
+    let _ = update_note_area_id(note_id, id, db);
     Ok(id)
 }
 
-
-pub async fn update_note_area_id(note_id:i32 , id: i32, db: &DatabaseConnection) -> Result<(), DbErr> {
+pub async fn update_note_area_id(
+    note_id: i32,
+    id: i32,
+    db: &DatabaseConnection,
+) -> Result<(), DbErr> {
     let new = note::ActiveModel {
         id: Set(note_id),
-        area_id:Set(Some(id)),
+        area_id: Set(Some(id)),
         ..Default::default()
     };
     let _ = note::Entity::update(new).exec(db).await?;
     Ok(())
 }
-
 
 pub async fn create_from_templates(db: &DatabaseConnection, id: i32) -> Result<i32, DbErr> {
     let links = json!({ "list": [] });

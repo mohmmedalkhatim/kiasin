@@ -20,7 +20,7 @@ pub async fn create_todo(todo: Todo, db: &DatabaseConnection) -> Result<i32, DbE
     let new = ActiveModel {
         title: Set(todo.title.clone()),
         area_id: Set(todo.area_id),
-        note_id:Set(note_id),
+        note_id: Set(note_id),
         checked: Set(false),
         created: Set(time.date_naive()),
         ..Default::default()

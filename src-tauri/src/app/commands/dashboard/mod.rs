@@ -3,7 +3,7 @@ use std::sync::Arc;
 use crate::DbConnection;
 use async_std::sync::Mutex;
 use migration::entities::area::{Entity, Model};
-use sea_orm::{ EntityTrait};
+use sea_orm::EntityTrait;
 use tauri::State;
 mod create;
 
@@ -18,9 +18,7 @@ pub async fn dashboard(data: State<'_, Arc<Mutex<DbConnection>>>) -> Result<Mode
             None => {
                 let res = create::create_area(&db, 1).await;
                 match res {
-                    Ok(model) => {
-                        Ok(model)   
-                    }
+                    Ok(model) => Ok(model),
                     Err(e) => Err(e.to_string()),
                 }
             }

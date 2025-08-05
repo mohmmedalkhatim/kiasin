@@ -1,7 +1,7 @@
 use std::sync::Arc;
 
-use async_std::sync::Mutex;
 use crate::DbConnection;
+use async_std::sync::Mutex;
 use migration::entities::todo::Model;
 use objects::Payload;
 use tauri::{command, ipc::Channel, State};

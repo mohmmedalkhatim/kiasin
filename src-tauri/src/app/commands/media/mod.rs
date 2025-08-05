@@ -32,10 +32,8 @@ pub async fn media_control(
                 Some(id) => {
                     let res = functions::update_media(state, &db, id).await;
                     match res {
-                        Ok(_state)=>{
-                            Ok(())
-                        }
-                        Err(e)=>{
+                        Ok(_state) => Ok(()),
+                        Err(e) => {
                             return Err(e.to_string());
                         }
                     }
@@ -84,9 +82,9 @@ pub async fn media_control(
                     match res {
                         Ok(list) => {
                             let _ = channel.send(list);
-                            return Ok(())
-                        },
-                        Err(e)=>{
+                            return Ok(());
+                        }
+                        Err(e) => {
                             return Err(e.to_string());
                         }
                     }

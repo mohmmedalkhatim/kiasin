@@ -7,7 +7,7 @@ pub struct Area {
     pub title: Option<String>,
     pub description: Option<String>,
     pub ui_schema: Value,
-    pub note_id:i32,
+    pub note_id: i32,
     pub cover: Option<String>,
     pub links: Value,
     pub icon: Option<String>,

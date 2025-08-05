@@ -40,9 +40,7 @@ pub async fn create_emty(db: &DatabaseConnection) -> Result<Model, DbErr> {
     let data = Local::now();
     let active = note::ActiveModel {
         title: Set(Some("untitled".to_string())),
-        content: Set(Some(
-            json!({"content":""}),
-        )),
+        content: Set(Some(json!({"content":""}))),
         in_archive: Set(false),
         create_date: Set(Some(data.date_naive())),
         ..Default::default()
