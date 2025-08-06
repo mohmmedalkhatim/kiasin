@@ -11,7 +11,7 @@ import { load } from '@tauri-apps/plugin-store';
 
 const lenis = new Lenis();
 
-const storage = await load("event.json");
+export const storage = load("event.json");
 
 
 lenis.on('scroll', ScrollTrigger.update);
