@@ -9,7 +9,7 @@ import {
 } from '@dnd-kit/core';
 import './index.css';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Task from './Task';
 import Input from '../../../components/Input';
 import { IconLink, IconSend2 } from '@tabler/icons-react';
@@ -19,35 +19,24 @@ import { useDebounce } from 'react-use';
 import { SwappingStrategy } from '../../Strategy';
 import { useLayoutDialog } from '../../../context/para/Dialog';
 
-function TaskList ({ id }: { id: number }) {
+function TaskList({ id }: { id: number }) {
   const [schema, setSchema] = useState<number[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const open_dialog = useLayoutDialog(state => state.changeMode);
   const [title, setTitle] = useState<string>('');
   const create_task = useTasks(state => state.create);
-  const get_card = useAreas(state => state.get_Card);
+  const card = useAreas(state => state.get_Card)(id);
+  const updateCard = useAreas(state => state.update_card);
   const act = useAreas(state => state.active);
-  const [_, forceUpdate] = useState(0);
-  useDebounce(
-    () => {
-      forceUpdate(n => n + 1);
-    },
-    10,
-    [act]
-  );
+
 
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor)
   );
-  useDebounce(
-    () => {
-      let card = get_card(id);
+  useEffect(() => {
       setSchema(card.props.list);
-    },
-    500,
-    []
-  );
+  }, [act]);
 
   const handleDragStart = (event: any) => {
     setActiveId(event.active.id);
@@ -57,7 +46,9 @@ function TaskList ({ id }: { id: number }) {
     if (event.active.id !== event.over.id) {
       const oldIndex = schema?.indexOf(event.active.id);
       const newIndex = schema?.indexOf(event.over.id);
-      setSchema(arrayMove(schema, oldIndex, newIndex));
+      const updated = arrayMove(schema, oldIndex, newIndex);
+      setSchema(updated);
+      updateCard(id, { ...card, props: { list: updated } })
     }
     setActiveId(null);
   };
@@ -70,7 +61,7 @@ function TaskList ({ id }: { id: number }) {
         onDragEnd={handleDragEnd}
       >
         <SortableContext items={schema} strategy={SwappingStrategy}>
-          <div className='list'>
+          <div className='p-2'>
             <form
               onSubmit={async e => {
                 e.preventDefault();
@@ -79,6 +70,7 @@ function TaskList ({ id }: { id: number }) {
                   setTitle('');
                 }
               }}
+              className='cols-full'
             >
               <Input
                 placeholder='create a task'
@@ -91,17 +83,19 @@ function TaskList ({ id }: { id: number }) {
                 }
               />
             </form>
-            {schema?.map(item =>
-              item !== null ? (
-                <Task
-                  id={item}
-                  key={item}
-                  classname={activeId === String(item) ? 'dragging' : ''}
-                />
-              ) : (
-                ''
-              )
-            )}
+            <div className='task_list overflow-hidden'>
+              {schema?.map(item =>
+                item !== null ? (
+                  <Task
+                    id={item}
+                    key={item}
+                    classname={activeId === String(item) ? 'dragging' : ''}
+                  />
+                ) : (
+                  ''
+                )
+              )}
+            </div>
             <div
               className='absolute bottom-5 right-5'
               onClick={() => open_dialog('dialog_links', { id })}

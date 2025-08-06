@@ -1,0 +1,12 @@
+@import "tailwindcss";
+
+
+@layer components {
+    .bubble_menu {
+        @apply absolute p-3 flex-col rounded w-[12rem] gap-2 flex z-100 bg-[#181818];
+    }
+    .bubble_menu_item {
+        z-index: 100;
+        @apply p-2 flex items-center justify-between grow cursor-pointer ;
+    }
+}

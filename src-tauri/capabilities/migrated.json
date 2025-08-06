@@ -9,6 +9,8 @@
     "core:default",
     "shell:allow-open",
     "shell:default",
-    "store:default" 
-   ]
+    "store:default",
+    "sql:default",
+    "store:default"
+  ]
 }

@@ -1,5 +1,5 @@
 import './style.css';
-import Layout from '../../Layout';
+import Layout from '../../Area';
 import { invoke } from '@tauri-apps/api/core';
 import { Area } from '../../types/area';
 import { useAreas } from '../../context/para/areas';

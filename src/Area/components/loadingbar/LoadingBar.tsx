@@ -36,14 +36,6 @@ export function LoadingBar ({ id }: { id: number }) {
   return (
     <div className='h-full py-2'>
       <div className='bg-[#e2e2e280] h-full rounded-r-lg' ref={ref}></div>
-      <div
-        className='absolute right-5 bottom-5 z-40'
-        onClick={() => {
-          change_mode('dialog_tasks', { id });
-        }}
-      >
-        <IconLink size={'1.3rem'} color='#e2e2e240' />
-      </div>
     </div>
   );
 }

@@ -6,15 +6,22 @@ import ScrollTrigger from 'gsap/ScrollTrigger';
 import { RouterProvider } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './styles.css';
-
+import { initShortcuts } from './shortcuts';
+import { load } from '@tauri-apps/plugin-store';
 
 const lenis = new Lenis();
+
+const storage = await load("event.json");
+
 
 lenis.on('scroll', ScrollTrigger.update);
 
 gsap.ticker.add((time) => {
   lenis.raf(time * 3000);
 });
+
+initShortcuts()
+
 gsap.ticker.lagSmoothing(0);
 
 gsap.registerPlugin(ScrollTrigger);

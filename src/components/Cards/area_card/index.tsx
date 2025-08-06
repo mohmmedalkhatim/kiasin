@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAreas } from '../../../context/para/areas';
 import { Link } from 'react-router-dom';
 import { Area } from '../../../types/area';
@@ -6,18 +6,17 @@ import { useDebounce } from 'react-use';
 
 const AreaCard = ({ id }: { id: number }) => {
   const get_list_item = useAreas(state => state.get_list_item);
-  const [Area, setArea] = useState<Area>({} as Area);
+  const [Area, setArea] = useState<Area>();
   const list = useAreas(state => state.list);
-  useDebounce(
+  useEffect(
     () => {
-       get_list_item(id, setArea);
+      get_list_item(id, setArea);
     },
-    5,
-    []
+    [list]
   );
   if (Area) {
     return (
-      <Link to={`/Area/${Area.id}`}>
+      <Link to={`/Area/${Area.id}`} viewTransition>
         <div className='relative flex flex-col rounded-md m_border bg-clip-border text-gray-700 shadow-md'>
           <div
             style={{ backgroundImage: `url()` }}

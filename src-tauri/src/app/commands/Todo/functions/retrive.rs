@@ -12,7 +12,7 @@ pub async fn find_one(id: i32, db: &DatabaseConnection) -> Result<Model, DbErr> 
 }
 pub async fn find_list(ids: Vec<i32>, db: &DatabaseConnection) -> Result<Vec<Model>, DbErr> {
     let mut list = Vec::new();
-    println!("{:?}",ids);
+    println!("{:?}", ids);
     for id in ids {
         let todo = Entity::find_by_id(id).one(db).await?.unwrap();
         list.push(todo);

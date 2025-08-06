@@ -10,7 +10,7 @@ interface props {
 
 function Page(item: props) {
   return (
-    <Link key={item.id} className="link group rounded z-40" to={item.link}>
+    <Link key={item.id} viewTransition className="link group rounded z-40" to={item.link}>
       <div>{item.Icon}</div>
       <div className="hidden m_border group-hover:block tip">{item.name}</div>
     </Link>

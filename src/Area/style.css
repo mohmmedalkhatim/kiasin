@@ -12,22 +12,28 @@
   }
 
   .elements_container {
-    @apply grid-cols-3 grow grid;
+    @apply grid-cols-3 grow grid ;
   }
 
   .GridContainer {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
     grid-auto-rows: 4.07rem;
     grid-auto-flow: dense;
     gap: 16px;
-    padding: 16px;
+    padding: 8px;
   }
 
   .editable_Dashboard {
     padding: none;
   }
-
+  .overlay{
+    background: #00000004;
+    z-index: 10;
+    top: 0;
+    right: 0;
+    position: absolute;
+  }
   .upload_area {
     stroke-width: 2px 5;
     stroke-dashoffset: 2% 10;

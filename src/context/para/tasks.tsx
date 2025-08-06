@@ -7,9 +7,9 @@ interface Tasks {
   list: Todo[];
   init: () => void;
   create: (title: string, card_id: number) => Promise<void>;
-  update: (data: Todo, setTask:React.Dispatch<React.SetStateAction<Todo>>,setChecked:(i:boolean)=>void) => Promise<void>;
+  update: (data: Todo, setTask:React.Dispatch<React.SetStateAction<Todo | undefined>>,setChecked:(i:boolean)=>void) => Promise<void>;
   get_list: (ids: number[], setItem: any) => void;
-  get_one: (id: string, setTask:React.Dispatch<React.SetStateAction<Todo>>,setChecked:(i:boolean)=>void) => Promise<void>;
+  get_one: (id: string, setTask:React.Dispatch<React.SetStateAction<Todo | undefined>>,setChecked:(i:boolean)=>void) => Promise<void>;
 }
 
 export let useTasks = create<Tasks>(set => ({

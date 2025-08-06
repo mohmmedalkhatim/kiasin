@@ -5,11 +5,18 @@ import { useEffect } from 'react';
 import { useAreas } from './context/para/areas';
 import Navbar from './components/Navbar';
 import { useNotes } from './context/para/notes';
-import Dialog from './Layout/Dialog';
+import Dialog from './Area/Dialog';
+import BubbleMenu from './App_bubble';
+import { useBubbleMenu } from './context/para/BubbleMenu';
+
+
 function App() {
   const init = useAreas((state) => state.init);
-  let initNotes = useNotes((state) => state.init);
-
+  const initNotes = useNotes((state) => state.init);
+  const close_bubble = useBubbleMenu(state => state.close)
+  const close = async () => {
+    close_bubble()
+  }
   useEffect(() => {
     init();
     initNotes();
@@ -18,10 +25,13 @@ function App() {
 
   return (
     <>
-      <Outlet />
-      <Navbar />
+      <BubbleMenu />
+      <div onClick={close}>
+        <Outlet />
+        <Navbar />
+      </div>
       <Aside />
-      <Dialog/>
+      <Dialog />
     </>
   );
 }
