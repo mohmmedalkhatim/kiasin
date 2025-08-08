@@ -35,7 +35,7 @@ function TextInputArea({ id }: { id: number }) {
         update(id, card)
     }, [content])
     return (
-        <form className="p-4 w-full h-full relative">
+        <form className="p-4 w-full h-full relative" onSubmit={(e)=>e.preventDefault()}>
             <textarea className="focus:outline-none w-full h-full" placeholder="start writing" value={content} onChange={e => setContent(e.target.value)} />
             <div className="absolute flex items-center gap-4 right-4 bottom-4">
                 <div onClick={() => {
@@ -43,7 +43,7 @@ function TextInputArea({ id }: { id: number }) {
                 }}>
                     <IconLink size={"1rem"} color="#e2e2e2" />
                 </div>
-                <Button children={"send"} className="text-xs" size="sm" />
+                <Button children={"send"} className="text-xs" size="sm" type="submit" />
             </div>
         </form >
     )
