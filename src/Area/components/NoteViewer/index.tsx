@@ -3,8 +3,8 @@ import Rich_Editor from './Editor';
 import './style.css';
 import useNoteCard from './Hook';
 
-const NoteViewer = ({ note_id }: {  note_id: number }) => {
-  let {editor} = useNoteCard(note_id)
+const NoteViewer = ({ note_id }: { note_id: number }) => {
+  let { editor } = useNoteCard(note_id)
   if (editor)
     return (
       <div className=' border-none outline-none'>

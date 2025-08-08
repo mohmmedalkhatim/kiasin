@@ -66,7 +66,7 @@ function Task({
           className='cursor-pointer text-xs'
           onClick={() => {
             if (!link) {
-              dialog('dialog_note', { id: task?.note_id as number });
+              dialog('dialog_note', { id: task?.id as number });
             } else { }
           }}
         >
