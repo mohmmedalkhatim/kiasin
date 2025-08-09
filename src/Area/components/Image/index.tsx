@@ -4,7 +4,7 @@ import { useRef, useState } from 'react';
 import { useAreas } from '../../../context/para/areas';
 import { useDebounce } from 'react-use';
 
-function Image ({ id }: { id: number }) {
+function Image({ id }: { id: number }) {
   const [url, setUrl] = useState('');
 
   const handleFileChange = useMedia(state => state.handleFileChange);
@@ -12,20 +12,19 @@ function Image ({ id }: { id: number }) {
   let one = useMedia(state => state.get_image_url);
   let ref = useRef<HTMLInputElement>(null);
   let active = useAreas(state => state.active);
+  let [loading, setLoading] = useState(false)
   useDebounce(
     () => {
-      if (url == '') {
         let card = get_Card(id);
-        one(card.props, setUrl);
-      }
+        one(card.props, setUrl, setLoading);
     },
-    50,
+    10,
     [active]
   );
   return (
     <div
       className='bg-cover w-full h-full'
-      style={{ backgroundImage: `url(${url})`, transition:"none" }}
+      style={{ backgroundImage: `url(${url})`, transition: "none" }}
     >
       <div className='w-full h-full p-4 '>
         {url == '' ? (
