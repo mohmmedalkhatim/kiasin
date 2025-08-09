@@ -25,7 +25,7 @@ function Image ({ id }: { id: number }) {
   return (
     <div
       className='bg-cover w-full h-full'
-      style={{ backgroundImage: `url(${url})` }}
+      style={{ backgroundImage: `url(${url})`, transition:"none" }}
     >
       <div className='w-full h-full p-4 '>
         {url == '' ? (
