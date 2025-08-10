@@ -1,7 +1,8 @@
 import { IconUpload } from '@tabler/icons-react';
 import { useMedia } from '../../../context/para/media';
-import { useRef, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import { useAreas } from '../../../context/para/areas';
+import { useParams } from 'react-router-dom';
 import { useDebounce } from 'react-use';
 
 function Image({ id }: { id: number }) {
@@ -9,17 +10,31 @@ function Image({ id }: { id: number }) {
 
   const handleFileChange = useMedia(state => state.handleFileChange);
   const get_Card = useAreas(state => state.get_Card);
-  let one = useMedia(state => state.get_image_url);
-  let ref = useRef<HTMLInputElement>(null);
-  let active = useAreas(state => state.active);
-  let [loading, setLoading] = useState(false)
+  const one = useMedia(state => state.get_image_url);
+  const ref = useRef<HTMLInputElement>(null);
+  const active = useAreas(state => state.active);
+  const { id: area_id } = useParams()
+  const [loading, setLoading] = useState(false)
+  const calls = useCallback(() => {
+    let card = get_Card(id);
+    one(card.props, setUrl, setLoading);
+  }, [area_id])
+
   useDebounce(
     () => {
-        let card = get_Card(id);
-        one(card.props, setUrl, setLoading);
+      if (url == '') {
+        calls()
+      }
     },
-    10,
+    500,
     [active]
+  );
+  useDebounce(
+    () => {
+      calls()
+    },
+    500,
+    [area_id]
   );
   return (
     <div
@@ -31,7 +46,6 @@ function Image({ id }: { id: number }) {
           <div
             className='upload_area cursor-pointer'
             onClick={() => {
-              console.log(ref.current);
               ref.current?.click();
             }}
           >
