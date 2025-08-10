@@ -34,15 +34,11 @@ export const useAreas = create<Areas>(set => ({
     const state: Areas = useAreas.getState();
     const active = state.active?.at(-1);
     const card = active?.ui_schema.item.find(item => item.id === id);
-    if (!card) {
-      throw new Error(`Card with id ${id} not found`);
-    }
     return card as Card;
   },
   update_card: (id: number, data: Card) => {
     set(state => {
       if (!state.active || state.active.length === 0) return state;
-      console.log(data);
       const lastActiveIndex = state.active.length - 1;
       const lastActive = state.active[lastActiveIndex];
 
@@ -194,7 +190,6 @@ export const useAreas = create<Areas>(set => ({
 
   update: (area: Area) => {
     const channel = new Channel<Area[]>();
-    console.log(area);
     channel.onmessage = data => {
       data.map(item => {
         const icon = URL.createObjectURL(
