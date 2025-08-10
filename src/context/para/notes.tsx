@@ -13,7 +13,7 @@ interface Notes {
   init: () => void;
   note:(
     id: number,
-    setNote: React.Dispatch<React.SetStateAction<Note>>
+    setNote: React.Dispatch<React.SetStateAction<Note | undefined>>
   ) => Promise<void>;
   create: (id: number) => void;
 }
