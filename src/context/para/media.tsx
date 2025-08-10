@@ -37,6 +37,7 @@ interface media {
   get_image_url: (
     id: number,
     set_url: React.Dispatch<React.SetStateAction<string>>,
+    set_loading:React.Dispatch<React.SetStateAction<boolean>>,
   ) => void;
   get_list: (ids: number[]) => string[];
 }
@@ -65,16 +66,15 @@ export let useMedia = create<media>(_ => ({
     return url[0];
   },
   delete: () => {},
-  get_image_url: (id, set_url) => {
+  get_image_url: (id, set_url,setLoading) => {
     let channel = new Channel<Media[]>();
     channel.onmessage = media => {
       let file = new Blob([new Uint8Array(media[0].file)], {
         type: media[0].media_type,
       });
-      console.log(media[0].file);
       let url = URL.createObjectURL(file);
-      console.log(file);
       set_url(url);
+      setLoading(false)
     };
     invoke('media_control', { payload: { command: 'find', id }, channel });
   },
