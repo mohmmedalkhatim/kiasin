@@ -7,11 +7,12 @@ function Dialog () {
   const props = useLayoutDialog(state => state.props);
   const state = useLayoutDialog(state => state.state);
   const mode = useLayoutDialog(state => state.mode);
-  const toggle = useLayoutDialog(state => state.toggle);
+  const close = useLayoutDialog(state => state.close);
+
   if (state) {
     return (
       <div className={mode + ' dialog m_border'}>
-        <div className='absolute top-5 right-5' onClick={toggle}>
+        <div className='absolute top-8 right-8 z-80 hover:bg-[#e2e2e220] p-2 rounded-full' onClick={close}>
           <IconX />
         </div>
         <Content mode={mode} props={props} />
