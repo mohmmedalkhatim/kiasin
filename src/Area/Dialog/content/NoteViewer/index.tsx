@@ -1,26 +1,21 @@
 import { IconLink } from '@tabler/icons-react';
 import Rich_Editor from './Editor';
 import './style.css';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useAsync } from 'react-use';
 import { useNotes } from '../../../../context/para/notes';
-import { useTasks } from '../../../../context/para/tasks';
 import { Note } from '../../../../types/notes';
-import { Todo } from '../../../../types/todos';
+import { useLayoutDialog } from '../../../../context/para/Dialog';
+
+
 
 const NoteViewer = ({ id }: { id: number }) => {
+  const dialog = useLayoutDialog(state => state.state)
   const get_note = useNotes(state => state.note);
-  const [task, setTask] = useState<Todo | undefined>();
-  const [_check, setCheck] = useState(false);
-  const get = useTasks(state => state.get_one)
   const [note, setNote] = useState<Note>();
-
-  useEffect(() => {
-    get(String(id), setTask, setCheck)
-    if (task && task.note_id) {
-      get_note(task.note_id, setNote)
-    }
-  }, [])
+  useAsync(async () => {
+    get_note(id, setNote)
+  }, [dialog])
 
   if (note) {
     return (
