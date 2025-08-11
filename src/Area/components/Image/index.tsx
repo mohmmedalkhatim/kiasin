@@ -20,22 +20,8 @@ function Image({ id }: { id: number }) {
     one(card.props, setUrl, setLoading);
   }, [area_id])
 
-  useDebounce(
-    () => {
-      if (url == '') {
-        calls()
-      }
-    },
-    500,
-    [active]
-  );
-  useDebounce(
-    () => {
-      calls()
-    },
-    500,
-    [area_id]
-  );
+  useDebounce(() => {if (url == '') calls()}, 500, [active]);
+  useDebounce(calls, 500, [area_id]);
   return (
     <div
       className='bg-cover w-full h-full'
