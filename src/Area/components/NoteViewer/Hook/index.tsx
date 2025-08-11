@@ -9,21 +9,23 @@ import { Note } from '../../../../types/notes';
 const useNoteCard = (id: number) => {
     const update_note = useNotes(state => state.updata_note);
     const get_note = useNotes(state => state.note);
-    const [note, setNote] = useState({} as Note);
+    const [note, setNote] = useState<Note | undefined>();
 
     useEffect(() => {
-        get_note(id, setNote).then(() => {
-            if (editor) {
-                editor.once('update', e => {
-                    const content = e.editor.getJSON();
-                    const description = editor.getText();
-                    if (content) {
-                        const updated = { title: note.title, content: note.content, description, id } as Note;
-                        update_note(note.id, updated);
-                    }
-                });
-            }
-        })
+        if (note) {
+            get_note(id, setNote).then(() => {
+                if (editor) {
+                    editor.once('update', e => {
+                        const content = e.editor.getJSON();
+                        const description = editor.getText();
+                        if (content) {
+                            const updated = { title: note.title, content: note.content, description, id } as Note;
+                            update_note(note.id, updated);
+                        }
+                    });
+                }
+            })
+        }
 
     }, [])
 
