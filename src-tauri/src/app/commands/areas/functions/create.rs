@@ -60,7 +60,7 @@ pub async fn create_from_templates(db: &DatabaseConnection, id: i32) -> Result<i
     let model = template::Entity::find_by_id(id as u32).one(db).await;
     let active_note = note::ActiveModel {
         title: Set(Some("untitled".to_string())),
-        content: Set(Some(json!({"content":""}))),
+        content: Set(Some(json!({"content":[]}))),
         in_archive: Set(false),
         create_date: Set(Some(date.date_naive())),
         ..Default::default()
