@@ -6,20 +6,22 @@ import { Note } from '../../types/notes';
 import { Editor } from '@tiptap/react';
 import Input from '../Input';
 
-function NoteHeader ({
+function NoteHeader({
   editor,
   id,
   Title,
+  hide_background = false,
 }: {
   editor: Editor;
   id: number;
   Title: string | undefined;
+  hide_background?: boolean
+
 }) {
   const update = useNotes(state => state.updata_note);
   const [title, setTitle] = useState(Title);
   let ref = useRef<HTMLDivElement>(null);
   editor.once('update', e => {
-    console.log("count")
     const content = e.editor.getJSON();
     const description = editor.getText();
     if (content && title) {
@@ -50,10 +52,10 @@ function NoteHeader ({
   }, []);
   return (
     <header className=' w-full m_border'>
-      <div
+      {!hide_background && <div
         className='bg-[url(/universe.jpg)] h-[12rem] bg-cover 1 transition-all  duration-300'
         ref={ref}
-      ></div>
+      ></div>}
       <div className='flex items-center pl-20 gap-4 py-4'>
         <Icon svg={<IconWheat size={'3rem'} />} />
         <form action=''>
