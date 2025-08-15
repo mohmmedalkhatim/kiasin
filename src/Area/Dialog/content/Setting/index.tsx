@@ -1,11 +1,17 @@
 import { useState } from "react"
 import SettingNav from "./Nav"
+import Content from "./content/content"
+
+
 
 function Setting() {
-    const [index, setindex] = useState(1)
+    const [section, Switch] = useState(1)
     return (
         <div className="relative overflow-hidden">
-            <SettingNav />
+            <SettingNav Switch={Switch} />
+            <div>
+                <Content id={section} />
+            </div>
         </div>
     )
 }
