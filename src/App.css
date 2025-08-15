@@ -134,7 +134,7 @@ html {
 
   
   .content {
-    @apply rounded-t-md p-4 md:mx-[5rem] bg-dark  mt-16 pb-0 relative;
+    @apply rounded-t-md p-4 md:mx-[5.5rem] bg-dark  mt-16 pb-0 relative ;
   }
 
   .cover {
