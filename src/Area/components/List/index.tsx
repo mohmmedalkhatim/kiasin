@@ -4,7 +4,6 @@ import useAreaList from './hook';
 
 function AreasList({ id }: { id: number }) {
   let { areas, update_card, card, changeMode } = useAreaList(id)
-  console.log(areas)
   if (areas) {
     return (
       <div className='p-4'>

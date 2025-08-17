@@ -9,7 +9,7 @@
     "active": true,
     "targets": "all",
     "icon": [
-      "icons/logo.ico"
+      "icons/kiasin.ico"
     ]
   },
   "productName": "kiasin",
@@ -25,7 +25,9 @@
       {
         "title": "kiasin",
         "width": 1300,
-        "height": 600
+        "height": 600,
+        "minWidth": 500,
+        "center": true
       }
     ]
   }

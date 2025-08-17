@@ -5,15 +5,18 @@ import { useNotes } from "../../../context/para/notes";
 import Button from "../../../components/Button";
 import { IconLink } from "@tabler/icons-react";
 import { useLayoutDialog } from "../../../context/para/Dialog";
+import { useDebounce } from "react-use";
 
 function TextInputArea({ id }: { id: number }) {
     const card = useAreas(state => state.get_Card)(id)
+    const get_card = useAreas(state => state.get_Card)
     const update = useAreas(state => state.update_card)
     const [content, setContent] = useState(card.props?.content || "")
     const dialog = useLayoutDialog(state => state.changeMode)
     const active = useAreas(state => state.active)?.at(-1)
     const note = useNotes(state => state.updata_note)
-    useEffect(() => {
+
+    useDebounce(() => {
         let json: JSONContent = {
             "attrs": {
                 "textAlign": null
@@ -33,9 +36,13 @@ function TextInputArea({ id }: { id: number }) {
         }
         card.props = { ...card.props, content };
         update(id, card)
-    }, [content])
+    }, 400, [content])
+    useEffect(() => {
+        let content = get_card(id).props.content
+        setContent(content)
+    }, [active])
     return (
-        <form className="p-4 w-full h-full relative">
+        <form className="p-4 w-full h-full relative" onSubmit={(e) => e.preventDefault()}>
             <textarea className="focus:outline-none w-full h-full" placeholder="start writing" value={content} onChange={e => setContent(e.target.value)} />
             <div className="absolute flex items-center gap-4 right-4 bottom-4">
                 <div onClick={() => {
@@ -43,7 +50,7 @@ function TextInputArea({ id }: { id: number }) {
                 }}>
                     <IconLink size={"1rem"} color="#e2e2e2" />
                 </div>
-                <Button children={"send"} className="text-xs" size="sm" />
+                <Button children={"send"} className="text-xs" size="sm" type="submit" />
             </div>
         </form >
     )

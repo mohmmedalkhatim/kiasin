@@ -19,7 +19,7 @@ async fn main() {
     let mut builder = tauri::Builder::default().plugin(tauri_plugin_sql::Builder::new().build());
     #[cfg(desktop)]
     {
-        builder = builder.plugin(tauri_plugin_single_instance::init(|app, args, cwd| {
+        builder = builder.plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
             let window = app.get_webview_window("main").expect("no main window");
             window.maximize().expect("there is an error");
         }));
@@ -43,6 +43,12 @@ async fn main() {
                 .path()
                 .resolve("Database\\test.db", BaseDirectory::AppData)
                 .unwrap();
+            let temp_url = app
+                .app_handle()
+                .path()
+                .resolve("temp\\index.db", BaseDirectory::AppData).unwrap();
+            std::fs::create_dir_all(&temp_url.parent().unwrap()).unwrap();
+            std::fs::File::create(&temp_url).unwrap();
             if !database_url.exists() {
                 std::fs::create_dir_all(database_url.parent().unwrap()).unwrap();
                 std::fs::File::create(&database_url).unwrap();

@@ -45,7 +45,7 @@ const Layout = () => {
             create={handleadding}
             end={handleDragEnd}
             state={editable}
-            schema={sort as string[]}
+            schema={sort as string[] | []}
           />
         )}
       </Container>

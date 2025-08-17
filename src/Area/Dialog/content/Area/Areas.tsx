@@ -6,7 +6,7 @@ function Areas ({ id }: { id: number }) {
   let list = useAreas(state => state.list);
   let get_card = useAreas(state => state.get_Card);
   return (
-    <div className='boxs_grid '>
+    <div className='boxs_grid p-8'>
       {list.map(item => {
         let card = get_card(id);
         if (

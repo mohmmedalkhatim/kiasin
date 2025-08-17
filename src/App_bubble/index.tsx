@@ -7,7 +7,6 @@ import { useAreas } from "../context/para/areas"
 
 function BubbleMenu() {
     let opened = useBubbleMenu(state => state.opened)
-    let toggle = useBubbleMenu(state => state.toggle)
     let open = useBubbleMenu(state => state.open)
     let close = useBubbleMenu(state => state.close)
     let ref = useRef<HTMLDivElement>(null)

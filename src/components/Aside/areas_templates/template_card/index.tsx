@@ -1,5 +1,4 @@
 import { useTemplates } from '../../../../context/para/templates';
-import { Link } from 'react-router-dom';
 
 const Template_Card = ({ id }: { id: number }) => {
   const get_list_item = useTemplates((state) => state.get_list_item);

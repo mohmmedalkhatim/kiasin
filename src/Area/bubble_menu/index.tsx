@@ -90,7 +90,7 @@ function Cards_menu ({
 
   return (
     <>
-      <Button className='w-full mb-2 text-center flex items-center justify-between' onClick={e => setmenu(!menu)}>
+      <Button className='w-full z-90  mb-2 text-center flex items-center justify-between' onClick={e => setmenu(!menu)}>
         <div>create new</div>
         <div>
           {menu ? <IconChevronDown size={'1.2rem'} /> : <IconChevronRight />}

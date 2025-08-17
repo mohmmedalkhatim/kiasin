@@ -14,6 +14,9 @@
   .elements_container {
     @apply grid-cols-3 grow grid ;
   }
+  .no-transition{
+    transition: height none !important;
+  }
 
   .GridContainer {
     display: grid;
