@@ -1,8 +1,9 @@
 mod create;
+mod delete;
 mod retrieve;
 mod update;
-mod delete;
 
-
-pub  use create::create;
-pub  use retrieve::get;
+pub use create::create;
+pub use delete::delete;
+pub use retrieve::{list,get};
+pub use update::update;
