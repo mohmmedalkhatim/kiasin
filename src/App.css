@@ -109,13 +109,13 @@ html {
     @apply font-OpenSans;
   }
 
-  .app_header {
-    border-bottom: 1px solid #2e2e2e90;
-    @apply flex bg-[#181818]  fixed items-center z-50 top-0 h-16 w-screen justify-between;
+  header {
+    @apply fixed justify-between top-0 w-full border-b border-[#e2e2e220] h-16 flex items-center px-26 z-50 bg-[#181818];
+
   }
 
   .menu {
-    @apply w-[240px] h-[240px] mb-2 bg-[#181818] shadow shadow-[#e2e2e250]  flex flex-col;
+    @apply w-[240px] h-[240px] mb-2 bg-[#181818] shadow shadow-[#e2e2e250] flex flex-col;
   }
 
   aside {
@@ -132,9 +132,9 @@ html {
     color: white !important;
   }
 
-  
+
   .content {
-    @apply rounded-t-md p-4 md:mx-[5.5rem] bg-dark  mt-16 pb-0 relative ;
+    @apply rounded-t-md p-4 md:mx-[5.5rem] bg-dark mt-16 pb-0 relative;
   }
 
   .cover {
