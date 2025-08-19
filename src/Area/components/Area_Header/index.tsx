@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
-import Input from '../../Input';
 import { IconEdit, IconSearch, IconNotebook } from '@tabler/icons-react';
 import { useAreas } from '../../../context/para/areas';
-import Button from '../../Button';
 import { Link } from 'react-router-dom';
 import { Area } from '../../../types/area';
 import { useNotes } from '../../../context/para/notes';
+import { Note } from '../../../types/notes';
+import Input from '../../../components/Input';
+import Button from '../../../components/Button';
 
 function Header() {
   const [search, setSearch] = useState('');
@@ -16,14 +17,14 @@ function Header() {
   const area_note = useNotes(state => state.active);
   const setActive = useNotes(state => state.note);
   const update_note = useNotes(state => state.updata_note);
-  const [loading_note, setDone] = useState(true);
+  const [loading_note, setDone] = useState<Note>();
   useEffect(() => {
     if (active?.note_id) {
       setActive(active.note_id, setDone);
     }
   }, []);
   return (
-    <header className='app_header'>
+    <header>
       <div></div>
       <Input
         type={'text'}
@@ -46,6 +47,7 @@ function Header() {
       <Button
         size='sm'
         className='bg-[#181818]'
+        
         children={
           <>
             edit <IconEdit size={'1.2rem'} />
