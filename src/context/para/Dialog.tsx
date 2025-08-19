@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 
 interface Dialog {
-  mode: 'dialog_note' | 'dialog_calender' | 'dialog_links' | 'dialog_areas' | 'dialog_tasks';
+  mode: 'dialog_note' | 'dialog_calender' | 'dialog_links' | 'dialog_areas' | 'dialog_tasks'| 'dialog_setting';
   state: boolean;
   props: { id: number };
   changeMode: (
-    mode: 'dialog_note' | 'dialog_calender' | 'dialog_links' | 'dialog_areas' | 'dialog_tasks',
+    mode: 'dialog_note' | 'dialog_calender' | 'dialog_links' | 'dialog_areas' | 'dialog_tasks'| 'dialog_setting',
     props: { id: number }
   ) => void;
   toggle: () => void;
