@@ -12,7 +12,7 @@ function Dialog () {
   if (state) {
     return (
       <div className={mode + ' dialog m_border'}>
-        <div className='absolute top-8 right-8 z-80 hover:bg-[#e2e2e220] p-2 rounded-full' onClick={close}>
+        <div className='absolute right-4 top-4 z-80 hover:bg-[#e2e2e220] p-2 rounded' onClick={close}>
           <IconX />
         </div>
         <Content mode={mode} props={props} />
