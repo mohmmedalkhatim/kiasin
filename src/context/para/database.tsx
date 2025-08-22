@@ -2,83 +2,23 @@ import { Channel, invoke } from "@tauri-apps/api/core";
 import { create } from "zustand/react";
 
 
-interface DB {
+export interface DB {
     fields: string[]
     data: Iterable<readonly [string, { type: string, value: any }[]]>;
 }
-interface DB_DTO {
+export interface DB_DTO {
     id: number,
-    name: String,
+    name: string,
     data: DB,
     user_id: number,
 }
 
-export class Database {
-    fields: string[] = []
-    data: Map<string, { type: any, value: any }[]> = new Map()
-    constructor(id: number) {
-        invoke('database_control', { command: "get", id })
-        new Channel<DB_DTO>(res => {
-            console.log(id)
-            this.fields = res.data.fields
-            this.data = new Map<string, { type: any, value: any }[]>(res.data.data)
-        })
 
-    }
-    stringify(): string {
-        let list: any[][] = []
-        this.data.forEach((key, item) => {
-            list.push([key, item])
-        })
-        return JSON.stringify({ fields: this.fields, data: list });
-    }
-    add_field(name: string): string {
-        this.data.set(name, [])
-        return this.stringify();
-    }
-    delete_field(name: string): string {
-        this.data.delete(name)
-        return this.stringify();
-    }
-    update_field(): string {
-        return this.stringify()
-    }
-    add_record(field: string, value: { type: any, value: any }) {
-        let list = this.data.get(field);
-        if (list) {
-            list.push(value)
-            this.data.set(field, list);
-        }
-        return this.stringify();
-
-    }
-    update_record(field: string, index: number, value: { type: any, value: any }) {
-        let list = this.data.get(field);
-        if (list) {
-            list[index] = value;
-            this.data.set(field, list);
-        }
-        return this.stringify();
-    }
-    delete_record(field: string, index: number,) {
-        let list = this.data.get(field);
-        if (list) {
-            let updated_list = list.map((value, key) => {
-                if (key !== index) {
-                    return value
-                }
-            })
-            if (updated_list) {
-                this.data.set(field, updated_list as { type: any, value: any }[]);
-            }
-        }
-        return this.stringify();
-    }
-}
 
 interface database_context {
     list: DB_DTO[]
-    create: (id: number, setDataBase: any) => Promise<void>,
+    create: () => Promise<void>,
+    init: () => Promise<void>,
     be_update: (id: number, data: DB_DTO) => Promise<void>,
     fe_update: (id: number, setDataBase: any) => Promise<void>,
     delete: (id: number) => Promise<void>,
@@ -86,13 +26,19 @@ interface database_context {
     get_list: (ids: number[], setDataBaseList: any) => Promise<void>;
 }
 
-let useDatabase = create<database_context>((set) => ({
+export let useDatabase = create<database_context>((set) => ({
     list: [],
     create: async () => {
         let channel = new Channel<DB_DTO>((res) => {
             set(state => ({ list: [...state.list, res] }))
         })
         invoke("database_control", { payload: { command: "create" }, channel },)
+    },
+    init: async () => {
+        let channel = new Channel<DB_DTO[]>((res) => {
+            set(({ list: res }))
+        })
+        invoke("database_control", { payload: { command: "all" }, channel },)
     },
     be_update: async (id, data: DB_DTO) => {
         let channel = new Channel<DB_DTO[]>((res) => {
@@ -107,9 +53,9 @@ let useDatabase = create<database_context>((set) => ({
     delete: async () => { },
     get: async (id, setDataBase) => {
         let channel = new Channel<DB_DTO[]>((res) => {
-            setDataBase(res[0])
+            setDataBase({ fields: res[0].data.fields, data: res[0].data.data })
         })
-        invoke("database_control", { payload: { command: "get", id }, channel })
+        invoke("database_control", { payload: { command: "one", id }, channel })
     },
     get_list: async (ids, setDataBaseList) => {
         let channel = new Channel<DB_DTO[]>((res) => {
