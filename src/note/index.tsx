@@ -6,12 +6,12 @@ import { Note } from '../types/notes';
 
 function NotePageProvider() {
   const get = useNotes((state) => state.note);
-  const [note, setNote] = useState({} as Note);
+  const [note, setNote] = useState<Note | undefined>({} as Note);
   const { id } = useParams();
   useEffect(() => {
     get(Number(id), setNote);
   }, []);
-  if (note.content ) {
+  if (note && note.content) {
     return <NotePage content={note.content} title={note.title} />;
   }
 }
