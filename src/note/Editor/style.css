@@ -5,12 +5,11 @@
     @apply flex overflow-hidden  border divide-x rounded-sm  rtl:flex-row-reverse;
   }
   .toolbar_button {
-    @apply px-2 py-1 flex font-medium rounded text-white transition-colors duration-200    dark:text-white dark:hover:text-gray-100 hover:text-gray-400;
+    @apply px-2 py-1 flex font-medium rounded text-white transition-colors duration-20    dark:text-white dark:hover:text-gray-100 hover:text-gray-400;
   }
   .bubble_menu {
     @apply absolute z-10 flex gap-1 p-1 bg-[#181818] rounded-sm  -top-10 -left-[5rem]  shadow-lg;
   }
-
   .buble {
     @apply text-white;
   }
@@ -129,16 +128,13 @@ p.is-editor-empty:first-child::before {
   0% {
     text-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
   }
-  50% {
-    text-shadow: 0 0 20px rgba(99, 102, 241, 0.7);
-  }
   100% {
     text-shadow: 0 0 10px rgba(99, 102, 241, 0.5);
   }
 }
 
 .tooltip strong {
-  animation: glow 2s infinite;
+  animation: glow 0.5s infinite;
   font-weight: 600;
 }
 
