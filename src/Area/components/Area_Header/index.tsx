@@ -25,13 +25,13 @@ function Header() {
   }, []);
   return (
     <header>
-      <div></div>
       <Input
         type={'text'}
         value={search}
         onChange={() => setSearch}
         icon={<IconSearch size={'1rem'} />}
       />
+      <div></div>
       <input
         value={active?.title}
         className='outline-none border-none focus:border'
