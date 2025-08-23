@@ -51,7 +51,7 @@ function NoteHeader({
     };
   }, []);
   return (
-    <header className=' w-full m_border'>
+    <div className=' w-full m_border'>
       {!hide_background && <div
         className='bg-[url(/universe.jpg)] h-[12rem] bg-cover 1 transition-all  duration-300'
         ref={ref}
@@ -62,7 +62,7 @@ function NoteHeader({
           <Input className='' value={title} onChange={setTitle} />
         </form>
       </div>
-    </header>
+    </div>
   );
 }
 export default NoteHeader;
