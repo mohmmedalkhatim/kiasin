@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react';
 import AreasList from '../components/List';
 import TaskList from '../components/Tasklist';
 import Image from '../components/Image';
-import Calendar from '../components/Calender';
 import { LoadingBar } from '../components/loadingbar/LoadingBar';
 import TextInputArea from '../components/inputArea';
+import EventCreate from '../components/EventCreater';
 
 type Card_content = { id: number; T: string; props?: any };
 
@@ -15,7 +15,7 @@ function CardContent({ id, T, props }: Card_content) {
       ['Areaslist', <AreasList id={id} />],
       ['tasks', <TaskList id={id} />],
       ['image', <Image id={id} />],
-      ['calender', <Calendar />],
+      ['calender', <EventCreate />],
       ['LoadingBar', <LoadingBar id={id} />],
       ['default', <div>no content</div>],
     ])

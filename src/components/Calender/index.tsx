@@ -57,7 +57,7 @@ const Calendar: React.FC = () => {
         </button>
       </div>
       <div className="grid grid-cols-7 text-center gap-4 mx-1 text-[#e2e2e298]">
-        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((day) => (
+        {['S', 'M', 'T', 'W', 'Th', 'F', 'S'].map((day) => (
           <div key={day} className="py-1 text-sm">
             {day}
           </div>
@@ -87,9 +87,9 @@ const Calendar: React.FC = () => {
                     ? 'bg-sky-500'
                     : 'hover:bg-gray-200 text-[#e2e2e295]'
                 } ${startDate && day.isSame(startDate, 'day')
-                  ? 'rounded-tl-md text-black'
+                  ? 'rounded-br-md text-black'
                   : startDate && endDate && day.isSame(endDate, 'day')
-                    ? 'rounded-br-md text-black'
+                    ? 'rounded-tl-md text-black'
                     : ''
                 }`}
               onClick={() => handleDateSelection(day)}
