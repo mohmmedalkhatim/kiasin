@@ -1,4 +1,5 @@
 import {
+  IconCalendarEvent,
   IconDashboard,
   IconDatabase,
   IconLayersIntersect,
@@ -12,9 +13,10 @@ function Links() {
   const { changeMode } = useLayoutDialog()
   const arr = [
     { name: 'dashboard', link: '/', Icon: <IconDashboard /> },
+    { name: 'Events', link: '/events', Icon: <IconCalendarEvent /> },
     { name: 'areas', link: '/areas', Icon: <IconLayersIntersect /> },
+    { name: 'Databases', link: '/databases', Icon: <IconDatabase /> },
     { name: 'notes', link: '/notes', Icon: <IconNotes /> },
-    { name: 'Databases', link: '/Databases', Icon: <IconDatabase /> },
   ];
   return (
     <div className='flex flex-col item-center justify-between h-full pb-20'>
