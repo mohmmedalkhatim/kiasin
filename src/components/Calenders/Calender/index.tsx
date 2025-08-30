@@ -16,6 +16,7 @@ const Calendar: React.FC = () => {
   const nextMonth = () => setCurrentDate(currentDate.add(1, 'month'));
 
   const handleDateSelection = (day: dayjs.Dayjs) => {
+    debugger;
     if (!startDate || (startDate && endDate)) {
       setStartDate(day);
       setEndDate(null);
@@ -57,8 +58,8 @@ const Calendar: React.FC = () => {
         </button>
       </div>
       <div className="grid grid-cols-7 text-center gap-4 mx-1 text-[#e2e2e298]">
-        {['S', 'M', 'T', 'W', 'Th', 'F', 'S'].map((day) => (
-          <div key={day} className="py-1 text-sm">
+        {['S', 'M', 'T', 'W', 'Th', 'F', 'S'].map((day,index) => (
+          <div key={index} className="py-1 text-sm">
             {day}
           </div>
         ))}
