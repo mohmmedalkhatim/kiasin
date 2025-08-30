@@ -1,19 +1,29 @@
 @import "tailwindcss";
 
 
-@layer components{
-    .day_marker{
-        border-top:3px #00bcff solid !important;
-        border: 1px #e3e3e320 solid; 
-        @apply  rounded-t-sm  flex p-4 ;
+@layer components {
+    .week_events {
+        @apply flex min-w-[61.5rem]
     }
-    .day_timeline{
-        @apply flex flex-col w-[8rem]
+
+    .day_timeline {
+        @apply flex flex-col w-full
     }
-    .scroller{
+
+    .day_marker {
+        border-top: 3px #00bcff solid !important;
+        border: 1px #e3e3e320 solid;
+        @apply rounded-t-sm flex p-4;
+    }
+
+
+
+    .scroller {
         scrollbar-gutter: stable;
+        scroll-behavior: smooth;
     }
-    .dashed{
-        border-bottom:1px  #e3e3e320 solid;
+
+    .dashed {
+        border-bottom: 1px #e3e3e320 solid;
     }
 }
