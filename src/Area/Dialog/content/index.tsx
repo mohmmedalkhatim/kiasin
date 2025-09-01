@@ -4,11 +4,13 @@ import Areas from './Area/Areas';
 import NoteViewer from '../content/NoteViewer';
 import Setting from './Setting';
 import Event from './Event';
+import NotesList from './notes';
 
 function Content ({ props, mode }: { props: any; mode: string }) {
   let [element] = useState(
     new Map([
       ['dialog_note', <NoteViewer id={props.id} />],
+      ['dialog_notes', <NotesList id={props.id} />],
       ['dialog_links', <Cards id={props.id} />],
       ['dialog_areas', <Areas id={props.id} />],
       ['dialog_tasks', <Cards id={props.id} />],
