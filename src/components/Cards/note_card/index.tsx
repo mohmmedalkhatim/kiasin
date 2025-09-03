@@ -13,7 +13,7 @@ const NoteCard = ({ note }: { note: Note }) => {
           {note.title}
         </h5>
         <div className="m_border" />
-        <div className="px-2 py-3 flex items-center text-xs flex justify-between">
+        <div className="px-2 py-3 flex items-center text-xs justify-between">
           <p>{note.description}</p>
         </div>
       </div>
