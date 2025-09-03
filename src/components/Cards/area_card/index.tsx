@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useAreas } from '../../../context/para/areas';
 import { Link } from 'react-router-dom';
 import { Area } from '../../../types/area';
-import { useDebounce } from 'react-use';
 
 const AreaCard = ({ id }: { id: number }) => {
   const get_list_item = useAreas(state => state.get_list_item);
