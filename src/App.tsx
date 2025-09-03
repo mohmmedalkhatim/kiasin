@@ -9,12 +9,14 @@ import Dialog from './Area/Dialog';
 import BubbleMenu from './App_bubble';
 import { useBubbleMenu } from './context/para/BubbleMenu';
 import { useDatabase } from './context/para/database';
+import { useEvents } from './context/para/events';
 
 
 function App() {
   const init = useAreas((state) => state.init);
   const init_db = useDatabase(state=>state.init)
   const initNotes = useNotes((state) => state.init);
+  const initEvent = useEvents((state) => state.init);
   const close_bubble = useBubbleMenu(state => state.close)
   const close = async () => {
     close_bubble()
@@ -23,6 +25,7 @@ function App() {
     init_db()
     init();
     initNotes();
+    initEvent()
   }, []);
 
 
