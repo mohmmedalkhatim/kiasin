@@ -10,6 +10,7 @@ import BubbleMenu from './App_bubble';
 import { useBubbleMenu } from './context/para/BubbleMenu';
 import { useDatabase } from './context/para/database';
 import { useEvents } from './context/para/events';
+import Toolsbar from './components/tools';
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
       <div onClick={close}>
         <Outlet />
         <Navbar />
+        <Toolsbar/>
       </div>
       <Aside />
       <Dialog />
