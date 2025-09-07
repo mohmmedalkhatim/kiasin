@@ -55,6 +55,7 @@ function TextInputArea({ id }: { id: number }) {
             update(id, card)
             setContent("")
         }}>
+            <div className="font-semibold capitalize opacity-15 absolute bottom-4 left-4">{card.props?.note_title}</div>
             <textarea className="focus:outline-none w-full h-full" placeholder="start writing" value={content} onChange={e => {
                 card.props.content = e.target.value;
                 update(card.id, card)
