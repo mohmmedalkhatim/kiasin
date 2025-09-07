@@ -5,6 +5,7 @@ import Image from '../components/Image';
 import { LoadingBar } from '../components/loadingbar/LoadingBar';
 import TextInputArea from '../components/inputArea';
 import EventCreate from '../components/EventCreater';
+import Timer from '../components/Timer';
 
 type Card_content = { id: number; T: string; props?: any };
 
@@ -13,6 +14,7 @@ function CardContent({ id, T, props }: Card_content) {
     new Map([
       ['editor', <TextInputArea id={id} />],
       ['Areaslist', <AreasList id={id} />],
+      ['Timer', <Timer />],
       ['tasks', <TaskList id={id} />],
       ['image', <Image id={id} />],
       ['calender', <EventCreate />],
