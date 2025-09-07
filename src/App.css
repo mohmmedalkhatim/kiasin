@@ -114,11 +114,17 @@ html {
 
   }
 
-  *{
+  * {
     user-select: none;
   }
+
   .menu {
     @apply w-[240px] h-[240px] mb-2 bg-[#181818] shadow shadow-[#e2e2e250] flex flex-col;
+  }
+
+  .toolsbar {
+    @apply top-0 pt-24 h-screen border-l-[#e2e2e220] px-8 w-[88px] bg-[#181818] border-l z-10 fixed -right-24 md:right-0;
+
   }
 
   aside {
