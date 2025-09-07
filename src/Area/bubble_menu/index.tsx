@@ -3,6 +3,7 @@ import {
   IconCalendar,
   IconChevronDown,
   IconChevronRight,
+  IconClock,
   IconGrid4x4,
   IconList,
   IconLoader,
@@ -24,7 +25,7 @@ const calculate_menu_appernce = (y: number): number => {
   return pos;
 };
 
-function Cards_menu ({
+function Cards_menu({
   handleadding,
 }: {
   handleadding: (ele: element_props) => void;
@@ -85,6 +86,15 @@ function Cards_menu ({
       },
       content: '',
       icon: <IconLoader size={'1.7rem'} />,
+    },
+    {
+      name: 'Timer',
+      props: {
+        min_cols: 1,
+        min_rows: 4,
+      },
+      content: '',
+      icon: <IconClock size={'1.7rem'} />,
     },
   ];
 
