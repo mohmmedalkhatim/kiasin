@@ -1,0 +1,34 @@
+{
+  "build": {
+    "beforeDevCommand": "npm run dev",
+    "beforeBuildCommand": "npm run build",
+    "frontendDist": "../dist",
+    "devUrl": "http://localhost:6006"
+  },
+  "bundle": {
+    "active": true,
+    "targets": "all",
+    "icon": [
+      "icons/kiasin.ico"
+    ]
+  },
+  "productName": "kiasin",
+  "mainBinaryName": "kiasin",
+  "version": "0.0.0",
+  "identifier": "kiasin",
+  "plugins": {},
+  "app": {
+    "security": {
+      "csp": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'"
+    },
+    "windows": [
+      {
+        "title": "storybook",
+        "width": 1300,
+        "height": 600,
+        "minWidth": 500,
+        "center": true
+      }
+    ]
+  }
+}
