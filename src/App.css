@@ -111,7 +111,6 @@ html {
 
   header {
     @apply fixed justify-between top-0 w-full border-b border-[#e2e2e220] h-16 flex items-center px-26 z-50 bg-[#181818];
-
   }
 
   * {
@@ -123,14 +122,13 @@ html {
   }
 
   .toolsbar {
-    @apply top-0 pt-24 h-screen border-l-[#e2e2e220] px-8 w-[88px] bg-[#181818] border-l z-10 fixed -right-24 md:right-0;
+    @apply top-8 pt-16 h-screen border-l-[#e2e2e220] px-8 w-[88px] bg-[#181818] border-l z-10 fixed -right-24 md:right-0;
 
   }
 
   aside {
     position: fixed;
     height: 100vh;
-    top: 4rem;
     left: 0;
     z-index: -1;
     @apply w-12 md:w-[88px];

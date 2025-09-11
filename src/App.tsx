@@ -11,6 +11,7 @@ import { useBubbleMenu } from './context/para/BubbleMenu';
 import { useDatabase } from './context/para/database';
 import { useEvents } from './context/para/events';
 import Toolsbar from './components/tools';
+import WindowsControl from './components/Controller';
 
 
 function App() {
@@ -33,7 +34,8 @@ function App() {
   return (
     <>
       <BubbleMenu />
-      <div onClick={close}>
+      <WindowsControl />
+      <div className='' onClick={close}>
         <Outlet />
         <Navbar />
         <Toolsbar/>

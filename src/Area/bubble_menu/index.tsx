@@ -14,6 +14,7 @@ import {
 import { element_props } from '..';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
+import { CSSTransition } from 'react-transition-group';
 
 const calculate_menu_appernce = (y: number): number => {
   let pos = 0;
@@ -106,40 +107,42 @@ function Cards_menu({
           {menu ? <IconChevronDown size={'1.2rem'} /> : <IconChevronRight />}
         </div>
       </Button>
-      <div
-        ref={menuRef}
-        className={`${menu ? 'menu w-full' : 'hidden'} z-1000`}
-      >
-        <div className='pt-4 px-4'>
-          <Input
-            placeholder='Search'
-            icon={<IconSearch size={'1rem'} color='#e2e2e260' />}
-          />
-        </div>
-        <nav className='elements_container'>
-          {map.map(item => (
-            <div
-              className='flex justify-center cursor-pointer items-center'
-              onClick={() =>
-                handleadding({
-                  cols: item.props.min_cols,
-                  rows: item.props.min_rows,
-                  type: item.name,
-                  content: item.content,
-                })
-              }
-            >
-              {item.icon}
-            </div>
-          ))}
-        </nav>
-        <Button
-          className='rounded-none border-none text-center text-xs'
-          type='reset'
+      <CSSTransition nodeRef={menuRef} in={menu} timeout={200} classNames="bubble_main" unmountOnExit>
+        <div
+          ref={menuRef}
+          className={`${menu ? 'menu w-full' : 'hidden'} z-1000`}
         >
-          Browser All
-        </Button>
-      </div>
+          <div className='pt-4 px-4'>
+            <Input
+              placeholder='Search'
+              icon={<IconSearch size={'1rem'} color='#e2e2e260' />}
+            />
+          </div>
+          <nav className='elements_container'>
+            {map.map(item => (
+              <div
+                className='flex justify-center cursor-pointer items-center'
+                onClick={() =>
+                  handleadding({
+                    cols: item.props.min_cols,
+                    rows: item.props.min_rows,
+                    type: item.name,
+                    content: item.content,
+                  })
+                }
+              >
+                {item.icon}
+              </div>
+            ))}
+          </nav>
+          <Button
+            className='rounded-none border-none text-center text-xs'
+            type='reset'
+          >
+            Browser All
+          </Button>
+        </div>
+      </CSSTransition>
     </>
   );
 }
