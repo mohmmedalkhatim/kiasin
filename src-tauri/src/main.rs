@@ -7,7 +7,8 @@ use migration::{
 };
 use sea_orm::DatabaseConnection;
 use std::sync::Arc;
-use tauri::{path::BaseDirectory, Manager};
+use tauri::WebviewWindowBuilder;
+use tauri::{path::BaseDirectory, Manager, Window};
 mod app;
 
 struct DbConnection {
@@ -16,11 +17,15 @@ struct DbConnection {
 
 #[tokio::main]
 async fn main() {
-    let mut builder = tauri::Builder::default().plugin(tauri_plugin_sql::Builder::new().build());
+
+    
+    let mut builder = tauri::Builder::default()
+        .plugin(tauri_plugin_sql::Builder::new().build());
     #[cfg(desktop)]
     {
         builder = builder.plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
             let window = app.get_webview_window("main").expect("no main window");
+            window.show().expect("there is an error");
             window.maximize().expect("there is an error");
         }));
     }
@@ -36,6 +41,8 @@ async fn main() {
             app::media_control,
             app::dashboard,
             app::database_control,
+            app::events_control,
+            app::window_control,
         ])
         .setup(|app| {
             let database_url = app
@@ -46,7 +53,8 @@ async fn main() {
             let temp_url = app
                 .app_handle()
                 .path()
-                .resolve("temp\\index.db", BaseDirectory::AppData).unwrap();
+                .resolve("temp\\index.db", BaseDirectory::AppData)
+                .unwrap();
             std::fs::create_dir_all(&temp_url.parent().unwrap()).unwrap();
             std::fs::File::create(&temp_url).unwrap();
             if !database_url.exists() {
@@ -62,6 +70,7 @@ async fn main() {
                     .await;
             });
             app.manage(database);
+
             Ok(())
         })
         .run(tauri::generate_context!())

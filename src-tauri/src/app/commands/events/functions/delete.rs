@@ -1,3 +1,1 @@
-pub async fn delete() {
-    
-}
+pub async fn delete() {}

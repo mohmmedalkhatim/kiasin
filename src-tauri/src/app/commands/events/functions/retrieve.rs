@@ -11,3 +11,7 @@ pub async fn list(ids: Vec<i32>, db: &DatabaseConnection) -> Result<Vec<Model>, 
     }
     Ok(list)
 }
+
+pub async fn all(db: &DatabaseConnection) -> Result<Vec<Model>, DbErr> {
+    Ok(Entity::find().all(db).await?)
+}
