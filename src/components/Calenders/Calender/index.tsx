@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import dayjs from 'dayjs';
-import { IconChevronLeft, IconChevronRight } from '@tabler/icons-react';
+import {IconTriangleFilled } from '@tabler/icons-react';
 
 const Calendar: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(dayjs());
   const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(null);
   const [endDate, setEndDate] = useState<dayjs.Dayjs | null>(null);
-
   const startOfMonth = currentDate.startOf('month');
   const endOfMonth = currentDate.endOf('month');
   const startDay = startOfMonth.day();
@@ -42,23 +41,26 @@ const Calendar: React.FC = () => {
 
   return (
     <div className="p-4 max-w-xs font-light flex flex-col gap-y-2 ">
-      <div className="flex justify-between items-center mb-1">
-        <button
-          onClick={prevMonth}
-          className="p-1 border-none hover:bg-white hover:text-black transition-colors duration-200 rounded-sm"
-        >
-          <IconChevronLeft size={'1.2rem'} />
-        </button>
-        <h2 className="text-md">{currentDate.format('MMMM YYYY')}</h2>
-        <button
-          onClick={nextMonth}
-          className="p-1 border-none hover:bg-white hover:text-black transition-colors duration-200 rounded-sm"
-        >
-          <IconChevronRight size={'1.2rem'} />
-        </button>
+      <div className="flex justify-between items-center mb-1 px-1">
+        <h2 className="text-md pl-4">{currentDate.format('MMMM YYYY')}</h2>
+        <div className='flex gap-4'>
+          <button
+            onClick={prevMonth}
+            className="p-2 border-none hover:bg-white text-[#e2e2e290] hover:text-black transition-colors duration-200 rounded-sm"
+          >
+            <IconTriangleFilled size={'0.6rem'} />
+          </button>
+          <button
+            onClick={nextMonth}
+            className="p-2 border-none hover:bg-white text-[#e2e2e290] hover:text-black transition-colors duration-200 rounded-sm rotate-[180deg]"
+          >
+            <IconTriangleFilled  size={'0.6rem'} />
+          </button>
+        </div>
+
       </div>
       <div className="grid grid-cols-7 text-center gap-4 mx-1 text-[#e2e2e298]">
-        {['S', 'M', 'T', 'W', 'Th', 'F', 'S'].map((day,index) => (
+        {['S', 'M', 'T', 'W', 'Th', 'F', 'S'].map((day, index) => (
           <div key={index} className="py-1 text-sm">
             {day}
           </div>
