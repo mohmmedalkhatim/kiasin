@@ -12,6 +12,7 @@ function NotesList({ id }: { id: number }) {
         <div className="notes_page p-6">
             {notes.map((item, index) => <NoteCard key={index} note={item} action={() => {
                 card.props.note_id = item.id;
+                card.props.note_title = item.title;
                 console.log(card.props)
                 update_card(id, card)
                 close()

@@ -1,5 +1,5 @@
-import {  useRef, useState } from "react"
-import { IconPlayerPauseFilled,  IconPlayerPlayFilled,  IconPlayerSkipBackFilled } from "@tabler/icons-react";
+import { useRef, useState } from "react"
+import { IconPlayerPauseFilled, IconPlayerPlayFilled, IconPlayerSkipBackFilled } from "@tabler/icons-react";
 
 class Timer {
     seconds = 0;
@@ -9,6 +9,10 @@ class Timer {
 
     }
     add_seconds(seconds: number) {
+        if (seconds < 0 && this.seconds == 0) {
+            this.seconds = 59
+            this.add_mints(-1)
+        }
         if (this.seconds >= 59) {
             this.mints = this.mints + 1
             this.seconds = 0
@@ -21,6 +25,10 @@ class Timer {
         return this
     }
     add_mints(mints: number) {
+        if (mints < 0 && this.mints == 0) {
+            this.mints = 59
+            this.add_hours(-1)
+        }
         if (mints + this.mints >= 60) {
             this.hours = this.hours + 1
             this.mints = 0
@@ -34,6 +42,11 @@ class Timer {
         return this
     }
     add_hours(hours: number) {
+        if (hours <= 0) {
+            this.mints = 0
+            this.seconds = 0
+            this.hours = 0
+        }
         if (this.hours >= 24) {
             this.hours = 0
         }
