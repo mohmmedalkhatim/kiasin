@@ -18,12 +18,11 @@ struct DbConnection {
 #[tokio::main]
 async fn main() {
 
-    
     let mut builder = tauri::Builder::default()
         .plugin(tauri_plugin_sql::Builder::new().build());
     #[cfg(desktop)]
     {
-        builder = builder.plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
+        builder.plugin(tauri_plugin_single_instance::init(|app, _args, _cwd| {
             let window = app.get_webview_window("main").expect("no main window");
             window.show().expect("there is an error");
             window.maximize().expect("there is an error");
