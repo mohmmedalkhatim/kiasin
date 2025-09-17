@@ -4,8 +4,11 @@
     "beforeBuildCommand": "npm run build",
     "frontendDist": "../dist",
     "devUrl": "http://localhost:1420"
+    
   },
+
   "bundle": {
+    
     "active": true,
     "targets": "all",
     "icon": [
@@ -15,6 +18,7 @@
   "productName": "kiasin",
   "mainBinaryName": "kiasin",
   "version": "0.0.0",
+  
   "identifier": "kiasin",
   "plugins": {},
   "app": {
@@ -27,7 +31,8 @@
         "width": 1300,
         "height": 600,
         "minWidth": 500,
-        "center": true
+        "center": true,
+        "decorations": false
       }
     ]
   }

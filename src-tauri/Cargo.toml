@@ -30,6 +30,7 @@ tauri-plugin-shell = "2"
 chrono = "0.4.39"
 rand = "0.9.1"
 tauri-plugin-sql = {version ="2", features = ["sqlite"] }
+tauri-plugin-devtools = "2.0.0"
 
 [features]
 # This feature is used for production builds or when a dev server is not specified, DO NOT REMOVE!!
@@ -37,3 +38,4 @@ custom-protocol = ["tauri/custom-protocol"]
 
 [target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
 tauri-plugin-single-instance = "2"
+tauri-plugin-updater = "2"
