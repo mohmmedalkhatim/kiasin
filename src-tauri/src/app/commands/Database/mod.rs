@@ -16,7 +16,7 @@ pub async fn database_control(
     let db = data.lock().await.db.clone().unwrap();
     let database = payload.item;
     match payload.command.as_str() {
-        "create" => match functions::create(database.unwrap(), &db).await {
+        "create" => match functions::create(&db).await {
             Ok(id) => match functions::get(id, &db).await {
                 Ok(item) => {
                     let _ = channel.send(vec![item]);
@@ -24,6 +24,13 @@ pub async fn database_control(
                 }
                 Err(e) => Err(e.to_string()),
             },
+            Err(e) => Err(e.to_string()),
+        },
+        "all" => match functions::all(&db).await {
+            Ok(list) => {
+                let _ = channel.send(list);
+                Ok(())
+            }
             Err(e) => Err(e.to_string()),
         },
         "delete" => match payload.id {
