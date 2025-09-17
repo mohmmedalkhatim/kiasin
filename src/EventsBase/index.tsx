@@ -2,7 +2,7 @@ import Navbar from "./components/Navbar"
 import Header from "./components/Header"
 import WeekEvents from "./components/WeekEvents"
 import "./style.css"
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import dayjs, { Dayjs } from "dayjs"
 
 function EventsPage() {
@@ -18,4 +18,4 @@ function EventsPage() {
     </>
   )
 }
-export default EventsPage
+export default EventsPage;

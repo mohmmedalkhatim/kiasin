@@ -1,42 +1,17 @@
-import dayjs, { Dayjs } from "dayjs"
+import { Dayjs } from "dayjs"
 import { hours } from "../../Data/hours"
 import { months } from "../../Data/Months"
-import { Dispatch, SetStateAction, use, useEffect, useRef, useState } from "react"
-import { useInterval } from "react-use";
+import { Dispatch, SetStateAction } from "react"
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
+import useEventsCalender from "../../Hooks/useEventsCalender";
+
+
 
 
 
 
 function EventsCalender({ current, active, setActive }: { current: Dayjs, active: Dayjs, setActive: Dispatch<SetStateAction<Dayjs>> }) {
-    const ref = useRef<HTMLDivElement>(null);
-    const week = current.date() == active.date() && current.month() == active.month() && active.year() == active.year()
-    function hourCheck(week_index: number, day_index: number) {
-        return current.startOf("week").date() + week_index === current.date() && current.get("hour") == ((day_index) / 2) && current.date() == active.date() && current.month() == active.month() && active.year() == active.year()
-    }
-    const [selected, useSelected] = useState<{ day: number, hour: number }[]>([])
-    const [render, setRender] = useState(0)
-    const [marker, setMarker] = useState("0px");
-    const [selecting, setSelecting] = useState(false)
-    useInterval(() => {
-        setRender(prev => prev + 1)
-    }, 1000)
-    useEffect(() => {
-        if (ref.current) {
-            setMarker(`${Math.floor(((((ref.current?.clientHeight / 100)) * dayjs().get("minute")) * 2) * 2) * 2}%`)
-        }
-    }, [render])
-    useEffect(() => {
-        let element = document.getElementById("active");
-        if (element && ref.current) {
-            element?.scrollIntoView()
-            ref.current.addEventListener("click", (_e) => {
-                if (ref.current) {
-                    ref.current.style.background = "#006dc1"
-                }
-            })
-        }
-    }, [active])
+    let { marker, selecting, ref, setSelecting, hourCheck, week, setSelected, selectingLogic, time_arr } = useEventsCalender(current, active);
     return (
         <div className="week_events flex-col border border-[#e3e3e320]">
             <div className="flex flex-col w-full">
@@ -50,7 +25,7 @@ function EventsCalender({ current, active, setActive }: { current: Dayjs, active
                         <div className="flex scroller">
                             <div className="min-w-20 border border-[#e2e2e220]"></div>
                             <div className="flex w-full">
-                                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((item, index) => (<div key={index} className="day_marker w-full text-sm">{item} {active.startOf("week").date() + index}</div>))}
+                                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((item, index) => (<div key={index} className="day_marker w-full text-sm">{item} {active.startOf("week").add(index,"day").date()}</div>))}
                             </div>
                             <div className="w-[13px] border-y border-[#e2e2e220]"></div>
                         </div>
@@ -62,31 +37,20 @@ function EventsCalender({ current, active, setActive }: { current: Dayjs, active
                                 </div>
                                 ))}
                             </div>
-                            {Array.from({ length: 7 }).map((_, week_index) => (
+                            {Array.from({ length: 7 }, (_, i) => {
+                                let date = active.startOf("week").add(i, "day")
+                                return date
+                            }).map((_, week_index) => (
                                 <div className="day_timeline w-full" key={week_index}>
                                     <div className="flex flex-col w-full">
-                                        {Array.from({ length: 48 }).map((_, hour_index) => (
-                                            <div id={String(week_index) + String(hour_index)} onMouseOver={() => {
-                                                if (selecting) {
-                                                    let self = document.getElementById(String(week_index) + String(hour_index));
-                                                    if (self) {
-                                                        self.style.transition = "none"
-                                                        self.style.background = "#323232"
-                                                    }
-                                                    useSelected(prev => { prev.push({ day: week_index, hour: hour_index }); return prev })
-                                                }
-                                            }} onMouseDown={(e) => {
+                                        {time_arr(week_index).map((time, hour_index) => (
+                                            <div id={String(time.date()) + String(hour_index)} onMouseOver={() => selectingLogic(selecting, setSelected, hour_index, time.date())} onMouseDown={(e) => {
                                                 e.preventDefault()
                                                 setSelecting(true)
-                                                let self = document.getElementById(String(week_index) + String(hour_index));
-                                                if (self) {
-                                                    self.style.transition = "none"
-                                                    self.style.background = "#323232"
-                                                }
-                                                useSelected(prev => { prev.push({ day: week_index, hour: hour_index }); return prev })
-                                            }} onMouseUp={(e) => setSelecting(false)}
+                                                selectingLogic(selecting, setSelected, hour_index, time.date(), true)
+                                            }} onMouseUp={(_e) => setSelecting(false)}
                                                 className="border p-4 relative border-t-0 w-full dashed border-[#e3e3e320] h-10" ref={ref} key={hour_index}>
-                                                {hourCheck(week_index, hour_index) ? <>
+                                                {hourCheck(time.day(), hour_index) ? <>
                                                     <div className="absolute border-y-1 right-0 w-full" style={{ top: ref.current ? marker : "" }}>
                                                         <div className="absolute bg-sky-400 rounded-full -left-2 w-3 h-3 z-40" style={{ top: "-0.375rem" }} > </div>
                                                     </div>
