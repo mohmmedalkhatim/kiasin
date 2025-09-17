@@ -47,6 +47,7 @@ pub async fn media_control(
                 let res = functions::delete_one(&db, id).await;
                 if let Ok(result) = res {
                     let list = functions::find_many(&db).await;
+                    let _ = channel.send(list.unwrap());
                     return Ok(result);
                 }
                 Err("you have to add an id".to_string())
