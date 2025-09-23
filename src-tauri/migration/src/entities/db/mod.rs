@@ -7,7 +7,6 @@ pub struct Model {
     pub id: i32,
     pub name: String,
     pub data:Json,
-    pub user_id: i32,
 }
 
 impl ActiveModelBehavior for ActiveModel {}
