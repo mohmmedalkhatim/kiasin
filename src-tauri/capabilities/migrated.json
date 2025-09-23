@@ -10,7 +10,6 @@
     "shell:allow-open",
     "shell:default",
     "store:default",
-    "sql:default",
-    "store:default"
-  ]
+    "sql:default"
+    ]
 }
