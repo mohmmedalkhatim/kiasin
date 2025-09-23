@@ -1,5 +1,5 @@
 use migration::entities::todo::{ActiveModel, Entity};
-use sea_orm::{entity::*, DatabaseConnection, DbErr, EntityTrait, Set};
+use sea_orm::{DatabaseConnection, DbErr, EntityTrait, Set};
 
 use crate::app::commands::todo::objects::Todo;
 

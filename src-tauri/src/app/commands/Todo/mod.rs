@@ -64,7 +64,6 @@ pub async fn todos_control(
                                 return Err(e.to_string())
                             }
                         }
-                    return Ok(());
             }
             None => Err("you have add item to the payload".to_string()),
         },
@@ -104,6 +103,6 @@ pub async fn todos_control(
         "area_todos"=>{
             Ok(())
         },
-        _ => Err("you try to acess unregieser command \n -create\t -update\n\t -delete\t -list\n -area_todos".to_string()),
+        _ => Err("you try to access unregister command \n -create\t -update\n\t -delete\t -list\n -area_todos".to_string()),
     }
 }
