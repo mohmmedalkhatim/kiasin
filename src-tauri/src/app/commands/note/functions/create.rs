@@ -36,7 +36,7 @@ pub async fn create_note(note: Note, db: &DatabaseConnection) -> Result<(), Stri
     Ok(())
 }
 
-pub async fn create_emty(db: &DatabaseConnection) -> Result<Model, DbErr> {
+pub async fn create_empty(db: &DatabaseConnection) -> Result<Model, DbErr> {
     let data = Local::now();
     let active = note::ActiveModel {
         title: Set(Some("untitled".to_string())),

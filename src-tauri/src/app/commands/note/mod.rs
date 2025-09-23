@@ -36,7 +36,7 @@ pub async fn notes_control(
             },
         },
         "create_blank"=>{
-            let item  = functions::create_emty(db).await.expect("conldn't c");
+            let item  = functions::create_empty(db).await.expect("couldn't create the area");
             let _ = channel.send(vec![item]);
             Ok(())
         },
@@ -53,7 +53,7 @@ pub async fn notes_control(
             Some(id) => {
                 let _ = functions::delete_one(db, id);
                 let list = functions::find_many(db).await;
-                if let Ok(v) = list {
+                if let Ok(_v) = list {
                     return Ok(());
                 }
                 Ok(())
