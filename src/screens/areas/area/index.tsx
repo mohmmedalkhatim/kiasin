@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAreas } from '../../../context/para/areas';
 import Layout from '../../../Area';
 import { IconDotsVertical } from '@tabler/icons-react';
-import Header from '../../../components/Headers/Area_Header';
+import Header from '../../../Area/components/Area_Header';
 
 function Area() {
   const { id } = useParams();
@@ -19,7 +19,7 @@ function Area() {
     return (
       <>
         <Header />
-        <main className={!editable ? "content" : "mt-[5rem] mr-[16rem]"}>
+        <main className={!editable ? "content" : "mt-[5rem] mr-[17rem]"}>
           {active && active.at(-1) && <Layout />}
           <div className="fixed top-16 right-6">
             <IconDotsVertical size={'1.5rem'} />
