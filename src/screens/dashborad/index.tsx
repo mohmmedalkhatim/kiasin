@@ -3,10 +3,10 @@ import Layout from '../../Area';
 import { invoke } from '@tauri-apps/api/core';
 import { Area } from '../../types/area';
 import { useAreas } from '../../context/para/areas';
-import Header from '../../components/Headers/Area_Header';
 import { useEffect, useState } from 'react';
+import Header from '../../Area/components/Area_Header';
 
-function DashBoard ({}: {}) {
+function DashBoard () {
   const setActive = useAreas(state => state.update_active_area);
   const editable = useAreas(state => state.editable);
   const [loading, setLoading] = useState(false);
@@ -20,7 +20,7 @@ function DashBoard ({}: {}) {
     return (
       <>
         <Header />
-        <main className={!editable ? 'content' : 'mt-[5rem] mr-[16rem]'}>
+        <main className={!editable ? 'content' : 'mt-[5rem] mr-[17rem]'}>
           <Layout />
         </main>
       </>
