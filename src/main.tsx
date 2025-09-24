@@ -4,10 +4,10 @@ import { router } from './router';
 import ReactDOM from 'react-dom/client';
 import ScrollTrigger from 'gsap/ScrollTrigger';
 import { RouterProvider } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import './styles.css';
 import { initShortcuts } from './shortcuts';
 import { load } from '@tauri-apps/plugin-store';
+import React from 'react';
 
 const lenis = new Lenis();
 
@@ -26,10 +26,9 @@ gsap.ticker.lagSmoothing(0);
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Client = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <QueryClientProvider client={Client}>
+  <React.StrictMode>
     <RouterProvider router={router} />
-  </QueryClientProvider>
+  </React.StrictMode>
 );
