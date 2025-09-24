@@ -1,7 +1,6 @@
 pub mod areas;
 pub mod dashboard;
 pub mod database;
-pub mod events;
 pub mod media;
 pub mod note;
 pub mod tag;
@@ -9,3 +8,4 @@ pub mod templates;
 pub mod todo;
 pub mod user;
 pub mod windows;
+pub mod events;

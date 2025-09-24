@@ -25,7 +25,7 @@ pub async fn events_control(
         },
         "create" => match payload.item {
             Some(state) => {
-                let res = functions::create(state.start, state.end, &db).await;
+                let res = functions::create(state.summary,state.start, state.end, &db).await;
                 match res {
                     Ok(_) => return Ok(()),
                     Err(e) => return Err(e.to_string()),
@@ -33,7 +33,7 @@ pub async fn events_control(
             }
             None => return Err("you have to add data to create the events".to_string()),
         },
-        "update" => match payload.item {
+        "update" => match payload.update_item {
             Some(state) => {
                 let res = functions::update(state, &db).await;
                 match res {

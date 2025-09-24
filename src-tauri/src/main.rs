@@ -50,8 +50,8 @@ async fn main() {
             app::media_control,
             app::dashboard,
             app::database_control,
-            app::events_control,
             app::window_control,
+            app::events_control,
         ])
         .setup(|app| {
             let database_url = app
