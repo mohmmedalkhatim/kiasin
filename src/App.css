@@ -110,19 +110,16 @@ html {
   }
 
   header {
-    @apply fixed justify-between top-0 w-full border-b border-[#e2e2e220] h-16 flex items-center px-26 z-50 bg-[#181818];
+    @apply fixed justify-between top-0 w-full border-b border-[#e2e2e220] h-16 flex items-center px-40 z-50 bg-[#181818];
   }
 
   * {
     user-select: none;
   }
 
-  .menu {
-    @apply w-[240px] h-[240px] mb-2 bg-[#181818] shadow shadow-[#e2e2e250] flex flex-col;
-  }
 
   .toolsbar {
-    @apply top-8 pt-16 h-screen border-l-[#e2e2e220] px-8 w-[88px] bg-[#181818] border-l z-10 fixed -right-24 md:right-0;
+    @apply top-16 pt-8 h-screen border-l-[#e2e2e220] px-8 w-[88px] bg-[#181818] border-l z-10 fixed -right-24 md:right-0;
 
   }
 
@@ -163,8 +160,4 @@ html {
 
 .dragging {
   transition: none !important;
-}
-
-[role='drag-overlay'] {
-  z-index: 1000;
 }
