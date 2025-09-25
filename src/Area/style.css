@@ -1,28 +1,23 @@
 @import 'tailwindcss';
 
-
-
 @layer components {
 
   * {
     transition: margin width right left display !important;
     transition-duration: 250ms !important;
   }
-
   .size_control {
     @apply absolute left-0 -top-10;
   }
   .Timer_button {
     @apply text-sm hover:bg-[#e2e2e240] p-2 cursor-pointer flex items-center justify-center rounded;
   }
-
   .elements_container {
     @apply grid-cols-3 grow grid;
   }
   .no-transition {
     transition: height none !important;
   }
-
   .GridContainer {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(18rem, 1fr));
@@ -31,11 +26,9 @@
     gap: 16px;
     padding: 8px;
   }
-
   .editable_Dashboard {
     padding: none;
   }
-
   .overlay {
     background: #00000004;
     z-index: 10;
@@ -43,7 +36,6 @@
     right: 0;
     position: absolute;
   }
-
   .upload_area {
     stroke-width: 2px 5;
     stroke-dashoffset: 2% 10;
@@ -54,13 +46,11 @@
   .timer_button{
     @apply w-10 h-10 flex items-center justify-center rounded-full bg-[#e2e2e220] hover:bg-[#e2e2e240]  transition
   }
-
   .menu {
     @apply mb-2 bg-[#181818] shadow shadow-[#e2e2e250] flex flex-col;
     animation: fade 400 cubic-bezier(0.81, 0.32, 0.7, 0.88);
     translate: translateY(-100%);
   }
-
 }
 .fade-enter {
   opacity: 0;
