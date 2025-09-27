@@ -1,9 +1,11 @@
-import { MouseEventHandler, useRef, useState } from 'react';
+import { MouseEventHandler, RefObject, useRef, useState } from 'react';
 import {
   IconCalendar,
+  IconCalendarEvent,
   IconChevronDown,
   IconChevronRight,
-  IconClock,
+  IconDeviceWatch,
+  IconDeviceWatchStats,
   IconGrid4x4,
   IconList,
   IconLoader,
@@ -15,24 +17,54 @@ import { element_props } from '..';
 import Button from '../../components/Button';
 import Input from '../../components/Input';
 import { CSSTransition } from 'react-transition-group';
-
-const calculate_menu_appernce = (y: number): number => {
-  let pos = 0;
-  if (y <= 300) {
-    pos = 72;
-  } else {
-    pos = 260;
-  }
-  return pos;
-};
+import "./style.css"
 
 function Cards_menu({
-  handleadding,
+  handle_adding,
 }: {
-  handleadding: (ele: element_props) => void;
+  handle_adding: (ele: element_props) => void;
 }) {
-  const [menu, setmenu] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
+  const [open, setOpen] = useState(false)
+  const [menu, setmenu] = useState("main");
+  const mainRef = useRef(null);
+  const listRef = useRef(null);
+
+
+  return (
+    <>
+      <Button className='w-full z-90  mb-2 text-center flex items-center justify-between' onClick={e => setOpen(prv => !prv)}>
+        <div>create new</div>
+        <div>
+          {menu ? <IconChevronDown size={'1.2rem'} /> : <IconChevronRight />}
+        </div>
+      </Button>
+      
+      <CSSTransition
+        nodeRef={mainRef}
+        in={open}
+        timeout={200}
+        classNames="slide"
+        unmountOnExit
+      >
+        <div className='menu absolute mt-2' ref={mainRef}>
+          <TheMenu handle_adding={handle_adding} action={() => { 
+            setOpen(prev => !prev) 
+            }} />
+        </div>
+      </CSSTransition>
+
+    </>
+  );
+}
+export default Cards_menu;
+
+function TheMenu({
+  handle_adding,
+  action
+}: {
+  handle_adding: (ele: element_props) => void;
+  action: () => void;
+}) {
   const map = [
     {
       name: 'Areaslist',
@@ -41,7 +73,7 @@ function Cards_menu({
         min_rows: 3,
       },
       content: { list: [] },
-      icon: <IconGrid4x4 size={'1.7rem'} />,
+      icon: <IconGrid4x4 size={'1.4rem'} />,
     },
     {
       name: 'editor',
@@ -50,7 +82,7 @@ function Cards_menu({
         min_rows: 4,
       },
       content: '',
-      icon: <IconWriting size={'1.7rem'} />,
+      icon: <IconWriting size={'1.4rem'} />,
     },
     {
       name: 'tasks',
@@ -59,7 +91,7 @@ function Cards_menu({
         min_rows: 3,
       },
       content: { list: [] },
-      icon: <IconList size={'1.7rem'} />,
+      icon: <IconList size={'1.4rem'} />,
     },
     {
       name: 'calender',
@@ -68,7 +100,7 @@ function Cards_menu({
         min_rows: 4,
       },
       content: { list: [1, 2] },
-      icon: <IconCalendar size={'1.7rem'} />,
+      icon: <IconCalendar size={'1.4rem'} />,
     },
     {
       name: 'image',
@@ -77,7 +109,7 @@ function Cards_menu({
         min_rows: 4,
       },
       content: '',
-      icon: <IconPhoto size={'1.7rem'} />,
+      icon: <IconPhoto size={'1.4rem'} />,
     },
     {
       name: 'LoadingBar',
@@ -86,7 +118,7 @@ function Cards_menu({
         min_rows: 4,
       },
       content: '',
-      icon: <IconLoader size={'1.7rem'} />,
+      icon: <IconLoader size={'1.4rem'} />,
     },
     {
       name: 'Timer',
@@ -95,55 +127,61 @@ function Cards_menu({
         min_rows: 4,
       },
       content: '',
-      icon: <IconClock size={'1.7rem'} />,
+      icon: <IconDeviceWatch size={'1.4rem'} />,
+    },
+    {
+      name: 'Status',
+      props: {
+        min_cols: 1,
+        min_rows: 4,
+      },
+      content: '',
+      icon: <IconDeviceWatchStats size={'1.4rem'} />,
+    },
+    {
+      name: 'Timeline',
+      props: {
+        min_cols: 1,
+        min_rows: 4,
+      },
+      content: '',
+      icon: <IconCalendarEvent size={'1.4rem'} />,
     },
   ];
-
   return (
-    <>
-      <Button className='w-full z-90  mb-2 text-center flex items-center justify-between' onClick={e => setmenu(!menu)}>
-        <div>create new</div>
-        <div>
-          {menu ? <IconChevronDown size={'1.2rem'} /> : <IconChevronRight />}
-        </div>
-      </Button>
-      <CSSTransition nodeRef={menuRef} in={menu} timeout={200} classNames="bubble_main" unmountOnExit>
-        <div
-          ref={menuRef}
-          className={`${menu ? 'menu w-full' : 'hidden'} z-1000`}
-        >
-          <div className='pt-4 px-4'>
-            <Input
-              placeholder='Search'
-              icon={<IconSearch size={'1rem'} color='#e2e2e260' />}
-            />
-          </div>
-          <nav className='elements_container'>
-            {map.map(item => (
-              <div
-                className='flex justify-center cursor-pointer items-center'
-                onClick={() =>
-                  handleadding({
-                    cols: item.props.min_cols,
-                    rows: item.props.min_rows,
-                    type: item.name,
-                    content: item.content,
-                  })
-                }
-              >
-                {item.icon}
-              </div>
-            ))}
-          </nav>
-          <Button
-            className='rounded-none border-none text-center text-xs'
-            type='reset'
+    <div
+      className={`flex flex-col`}
+    >
+      <div className='pt-4 px-4'>
+        <Input
+          placeholder='Search'
+          icon={<IconSearch size={'1rem'} color='#e2e2e260' />}
+        />
+      </div>
+      <nav className='elements_container py-2'>
+        {map.map(item => (
+          <div
+            className='flex justify-center p-4 cursor-pointer items-center'
+            onClick={() =>
+              handle_adding({
+                cols: item.props.min_cols,
+                rows: item.props.min_rows,
+                type: item.name,
+                content: item.content,
+              })
+            }
           >
-            Browser All
-          </Button>
-        </div>
-      </CSSTransition>
-    </>
-  );
+            {item.icon}
+          </div>
+        ))}
+      </nav>
+      <Button
+        className='rounded-none border-none text-center text-xs'
+        type='reset'
+        onClick={() => action()}
+      >
+        Browser All
+      </Button>
+    </div>
+  )
 }
-export default Cards_menu;
