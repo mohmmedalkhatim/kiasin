@@ -110,7 +110,7 @@ html {
   }
 
   header {
-    @apply fixed justify-between top-0 w-full border-b border-[#e2e2e220] h-16 flex items-center px-40 z-50 bg-[#181818];
+    @apply fixed justify-between top-0 w-full border-b border-[#e2e2e220] h-16 flex items-center pl-32 pr-52 z-50 bg-[#181818];
   }
 
   * {
@@ -160,4 +160,18 @@ html {
 
 .dragging {
   transition: none !important;
+}
+.fade-enter {
+  opacity: 0;
+}
+.fade-enter-active {
+  opacity: 1;
+  transition: opacity 600ms ease;
+}
+.fade-exit {
+  opacity: 1;
+}
+.fade-exit-active {
+  opacity: 0;
+  transition: opacity 600ms ease;
 }
