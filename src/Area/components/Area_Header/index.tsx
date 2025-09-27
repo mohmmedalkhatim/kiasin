@@ -25,16 +25,9 @@ function Header() {
   }, []);
   return (
     <header>
-      <Input
-        type={'text'}
-        value={search}
-        onChange={() => setSearch}
-        icon={<IconSearch size={'1rem'} />}
-      />
-      <div></div>
       <input
         value={active?.title}
-        className='outline-none border-none focus:border'
+        className='outline-none border-none font-semibold font focus:border'
         onChange={e => {
           let area = { ...active, title: e.target.value } as Area;
           if (active?.note_id) {
@@ -44,10 +37,17 @@ function Header() {
           update(area);
         }}
       />
+      <div></div>
+      <div></div>
+      <div></div>
+
+      <Link viewTransition to={`/note/${active?.note_id}`}>
+        <IconNotebook size={'2rem'} />
+      </Link>
       <Button
         size='sm'
         className='bg-[#181818]'
-        
+
         children={
           <>
             edit <IconEdit size={'1.2rem'} />
@@ -55,10 +55,6 @@ function Header() {
         }
         onClick={toggle}
       />
-      <Link viewTransition to={`/note/${active?.note_id}`}>
-        <IconNotebook size={'2rem'} />
-      </Link>
-      <div></div>
     </header>
   );
 }
