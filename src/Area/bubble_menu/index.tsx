@@ -1,4 +1,4 @@
-import { MouseEventHandler, RefObject, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   IconCalendar,
   IconCalendarEvent,
@@ -26,33 +26,30 @@ function Cards_menu({
 }) {
   const [open, setOpen] = useState(false)
   const [menu, setmenu] = useState("main");
-  const mainRef = useRef(null);
+  const nodeRef = useRef(null);
   const listRef = useRef(null);
 
 
   return (
     <>
-      <Button className='w-full z-90  mb-2 text-center flex items-center justify-between' onClick={e => setOpen(prv => !prv)}>
+      <Button className='w-full z-90   mb-2 text-center flex items-center justify-between' onClick={e => setOpen(prv => !prv)}>
         <div>create new</div>
         <div>
           {menu ? <IconChevronDown size={'1.2rem'} /> : <IconChevronRight />}
         </div>
       </Button>
-      
       <CSSTransition
-        nodeRef={mainRef}
+        nodeRef={nodeRef}
         in={open}
-        timeout={200}
+        timeout={600}                 // <-- matches CSS transition: 600ms
         classNames="slide"
         unmountOnExit
+        appear                         // animate on first mount if open initially
       >
-        <div className='menu absolute mt-2' ref={mainRef}>
-          <TheMenu handle_adding={handle_adding} action={() => { 
-            setOpen(prev => !prev) 
-            }} />
+        <div ref={nodeRef} className="menu" style={{ right: 15, top: 150 }}>
+          <TheMenu handle_adding={handle_adding} action={() => setOpen(false)} />
         </div>
       </CSSTransition>
-
     </>
   );
 }
@@ -90,7 +87,7 @@ function TheMenu({
         min_cols: 1,
         min_rows: 3,
       },
-      content: { list: [] },
+      content: { list: [], columns: [{name:"untitled",list:[]}] },
       icon: <IconList size={'1.4rem'} />,
     },
     {
@@ -150,18 +147,18 @@ function TheMenu({
   ];
   return (
     <div
-      className={`flex flex-col`}
+      className={`flex flex-col items-center  justify-center`}
     >
-      <div className='pt-4 px-4'>
+      <div className='w-full px-4 py-4 '>
         <Input
           placeholder='Search'
           icon={<IconSearch size={'1rem'} color='#e2e2e260' />}
         />
       </div>
-      <nav className='elements_container py-2'>
+      <nav className='grid grid-cols-3 gap-x-2 w-full pb-2'>
         {map.map(item => (
           <div
-            className='flex justify-center p-4 cursor-pointer items-center'
+            className='flex justify-center items-center w-full h-14   hover:bg-[#e2e2e220]  hover:-translate-y-0.5  cursor-pointer'
             onClick={() =>
               handle_adding({
                 cols: item.props.min_cols,
@@ -176,7 +173,7 @@ function TheMenu({
         ))}
       </nav>
       <Button
-        className='rounded-none border-none text-center text-xs'
+        className='rounded-none w-full border-none text-center text-xs'
         type='reset'
         onClick={() => action()}
       >
