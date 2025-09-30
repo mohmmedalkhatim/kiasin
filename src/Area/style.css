@@ -48,7 +48,5 @@
   }
   .menu {
     @apply mb-2 bg-[#181818] shadow shadow-[#e2e2e250] flex flex-col;
-    animation: fade 400 cubic-bezier(0.81, 0.32, 0.7, 0.88);
-    translate: translateY(-100%);
   }
 }
