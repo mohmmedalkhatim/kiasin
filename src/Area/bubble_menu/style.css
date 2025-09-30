@@ -1,26 +1,38 @@
+/* container positioning so slide is visible */
+.menu {
+  position: absolute;
+  z-index: 50;
+}
 
-
-/* When entering */
+/* ENTER */
 .slide-enter {
-  transform: translateY(0);
+  transform: translateX(100%);
   opacity: 0;
-  transition: all 300ms ease-in-out;
 }
 .slide-enter-active {
-  transform: translateY(0);
+  transform: translateX(0);
   opacity: 1;
-  transition: all 300ms ease-in-out;
+  transition: transform 600ms ease-in-out, opacity 600ms ease-in-out;
 }
-/* When exiting */
-.slide-exit {
-  transform: translateY(0);
+.slide-enter-done {
+  transform: translateX(0);
   opacity: 1;
-  transition: all 300ms ease-in-out;
+}
+
+/* EXIT */
+.slide-exit {
+  transform: translateX(0);
+  opacity: 1;
 }
 .slide-exit-active {
-  transform: translateY(-100%);
+  transform: translateX(100%);
   opacity: 0;
-  transition: all 300ms ease-in-out;
+  transition: transform 600ms ease-in-out, opacity 600ms ease-in-out;
+}
+.slide-exit-done {
+  transform: translateX(100%);
+  opacity: 0;
 }
 
-
+/* small visual style for inner content */
+.menu-content { min-width: 220px; }
