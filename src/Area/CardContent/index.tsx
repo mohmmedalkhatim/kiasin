@@ -10,9 +10,9 @@ import Status from '../components/Status';
 import Timeline from '../components/TimeLine';
 import dayjs from 'dayjs';
 
-type Card_content = { id: number; T: string; props?: any };
+type Card_content = { id: number; T: string; props?: any,cols:number | undefined };
 
-function CardContent({ id, T, props }: Card_content) {
+function CardContent({ id, T, props,cols }: Card_content) {
   const [events,_setEvents]  = useState([
     { id: 1, title: "Work Session", start: dayjs().startOf("D").add(9,"hours"), end: dayjs().startOf("D").add(12,"hours") },
     { id: 2, title: "Meeting", start: dayjs().startOf("D").add(13,"hours"), end: dayjs().startOf("D").add(15,"hours") },
@@ -24,7 +24,7 @@ function CardContent({ id, T, props }: Card_content) {
       ['Areaslist', <AreasList id={id} />],
       ['Timer', <Timer />],
       ['Status', <Status />],
-      ['tasks', <TaskList id={id} />],
+      ['tasks', <TaskList id={id} cols={cols} />],
       ['image', <Image id={id} />],
       ['calender', <EventCreate />],
       ['LoadingBar', <LoadingBar id={id} />],

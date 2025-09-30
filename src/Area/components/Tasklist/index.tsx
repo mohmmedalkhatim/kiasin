@@ -11,100 +11,86 @@ import './index.css';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import { useEffect, useState } from 'react';
 import Task from './Task';
-import Input from '../../../components/Input';
-import { IconLink, IconSend2 } from '@tabler/icons-react';
-import { useTasks } from '../../../context/para/tasks';
+import { IconLink } from '@tabler/icons-react';
 import { useAreas } from '../../../context/para/areas';
 import { SwappingStrategy } from '../../Strategy';
 import { useLayoutDialog } from '../../../context/para/Dialog';
+import Form from './form';
 
-function TaskList({ id }: { id: number }) {
-  const [schema, setSchema] = useState<number[]>([]);
+function TaskList({ id, cols }: { id: number, cols: number | undefined }) {
+  const [schema, setSchema] = useState<{ name: string, list: number[] }[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const open_dialog = useLayoutDialog(state => state.changeMode);
-  const [title, setTitle] = useState<string>('');
-  const create_task = useTasks(state => state.create);
   const card = useAreas(state => state.get_Card)(id);
   const updateCard = useAreas(state => state.update_card);
   const act = useAreas(state => state.active);
-
-
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor)
   );
   useEffect(() => {
-      setSchema(card.props.list);
-  }, [act]);
+    if (cols && cols > card.props.columns.length) {
+      card.props.columns.push({ name: "untitled", list: [] })
+      updateCard(id, card)
+    }
+    setSchema(card.props.columns);
+  }, [cols]);
 
   const handleDragStart = (event: any) => {
     setActiveId(event.active.id);
   };
 
-  const handleDragEnd = async (event: any) => {
+  const handleDragEnd = async (event: any, column_id: number) => {
     if (event.active.id !== event.over.id) {
       const oldIndex = schema?.indexOf(event.active.id);
       const newIndex = schema?.indexOf(event.over.id);
       const updated = arrayMove(schema, oldIndex, newIndex);
+      card.props.columns[column_id].list = updated;
       setSchema(updated);
-      updateCard(id, { ...card, props: { list: updated } })
+      updateCard(card.id, card);
     }
     setActiveId(null);
   };
+  console.log(cols)
   if (schema) {
     return (
-      <DndContext
-        sensors={sensors}
-        collisionDetection={closestCenter}
-        onDragStart={handleDragStart}
-        onDragEnd={handleDragEnd}
-      >
-        <SortableContext items={schema} strategy={SwappingStrategy}>
-          <div className='p-2'>
-            <form
-              onSubmit={async e => {
-                e.preventDefault();
-                if (title != '') {
-                  await create_task(title, id);
-                  setTitle('');
-                }
-              }}
-              className='cols-full'
-            >
-              <Input
-                placeholder='create a task'
-                onChange={setTitle}
-                value={title}
-                icon={
-                  <button type='submit'>
-                    <IconSend2 size={'1rem'} />
-                  </button>
-                }
-              />
-            </form>
-            <div className='task_list overflow-hidden'>
-              {schema?.map(item =>
-                item !== null ? (
-                  <Task
-                    id={item}
-                    key={item}
-                    classname={activeId === String(item) ? 'dragging' : ''}
-                  />
-                ) : (
-                  ''
-                )
-              )}
-            </div>
-            <div
-              className='absolute bottom-5 right-5'
-              onClick={() => open_dialog('dialog_links', { id })}
-            >
-              <IconLink size={'1.3rem'} color='gray' />
-            </div>
-          </div>
-        </SortableContext>
-        <DragOverlay></DragOverlay>
-      </DndContext>
+      <div className='flex w-full'>
+        {schema.map((column, id) => (
+          <DndContext
+            sensors={sensors}
+            collisionDetection={closestCenter}
+            onDragStart={handleDragStart}
+            onDragEnd={event => handleDragEnd(event, id)}
+          >
+            <SortableContext items={column.list} strategy={SwappingStrategy}>
+              <div className='p-2 w-full'>
+                <Form column_id={id} card_id={card.id} />
+                <div className='task_list overflow-hidden'>
+                  {column.list?.map(item =>
+                    item !== null ? (
+                      <Task
+                        id={item}
+                        key={item}
+                        classname={activeId === String(item) ? 'dragging' : ''}
+                      />
+                    ) : (
+                      ''
+                    )
+                  )}
+                </div>
+                <div
+                  className='absolute bottom-5 right-5'
+                  onClick={() => open_dialog('dialog_links', { id })}
+                >
+                  <IconLink size={'1.3rem'} color='gray' />
+                </div>
+              </div>
+            </SortableContext>
+            <DragOverlay></DragOverlay>
+          </DndContext>
+        ))}
+
+      </div>
     );
   }
 }

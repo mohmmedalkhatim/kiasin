@@ -5,18 +5,20 @@
   align-items: center;
   justify-content: space-between;
 }
+
 .task_list {
   display: grid;
-  grid-template-columns: repeat(auto-fill,minmax(14.6rem,1fr));
-  gap: 0.5rem;
- padding: 0.5rem;
-  form{
-    display: flex ;
+  grid-template-columns: repeat(auto-fill, minmax(14.6rem, 1fr));
+  gap: 0.4rem;
+  padding: 0.5rem;
+
+  form {
+    display: flex;
     align-items: center;
     justify-content: center;
-    input{
-    width: 15.55rem;
+
+    input {
+      width: 15.55rem;
     }
   }
 }
-
