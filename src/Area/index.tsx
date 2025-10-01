@@ -25,20 +25,29 @@ const Layout = () => {
     activeId,
     sort,
   } = useLayout();
+  let content = () => {
+    if (area?.ui_schema.item.length !== 0) {
+      return area?.ui_schema.item?.map(item => (
+        <Card
+          setSort={updateSort}
+          container_width={rect.width}
+          cla={activeId === String(item.id) ? 'dragging' : ''}
+          key={String(item.id)}
+          id={String(item.id)}
+          card={item}
+          setCardlist={handlesizeChange}
+        />
+      ))
+    }else{
+      return <div className=' col-span-full row-span-10 flex items-center justify-center'>
+        hello
+      </div>
+    }
+  }
   return (
     <>
       <Container ref={ref}>
-        {area?.ui_schema.item?.map(item => (
-          <Card
-            setSort={updateSort}
-            container_width={rect.width}
-            cla={activeId === String(item.id) ? 'dragging' : ''}
-            key={String(item.id)}
-            id={String(item.id)}
-            card={item}
-            setCardlist={handlesizeChange}
-          />
-        ))}
+        {content()}
         {editable && (
           <Navbar
             start={handleDragStart}

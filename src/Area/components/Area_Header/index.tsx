@@ -1,15 +1,13 @@
 import { useEffect, useState } from 'react';
-import { IconEdit, IconSearch, IconNotebook } from '@tabler/icons-react';
+import { IconEdit,  IconNotebook } from '@tabler/icons-react';
 import { useAreas } from '../../../context/para/areas';
 import { Link } from 'react-router-dom';
 import { Area } from '../../../types/area';
 import { useNotes } from '../../../context/para/notes';
 import { Note } from '../../../types/notes';
-import Input from '../../../components/Input';
 import Button from '../../../components/Button';
 
 function Header() {
-  const [search, setSearch] = useState('');
   const toggle = useAreas(state => state.toggleEditable);
   const active = useAreas(state => state.active)?.at(-1);
   const update = useAreas(state => state.update);
@@ -17,7 +15,7 @@ function Header() {
   const area_note = useNotes(state => state.active);
   const setActive = useNotes(state => state.note);
   const update_note = useNotes(state => state.updata_note);
-  const [loading_note, setDone] = useState<Note>();
+  const [_, setDone] = useState<Note>();
   useEffect(() => {
     if (active?.note_id) {
       setActive(active.note_id, setDone);
@@ -55,6 +53,7 @@ function Header() {
         }
         onClick={toggle}
       />
+      <div></div>
     </header>
   );
 }
