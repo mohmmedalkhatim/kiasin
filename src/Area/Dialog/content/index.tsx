@@ -5,8 +5,10 @@ import NoteViewer from '../content/NoteViewer';
 import Setting from './Setting';
 import Event from './Event';
 import NotesList from './notes';
+import Timeline from '../../components/TimeLine';
 
 function Content ({ props, mode }: { props: any; mode: string }) {
+
   let [element] = useState(
     new Map([
       ['dialog_note', <NoteViewer id={props.id} />],
