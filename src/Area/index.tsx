@@ -39,7 +39,7 @@ const Layout = () => {
         />
       ))
     }else{
-      return <div className=' col-span-full row-span-10 flex items-center justify-center'>
+      return <div className=' col-span-full row-span-8 flex items-center justify-center'>
         hello
       </div>
     }
