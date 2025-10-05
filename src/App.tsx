@@ -12,6 +12,7 @@ import { useDatabase } from './context/para/database';
 import { useEvents } from './context/para/events';
 import Toolsbar from './components/tools';
 import WindowsControl from './components/Controller';
+import Search from './components/Search/Search';
 
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
       </div>
       <Aside />
       <Dialog />
+      <Search />
     </>
   );
 }
