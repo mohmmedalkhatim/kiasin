@@ -1,4 +1,4 @@
-import { IconUpload } from '@tabler/icons-react';
+import { IconImageInPicture, IconUpload } from '@tabler/icons-react';
 import { useMedia } from '../../../context/para/media';
 import { useCallback, useMemo, useRef, useState } from 'react';
 import { useAreas } from '../../../context/para/areas';
@@ -41,7 +41,7 @@ function Image({ id }: { id: number }) {
           ''
         )}
       </div>
-
+        {url !== "" && <div className='absolute top-4 right-4 z-20 hover:bg-[#e2e2e280] cursor-pointer p-1 rounded-sm' onClick={()=>setUrl("")}><IconImageInPicture/></div>}
       <input
         type='file'
         ref={ref}
