@@ -1,5 +1,8 @@
+import { IconChevronDown, IconChevronLeft, IconChevronRight, IconChevronsRight, IconTimelineEvent } from "@tabler/icons-react";
 import dayjs, { Dayjs } from "dayjs";
 import React from "react";
+import Button from "../../../components/Button";
+import { months } from "../../../EventsBase/Data/Months";
 
 type Event = {
   id: number;
@@ -19,23 +22,42 @@ export default function Timeline({ date, events, hours = 24 }: TimelineProps) {
 
   return (
     <div className="bg-[#181818] text-gray-200 rounded-md  overflow-hidden h-full">
-      <div className="flex items-center  justify-between border-b border-[#e2e2e220] px-4 py-2 text-sm">
-        <div className="font-semibold">{date}</div>
-        <div className="flex gap-2 text-xs text-gray-400">
-          <button className="hover:text-white">Day ▼</button>
-          <button className="hover:text-white">Today</button>
+      <div className="flex items-center  justify-between px-4 py-2 text-sm">
+        <div className="flex items-center  gap-2 bg-[#e2e2e240] px-3  text-xs py-1 rounded-full">
+          <IconTimelineEvent size={"0.8rem"} className="pt-[1px]" />
+          <div>
+            events
+          </div>
+        </div>
+        <div>
+          <div></div>
+          <Button size="sm" className="font-bold">
+            <div className=""> New</div>
+            <div>
+              <IconChevronDown size={"0.9rem"} />
+            </div>
+          </Button>
+        </div>
+      </div>
+      <div className="flex items-center px-6 py-3 text-xs border-b border-[#e2e2e220] justify-between">
+        <div className="flex items-center gap-2">
+          <IconChevronsRight size={"1rem"} color="#e2e2e280"/>
+          <div>{months[dayjs().get("month")]}</div>
+        </div>
+        <div className="flex ">
+          {months[dayjs().month()]+"  "+dayjs().date()}
+        </div>
+        <div className="flex items-center gap-3">
+          <div><IconChevronLeft size={"1rem"} /></div>
+          <div>today</div>
+          <div><IconChevronRight size={"1rem"} /></div>
         </div>
       </div>
 
       <div className="flex w-full overflow-x-auto h-full">
-        <div className="w-32  flex flex-col items-start p-2">
-          <button className="flex items-center gap-1 text-xs  hover:text-white">
-            + New
-          </button>
-        </div>
 
         <div className="relative">
-          <div className="flex border-b border-[#e2e2e220]">
+          <div className="flex">
             {hourMarks.map((h) => (
               <div
                 key={h.hour()}
@@ -79,6 +101,6 @@ export default function Timeline({ date, events, hours = 24 }: TimelineProps) {
           </div>
         </div>
       </div>
-    </div>
+    </div >
   );
 }

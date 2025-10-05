@@ -28,7 +28,7 @@ function CardContent({ id, T, props,cols }: Card_content) {
       ['image', <Image id={id} />],
       ['calender', <EventCreate />],
       ['LoadingBar', <LoadingBar id={id} />],
-      ['Timeline', <Timeline events={events} date='September 15, 2025' />],
+      ['Timeline', <Timeline events={events} date={dayjs().format("DD-MM")} />],
       ['default', <div>no content</div>],
     ])
   );

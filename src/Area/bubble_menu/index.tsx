@@ -44,7 +44,6 @@ function Cards_menu({
         timeout={600}                 // <-- matches CSS transition: 600ms
         classNames="slide"
         unmountOnExit
-        appear                         // animate on first mount if open initially
       >
         <div ref={nodeRef} className="menu" style={{ right: 15, top: 150 }}>
           <TheMenu handle_adding={handle_adding} action={() => setOpen(false)} />
