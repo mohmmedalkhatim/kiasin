@@ -60,7 +60,7 @@ function Task({
       style={style}
       {...attributes}
     >
-      <div className='text-sm flex gap-4'>
+      <div className='text-sm flex gap-4 group'>
         <IconGridDots {...listeners} className='cursor-grab' size={'1rem'} />
         <div
           className='cursor-pointer text-xs'
@@ -74,7 +74,6 @@ function Task({
         </div>
 
       </div>
-      <Checkbox state={checked} setState={setChecked} />
     </div>
   );
 }

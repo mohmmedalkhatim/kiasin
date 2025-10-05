@@ -11,14 +11,14 @@ import './index.css';
 import { arrayMove, SortableContext } from '@dnd-kit/sortable';
 import { useEffect, useState } from 'react';
 import Task from './Task';
-import { IconLink } from '@tabler/icons-react';
+import { IconLink, IconPlus } from '@tabler/icons-react';
 import { useAreas } from '../../../context/para/areas';
 import { SwappingStrategy } from '../../Strategy';
 import { useLayoutDialog } from '../../../context/para/Dialog';
 import Form from './form';
 
 function TaskList({ id, cols }: { id: number, cols: number | undefined }) {
-  const [schema, setSchema] = useState<{ name: string, list: number[] }[]>([]);
+  const [schema, setSchema] = useState<{ id: number, name: string, list: number[] }[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
   const open_dialog = useLayoutDialog(state => state.changeMode);
   const card = useAreas(state => state.get_Card)(id);
@@ -31,47 +31,48 @@ function TaskList({ id, cols }: { id: number, cols: number | undefined }) {
   );
   useEffect(() => {
     if (cols && cols > card.props.columns.length) {
-      card.props.columns.push({ name: "untitled", list: [] })
+      card.props.columns.push({ id: card.props.columns.length, name: "untitled", list: [] })
       updateCard(id, card)
     }
-    setSchema(card.props.columns);
+    // Ensure all columns have an 'id' property
+    setSchema(card.props.columns.map((col: any, idx: number) => ({
+      id: col.id ?? idx,
+      name: col.name,
+      list: col.list
+    })));
   }, [act, cols]);
 
   const handleDragStart = (event: any) => {
     setActiveId(event.active.id);
   };
 
-  const handleDragEnd = async (event: any, column_id: number) => {
-    if (event.active.id !== event.over.id) {
-      const oldIndex = schema[column_id].list?.indexOf(event.active.id);
-      const newIndex = schema[column_id].list?.indexOf(event.over.id);
-      let temp = [...schema[column_id].list];
-      const updated = arrayMove(temp, oldIndex, newIndex);
-      card.props.columns[column_id].list = [...updated];
-      setSchema(state => {
-        let temp = state;
-        temp[column_id].list = [...updated]
-        return temp;
-      });
-      updateCard(card.id, card);
-    }
-    setActiveId(null);
+
+
+  const handleDragEnd = (event: any) => {
+    const { active, over } = event;
+    setSchema((items) => {
+      items.map(column => {
+        active
+      })
+      return items
+    })
   };
+
   if (schema) {
     return (
       <div className='flex w-full'>
-        {schema.map((column, id) => {
-          if (cols && cols > id) {
-            return (
-              <DndContext
-                sensors={sensors}
-                collisionDetection={closestCenter}
-                onDragStart={handleDragStart}
-                onDragEnd={event => handleDragEnd(event, id)}
-              >
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragStart={handleDragStart}
+          onDragEnd={handleDragEnd}
+        >
+          {schema.map((column, id) => {
+            if (cols && cols > id) {
+              return (
                 <SortableContext items={column.list} strategy={SwappingStrategy}>
                   <div className='p-2 w-full'>
-                    <Form column_id={id} card_id={card.id} setActive={setRender} />
+                    <Form column_id={id} title={column.name} setActive={setRender} />
                     <div className='task_list overflow-hidden'>
                       {column.list?.map(item =>
                         item !== null ? (
@@ -84,6 +85,10 @@ function TaskList({ id, cols }: { id: number, cols: number | undefined }) {
                           ''
                         )
                       )}
+                      <div className='flex items-center gap-2 px-4 py-2'>
+                        <div className='text-[#e2e2e230]'><IconPlus size={"0.9rem"} /></div>
+                        <div className='text-[#e2e2e230] text-xs'>New</div>
+                      </div>
                     </div>
                     <div
                       className='absolute bottom-5 right-5'
@@ -94,12 +99,13 @@ function TaskList({ id, cols }: { id: number, cols: number | undefined }) {
                   </div>
                   <DragOverlay></DragOverlay>
                 </SortableContext>
-              </DndContext>
-            )
-          }
-        })}
+              )
+            }
+          })}
 
-      </div>
+        </DndContext>
+
+      </div >
     );
   }
 }
