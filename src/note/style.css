@@ -1,10 +1,8 @@
 @import 'tailwindcss';
 
 @layer components {
-  .HeadingBar {
-    @apply not-lg:hidden fixed top-8 p-4 right-8 w-xs h-[45rem] z-50 bg-[#181818];
+  .heading_bar {
+    @apply not-lg:hidden fixed top-16 p-4 right-[5.4rem] w-xs h-[47rem] z-50 bg-[#181818];
   }
-  .NoteHeader {
-    @apply bg-white;
-  }
+
 }
