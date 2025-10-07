@@ -54,6 +54,7 @@ export let useDatabase = create<database_context>((set) => ({
     get: async (id, setDataBase) => {
         let channel = new Channel<DB_DTO[]>((res) => {
             setDataBase({ fields: res[0].data.fields, data: res[0].data.data })
+            set(state => state)
         })
         invoke("database_control", { payload: { command: "one", id }, channel })
     },
@@ -62,5 +63,7 @@ export let useDatabase = create<database_context>((set) => ({
             setDataBaseList(res)
         })
         invoke("database_control", { payload: { command: "get", ids }, channel })
+        set(state => state)
+
     }
 }))
