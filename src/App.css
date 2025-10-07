@@ -4,6 +4,50 @@ html {
   color-scheme: dark;
 }
 
+@theme {
+    --color-dark: oklch(0.2155 0.013 0);
+    --color-sky-50: oklch(97.7% 0.013 236.62);
+    --color-sky-100: oklch(95.1% 0.026 236.824);
+    --color-sky-200: oklch(90.1% 0.058 230.902);
+    --color-sky-300: oklch(82.8% 0.111 230.318);
+    --color-sky-400: oklch(74.6% 0.16 232.661);
+    --color-sky-500: oklch(68.5% 0.169 237.323);
+    --color-sky-600: oklch(58.8% 0.158 241.966);
+    --color-sky-700: oklch(50% 0.134 242.749);
+    --color-sky-800: oklch(44.3% 0.11 240.79);
+    --color-sky-900: oklch(39.1% 0.09 240.876);
+    --color-sky-950: oklch(29.3% 0.066 243.157);
+    --color-border: oklch(0.8545 0 225.67 / 20.15%);
+
+    --text-xs: 0.75rem;
+    --text-xs--line-height: calc(1 / 0.75);
+    --text-sm: 0.875rem;
+    --text-sm--line-height: calc(1.25 / 0.875);
+    --text-base: 1rem;
+    --text-base--line-height: calc(1.5 / 1);
+    --text-lg: 1.125rem;
+    --text-lg--line-height: calc(1.75 / 1.125);
+    --text-xl: 1.25rem;
+    --text-xl--line-height: calc(1.75 / 1.25);
+    --text-2xl: 1.5rem;
+    --text-2xl--line-height: calc(2 / 1.5);
+    --text-3xl: 1.875rem;
+    --text-3xl--line-height: calc(2.25 / 1.875);
+    --text-4xl: 2.25rem;
+    --text-4xl--line-height: calc(2.5 / 2.25);
+    --text-5xl: 3rem;
+    --text-5xl--line-height: 1;
+    --text-6xl: 3.75rem;
+    --text-6xl--line-height: 1;
+    --text-7xl: 4.5rem;
+    --text-7xl--line-height: 1;
+    --text-8xl: 6rem;
+    --text-8xl--line-height: 1;
+    --text-9xl: 8rem;
+    --text-9xl--line-height: 1;
+    --font-OpenSans: 'OpenSans', sans-serif;
+  }
+
 @font-face {
   font-family: 'OpenSans';
   src: url('/fonts/Open_Sans/OpenSans-VariableFont_wdth,wght.ttf') format('truetype-variations');
@@ -28,18 +72,7 @@ html {
   font-style: normal;
 }
 
-@theme {
-  --color-dark: #181818;
-  --color-light: '#F9F7F7';
-  --color-muted: '#DBE2EF';
-  --color-primary: '#3F72AF';
-  --color-primary-border: #e2e2e220;
-  --font-OpenSans: 'OpenSans';
-  --font-AverageSans: 'AverageSans';
-}
-
 @layer components {
-
   .login_page {
     grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
     @apply bg-dark my-16 grid mx-32;
@@ -62,7 +95,6 @@ html {
     transition: all 0.25s ease-out;
     display: flex;
     align-items: center;
-
     gap: 0.5rem;
 
     span {
@@ -102,8 +134,6 @@ html {
     grid-auto-rows: 14rem;
     gap: 1rem;
   }
-
-  .login_illustration img {}
 
   body {
     @apply font-OpenSans;
@@ -161,16 +191,20 @@ html {
 .dragging {
   transition: none !important;
 }
+
 .fade-enter {
   opacity: 0;
 }
+
 .fade-enter-active {
   opacity: 1;
   transition: opacity 600ms ease;
 }
+
 .fade-exit {
   opacity: 1;
 }
+
 .fade-exit-active {
   opacity: 0;
   transition: opacity 600ms ease;
