@@ -6,6 +6,7 @@ pub struct Todo {
     pub title: String,
     pub checked: Option<bool>,
     pub area_id: Option<i32>,
+    pub content: Option<serde_json::Value>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -11,6 +11,7 @@ pub async fn update_todo(todo: Todo, db: &DatabaseConnection) -> Result<(), DbEr
         area_id: Set(todo.area_id),
         checked: Set(todo.checked.unwrap()),
         update: Set(Some(time.date_naive())),
+        content: Set(todo.content),
         ..Default::default()
     };
     let _ = Entity::update(new).exec(db).await?;

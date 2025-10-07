@@ -23,6 +23,7 @@ pub async fn create_todo(todo: Todo, db: &DatabaseConnection) -> Result<i32, DbE
         note_id: Set(note_id),
         checked: Set(false),
         created: Set(time.date_naive()),
+        content: Set(todo.content),
         ..Default::default()
     };
     let id = Entity::insert(new).exec(db).await?.last_insert_id;

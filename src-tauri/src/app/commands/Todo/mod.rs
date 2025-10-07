@@ -18,12 +18,10 @@ pub async fn todos_control(
     match payload.command.as_str() {
         "create" => match payload.item {
             Some(model) => {
-                println!("create todo");
                 let id = functions::create_todo(model, &db)
                     .await
                     .expect("there is a problem with the database");
                 let todo = functions::find_one(id, &db).await.expect("there a problem when creating an element");
-                println!("{:?}",todo);
                 let _ = server.send(vec![todo]);
 
                 Ok(())

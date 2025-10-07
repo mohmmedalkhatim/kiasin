@@ -10,6 +10,7 @@ pub struct Model {
     pub created:Date,
     pub note_id:i32,
     pub update:Option<Date>,
+    pub content:Option<Json>,
     pub area_id:Option<i32>
 }
 impl ActiveModelBehavior for ActiveModel {}
