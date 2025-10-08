@@ -1,5 +1,4 @@
 @import 'tailwindcss';
-@import './theme/index.css';
 
 
 @layer components {
@@ -23,6 +22,7 @@
     -moz-osx-font-smoothing: grayscale;
     -webkit-text-size-adjust: 100%;
     scrollbar-gutter: stable both-edges;
+    background: #181818;
   }
 
   .boxs_grid {
