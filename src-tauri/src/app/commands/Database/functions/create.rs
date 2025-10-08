@@ -6,7 +6,7 @@ pub async fn create(db: &DatabaseConnection) -> Result<i32, DbErr> {
     let active_model = ActiveModel {
         name: Set("untitled".to_string()),
         data: Set(
-            json!({"fields":["names"],"data":[["names",[{"type":"string","value":"mohammed"},{"type":"string","value":"alkhatim"}]]]}),
+            json!({"fields":["name","number","position"],"records":[]}),
         ),
         ..Default::default()
     };

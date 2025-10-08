@@ -4,12 +4,13 @@ use crate::DbConnection;
 use async_std::sync::Mutex;
 use migration::entities::event::Model;
 use objects::Payload;
-use tauri::{ipc::Channel, State};
+use tauri::{ipc::Channel, AppHandle, Manager, Runtime, State};
 mod functions;
 mod objects;
 
 #[tauri::command]
-pub async fn events_control(
+pub async fn events_control<R:Runtime>(
+    app:AppHandle<R>,
     payload: Payload,
     channel: Channel<Vec<Model>>,
     data: State<'_, Arc<Mutex<DbConnection>>>,
@@ -43,6 +44,21 @@ pub async fn events_control(
             }
             None => return Err("you have to add data to create the events".to_string()),
         },
+        "window"=>{
+            match tauri::WebviewWindowBuilder::from_config(app.app_handle(), &app.config().app.windows[1]) {
+                Ok(state)=>{
+                    match state.build() {
+                        Ok(state)=>{},
+                        Err(e)=>{
+                            return Err(e.to_string())
+                        },
+                    }
+                },
+                Err(err)=>{
+                   return Err(err.to_string())
+                }
+            }
+        }
         _ => {}
     }
     Ok(())

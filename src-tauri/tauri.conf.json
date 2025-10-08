@@ -4,11 +4,8 @@
     "beforeBuildCommand": "npm run build",
     "frontendDist": "../dist",
     "devUrl": "http://localhost:1420"
-    
   },
-
   "bundle": {
-    
     "active": true,
     "targets": "all",
     "icon": [
@@ -18,7 +15,6 @@
   "productName": "kiasin",
   "mainBinaryName": "kiasin",
   "version": "0.0.0",
-  
   "identifier": "kiasin",
   "plugins": {},
   "app": {
@@ -33,6 +29,16 @@
         "minWidth": 500,
         "center": true,
         "decorations": false
+      },
+      {
+        "create": false,
+        "label": "event",
+        "title": "event",
+        "url": "event.html",
+        "width": 800,
+        "height": 400,
+        "minWidth": 500,
+        "center": true
       }
     ]
   }
