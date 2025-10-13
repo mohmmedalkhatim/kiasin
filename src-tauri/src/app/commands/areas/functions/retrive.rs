@@ -18,10 +18,4 @@ pub async fn find_many(db: &DatabaseConnection) -> Result<Vec<Model>, DbErr> {
         .collect::<Vec<Model>>();
     Ok(transformed_list)
 }
-pub async fn find_by_catergorie(db: &DatabaseConnection, id: i32) -> Result<Vec<Model>, DbErr> {
-    let list = Entity::find()
-        .filter(Column::Categorie.eq(id))
-        .all(db)
-        .await?;
-    Ok(list)
-}
+

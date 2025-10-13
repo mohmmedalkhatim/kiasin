@@ -7,7 +7,6 @@ pub mod media;
 pub mod tag;
 pub mod template;
 pub mod component;
-pub mod categorie;
 pub mod event;
 pub mod card;
 use sea_orm::prelude::*;

@@ -5,7 +5,7 @@ use async_std::sync::Mutex;
 use migration::entities::area::Model;
 pub use objects::{Area, Payload};
 use tauri::{command, ipc::Channel, State};
-mod functions;
+pub mod functions;
 mod objects;
 
 #[command]
@@ -15,7 +15,6 @@ pub async fn areas_control(
     channel: Channel<Vec<Model>>,
 ) -> Result<(), String> {
     let db = data.lock().await.db.clone().unwrap();
-    functions::init_categories(&db).await;
     match payload.command.as_str() {
         "create" => match payload.template {
             Some(id) => {
@@ -30,7 +29,7 @@ pub async fn areas_control(
                 }
             }
             None => {
-                let res = functions::create_area(&db, payload.id.unwrap()).await;
+                let res = functions::create_area(&db).await;
                 match res {
                     Ok(id) => {
                         let state = functions::find_one(id, &db).await;

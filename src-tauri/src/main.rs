@@ -1,14 +1,10 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 use async_std::sync::Mutex;
-use migration::{
-    entities::categorie::{self},
-    MigratorTrait,
-};
+use migration::MigratorTrait;
 use sea_orm::DatabaseConnection;
 use std::sync::Arc;
-use tauri::WebviewWindowBuilder;
-use tauri::{path::BaseDirectory, Manager, Window};
+use tauri::{path::BaseDirectory, Manager};
 mod app;
 
 struct DbConnection {

@@ -6,7 +6,7 @@ use migration::entities::{
 use sea_orm::{DatabaseConnection, DbErr, EntityTrait, IntoActiveModel, Set};
 use serde_json::json;
 
-pub async fn create_area(db: &DatabaseConnection, id: i32) -> Result<i32, DbErr> {
+pub async fn create_area(db: &DatabaseConnection) -> Result<i32, DbErr> {
     let shema = json!({
         "item":[]
     });
@@ -24,7 +24,7 @@ pub async fn create_area(db: &DatabaseConnection, id: i32) -> Result<i32, DbErr>
     let new = ActiveModel {
         title: Set(Some("untitled".to_string())),
         user_id: Set(1),
-        descrption: Set(Some("set a description".to_string())),
+        description: Set(Some("set a description".to_string())),
         icon: Set(None),
         cover: Set(None),
         links: Set(links),
@@ -32,7 +32,6 @@ pub async fn create_area(db: &DatabaseConnection, id: i32) -> Result<i32, DbErr>
         ui_schema: Set(shema),
         note_id: Set(note_id.clone()),
         in_archive: Set(false),
-        categorie: Set(id as u32),
         ..Default::default()
     };
     let id = Entity::insert(new).exec(db).await?.last_insert_id as i32;
@@ -71,14 +70,13 @@ pub async fn create_from_templates(db: &DatabaseConnection, id: i32) -> Result<i
     let new = ActiveModel {
         title: Set(Some("untitled".to_string())),
         user_id: Set(1),
-        descrption: Set(Some("set a discrption".to_string())),
+        description: Set(Some("set a discrption".to_string())),
         icon: Set(None),
         cover: Set(None),
         links: Set(links),
         ui_schema: schema,
         note_id: Set(note.last_insert_id.abs()),
         in_archive: Set(false),
-        categorie: Set(id as u32),
         ..Default::default()
     };
 

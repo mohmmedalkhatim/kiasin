@@ -8,7 +8,6 @@ use crate::entities::media;
 use crate::entities::todo;
 use crate::entities::template;
 use crate::entities::component;
-use crate::entities::categorie;
 use crate::entities::card;
 use crate::entities::event;
 
@@ -29,7 +28,6 @@ impl MigrationTrait for Migration {
         manager.create_table(schema.create_table_from_entity(todo::Entity)).await?;
         manager.create_table(schema.create_table_from_entity(template::Entity)).await?;
         manager.create_table(schema.create_table_from_entity(component::Entity)).await?;
-        manager.create_table(schema.create_table_from_entity(categorie::Entity)).await?;
         manager.create_table(schema.create_table_from_entity(card::Entity)).await?;
         manager.create_table(schema.create_table_from_entity(event::Entity)).await?;
         Ok(())
@@ -45,7 +43,6 @@ impl MigrationTrait for Migration {
         manager.drop_table(Table::drop().table(todo::Entity).to_owned()).await?;
         manager.drop_table(Table::drop().table(template::Entity).to_owned()).await?;
         manager.drop_table(Table::drop().table(component::Entity).to_owned()).await?;
-        manager.drop_table(Table::drop().table(categorie::Entity).to_owned()).await?;
         manager.drop_table(Table::drop().table(event::Entity).to_owned()).await?;
         Ok(())
     }
