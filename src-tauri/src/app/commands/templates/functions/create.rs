@@ -4,7 +4,7 @@ pub async fn create(id: u32, db: &DatabaseConnection) -> Result<(), DbErr> {
     let model = Entity::find_by_id(id).one(db).await?.unwrap();
     let template = ActiveModel {
         title: Set(model.title),
-        description: Set(model.descrption),
+        description: Set(model.description),
         cover: Set(model.cover),
         icon: Set(model.icon),
         created: Set(model.created),
