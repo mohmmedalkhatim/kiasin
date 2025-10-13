@@ -4,7 +4,7 @@ use crate::DbConnection;
 use async_std::sync::Mutex;
 use migration::entities::event::Model;
 use objects::Payload;
-use tauri::{ipc::Channel, AppHandle, Manager, Runtime, State};
+use tauri::{ipc::Channel, utils::config::WindowConfig, AppHandle, Manager, Runtime, State};
 mod functions;
 mod objects;
 
@@ -45,7 +45,16 @@ pub async fn events_control<R:Runtime>(
             None => return Err("you have to add data to create the events".to_string()),
         },
         "window"=>{
-            match tauri::WebviewWindowBuilder::from_config(app.app_handle(), &app.config().app.windows[1]) {
+            match tauri::WebviewWindowBuilder::from_config(app.app_handle(), 
+            &WindowConfig{
+                label:uuid::Uuid::new_v4().to_string(),
+                url:app.config().app.windows[1].url.clone(),
+                center:true,
+                create:false,
+                width:1040.0,
+                height:600.0,
+                ..Default::default()
+            }) {
                 Ok(state)=>{
                     match state.build() {
                         Ok(state)=>{},
