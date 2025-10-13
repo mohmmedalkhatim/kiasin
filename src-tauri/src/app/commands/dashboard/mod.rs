@@ -1,28 +1,38 @@
 use std::sync::Arc;
 
+use super::areas::functions;
 use crate::DbConnection;
 use async_std::sync::Mutex;
-use migration::entities::area::{Entity, Model};
+use migration::entities::area::{self, Entity, Model};
 use sea_orm::EntityTrait;
-use tauri::State;
-mod create;
+use tauri::{AppHandle, Manager, State};
+use tauri_plugin_store::StoreBuilder;
 
 #[tauri::command]
-pub async fn dashboard(data: State<'_, Arc<Mutex<DbConnection>>>) -> Result<Model, String> {
+pub async fn dashboard(
+    data: State<'_, Arc<Mutex<DbConnection>>>,
+    app: AppHandle,
+) -> Result<Model, String> {
     let db = data.lock().await.db.clone().unwrap();
-    let id = 1;
-    let res = Entity::find_by_id(id as u32).one(&db).await;
-    match res {
-        Ok(data) => match data {
-            Some(model) => Ok(model),
-            None => {
-                let res = create::create_area(&db, 1).await;
-                match res {
-                    Ok(model) => Ok(model),
-                    Err(e) => Err(e.to_string()),
+    let store = StoreBuilder::new(app.app_handle(), "main.json").build();
+    match store {
+        Ok(data) => {
+            let value = data.get("dashboard_id");
+            match value {
+                Some(id) => {
+                    let area = functions::find_one(id.as_f64().unwrap() as i32, &db)
+                        .await
+                        .unwrap();
+                    return Ok(area);
+                }
+                None => {
+                    let id = functions::create_area(&db).await.unwrap();
+                    data.set("dashboard_id", id);
+                    let area = functions::find_one(id, &db).await.unwrap();
+                    return Ok(area);
                 }
             }
-        },
+        }
         Err(e) => Err(e.to_string()),
     }
 }
