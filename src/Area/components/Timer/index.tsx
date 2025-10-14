@@ -3,12 +3,23 @@ import { IconArrowLoopLeft, IconArrowLoopLeft2, IconChevronDown, IconChevronUp, 
 import Button from "../../../components/Button";
 import Checkbox from "../../../components/Checkbox";
 import { CSSTransition } from "react-transition-group"
+import { load } from "@tauri-apps/plugin-store";
+import { useAsync } from "react-use";
 
 
 function TimerCard() {
     const time_set = useRef(null)
     const time_clock = useRef(null)
     const [time, setTime] = useState(15)
+    useAsync( async () => {
+        const store =  await load("main.json");
+        const section_time = await store.get("section_time") as number;
+        if (section_time) {
+            setTime(section_time)
+            store.set("section_time", section_time);
+            await store.save();
+        }
+    }, [time])
     const [skip, setSkip] = useState(false)
     const [mode, setMode] = useState("setting")
 
@@ -58,7 +69,10 @@ function TimerCard() {
                         <Checkbox setState={setSkip} state={skip} />
                         Skip breaks
                     </div>
-                    <Button size="md" className="text-xs" onClick={() => setMode("timer")} >
+                    <Button size="md" className="text-xs" onClick={() => {
+                        
+                        setMode("timer")
+                    }} >
                         <div className="rotate-90 text-[#181818]">
                             <IconTriangleFilled size={"0.7rem"} />
                         </div>
@@ -76,7 +90,7 @@ function TimerCard() {
                 unmountOnExit
             >
                 <div className="absolute" ref={time_clock} onClick={() => { }}>
-                    <FocusSession sessionMinutes={45} size={224} />
+                    <FocusSession sessionMinutes={time} size={224} />
                 </div>
 
             </CSSTransition>
@@ -104,7 +118,7 @@ const FocusSession: React.FC<FocusSessionProps> = ({
     // Reset when sessionMinutes changes from outside
     useEffect(() => {
         setTimeLeft(sessionMinutes * 60);
-        setIsRunning(false);
+        setIsRunning(true);
     }, [sessionMinutes]);
 
     // Timer logic
@@ -146,35 +160,26 @@ const FocusSession: React.FC<FocusSessionProps> = ({
         >
 
             {/* Dial */}
-            <div className="relative flex items-center justify-center m_border rounded-full" style={{ width: size , height: size}}>
-                <svg className="absolute  -rotate-270" viewBox={`0 0 ${size} ${size}`}>
-                    {/* ticks background */}
-                    {[...Array(ticks)].map((_, i) => (
-                        <line
-                            key={i}
-                            x1={radius}
-                            y1={radius * 0.15}
-                            x2={radius}
-                            y2={radius * 0.15 + tickLength}
-                            className="stroke-[#e2e2e220]"
-                            strokeLinecap="round"
-                            strokeWidth={size * 0.035}
-                            transform={`rotate(${360 - (360 / ticks) * i} ${radius} ${radius})`}
-                        />
-                    ))}
-                    {/* progress tick */}
-                    <line
-                        x1={radius}
-                        y1={radius * 0.15}
-                        x2={radius}
-                        y2={radius * 0.15 + tickLength}
-                        stroke="#3aa6ff"
-                        strokeWidth={size * 0.035}
-                        strokeLinecap="round"
-                        transform={`rotate(${360 - (progress * 360) / 100} ${radius} ${radius})`}
-                    />
+            <div className="relative flex items-center justify-center m_border rounded-full" style={{ width: size, height: size }}>
+                <svg className="absolute -rotate-[252deg]" viewBox={`0 0 ${size} ${size}`}>
+                    {[...Array(ticks)].map((_, i) => {
+                        const activeTicks = Math.floor((progress / 100) * ticks);
+                        const color = i < activeTicks ? "#e2e2e220" : "#0084d1";
+                        return (
+                            <line
+                                key={i}
+                                x1={radius}
+                                y1={radius * 0.15}
+                                x2={radius}
+                                y2={radius * 0.15 + tickLength}
+                                stroke={color}
+                                strokeLinecap="round"
+                                strokeWidth={size * 0.035}
+                                transform={`rotate(${(360 / ticks) * i} ${radius} ${radius})`}
+                            />
+                        );
+                    })}
                 </svg>
-
                 {/* Time in the middle */}
                 <span className=" gap-1 flex items-center ">
                     <span className="text-3xl font-medium">
