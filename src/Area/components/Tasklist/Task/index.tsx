@@ -1,4 +1,3 @@
-import Checkbox from '../../../../components/Checkbox';
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useTasks } from '../../../../context/para/tasks';
@@ -52,29 +51,41 @@ function Task({
     10,
     [checked]
   );
+  let open = () => {
+    if (!link) {
+      dialog('dialog_note', { id: task?.note_id as number });
+    } else { }
+  }
+  if (task) {
+    return (
+      <div
+        className={`${classname} Task rounded-xs`}
+        ref={setNodeRef}
+        style={style}
+        {...attributes}
+      >
+        <div className='text-sm flex gap-4 group items-center'>
+          <IconGridDots {...listeners} className='cursor-grab' size={'1.08rem'} />
+          <div
+            className='cursor-pointer text-[12px]'
+          >
+            <input className='p-0 outline-none border-none' value={task.title} onChange={(e) => {
+              update(
+                {
+                  id: task?.id as number,
+                  title: e.target.value,
+                  checked,
+                  note_id: task?.note_id,
+                },
+                setTask,
+                setChecked
+              );
+            }}></input>
+          </div>
 
-  return (
-    <div
-      className={`${classname} Task rounded-xs`}
-      ref={setNodeRef}
-      style={style}
-      {...attributes}
-    >
-      <div className='text-sm flex gap-4 group'>
-        <IconGridDots {...listeners} className='cursor-grab' size={'1rem'} />
-        <div
-          className='cursor-pointer text-xs'
-          onClick={() => {
-            if (!link) {
-              dialog('dialog_note', { id: task?.note_id as number });
-            } else { }
-          }}
-        >
-          {task?.title}
         </div>
-
       </div>
-    </div>
-  );
+    );
+  }
 }
 export default Task;

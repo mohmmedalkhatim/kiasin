@@ -1,6 +1,5 @@
 import { IconChevronDown, IconChevronLeft, IconChevronRight, IconChevronsRight, IconTimelineEvent } from "@tabler/icons-react";
 import dayjs, { Dayjs } from "dayjs";
-import React from "react";
 import Button from "../../../components/Button";
 import { months } from "../../../EventsBase/Data/Months";
 
@@ -22,7 +21,7 @@ export default function Timeline({ date, events, hours = 24 }: TimelineProps) {
 
   return (
     <div className="bg-[#181818] text-gray-200 rounded-md  overflow-hidden h-full">
-      <div className="flex items-center  justify-between px-4 py-2 text-sm">
+      <div className="flex items-center  justify-between px-4 py-3 text-sm">
         <div className="flex items-center  gap-2 bg-[#e2e2e240] px-3  text-xs py-1 rounded-full">
           <IconTimelineEvent size={"0.8rem"} className="pt-[1px]" />
           <div>
@@ -54,7 +53,7 @@ export default function Timeline({ date, events, hours = 24 }: TimelineProps) {
         </div>
       </div>
 
-      <div className="flex w-full overflow-x-auto h-full">
+      <div className="flex w-full overflow-y-hidden  h-[70%] pb-0">
 
         <div className="relative">
           <div className="flex">
@@ -68,14 +67,14 @@ export default function Timeline({ date, events, hours = 24 }: TimelineProps) {
             ))}
           </div>
 
-          <div className="relative h-[85%]">
-            <div className="absolute inset-0 flex">
+          <div className="relative h-[84%] overflow-x-auto border-b border-[#e2e2e220]">
+            <div className="absolute inset-0 flex h-full">
               {hourMarks.map((_, i) => {
                 let time = dayjs().add(i, 'hour');
                 return (
                   <div
                     key={i}
-                    className="flex-1 min-w-[80px] border-l border-[#e2e2e220] "
+                    className="flex-1 min-w-[80px] border-l h-full border-[#e2e2e220] "
                   />
                 )
               })}
@@ -88,13 +87,13 @@ export default function Timeline({ date, events, hours = 24 }: TimelineProps) {
               return (
                 <div
                   key={event.id}
-                  className="absolute top-4 h-10 bg-sky-500/80 text-white text-xs rounded px-2 flex items-center"
+                  className="absolute top-4 h-[86%] border-l-8 bg-sky-500/80 text-white text-xs rounded px-2 flex items-center"
                   style={{
                     left: `${startPercent}%`,
                     width: `${widthPercent}%`,
                   }}
                 >
-                  {event.title}
+                  <div className="h-4/5">{event.title}</div>
                 </div>
               );
             })}
