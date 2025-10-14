@@ -16,6 +16,7 @@ interface Areas {
   get_Card: (id: number) => Card;
   update_card: (id: number, card: Card) => void;
   get_list_item: (id: number, setArea: any) => void;
+  delete_area: (id: number) => void;
   getArea: (
     id: number,
     setArea: React.Dispatch<React.SetStateAction<boolean>>
@@ -54,7 +55,7 @@ export const useAreas = create<Areas>(set => ({
         },
       };
 
-      const updatedActiveArray = [
+      const updatedActiveArea = [
         ...state.active.slice(0, lastActiveIndex),
         updatedActive,
       ];
@@ -66,7 +67,7 @@ export const useAreas = create<Areas>(set => ({
 
       return {
         ...state,
-        active: updatedActiveArray,
+        active: updatedActiveArea,
       };
     });
   },
@@ -102,13 +103,13 @@ export const useAreas = create<Areas>(set => ({
     set(state => {
       s = state.list.filter(item => item.id == id)[0];
       setArea(s);
-      return { ...state }; 
+      return { ...state };
     });
     return s;
   },
   init: async () => {
     const channel = new Channel<Area[]>(data => {
-       data.map(item => {
+      data.map(item => {
         const icon = URL.createObjectURL(
           new Blob([new Uint8Array(item.icon as number[])], {
             type: 'image/jpeg',
@@ -214,4 +215,13 @@ export const useAreas = create<Areas>(set => ({
       channel,
     });
   },
+  delete_area(id: number) {
+    let channel = new Channel<Area[]>((res) => {
+
+    })
+    set(state => ({
+      list: [...state.list.filter(item => item.id != id)],
+    }));
+    invoke("areas_control", { payload: { command: "delete_one", id }, channel })
+  }
 }));
