@@ -9,6 +9,7 @@ import Timer from '../components/Timer';
 import Status from '../components/Status';
 import Timeline from '../components/TimeLine';
 import dayjs from 'dayjs';
+import Database from '../components/Database';
 
 type Card_content = { id: number; T: string; props?: any,cols:number | undefined };
 
@@ -27,6 +28,7 @@ function CardContent({ id, T, props,cols }: Card_content) {
       ['tasks', <TaskList id={id} cols={cols} />],
       ['image', <Image id={id} />],
       ['calender', <EventCreate />],
+      ['database', <Database id={id}/>],
       ['LoadingBar', <LoadingBar id={id} />],
       ['Timeline', <Timeline events={events} date={dayjs().format("DD-MM")} />],
       ['default', <div>no content</div>],

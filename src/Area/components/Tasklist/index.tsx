@@ -16,10 +16,12 @@ import { useAreas } from '../../../context/para/areas';
 import { SwappingStrategy } from '../../Strategy';
 import { useLayoutDialog } from '../../../context/para/Dialog';
 import Form from './form';
+import { useTasks } from '../../../context/tasks';
 
 function TaskList({ id, cols }: { id: number, cols: number | undefined }) {
   const [schema, setSchema] = useState<{ id: number, name: string, list: number[] }[]>([]);
   const [activeId, setActiveId] = useState<string | null>(null);
+  const create_task = useTasks(state => state.create);
   const open_dialog = useLayoutDialog(state => state.changeMode);
   const card = useAreas(state => state.get_Card)(id);
   const updateCard = useAreas(state => state.update_card);
@@ -67,12 +69,12 @@ function TaskList({ id, cols }: { id: number, cols: number | undefined }) {
           onDragStart={handleDragStart}
           onDragEnd={handleDragEnd}
         >
-          {schema.map((column, id) => {
-            if (cols && cols > id) {
+          {schema.map((column, column_id) => {
+            if (cols && cols > column_id) {
               return (
                 <SortableContext items={column.list} strategy={SwappingStrategy}>
                   <div className='p-2 w-full'>
-                    <Form column_id={id} title={column.name} setActive={setRender} />
+                    <Form column_id={column_id} title={column.name} setActive={setRender} card_id={id} />
                     <div className='task_list overflow-hidden'>
                       {column.list?.map(item =>
                         item !== null ? (
@@ -85,7 +87,7 @@ function TaskList({ id, cols }: { id: number, cols: number | undefined }) {
                           ''
                         )
                       )}
-                      <div className='flex items-center gap-2 px-4 py-2'>
+                      <div className='flex items-center gap-2 px-4 py-2' onClick={() => create_task("", card.id, column_id)}>
                         <div className='text-[#e2e2e230]'><IconPlus size={"0.9rem"} /></div>
                         <div className='text-[#e2e2e230] text-xs'>New</div>
                       </div>

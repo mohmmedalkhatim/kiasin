@@ -36,7 +36,7 @@ function App() {
     <>
       <BubbleMenu />
       <WindowsControl />
-      <div className='' onClick={close}>
+      <div  onClick={close}>
         <Outlet />
         <Navbar />
         <Toolsbar/>
