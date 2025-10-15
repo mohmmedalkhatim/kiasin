@@ -1,10 +1,11 @@
 import { Channel, invoke } from "@tauri-apps/api/core";
+import { Dispatch, SetStateAction } from "react";
 import { create } from "zustand/react";
 
 
 export interface DB {
     fields: string[]
-    data: Iterable<readonly [string, { type: string, value: any }[]]>;
+    records: String[][];
 }
 export interface DB_DTO {
     id: number,
@@ -17,7 +18,7 @@ export interface DB_DTO {
 
 interface database_context {
     list: DB_DTO[]
-    create: () => Promise<void>,
+    create: (setDataBase?:Dispatch<SetStateAction<DB_DTO | undefined>>) => Promise<void>,
     init: () => Promise<void>,
     be_update: (id: number, data: DB_DTO) => Promise<void>,
     fe_update: (id: number, setDataBase: any) => Promise<void>,
@@ -28,9 +29,10 @@ interface database_context {
 
 export let useDatabase = create<database_context>((set) => ({
     list: [],
-    create: async () => {
-        let channel = new Channel<DB_DTO>((res) => {
-            set(state => ({ list: [...state.list, res] }))
+    create: async (set_db) => {
+        let channel = new Channel<DB_DTO[]>((res) => {
+            set_db?(res[0]):""
+            set(state => ({ list: [...state.list, res[0]] }))
         })
         invoke("database_control", { payload: { command: "create" }, channel },)
     },
@@ -53,7 +55,7 @@ export let useDatabase = create<database_context>((set) => ({
     delete: async () => { },
     get: async (id, setDataBase) => {
         let channel = new Channel<DB_DTO[]>((res) => {
-            setDataBase({ fields: res[0].data.fields, data: res[0].data.data })
+            setDataBase(res[0])
             set(state => state)
         })
         invoke("database_control", { payload: { command: "one", id }, channel })

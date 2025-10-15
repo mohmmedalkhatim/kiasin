@@ -6,10 +6,10 @@ import { useAreas } from './areas';
 interface Tasks {
   list: Todo[];
   init: () => void;
-  create: (title: string, card_id: number) => Promise<void>;
-  update: (data: Todo, setTask:React.Dispatch<React.SetStateAction<Todo | undefined>>,setChecked:(i:boolean)=>void) => Promise<void>;
+  create: (title: string, card_id: number, column_id: number ) => Promise<void>;
+  update: (data: Todo, setTask: React.Dispatch<React.SetStateAction<Todo | undefined>>, setChecked: (i: boolean) => void) => Promise<void>;
   get_list: (ids: number[], setItem: any) => void;
-  get_one: (id: string, setTask:React.Dispatch<React.SetStateAction<Todo | undefined>>,setChecked:(i:boolean)=>void) => Promise<void>;
+  get_one: (id: string, setTask: React.Dispatch<React.SetStateAction<Todo | undefined>>, setChecked: (i: boolean) => void) => Promise<void>;
 }
 
 export let useTasks = create<Tasks>(set => ({
@@ -21,22 +21,20 @@ export let useTasks = create<Tasks>(set => ({
     };
     invoke('todos_control', { payload: { command: 'find' }, server });
   },
-  create: async (title, card_id) => {
+  create: async (title, card_id, column_id) => {
     let server = new Channel<Todo[]>();
-    server.onmessage = data => {
-      let card = useAreas.getState().get_Card(card_id);
-      card.props.list.push(data[0].id);
-      useAreas.getState().update_card(card_id, card);
-      set(state => {
-        return { list: [...state.list, data[0]] };
-      });
+    server.onmessage = async data => {
+      let card =  await useAreas.getState().get_Card(card_id);
+      console.log(card)
+      card.props.columns[column_id].list.push(data[0].id);
+      useAreas.getState().update_card(card_id, card); 
     };
     await invoke('todos_control', {
       payload: { command: 'create', item: { title } },
       server,
     });
   },
-  update: async (todo, setTask,setChecked) => {
+  update: async (todo, setTask, setChecked) => {
     let server = new Channel<Todo[]>();
     server.onmessage = data => {
       setTask(data[0])
@@ -47,14 +45,14 @@ export let useTasks = create<Tasks>(set => ({
       server,
     });
   },
-  get_list: (ids,setlist) => {
+  get_list: (ids, setlist) => {
     let server = new Channel<Todo[]>();
     server.onmessage = data => {
       setlist(data)
     };
     invoke('todos_control', { payload: { command: 'find', ids }, server });
   },
-  get_one: async (id, setItem,setChecked) => {
+  get_one: async (id, setItem, setChecked) => {
     let server = new Channel<Todo[]>();
     server.onmessage = data => {
       setItem(data[0]);
