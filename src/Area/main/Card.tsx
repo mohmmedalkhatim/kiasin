@@ -1,5 +1,5 @@
 // components/Card.tsx
-import React, { useRef } from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import {
   IconChevronsDown,
@@ -57,6 +57,7 @@ const Card: React.FC<CardProps> = ({
 }) => {
   const editable = useAreas(state => state.editable);
   const delete_card = useAreas(state => state.delete_card);
+  const [cols,setCols] = useState(card?.cols)
   if (card) {
     return (
       <CardContainer
@@ -113,7 +114,7 @@ const Card: React.FC<CardProps> = ({
           </div>
         )}
         {card.type && (
-          <CardContent id={Number(id)} T={card.type} props={card.props} />
+          <CardContent cols={cols} id={Number(id)} T={card.type} props={card.props} />
         )}
       </CardContainer>
     );

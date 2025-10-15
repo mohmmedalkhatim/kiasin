@@ -34,7 +34,7 @@ function Navbar ({ start, end, state, schema, create }: Navbar_props) {
       className='fixed w-[16rem] transition-all duration-150 h-screen z-60 pt-24 px-4  bg-[#181818] m_border'
       style={{ top: 0, right: state ? '0' : '9999px' }}
     >
-      <Cards_menu handleadding={create} />
+      <Cards_menu handle_adding={create} />
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
