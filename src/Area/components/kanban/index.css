@@ -4,6 +4,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  opacity: 1 !important;
 }
 
 .task_list {

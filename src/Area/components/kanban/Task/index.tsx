@@ -61,7 +61,7 @@ function Task({
       <div
         className={`${classname} Task rounded-xs`}
         ref={setNodeRef}
-        style={style}
+        style={{...style,transition}}
         {...attributes}
       >
         <div className='text-sm flex gap-4 group items-center'>
@@ -82,7 +82,6 @@ function Task({
               );
             }}></input>
           </div>
-
         </div>
       </div>
     );

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import AreasList from '../components/List';
-import TaskList from '../components/Tasklist';
+import Kanban from '../components/kanban';
 import Image from '../components/Image';
 import { LoadingBar } from '../components/loadingbar/LoadingBar';
 import TextInputArea from '../components/inputArea';
@@ -25,7 +25,7 @@ function CardContent({ id, T, props,cols }: Card_content) {
       ['Areaslist', <AreasList id={id} />],
       ['Timer', <Timer />],
       ['Status', <Status />],
-      ['tasks', <TaskList id={id} cols={cols} />],
+      ['tasks', <Kanban id={id} cols={cols} />],
       ['image', <Image id={id} />],
       ['calender', <EventCreate />],
       ['database', <Database id={id}/>],

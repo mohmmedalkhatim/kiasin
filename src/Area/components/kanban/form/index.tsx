@@ -1,9 +1,8 @@
 import { IconDots, IconPlus } from "@tabler/icons-react";
-import { Dispatch, SetStateAction } from "react";
 import { useTasks } from "../../../../context/para/tasks";
 
 
-function Form({ column_id, title, card_id }: { column_id: number, card_id: number, title: string, setActive: Dispatch<SetStateAction<number>> }) {
+function Form({ column_id, title, card_id }: { column_id: number, card_id: number, title: string }) {
     const create_task = useTasks(state => state.create);
     return (
         <div className="flex items-center justify-between h-12 w-full px-4">
