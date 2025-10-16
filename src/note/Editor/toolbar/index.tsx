@@ -28,19 +28,19 @@ export const Toolbar: React.FC<ToolbarProps> = ({ editor }) => {
         >
           <IconItalic size={'1rem'} />
         </button>
-
+        <button
+          onClick={() => editor.chain().focus().setUnderline().run()}
+          disabled={!editor.can().chain().focus().setUnderline().run()}
+          className="toolbar_button"
+        >
+          <IconUnderline size={'1rem'} />
+        </button>
         <div className="flex">
           <Alignment editor={editor} />
           <Heading editor={editor} />
         </div>
       </div>
-      <button
-        onClick={() => editor.chain().focus().setUnderline().run()}
-        disabled={!editor.can().chain().focus().setUnderline().run()}
-        className="toolbar_button"
-      >
-        <IconUnderline size={'1rem'} />
-      </button>
+
     </BubbleMenu>
   );
 };
