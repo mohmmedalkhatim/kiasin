@@ -64,7 +64,9 @@ function useLayout () {
           break;
         }
         default:
-          () => {};
+          () => {
+            console.log(`cards there is a problem with the sorting row${card.rows} + cols:${card.cols}`)
+          };
       }
       const newschema = [...filetred, card];
       const sorted = sort?.map(id => {
