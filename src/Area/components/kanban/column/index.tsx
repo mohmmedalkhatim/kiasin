@@ -2,7 +2,6 @@ import { rectSwappingStrategy, SortableContext, useSortable } from "@dnd-kit/sor
 import { IconGridDots, IconLink, IconPlus } from "@tabler/icons-react"
 import Task from "../Task"
 import Form from "../form"
-import { CSS } from "@dnd-kit/utilities"
 import { useTasks } from "../../../../context/tasks"
 
 function Column({ list, id, activeId, card_id }: { list: number[], id: number, activeId: String | null, classname?: string, card_id: number }) {
@@ -22,7 +21,7 @@ function Column({ list, id, activeId, card_id }: { list: number[], id: number, a
                         ''
                     )
                 )}
-                <div className='flex items-center gap-2 px-4 py-2' onClick={() => create_task("", card_id, id)}>
+                <div className='flex items-center gap-2 px-4 py-3 hover:bg-[#e2e2e205] rounded-xs' onClick={() => create_task("", card_id, id)}>
                     <div className='text-[#e2e2e230]'><IconPlus size={"0.9rem"} /></div>
                     <div className='text-[#e2e2e230] text-xs'>New</div>
                 </div>

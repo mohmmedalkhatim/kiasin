@@ -4,6 +4,7 @@ import { months } from "../../Data/Months"
 import { Dispatch, SetStateAction } from "react"
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import useEventsCalender from "../../Hooks/useEventsCalender";
+import { Channel, invoke } from "@tauri-apps/api/core";
 
 
 
@@ -25,7 +26,7 @@ function EventsCalender({ current, active, setActive }: { current: Dayjs, active
                         <div className="flex scroller">
                             <div className="min-w-20 border border-[#e2e2e220]"></div>
                             <div className="flex w-full">
-                                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((item, index) => (<div key={index} className="day_marker w-full text-sm">{item} {active.startOf("week").add(index,"day").date()}</div>))}
+                                {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((item, index) => (<div key={index} className="day_marker w-full text-sm">{item} {active.startOf("week").add(index, "day").date()}</div>))}
                             </div>
                             <div className="w-[13px] border-y border-[#e2e2e220]"></div>
                         </div>
@@ -48,7 +49,11 @@ function EventsCalender({ current, active, setActive }: { current: Dayjs, active
                                                 e.preventDefault()
                                                 setSelecting(true)
                                                 selectingLogic(selecting, setSelected, hour_index, time.date(), true)
-                                            }} onMouseUp={(_e) => setSelecting(false)}
+                                            }} onMouseUp={(_e) => {
+                                                let channel = new Channel();
+                                                invoke("events_control", { payload: { command: "window" }, channel })
+                                                setSelecting(false)
+                                            }}
                                                 className="border p-4 relative border-t-0 w-full dashed border-[#e3e3e320] h-10" ref={ref} key={hour_index}>
                                                 {hourCheck(time.day(), hour_index) ? <>
                                                     <div className="absolute border-y-1 right-0 w-full" style={{ top: ref.current ? marker : "" }}>
