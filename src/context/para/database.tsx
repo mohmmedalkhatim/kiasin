@@ -1,71 +1,69 @@
-import { Channel, invoke } from "@tauri-apps/api/core";
-import { Dispatch, SetStateAction } from "react";
-import { create } from "zustand/react";
+import { create } from "zustand";
+import { DB } from "../../main";
 
 
-export interface DB {
-    fields: string[]
-    records: String[][];
-}
-export interface DB_DTO {
-    id: number,
+
+type DatabaseType = {
     name: string,
-    data: DB,
-    user_id: number,
+    info: rowInfo[],
+    data: unknown[]
+}
+type rowType = "INTEGER" | "varchar" | "varbinary_blob" | "date_text" | "boolean" | "json_text"
+type rowInfo = {
+    cid: 0 | 1
+    dflt_value: null | string
+    name: string
+    notnull: 1 | 0
+    pk: 1 | 0
+    type: rowType
 }
 
-
-
-interface database_context {
-    list: DB_DTO[]
-    create: (setDataBase?:Dispatch<SetStateAction<DB_DTO | undefined>>) => Promise<void>,
+interface DatabaseContextType {
+    databases: DatabaseType[];
+    activeDatabase: DatabaseType | null;
+    setActiveDatabase: (name: string) => Promise<void>;
+    reloadDatabase: (name: string) => Promise<void>;
+    setDatabase: (db: DatabaseType) => void;
     init: () => Promise<void>,
-    be_update: (id: number, data: DB_DTO) => Promise<void>,
-    fe_update: (id: number, setDataBase: any) => Promise<void>,
-    delete: (id: number) => Promise<void>,
-    get: (id: number, setDataBase: any) => Promise<void>;
-    get_list: (ids: number[], setDataBaseList: any) => Promise<void>;
 }
 
-export let useDatabase = create<database_context>((set) => ({
-    list: [],
-    create: async (set_db) => {
-        let channel = new Channel<DB_DTO[]>((res) => {
-            set_db?(res[0]):""
-            set(state => ({ list: [...state.list, res[0]] }))
-        })
-        invoke("database_control", { payload: { command: "create" }, channel },)
-    },
+export const useDatabase = create<DatabaseContextType>((set) => ({
+    databases: [],
+    activeDatabase: null,
     init: async () => {
-        let channel = new Channel<DB_DTO[]>((res) => {
-            set(({ list: res }))
+        let tables = await DB.select("SELECT * from sqlite_master WHERE type='table';") as { name: string, tbl_name: string, type: string, rootpage: number, sql: string }[]
+        tables.map(async (value) => {
+            let info = await tableInfo(value.name)
+            DB.select<unknown[]>(`SELECT * from ${value.name}`,).then((res) => {
+                set(state => {
+                    return ({
+                        databases: [...state.databases, { name: value.name, info, data: res }]
+                    })
+                })
+            })
+
         })
-        invoke("database_control", { payload: { command: "all" }, channel },)
+
     },
-    be_update: async (id, data: DB_DTO) => {
-        let channel = new Channel<DB_DTO[]>((res) => {
-            set(state => {
-                let filterd = state.list.filter(item => { return item.id != res[0].id });
-                return { list: [...filterd, res[0]] };
+    setActiveDatabase: async (name: string) => {
+        let info = await tableInfo(name)
+        DB.select<unknown[]>(`SELECT * from ${name}`).then((res) => {
+            set({
+                activeDatabase: {
+                    name,
+                    info,
+                    data: res
+                }
             })
         })
-        invoke("database_control", { payload: { command: "update", id, item: data }, channel })
     },
-    fe_update: async () => { },
-    delete: async () => { },
-    get: async (id, setDataBase) => {
-        let channel = new Channel<DB_DTO[]>((res) => {
-            setDataBase(res[0])
-            set(state => state)
-        })
-        invoke("database_control", { payload: { command: "one", id }, channel })
-    },
-    get_list: async (ids, setDataBaseList) => {
-        let channel = new Channel<DB_DTO[]>((res) => {
-            setDataBaseList(res)
-        })
-        invoke("database_control", { payload: { command: "get", ids }, channel })
-        set(state => state)
+    reloadDatabase: async (name: string) => {
 
-    }
+    },
+    setDatabase: () => { },
 }))
+
+async function tableInfo(name: string): Promise<rowInfo[]> {
+    let info = await DB.select(`PRAGMA table_info(${name})`, [name]) as rowInfo[];
+    return info
+}
