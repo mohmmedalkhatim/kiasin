@@ -12,6 +12,7 @@ import Databases from '../screens/Databases';
 import Archive from '../screens/archive';
 import Area from '../screens/areas/area';
 import EventsPage from '../EventsBase';
+import Database from '../Database';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -23,6 +24,7 @@ export const router = createBrowserRouter(
       <Route path="/Area/:id" element={<Area />} />
       <Route path="/Archive" element={<Archive />} />
       <Route path="/databases" element={<Databases />} />
+      <Route path="/DB/:id" element={<Database />} />
       <Route path="/events" element={<EventsPage />} />
     </Route>
   )
