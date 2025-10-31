@@ -36,6 +36,7 @@
     "@tiptap/extension-underline": "^2.11.5",
     "@tiptap/react": "^2.11.5",
     "@tiptap/starter-kit": "^2.11.5",
+    "classnames": "^2.5.1",
     "dayjs": "^1.11.13",
     "gsap": "^3.12.7",
     "immer": "^10.1.1",

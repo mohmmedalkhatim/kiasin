@@ -10,8 +10,11 @@ import { load } from '@tauri-apps/plugin-store';
 import React from 'react';
 import Database from '@tauri-apps/plugin-sql';
 
-export const DB = await Database.load(`sqlite:Database/test.db`);
+export let DB: Database;
 
+(async () => {
+  DB =  await Database.load(`sqlite:Database/test.db`);
+})()
 
 const lenis = new Lenis();
 
