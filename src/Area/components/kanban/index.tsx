@@ -1,7 +1,7 @@
 import './index.css';
 import { useEffect, useState } from 'react';
 import { useAreas } from '../../../context/para/areas';
-import { MultipleContainers } from '../../dnd/2.Presets/Sortable/MultipleContainers';
+import { MultipleContainers } from './dnd_kanban/MultipleContainers';
 import { UniqueIdentifier } from '@dnd-kit/core';
 
 function Kanban({ id, cols }: { id: number, cols: number | undefined }) {
