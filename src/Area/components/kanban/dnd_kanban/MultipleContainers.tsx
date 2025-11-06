@@ -175,11 +175,11 @@ export function MultipleContainers({
   const [items, setItems] = useState<Items>(
     () =>
       initialItems ?? {
-        A: createRange(itemCount, (index) => `A${index + 1}`),
+        untitled1: createRange(itemCount, (index) => `A${index + 1}`),
       }
   );
   const [containers, setContainers] = useState(
-    containers_arr
+    0 === 0? Array.from(["untitled1"]): containers_arr
   );
   const update_card = useAreas(state => state.update_card)
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
@@ -271,10 +271,19 @@ export function MultipleContainers({
   useEffect(
     () => {
       let card = getcard(card_id as number)
+      card.props.container = ["A"];
       card.props.containers = containers;
       update_card(card_id as number, card)
     },
     [containers]
+  );
+    useEffect(
+    () => {
+      let card = getcard(card_id as number)
+      card.props.containers = containers;
+      update_card(card_id as number, card)
+    },
+    []
   );
   const sensors = useSensors(
     useSensor(MouseSensor),
@@ -474,20 +483,20 @@ export function MultipleContainers({
               : horizontalListSortingStrategy
           }
         >
-          {containers.map((containerId) => (
+          {Array.from({length:columns as number}).map((_,container_index) => (
             <DroppableContainer
-              key={containerId}
-              id={containerId}
-              label={minimal ? undefined : `${containerId}`}
-              columns={columns}
-              items={items[containerId]}
+              key={containers[container_index]|| containers[0]}
+              id={containers[container_index]|| containers[0]}
+              label={minimal ? undefined : `${containers[container_index]|| containers[0]}`}
+              columns={1}
+              items={items[containers[container_index]|| containers[0]]}
               scrollable={scrollable}
               style={containerStyle}
               unstyled={minimal}
-              onRemove={() => handleRemove(containerId)}
+              onRemove={() => handleRemove(containers[container_index]|| containers[0])}
             >
-              <SortableContext items={items[containerId]} strategy={strategy}>
-                {items[containerId].map((value, index) => {
+              <SortableContext items={items[containers[container_index]|| containers[0]]} strategy={strategy}>
+                {items[containers[container_index]|| containers[0]].map((value, index) => {
                   return (
                     <SortableItem
                       disabled={isSortingContainer}
@@ -498,7 +507,7 @@ export function MultipleContainers({
                       style={getItemStyles}
                       wrapperStyle={wrapperStyle}
                       renderItem={renderItem}
-                      containerId={containerId}
+                      containerId={containers[container_index]|| containers[0]}
                       getIndex={getIndex}
                     />
                   );
