@@ -25,7 +25,6 @@ function App() {
     close_bubble()
   }
   useEffect(() => {
-    init_db()
     init();
     initNotes();
     initEvent()

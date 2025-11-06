@@ -13,6 +13,7 @@ function Kanban({ id, cols }: { id: number, cols: number | undefined }) {
     setSchema({items:card.props.columns,containers:card.props.containers as UniqueIdentifier[]})
     update_card(id, card)
   }, [])
+  console.log(schema?.items)
   if (schema) {
     return (
       <div className='flex w-full h-full gap-2 p-2 '>

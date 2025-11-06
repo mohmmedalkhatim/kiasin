@@ -86,7 +86,7 @@ function TheMenu({
         min_cols: 1,
         min_rows: 3,
       },
-      content: { list: [], columns: [{name:"untitled",list:[]}] },
+      content: { list: [], columns: {untitled1:[1,2,3]} },
       icon: <IconList size={'1.4rem'} />,
     },
     {
