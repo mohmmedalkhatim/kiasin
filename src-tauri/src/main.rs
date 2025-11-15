@@ -13,9 +13,6 @@ struct DbConnection {
 
 #[tokio::main]
 async fn main() {
-    let mut builder = tauri::Builder::default()
-        .plugin(tauri_plugin_updater::Builder::new().build())
-        .plugin(tauri_plugin_sql::Builder::new().build());
 
     #[cfg(debug_assertions)]
     let devtools = tauri_plugin_devtools::init();
@@ -38,6 +35,7 @@ async fn main() {
     builder
         .plugin(tauri_plugin_store::Builder::new().build())
         .plugin(tauri_plugin_shell::init())
+        .plugin(tauri_plugin_sql::Builder::new().build())
         .invoke_handler(tauri::generate_handler![
             app::areas_control,
             app::user_control,
