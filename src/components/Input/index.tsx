@@ -27,7 +27,7 @@ export default function Input({
   const hasError = error && touched;
 
   return (
-    <div className={`flex flex-col gap-1 ${className}`}>
+    <div className={`flex flex-col gap-1 p-1 ${className}`}>
       {label && (
         <label className="text-sm font-medium text-white">
           {label} {required && <span className="text-red-500">*</span>}
