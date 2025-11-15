@@ -1,8 +1,51 @@
+:root {
+    --bg-dark: oklch(0.1 0.025 264);
+    --bg: oklch(21.274% 0.00253 248.167);
+    --bg-light: oklch(0.2 0.025 264);
+    --text: oklch(0.96 0.05 264);
+    --text-muted: oklch(0.76 0.05 264);
+    --highlight: oklch(0.5 0.05 264);
+    --border: #e2e2e220;
+    --border-muted: oklch(0.3 0.05 264);
+    --primary: oklch(0.76 0.1 264);
+    --secondary: oklch(0.76 0.1 84);
+    --danger: oklch(0.7 0.05 30);
+    --warning: oklch(0.7 0.05 100);
+    --success: oklch(0.7 0.05 160);
+    --info: oklch(0.7 0.05 260);
+}
+
+body.light {
+    /* hsl (fallback color) */
+    --bg-dark: hsl(220 59% 91%);
+    --bg: #181818;
+    --bg-light: hsl(220 100% 100%);
+    --text: hsl(226 85% 7%);
+    --text-muted: hsl(220 26% 31%);
+    --highlight: hsl(220 100% 100%);
+    --border: hsl(220 19% 53%);
+    --border-muted: hsl(220 27% 65%);
+    --primary: hsl(221 49% 33%);
+    --secondary: hsl(44 100% 14%);
+    --danger: hsl(9 21% 41%);
+    --warning: hsl(52 23% 34%);
+    --success: hsl(147 19% 36%);
+    --info: hsl(217 22% 41%);
+
+}
+
+body.dark-mode {
+    --bg: #181818;
+    --bg-dark: #;
+}
+
+
 * {
     margin: 0;
 }
 
 body {
+    background: var(--bg);
     height: 100vh;
     width: 100vw;
 }
@@ -16,33 +59,53 @@ header {
 
 div.input_element {
     display: flex;
-    border-bottom: 2px solid black;
+    border-bottom: 2px solid var(--border);
     justify-content: space-between;
+
     input {
         font-size: 18px;
         outline: none;
         border: none;
         padding-inline: 0.30rem;
         padding-block: 0.45rem;
+
         &:focus {
             outline: none;
         }
     }
 }
 
+.time_range {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 4rem;
+    input {
+        font-size: 18px;
+        outline: none;
+        border: none;
+        padding-inline: 0.30rem;
+        padding-block: 0.45rem;
+
+        &:focus {
+            outline: none;
+        }
+    }
+}
+
+
 .event {
     display: flex;
-    padding-inline: 3rem;
-
+    padding: 2rem;
+    border: 1px solid var(--border);
     content {
         display: flex;
-
         .inputs {
             flex: 2;
             display: flex;
-            align-items: center;
             flex-direction: column;
-            gap: 4px;
+            gap: 16px;
+
         }
     }
 
