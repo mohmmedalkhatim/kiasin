@@ -1,18 +1,19 @@
-import { useCallback, useEffect, useRef, useState } from "react"
-import { IconArrowLoopLeft, IconArrowLoopLeft2, IconChevronDown, IconChevronUp, IconDots, IconMenu, IconMenu2, IconMenu3, IconMenu4, IconPlayerPause, IconPlayerPlay, IconTriangleFilled } from "@tabler/icons-react";
+import {  useEffect, useRef, useState, Dispatch } from "react"
+import {  IconArrowLoopLeft2, IconChevronDown, IconChevronUp, IconDots, IconMenu, IconMenu2, IconMenu3, IconMenu4, IconPlayerPause, IconPlayerPlay, IconTriangleFilled } from "@tabler/icons-react";
 import Button from "../../../components/Button";
 import Checkbox from "../../../components/Checkbox";
 import { CSSTransition } from "react-transition-group"
 import { load } from "@tauri-apps/plugin-store";
 import { useAsync } from "react-use";
+import React from "react";
 
 
 function TimerCard() {
     const time_set = useRef(null)
     const time_clock = useRef(null)
     const [time, setTime] = useState(15)
-    useAsync( async () => {
-        const store =  await load("main.json");
+    useAsync(async () => {
+        const store = await load("main.json");
         const section_time = await store.get("section_time") as number;
         if (section_time) {
             setTime(section_time)
@@ -70,7 +71,7 @@ function TimerCard() {
                         Skip breaks
                     </div>
                     <Button size="md" className="text-xs" onClick={() => {
-                        
+
                         setMode("timer")
                     }} >
                         <div className="rotate-90 text-[#181818]">
@@ -90,7 +91,7 @@ function TimerCard() {
                 unmountOnExit
             >
                 <div className="absolute" ref={time_clock} onClick={() => { }}>
-                    <FocusSession sessionMinutes={time} size={224} />
+                    <FocusSession sessionMinutes={time} size={224} setMode={setMode} />
                 </div>
 
             </CSSTransition>
@@ -105,11 +106,15 @@ export default TimerCard
 interface FocusSessionProps {
     size?: number; // diameter of the circle
     sessionMinutes: number; // session duration in minutes
+    setTime?: Dispatch<React.SetStateAction<number>>;
+    setMode?: Dispatch<React.SetStateAction<string>>;
 }
 
 const FocusSession: React.FC<FocusSessionProps> = ({
     size = 256, // default 256px (like screenshot)
     sessionMinutes,
+    setMode,
+    setTime
 }) => {
     const [timeLeft, setTimeLeft] = useState(sessionMinutes * 60);
     const [isRunning, setIsRunning] = useState(false);
@@ -205,7 +210,7 @@ const FocusSession: React.FC<FocusSessionProps> = ({
                 >
                     <IconArrowLoopLeft2 size={"1.2rem"} />
                 </button>
-                <button className="timer_button">
+                <button className="timer_button" onClick={setMode ? () => { setMode("setting") } : () => { }}>
                     <IconDots size={"1.2rem"} />
                 </button>
             </div>
