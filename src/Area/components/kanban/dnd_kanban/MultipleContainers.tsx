@@ -705,7 +705,6 @@ function SortableItem({
       value={id}
       dragging={isDragging}
       sorting={isSorting}
-      handle
       handleProps={handle ? { ref: setActivatorNodeRef } : undefined}
       index={index}
       wrapperStyle={wrapperStyle({ index })}
