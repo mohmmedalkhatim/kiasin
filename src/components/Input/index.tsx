@@ -2,7 +2,7 @@ import {  ReactElement, useState } from 'react';
 
 type InputProps = {
   label?: string;
-  type?: 'text' | 'email' | 'password' | 'number';
+  type?: 'text' | 'email' | 'password' | 'number' | "time";
   placeholder?: string;
   value?: string;
   onChange?: (value: string) => void;
@@ -29,7 +29,7 @@ export default function Input({
   return (
     <div className={`flex flex-col gap-1 p-1 ${className}`}>
       {label && (
-        <label className="text-sm font-medium text-white">
+        <label className="text-xs font-medium text-white ">
           {label} {required && <span className="text-red-500">*</span>}
         </label>
       )}
