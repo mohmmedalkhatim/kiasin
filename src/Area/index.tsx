@@ -3,6 +3,8 @@ import Card from './main/Card';
 import './style.css';
 import Navbar from './Navbar';
 import useLayout from './Hooks/useLayout';
+import {  useEffect, useState } from 'react';
+import { getCurrentWindow, LogicalPosition } from '@tauri-apps/api/window';
 
 export type element_props = {
   type: string;
@@ -38,12 +40,26 @@ const Layout = () => {
           setCardlist={handlesizeChange}
         />
       ))
-    }else{
+    } else {
       return <div className=' col-span-full row-span-8 flex items-center justify-center'>
         hello
       </div>
     }
   }
+  let [clicked, setClicked] = useState(false)
+  useEffect(() => {
+    let header = document.querySelector("header")
+    if (header) {
+      header.onmousedown = (e) => {
+        let window = getCurrentWindow()
+        window.setPosition(new LogicalPosition({ x: e.x, y: e.y }))
+        setClicked(true)
+      }
+      header.onmouseup = (e) => {
+        setClicked(false)
+      }
+    }
+  }, [])
   return (
     <>
       <Container ref={ref}>
