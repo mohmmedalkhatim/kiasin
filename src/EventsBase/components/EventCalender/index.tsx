@@ -1,10 +1,12 @@
 import { Dayjs } from "dayjs"
 import { hours } from "../../Data/hours"
 import { months } from "../../Data/Months"
-import { Dispatch, SetStateAction } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 import { IconChevronLeft, IconChevronRight } from "@tabler/icons-react";
 import useEventsCalender from "../../Hooks/useEventsCalender";
 import { Channel, invoke } from "@tauri-apps/api/core";
+import { CSSTransition, TransitionGroup } from "react-transition-group";
+import MinEventForm from "../MinEventForm";
 
 
 
@@ -13,8 +15,12 @@ import { Channel, invoke } from "@tauri-apps/api/core";
 
 function EventsCalender({ current, active, setActive }: { current: Dayjs, active: Dayjs, setActive: Dispatch<SetStateAction<Dayjs>> }) {
     let { marker, selecting, ref, setSelecting, hourCheck, week, setSelected, selectingLogic, time_arr } = useEventsCalender(current, active);
+    let [mode, setMode] = useState("close")
     return (
         <div className="week_events flex-col border border-[#e3e3e320]">
+            <CSSTransition in={mode == "open"} unmountOnExit timeout={200} classNames={"min_form"}>
+                <MinEventForm />
+            </CSSTransition>
             <div className="flex flex-col w-full">
                 <div className="px-8 py-4 border-b flex border-[#e2e2e220] gap-4 items-center rounded-t">
                     <div>{months[active.get("month")]} {active.get("D")}</div>
@@ -30,7 +36,7 @@ function EventsCalender({ current, active, setActive }: { current: Dayjs, active
                             </div>
                             <div className="w-[13px] border-y border-[#e2e2e220]"></div>
                         </div>
-                        <div className="flex  max-h-[35rem] w-full overflow-auto scroller">
+                        <div className="flex  max-h-[36.5rem]  border-b border-[#e2e2e220] w-full overflow-auto scroller">
                             <div>
                                 {hours.map((item, index) => (<div key={index}>
                                     <div className={`border-y-none px-4 pt-4 border-[#e3e3e320] h-10 w-20 text-xs ${active.hour() === index ? "font-bold" : ""}`} id={index == active.hour() && week ? "active" : ""}>{item}</div>
