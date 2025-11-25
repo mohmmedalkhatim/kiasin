@@ -1,9 +1,11 @@
 import { create } from "zustand";
 import { DB } from "../../main";
+import { Dispatch, SetStateAction } from "react";
+
+export type tableInfo = { name: string, tbl_name: string, type: string, rootpage: number, sql: string }
 
 
-
-type DatabaseType = {
+export type DatabaseType = {
     name: string,
     info: rowInfo[],
     data: unknown[]
@@ -24,6 +26,7 @@ interface DatabaseContextType {
     setActiveDatabase: (name: string) => Promise<void>;
     reloadDatabase: (name: string) => Promise<void>;
     setDatabase: (db: DatabaseType) => void;
+    findOne: (name: string, setDB: Dispatch<SetStateAction<DatabaseType | undefined>>) => Promise<void>
     init: () => Promise<void>,
 }
 
@@ -31,31 +34,36 @@ export const useDatabase = create<DatabaseContextType>((set) => ({
     databases: [],
     activeDatabase: null,
     init: async () => {
-        let tables = await DB.select("SELECT * from sqlite_master WHERE type='table';") as { name: string, tbl_name: string, type: string, rootpage: number, sql: string }[]
+        let tables = await DB.select("SELECT * from sqlite_master WHERE type='table';") as tableInfo[]
         tables.map(async (value) => {
             let info = await tableInfo(value.name)
             DB.select<unknown[]>(`SELECT * from ${value.name}`,).then((res) => {
                 set(state => {
-                    return ({
-                        databases: [...state.databases, { name: value.name, info, data: res }]
-                    })
+                    let filtered = state.databases.filter(item=>item.name != value.name).sort();
+                    return {
+                        databases: [...filtered, {
+                            name: value.name,
+                            info,
+                            data: res
+                        }]
+                    }
                 })
             })
-
         })
 
     },
-    setActiveDatabase: async (name: string) => {
+    findOne: async (name, setdatabase) => {
         let info = await tableInfo(name)
         DB.select<unknown[]>(`SELECT * from ${name}`).then((res) => {
-            set({
-                activeDatabase: {
-                    name,
-                    info,
-                    data: res
-                }
+            setdatabase({
+                name,
+                info,
+                data: res
             })
         })
+    },
+    setActiveDatabase: async (name: string) => {
+
     },
     reloadDatabase: async (name: string) => {
 
