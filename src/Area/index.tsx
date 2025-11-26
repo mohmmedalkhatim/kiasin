@@ -3,8 +3,9 @@ import Card from './main/Card';
 import './style.css';
 import Navbar from './Navbar';
 import useLayout from './Hooks/useLayout';
-import {  useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getCurrentWindow, LogicalPosition } from '@tauri-apps/api/window';
+import Heading from '../components/Heading';
 
 export type element_props = {
   type: string;
@@ -41,8 +42,13 @@ const Layout = () => {
         />
       ))
     } else {
-      return <div className=' col-span-full row-span-8 flex items-center justify-center'>
-        hello
+      return <div className=' col-span-full row-span-8 flex items-center justify-center flex-col'>
+        <div>
+          press the edit button for more option
+        </div>
+        <Heading level='1'>
+          hello, try adding card's to this area
+        </Heading>
       </div>
     }
   }
