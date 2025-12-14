@@ -1,7 +1,0 @@
-@import "tailwindcss";
-
-@layer components{
-    .cell{
-        @apply py-2 border-r  border-[#e2e2e220] w-1/6 overflow-hidden max-h-[36px];
-    }
-}

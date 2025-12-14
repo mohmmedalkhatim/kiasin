@@ -8,11 +8,12 @@ import Dashborad from '../screens/dashborad';
 import Areas from '../screens/areas';
 import Notes from '../screens/notes';
 import Note from '../note';
-import Databases from '../screens/Databases';
+import Databases from '../Databases';
 import Archive from '../screens/archive';
 import Area from '../screens/areas/area';
 import EventsPage from '../EventsBase';
-import Database from '../Database';
+import People from '../screens/people';
+import Account from '../screens/account';
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -24,8 +25,9 @@ export const router = createBrowserRouter(
       <Route path="/Area/:id" element={<Area />} />
       <Route path="/Archive" element={<Archive />} />
       <Route path="/databases" element={<Databases />} />
-      <Route path="/DB/:id" element={<Database />} />
       <Route path="/events" element={<EventsPage />} />
+      <Route path='/people' element={<People/>}></Route>
+      <Route path='/account' element={<Account/>}></Route>
     </Route>
   )
 );
