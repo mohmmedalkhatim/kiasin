@@ -13,9 +13,9 @@ function Links() {
   const { changeMode } = useLayoutDialog()
   const arr = [
     { name: 'dashboard', link: '/', Icon: <IconDashboard /> },
+    { name: 'Databases', link: '/databases', Icon: <IconDatabase /> },
     { name: 'Events', link: '/events', Icon: <IconCalendarEvent /> },
     { name: 'areas', link: '/areas', Icon: <IconLayersIntersect /> },
-    { name: 'Databases', link: '/databases', Icon: <IconDatabase /> },
     { name: 'notes', link: '/notes', Icon: <IconNotes /> },
   ];
   return (

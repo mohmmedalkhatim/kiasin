@@ -23,7 +23,9 @@ function TimerCard() {
     }, [time])
     const [skip, setSkip] = useState(false)
     const [mode, setMode] = useState("setting")
+    useEffect(()=>{
 
+    },[])
     return (
         <div className="flex items-center justify-center flex-col h-full gap-8">
             <CSSTransition
@@ -71,7 +73,7 @@ function TimerCard() {
                         Skip breaks
                     </div>
                     <Button size="md" className="text-xs" onClick={() => {
-
+                        
                         setMode("timer")
                     }} >
                         <div className="rotate-90 text-[#181818]">
