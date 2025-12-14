@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { IconEdit,  IconNotebook } from '@tabler/icons-react';
+import { IconDeviceFloppy, IconEdit,  IconNotebook } from '@tabler/icons-react';
 import { useAreas } from '../../../context/para/areas';
 import { Link } from 'react-router-dom';
 import { Area } from '../../../types/area';
@@ -9,6 +9,7 @@ import Button from '../../../components/Button';
 
 function Header() {
   const toggle = useAreas(state => state.toggleEditable);
+  const editable = useAreas(state => state.editable);
   const active = useAreas(state => state.active)?.at(-1);
   const update = useAreas(state => state.update);
   const update_active = useAreas(state => state.update_active_area);
@@ -48,7 +49,7 @@ function Header() {
 
         children={
           <>
-            edit <IconEdit size={'1.2rem'} />
+            {editable?(<>save <IconDeviceFloppy size={'1.2rem'} /></>):<>edit <IconEdit size={'1.2rem'} /></>}
           </>
         }
         onClick={toggle}

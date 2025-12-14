@@ -52,20 +52,7 @@ const Layout = () => {
       </div>
     }
   }
-  let [clicked, setClicked] = useState(false)
-  useEffect(() => {
-    let header = document.querySelector("header")
-    if (header) {
-      header.onmousedown = (e) => {
-        let window = getCurrentWindow()
-        window.setPosition(new LogicalPosition({ x: e.x, y: e.y }))
-        setClicked(true)
-      }
-      header.onmouseup = (e) => {
-        setClicked(false)
-      }
-    }
-  }, [])
+
   return (
     <>
       <Container ref={ref}>
