@@ -12,6 +12,7 @@ import Database from '@tauri-apps/plugin-sql';
 
 export let DB: Database;
 
+
 (async () => {
   DB =  await Database.load(`sqlite:Database/test.db`);
 })()
