@@ -1,10 +1,10 @@
 import { useDispatch } from "react-redux"
 import AreasList from "../area/areas_list"
-import { useEffect, useState } from "react"
-import { Button } from "@headlessui/react"
+import {  useState } from "react"
 import { create_area_async_function } from "../../contexts/area/functions/create"
 import Header from "../../components/header"
 import { AppDispatch } from "../../contexts/store"
+import Button from "../../components/Button";
 
 function MainPage() {
 
@@ -16,7 +16,8 @@ function MainPage() {
         <div>
             <Header  >
                 <div>Areas{signle}</div>
-                <Button onClick={() => {setSignle(!signle); dispatch(create_area_async_function())}}>create</Button>
+                <Button  onClick={() => {setSignle(!signle); dispatch(create_area_async_function())}}>create</Button>
+        
             </Header>
             <AreasList reload={signle}/>
         </div>
