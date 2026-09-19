@@ -15,7 +15,7 @@ export default function Button({
   ...props
 }: ButtonProps) {
   const baseStyles =
-    'rounded cursor-pointer  font-medium transition-color focus:ring-2  focus:outline-none primary_button';
+    'rounded cursor-pointer font-medium transition-colors duration-150 focus:ring-2 focus:outline-none primary_button';
   const variantStyles = {
     primary: 'bg-primary-600 text-white hover:bg-primary-700 focus:ring-primary-500',
     secondary: 'bg-support-600 text-white hover:bg-support-700 focus:ring-support-500',

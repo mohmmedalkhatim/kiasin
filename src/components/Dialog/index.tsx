@@ -161,7 +161,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
 
                     <div
                         className={twMerge(
-                            " py-4 flex-1",
+                            "py-4 flex-1",
                             bodyClassName
                         )}
                     >
