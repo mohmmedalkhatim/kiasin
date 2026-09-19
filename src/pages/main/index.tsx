@@ -7,19 +7,20 @@ import { AppDispatch } from "../../contexts/store"
 import Button from "../../components/Button";
 
 function MainPage() {
-
     let dispatch = useDispatch<AppDispatch>()
-      const [signle,setSignle] = useState(true)
-
-
+    const [reload, setReload] = useState(true)
     return (
         <div>
-            <Header  >
-                <div>Areas{signle}</div>
-                <Button  onClick={() => {setSignle(!signle); dispatch(create_area_async_function())}}>create</Button>
-        
+            <Header>
+                <h1 className="text-xl font-semibold">Areas</h1>
+                <Button onClick={() => {
+                    setReload(!reload)
+                    dispatch(create_area_async_function())
+                }}>
+                    Create Area
+                </Button>
             </Header>
-            <AreasList reload={signle}/>
+            <AreasList reload={reload}/>
         </div>
     )
 }

@@ -3,14 +3,14 @@ import { create_table_thunk_builder } from './functions/create'
 import { Sheet } from './objects'
 import { retrieve_table_thunk_builder } from './functions/retiveve'
 
-export interface databases_storage {
+export interface SheetStore {
   active:Sheet | null
   err: string
   status: string
   loading: boolean
 }
 
-let init: databases_storage = {
+let init:SheetStore = {
   active: null ,
   err: '',
   status: 'idle',

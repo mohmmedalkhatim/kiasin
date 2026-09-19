@@ -1,9 +1,8 @@
 export type Sheet = {
-    id: number,
-    name: string,
-    description: string,
-    file: string,
-    rows_info:{},
-    created: string,
-    updated: string,
+    id?: number,
+    name?: string,
+    description?: string,
+    file?: string,
+    created?: string,
+    updated?: string,
 }

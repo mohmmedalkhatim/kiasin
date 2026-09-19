@@ -8,51 +8,43 @@ import { useParams } from "react-router-dom"
 import Aside from "./components/aside"
 import { useAsync } from "react-use"
 import { useState } from "react"
-import { AnimatePresence, motion } from "motion/react"
 import "./index.css"
 import AreaHeader from "./Header"
-import { update } from "../../contexts/area/functions/update"
 
 function Area() {
   let { id } = useParams()
   let dispatch = useDispatch<AppDispatch>()
   let { edit, area } = useSelector((state: RootState) => state.area.active)
   let [denseState, setDense] = useState(false)
-  let [signle,setSignle] = useState()
   useAsync(async () => {
     if (area.id !== Number(id)) {
       dispatch(retrieve(Number(id)))
     } else {
       setDense(area.structure.dense)
     }
-  }, [area.structure])  
+  }, [area.id, id])  
 
   if (area.id === Number(id)) {
     return (
       <main className="area_container relative">
         <AreaHeader setDense={setDense} />
         <MainGrid dense={denseState}>
-          {area.structure.cards.map((item) => {
-            return (
-              <CardContainer key={JSON.stringify(item)} columns={item.size.columns} rows={item.size.rows} id={item.id as never}>
-                <CardContent type={item.type} id={item.id} />
-              </CardContainer>
-            )
-          })}
-        </MainGrid>
-        <AnimatePresence initial={false}>
-          {edit ? (
-            <motion.div
-              initial={{ opacity: 0, }}
-              animate={{ opacity: 1, }}
-              exit={{ opacity: 0, }}
+          {area.structure.cards.map((item) => (
+            <CardContainer
+              key={item.id}
+              columns={item.size.columns}
+              rows={item.size.rows}
+              id={item.id as never}
             >
-              <Aside />
-            </motion.div>
-          ) : null}
-        </AnimatePresence>
+              <CardContent type={item.type} id={item.id} />
+            </CardContainer>
+          ))}
+        </MainGrid>
+        {edit && <Aside />}
       </main>
     )
   }
+
+  return null
 }
 export default Area

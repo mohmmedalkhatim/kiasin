@@ -1,30 +1,37 @@
 import { ActionReducerMapBuilder, createAsyncThunk } from '@reduxjs/toolkit'
-import { DB } from '../../../main'
-import { databases_storage } from '..'
+import { SheetStore } from '..'
 import { Channel, invoke } from '@tauri-apps/api/core'
 import { Sheet } from '../objects'
 
-export let sheet_data = createAsyncThunk(
+export let retrieve_sheet = createAsyncThunk(
   'sheet/data',
-  async (id: number,) => {
-    let channel = new Channel<Sheet>((res)=>{
-
-    })
-    invoke("sheets_control",{payload:{command:"retrieve",id}})
+  async (id: number, api) => {
+    let sheet:Sheet = {};
+    try {
+      let channel = new Channel<Sheet>((res) => {
+        sheet = res
+      })
+      await invoke("sheets_control", { payload: { command: "retrieve", id }, channel });
+    } catch (error) {
+      api.rejectWithValue(error)
+    }
+    return sheet 
   }
 )
 
 export let retrieve_table_thunk_builder = (
-  builder: ActionReducerMapBuilder<databases_storage>
+  builder: ActionReducerMapBuilder<SheetStore>
 ) => {
-  builder.addAsyncThunk(sheet_data, {
+  builder.addAsyncThunk(retrieve_sheet, {
     pending: (state, _) => {
-      ;(state.loading = true), (state.status = 'pending')
+      ; (state.loading = true), (state.status = 'pending')
     },
     fulfilled: (state, action) => {
+      state.active = action.payload; 
       state.loading = false
       state.status = 'fulfilled'
     },
-    rejected: _ => {}
+    rejected: (_) => {
+    }
   })
 }

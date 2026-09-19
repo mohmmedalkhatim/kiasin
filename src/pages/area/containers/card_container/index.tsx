@@ -14,11 +14,13 @@ function CardContainer({ children, columns = 1, rows = 1, ...props }: CardContai
   let editing = useSelector((state: RootState) => state.area.active.edit)
   return (
     <div
-      className={"card_container relative  grid_animation" + props.className}
-      style={{ gridColumn: `span ${columns}`, gridRow: `span ${rows}` }}>
-      {editing ? <CardController id={props.id as never} /> : ""}
+      className={`card_container relative grid_animation ${props.className || ''}`}
+      style={{ gridColumn: `span ${columns}`, gridRow: `span ${rows}` }}
+    >
+      {editing && <CardController id={props.id} />}
       {children}
     </div>
   )
 }
+
 export default CardContainer

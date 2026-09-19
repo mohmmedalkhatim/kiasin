@@ -1,11 +1,15 @@
-import {  IconTable } from "@tabler/icons-react"
+import { IconTable } from "@tabler/icons-react"
 
-function DbCard({ name,onClick }: { name: String,onClick:()=>void }) {
+function DbCard({ name, onClick }: { name: string; onClick: () => void }) {
     return (
-        <div onClick={onClick} className="gap-2 rounded-sm w-fill hover:bg-[#e2e2e220] bg-transparent flex items-center primary_button p-3">
-            <IconTable size={"1.2rem"}/>
-            <div className="text-sm">{name}</div>
-        </div>
+        <button
+            type="button"
+            onClick={onClick}
+            className="gap-2 rounded-sm w-full hover:bg-[#e2e2e220] bg-transparent flex items-center primary_button p-3 transition-colors duration-150 text-left cursor-pointer"
+        >
+            <IconTable size={20} stroke={1.5} />
+            <span className="text-sm">{name}</span>
+        </button>
     )
 }
 export default DbCard
