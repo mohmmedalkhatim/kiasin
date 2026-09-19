@@ -1,10 +1,11 @@
 @import 'tailwindcss';
 
-*{
+* {
     box-sizing: border-box;
 }
-.gutter{
-    scrollbar-gutter: right;
+
+.gutter {
+    scrollbar-gutter: stable;
 }
 
 @theme {

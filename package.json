@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
+    "build": "vite build",
     "preview": "vite preview",
     "tauri": "tauri"
   },
@@ -23,6 +23,7 @@
     "@tauri-apps/plugin-opener": "^2.5.3",
     "@tauri-apps/plugin-sql": "~2.3.1",
     "@tauri-apps/plugin-store": "~2.4.2",
+    "@types/exceljs": "^0.5.3",
     "@types/react-transition-group": "^4.4.12",
     "apexcharts": "^5.3.6",
     "clsx": "^2.1.1",
@@ -46,5 +47,8 @@
     "@vitejs/plugin-react": "^4.7.0",
     "typescript": "~5.8.3",
     "vite": "^7.3.1"
+  },
+  "overrides": {
+    "uuid": ">=11.1.1"
   }
 }
