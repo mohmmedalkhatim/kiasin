@@ -10,9 +10,9 @@ pub struct Model {
     pub id: i32,
     pub name: Option<String>,
     pub description: Option<String>,
-    pub file: Option<String>,
+    pub file: Option<Vec<u8>>,
     pub rows_info: Option<Json>,
-    pub created: Date,
+    pub created: Option<Date>,
     pub updated: Option<Date>,
 }
 

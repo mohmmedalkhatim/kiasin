@@ -14,7 +14,7 @@ pub async fn retrieve_sheet(id: i32, db: &DatabaseConnection) -> Result<Model, S
 pub async fn list(db: &DatabaseConnection) -> Result<Vec<Model>, String> {
     let query = Entity::find()
         .all(db)
-        .await
+         .await
         .map_err(|e| format!("Error retrieving sheet: {}", e))?;
     Ok(query)
 }

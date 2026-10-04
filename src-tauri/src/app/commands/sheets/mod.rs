@@ -20,7 +20,7 @@ pub async fn sheets_control(
     match payload.command.as_str() {
         "create" => {
             let sheet = functions::create_sheet(&data, payload.data.unwrap()).await?;
-            let _ = channel.send(vec![]);
+            let _ = channel.send(vec![sheet]);
             Ok(())
         }
         "retrieve" => match payload.id {
@@ -32,8 +32,9 @@ pub async fn sheets_control(
             None => Err("you didn't add a payload data".to_string()),
         },
         "update" => match payload.data {
-            Some(data) => {
-                let _ = functions::update_sheet(data, &db.lock().await.db.clone().unwrap()).await?;
+            Some(sheet_data) => {
+                let sheet = functions::update_sheet(sheet_data, &data).await?;
+                let _ = channel.send(vec![sheet]);
                 Ok(())
             }
             None => Err("you didn't add a payload data".to_string()),
