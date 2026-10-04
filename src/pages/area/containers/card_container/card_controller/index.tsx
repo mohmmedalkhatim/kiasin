@@ -86,7 +86,7 @@ function CardController({ id }: CardControllerProps) {
         let index = structure.cards.indexOf(card)
         return (
             <AnimatePresence mode="popLayout">
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className='absolute top-0 left-0 w-full h-full z-100 bg flex justify-between flex-col rounded-sm'>
+                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className='absolute top-0 left-0 w-full h-full z-90 bg flex justify-between flex-col rounded-sm'>
                     <div className="flex min-w-40 max-w-44 items-center bg-dark-800 h-12 self-start justify-around px-2 rounded-sm">
                         <div onClick={() => dispatch(update_card({ index, card: card_action(card, id, "decr_col") }))} children={<IconChevronsLeft size={"1.3rem"} />} />
                         <div onClick={() => dispatch(update_card({ index, card: card_action(card, id, "incr_col") }))} children={<IconChevronsRight size={"1.3rem"} />} />

@@ -21,7 +21,7 @@ export interface Area {
   id: number
   name: string
   description: string
-  structure: { cards: Card[]; dense: boolean }
+  structure: { cards: Card[]; dense: boolean,sheets: number[] }
 }
 export interface areas_storage {
   loading: boolean
