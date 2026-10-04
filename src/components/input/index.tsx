@@ -1,12 +1,4 @@
-// Input.tsx
-import React, {
-  forwardRef,
-  useState,
-  useEffect,
-  useCallback,
-  useMemo,
-  useRef
-} from 'react';
+import React, { forwardRef, useState, useEffect, useRef, useMemo, useId } from "react";
 import {
   IconX,
   IconEye,
@@ -17,24 +9,28 @@ import {
   IconCheck,
   IconMail,
   IconLock,
-  IconPhone
-} from '@tabler/icons-react';
+  IconPhone,
+} from "@tabler/icons-react";
 
-export type InputSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-export type InputVariant = 'default' | 'filled' | 'underline';
+// ---------------------------------------------------------------------------
+// Types
+// ---------------------------------------------------------------------------
+
+export type InputSize = "sm" | "md" | "lg";
+export type InputVariant = "outlined" | "filled";
 export type InputType =
-  | 'text'
-  | 'email'
-  | 'password'
-  | 'number'
-  | 'tel'
-  | 'url'
-  | 'search'
-  | 'date'
-  | 'time';
+  | "text"
+  | "email"
+  | "password"
+  | "number"
+  | "tel"
+  | "url"
+  | "search"
+  | "date"
+  | "time";
 
 export interface InputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
   size?: InputSize;
   variant?: InputVariant;
   type?: InputType;
@@ -42,234 +38,289 @@ export interface InputProps
   helperText?: string;
   error?: string;
   success?: string;
-  warning?: string;
   fullWidth?: boolean;
   leftSection?: React.ReactNode;
   rightSection?: React.ReactNode;
-  leftSectionWidth?: number;
-  rightSectionWidth?: number;
   clearable?: boolean;
-  debounceDelay?: number;
   loading?: boolean;
   withCount?: boolean;
-  radius?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   wrapperClassName?: string;
-  inputWrapperClassName?: string;
   inputClassName?: string;
   onClear?: () => void;
 }
 
+// ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
+
+const SIZE_CONFIG = {
+  sm: { height: "h-10", text: "text-sm", label: "text-xs", iconSize: 16 },
+  md: { height: "h-14", text: "text-sm", label: "text-xs", iconSize: 18 },
+  lg: { height: "h-16", text: "text-base", label: "text-xs", iconSize: 20 },
+} as const;
+
+// ---------------------------------------------------------------------------
+// Component
+// ---------------------------------------------------------------------------
+
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
-      size = 'md',
-      variant = 'default',
-      type = 'text',
+      size = "md",
+      variant = "outlined",
+      type = "text",
       label,
       helperText,
       error,
       success,
-      warning,
       disabled,
-      fullWidth,
+      fullWidth = true,
       leftSection,
       rightSection,
-      leftSectionWidth = 40,
-      rightSectionWidth = 40,
       clearable,
-      debounceDelay = 0,
       loading,
-      withCount,
-      radius = 'sm',
       wrapperClassName,
-      inputWrapperClassName,
       inputClassName,
       value,
       defaultValue,
+      placeholder,
       onChange,
       onClear,
+      onFocus,
+      onBlur,
       ...props
     },
-    ref
+    ref,
   ) => {
     const inputRef = useRef<HTMLInputElement>(null);
-    const timeoutRef = useRef<ReturnType<typeof setTimeout>| undefined>(undefined);
+    const fieldId = useId();
 
     const [internalValue, setInternalValue] = useState(
-      value ?? defaultValue ?? ''
+      value ?? defaultValue ?? "",
     );
+    const [focused, setFocused] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
     const isControlled = value !== undefined;
     const currentValue = isControlled ? value : internalValue;
+    const hasValue = String(currentValue).length > 0;
+    const isPassword = type === "password";
+    const resolvedType = isPassword && showPassword ? "text" : type;
 
     useEffect(() => {
-      if (!isControlled) return;
-      setInternalValue(String(value ?? ''));
+      if (isControlled) setInternalValue(String(value ?? ""));
     }, [value, isControlled]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      if (!isControlled) {
-        setInternalValue(e.target.value);
-      }
-
-      if (debounceDelay > 0) {
-        clearTimeout(timeoutRef.current);
-        timeoutRef.current = setTimeout(() => onChange?.(e), debounceDelay);
-      } else {
-        onChange?.(e);
-      }
+      if (!isControlled) setInternalValue(e.target.value);
+      onChange?.(e);
     };
 
     const handleClear = () => {
-      if (!isControlled) setInternalValue('');
+      if (!isControlled) setInternalValue("");
       onClear?.();
       inputRef.current?.focus();
     };
 
-    const isPassword = type === 'password';
-    const resolvedType =
-      isPassword && showPassword ? 'text' : type;
+    const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
+      setFocused(true);
+      onFocus?.(e);
+    };
+
+    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
+      setFocused(false);
+      onBlur?.(e);
+    };
+
+    const cfg = SIZE_CONFIG[size];
 
     const defaultLeftIcon = useMemo(() => {
       if (leftSection) return leftSection;
-      if (type === 'email') return <IconMail size={18} />;
-      if (type === 'password') return <IconLock size={18} />;
-      if (type === 'search') return <IconSearch size={18} />;
-      if (type === 'tel') return <IconPhone size={18} />;
+      if (type === "email") return <IconMail size={cfg.iconSize} />;
+      if (type === "password") return <IconLock size={cfg.iconSize} />;
+      if (type === "search") return <IconSearch size={cfg.iconSize} />;
+      if (type === "tel") return <IconPhone size={cfg.iconSize} />;
       return null;
-    }, [type, leftSection]);
+    }, [type, leftSection, cfg.iconSize]);
 
-    const inputPaddingStyle = useMemo(
-      () => ({
-        paddingLeft: defaultLeftIcon ? leftSectionWidth : undefined,
-        paddingRight:
-          rightSection || clearable || isPassword || loading
-            ? rightSectionWidth
-            : undefined
-      }),
-      [
-        defaultLeftIcon,
-        rightSection,
-        clearable,
-        isPassword,
-        loading,
-        leftSectionWidth,
-        rightSectionWidth
-      ]
-    );
+    const hasLeft = !!defaultLeftIcon;
+    const hasRight =
+      !!rightSection || clearable || isPassword || loading || !!error || !!success;
 
-    const sizeClasses = {
-      xs: 'h-7 text-xs',
-      sm: 'h-8 text-sm',
-      md: 'h-9 text-sm',
-      lg: 'h-10 text-base',
-      xl: 'h-12 text-lg'
-    }[size];
-
-    const radiusClasses = {
-      xs: 'rounded-xs',
-      sm: 'rounded-sm',
-      md: 'rounded-md',
-      lg: 'rounded-lg',
-      xl: 'rounded-xl'
-    }[radius];
-
-    const variantClasses = disabled
-      ? 'border-gray-200 text-gray-400'
+    // MD3 state colors
+    const stateColor = disabled
+      ? "text-support-500"
       : error
-      ? 'border-red-500 focus:ring-red-500'
-      : success
-      ? 'border-green-500 focus:ring-green-500'
-      : warning
-      ? 'border-yellow-500 focus:ring-yellow-500'
-      : variant === 'filled'
-      ? 'bg-gray-50 focus:bg-white'
-      : variant === 'underline'
-      ? 'border-x-0 border-t-0 border-b-2 border-border-main rounded-none'
-      : 'bg border-border-main px-2';
+        ? "text-danger-500"
+        : success
+          ? "text-success-500"
+          : focused
+            ? "text-primary-600"
+            : "text-support-500";
+
+    const borderColor = disabled
+      ? "border-support-400/20"
+      : error
+        ? "border-danger-500"
+        : success
+          ? "border-success-500"
+          : focused
+            ? "border-primary-600"
+            : "border-support-400/40 hover:border-support-300";
+
+    const borderWidth = focused || error ? "border-2" : "border";
+
+    const labelFloated = focused || hasValue || !!placeholder;
 
     return (
-      <div className={wrapperClassName}>
-        {label && (
-          <label className="block mb-1 text-sm font-medium">
-            {label}
-          </label>
-        )}
-
+      <div
+        className={`relative ${fullWidth ? "w-full" : ""} ${wrapperClassName ?? ""}`}
+      >
+        {/* Field container */}
         <div
-          className={`relative ${fullWidth ? 'w-full' : ''} ${inputWrapperClassName}`}
+          className={`
+            relative ${cfg.height} rounded-[4px]
+            ${variant === "filled" ? "bg-support-800/10 rounded-t-[4px] rounded-b-none border-b-2 border-t-0 border-x-0" : ""}
+            ${variant === "outlined" ? `${borderWidth} ${borderColor}` : ""}
+            ${disabled ? "opacity-50 pointer-events-none" : ""}
+            transition-[border-color] duration-200
+            [transition-timing-function:cubic-bezier(0.2,0,0,1)]
+            cursor-text
+          `}
+          onClick={() => inputRef.current?.focus()}
         >
-          {defaultLeftIcon && (
+          {/* Left section */}
+          {hasLeft && (
             <div
-              className="absolute left-0 inset-y-0 flex items-center justify-center "
-              style={{ width: leftSectionWidth }}
+              className={`absolute left-3 inset-y-0 flex items-center ${stateColor} pointer-events-none`}
             >
               {defaultLeftIcon}
             </div>
           )}
 
+          {/* Input */}
           <input
             ref={(node) => {
               inputRef.current = node;
-              if (typeof ref === 'function') ref(node);
+              if (typeof ref === "function") ref(node);
               else if (ref) ref.current = node;
             }}
+            id={fieldId}
             type={resolvedType}
             value={currentValue}
             disabled={disabled}
+            placeholder={labelFloated ? placeholder : undefined}
             onChange={handleChange}
-            style={inputPaddingStyle}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
             className={`
-              w-full border outline-none transition
-              ${sizeClasses}
-              ${radiusClasses}
-              ${variantClasses}
-              ${inputClassName}
+              peer w-full h-full bg-transparent outline-none
+              ${cfg.text}
+              ${hasLeft ? "pl-11" : "pl-4"}
+              ${hasRight ? "pr-11" : "pr-4"}
+              ${label ? "pt-5 pb-1" : ""}
+              text-support-100
+              placeholder:text-support-500/60
+              ${inputClassName ?? ""}
             `}
+            aria-invalid={!!error}
+            aria-describedby={
+              error
+                ? `${fieldId}-error`
+                : helperText
+                  ? `${fieldId}-helper`
+                  : undefined
+            }
             {...props}
           />
 
-          <div
-            className="absolute right-0 inset-y-0 flex items-center justify-center gap-1"
-            style={{ width: rightSectionWidth }}
-          >
-            {loading && <IconLoader2 className="animate-spin" size={16} />}
-            {error && <IconAlertCircle size={16} />}
-            {success && <IconCheck size={16} />}
+          {/* Floating label (MD3 outlined style) */}
+          {label && (
+            <label
+              htmlFor={fieldId}
+              className={`
+                absolute pointer-events-none select-none
+                transition-all duration-200
+                [transition-timing-function:cubic-bezier(0.2,0,0,1)]
+                ${hasLeft ? "left-11" : "left-4"}
+                ${stateColor}
+                ${
+                  labelFloated
+                    ? `top-1.5 ${cfg.label} font-medium`
+                    : `top-1/2 -translate-y-1/2 ${cfg.text}`
+                }
+              `}
+            >
+              {label}
+            </label>
+          )}
 
-            {clearable && currentValue && !loading && (
-              <button type="button" onClick={handleClear}>
-                <IconX size={16} />
-              </button>
-            )}
-
-            {isPassword && (
-              <button
-                type="button"
-                onClick={() => setShowPassword((p) => !p)}
-              >
-                {showPassword ? (
-                  <IconEyeOff size={16} />
-                ) : (
-                  <IconEye size={16} />
-                )}
-              </button>
-            )}
-
-            {rightSection}
-          </div>
+          {/* Right section */}
+          {hasRight && (
+            <div className="absolute right-2 inset-y-0 flex items-center gap-1">
+              {loading && (
+                <IconLoader2
+                  className="animate-spin text-support-400"
+                  size={cfg.iconSize}
+                />
+              )}
+              {error && !loading && (
+                <IconAlertCircle
+                  size={cfg.iconSize}
+                  className="text-danger-500"
+                />
+              )}
+              {success && !error && !loading && (
+                <IconCheck
+                  size={cfg.iconSize}
+                  className="text-success-500"
+                />
+              )}
+              {clearable && hasValue && !loading && (
+                <button
+                  type="button"
+                  tabIndex={-1}
+                  onClick={handleClear}
+                  className="p-1 rounded-full text-support-400 hover:text-support-200 hover:bg-support-600/10 transition-colors"
+                >
+                  <IconX size={cfg.iconSize - 2} />
+                </button>
+              )}
+              {isPassword && (
+                <button
+                  type="button"
+                  tabIndex={-1}
+                  onClick={() => setShowPassword((p) => !p)}
+                  className="p-1 rounded-full text-support-400 hover:text-support-200 hover:bg-support-600/10 transition-colors"
+                >
+                  {showPassword ? (
+                    <IconEyeOff size={cfg.iconSize} />
+                  ) : (
+                    <IconEye size={cfg.iconSize} />
+                  )}
+                </button>
+              )}
+              {rightSection}
+            </div>
+          )}
         </div>
 
+        {/* Helper / error text (MD3: body-small, 16px left padding) */}
         {(error || helperText) && (
-          <p className={`mt-1 text-sm ${error ? 'text-red-600' : 'text-gray-500'}`}>
+          <p
+            id={error ? `${fieldId}-error` : `${fieldId}-helper`}
+            role={error ? "alert" : undefined}
+            className={`mt-1 px-4 text-xs leading-4 ${
+              error ? "text-danger-500" : "text-support-500"
+            }`}
+          >
             {error || helperText}
           </p>
         )}
       </div>
     );
-  }
+  },
 );
 
-Input.displayName = 'Input';
+Input.displayName = "Input";
 export default Input;
