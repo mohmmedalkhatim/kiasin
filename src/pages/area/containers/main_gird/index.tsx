@@ -14,7 +14,7 @@ type MainGridProps = {
 function MainGrid({ children, dense }: MainGridProps) {
     let edit = useSelector((state: RootState) => state.area.active.edit)
     return (
-        <div className={(!edit ? "main_grid_container" : "editing_grid_container") + " grid_animation" + (dense ? " dense" : "")}>
+        <div className={"main_grid_container"  + " grid_animation" + (dense ? " dense" : "")}>
             {children}
         </div>
     )

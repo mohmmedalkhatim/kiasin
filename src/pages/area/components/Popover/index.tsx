@@ -17,7 +17,7 @@ function popover() {
     useEffect(() => {
     }, [area])
     return (
-        <div className="flex justify-center mt-4 w-full" ref={ref}>
+        <div className="flex justify-center  w-full" ref={ref}>
             {ref.current && <Popover className={"w-full"}>
                 <PopoverPanel className="mb-2 border-border-main border gap-4 bg " style={{ zIndex: 20000 }}>
                     <div className="w-full justify-between p-5 flex "><div>cards</div> <IconX /></div>
@@ -60,7 +60,7 @@ function popover() {
                     </div>
                 </PopoverPanel>
                 <PopoverButton className={"w-full"}>
-                    <Button >
+                    <Button className="w-full">
                         create
                     </Button>
                 </PopoverButton>
