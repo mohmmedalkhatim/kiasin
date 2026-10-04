@@ -35,4 +35,5 @@ tauri-plugin-sql = { version = "2", features = ["sqlite"] }
 tauri-plugin-store = "2"
 tauri-plugin-devtools = "2.0.1"
 reqwest = "0.13.2"
+base64 = "0.23.1"
 
