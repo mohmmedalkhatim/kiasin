@@ -8,7 +8,7 @@ function App() {
   useEffect(() => {
   }, [])
   return (
-    <main className="bg-dark-900 min-h-screen ">
+    <main className="bg-surface min-h-screen">
       <WindowControls title="kiasin" />
       <div className="app_container relative">
         <Outlet />

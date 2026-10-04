@@ -6,7 +6,11 @@ export let store = configureStore({
   reducer: {
     area: areas_slice,
     database: database_slice
-  }
+  },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: false,
+    }),
 })
 
 export type RootState = ReturnType<typeof store.getState>

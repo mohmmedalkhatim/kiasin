@@ -1,15 +1,27 @@
-import { IconTable } from "@tabler/icons-react"
+import { IconTable } from "@tabler/icons-react";
 
-function DbCard({ name, onClick }: { name: string; onClick: () => void }) {
-    return (
-        <button
-            type="button"
-            onClick={onClick}
-            className="gap-2 rounded-sm w-full hover:bg-[#e2e2e220] bg-transparent flex items-center primary_button p-3 transition-colors duration-150 text-left cursor-pointer"
-        >
-            <IconTable size={20} stroke={1.5} />
-            <span className="text-sm">{name}</span>
-        </button>
-    )
+function SheetCard({
+  name,
+  active,
+  onClick,
+}: {
+  name: string;
+  active?: boolean;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`gap-2 rounded-md w-full flex items-center p-2.5 transition-colors duration-150 text-left cursor-pointer ${
+        active
+          ? "bg-primary-600/12 text-primary-400"
+          : "bg-transparent hover:bg-dark-800/60 text-support-200"
+      }`}
+    >
+      <IconTable size={18} stroke={1.5} className={active ? "text-primary-400" : "text-support-500"} />
+      <span className="text-sm truncate">{name}</span>
+    </button>
+  );
 }
-export default DbCard
+export default SheetCard;
