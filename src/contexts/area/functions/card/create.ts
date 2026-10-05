@@ -1,23 +1,25 @@
 import { ActionReducerMapBuilder, createAsyncThunk } from '@reduxjs/toolkit'
 import { RootState } from '../../../store'
-import { areas_storage, Card } from '../..'
+import { areas_storage, Card, CardStore } from '../..'
 import { update } from '../update'
 
 let create_card_state = ({
   id,
   type,
   columns = 1,
-  rows = 1
+  rows = 1,
+  store,
 }: {
   id: number
-  type: 'areas' | 'value' | 'form'
+  type: Card['type']
   columns?: number
   rows?: number
+  store?: Partial<CardStore>
 }): Card => {
   return {
     id,
     type,
-    store: { list: [] },
+    store: { list: [], ...store },
     size: {
       columns,
       rows
@@ -30,8 +32,9 @@ export let create_card = createAsyncThunk(
     {
       type,
       columns = 1,
-      rows = 1
-    }: { type: "areas" | "value" | "form"; columns?: number; rows?: number },
+      rows = 1,
+      store,
+    }: { type: Card['type']; columns?: number; rows?: number; store?: Partial<CardStore> },
     api
   ) => {
     let { area } = api.getState() as RootState
@@ -40,12 +43,13 @@ export let create_card = createAsyncThunk(
       id: structure.cards.length,
       type,
       columns,
-      rows
+      rows,
+      store,
     })
     api.dispatch(
       update({
         ...area.active.area,
-        structure: { cards: [...structure.cards, card], dense: structure.dense }
+        structure: { ...structure, cards: [...structure.cards, card] }
       })
     )
     return card

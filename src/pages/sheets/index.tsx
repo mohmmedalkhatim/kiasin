@@ -26,7 +26,7 @@ function Sheets() {
         <SheetsList setActive={setActive} activeId={active} />
         <div className="flex pt-12 w-full relative  pl-60">
           <SheetEditor />
-        </div>
+        </div> 
       </main>
       <Dialog open={open} widthClass="w-[30rem]" bodyClassName="" onClose={function (): void {
         setOpen(false)

@@ -1,105 +1,116 @@
 import { useDispatch, useSelector } from "react-redux"
 import { AppDispatch, RootState } from "../../../../../contexts/store"
-import { IconChevronsDown, IconChevronsLeft, IconChevronsRight, IconChevronsUp, IconTrash } from "@tabler/icons-react"
+import { IconChevronDown, IconChevronLeft, IconChevronRight, IconChevronUp, IconTrash } from "@tabler/icons-react"
 import { update_card } from "../../../../../contexts/area/functions/card/update"
 import { Card } from "../../../../../contexts/area"
 import * as motion from "motion/react-client"
 import { AnimatePresence } from "motion/react"
 import { delete_card } from "../../../../../contexts/area/functions/card/delete"
 
-type CardControllerProps = {
-    id: number
-}
-function card_action(card: Card, id: number, action: string,): Card {
-    let actions = new Map<string, Card>(
-        [
-            ["incr_col",
-                {
-                    id,
-                    type: card.type,
-                    store: card.store,
-                    size:
-                    {
-                        columns: (card.size.columns + 1) == 8 ? card.size.columns : card.size.columns + 1,
-                        rows: card.size.rows
-                    },
-                }
-            ],
-            ["decr_col",
-                {
-                    id,
-                    type: card.type,
-                    store: card.store,
-                    size:
-                    {
-                        columns: (card.size.columns - 1) > 1 ? card.size.columns - 1 : 1,
-                        rows: card.size.rows
-                    },
-                }
-            ],
-            ["decr_row",
-                {
-                    id,
-                    type: card.type,
-                    store: card.store,
-                    size:
-                    {
-                        columns: card.size.columns,
-                        rows: (card.size.rows - 1) > 1 ? card.size.rows - 1 : 1,
-                    },
-                }
-            ],
-            ["incr_row",
-                {
-                    id,
-                    type: card.type,
-                    store: card.store,
-                    size:
-                    {
-                        rows: (card.size.rows + 1) == 4 ? card.size.rows : card.size.rows + 1,
-                        columns: card.size.columns
-                    },
-                }
-            ]
-        ]
-    )
-    return actions.get(action) ||
-    {
-        id,
-        type: card.type,
-        store: card.store,
-        size:
-        {
-            columns: card.size.columns,
-            rows: card.size.rows
-        },
-    }
-
+function resizeCard(card: Card, id: number, action: string): Card {
+  const { columns, rows } = card.size
+  const sizes: Record<string, { columns: number; rows: number }> = {
+    incr_col: { columns: Math.min(columns + 1, 7), rows },
+    decr_col: { columns: Math.max(columns - 1, 1), rows },
+    incr_row: { columns, rows: Math.min(rows + 1, 3) },
+    decr_row: { columns, rows: Math.max(rows - 1, 1) },
+  }
+  return { ...card, id, size: sizes[action] ?? card.size }
 }
 
-
-function CardController({ id }: CardControllerProps) {
-    let structure = useSelector((state: RootState) => state.area.active.area.structure)
-    let card = structure.cards.find(item => item.id == id)
-    let dispatch = useDispatch<AppDispatch>()
-    if (card) {
-        let index = structure.cards.indexOf(card)
-        return (
-            <AnimatePresence mode="popLayout">
-                <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }} className='absolute top-0 left-0 w-full h-full z-90 bg flex justify-between flex-col rounded-sm'>
-                    <div className="flex min-w-40 max-w-44 items-center bg-dark-800 h-12 self-start justify-around px-2 rounded-sm">
-                        <div onClick={() => dispatch(update_card({ index, card: card_action(card, id, "decr_col") }))} children={<IconChevronsLeft size={"1.3rem"} />} />
-                        <div onClick={() => dispatch(update_card({ index, card: card_action(card, id, "incr_col") }))} children={<IconChevronsRight size={"1.3rem"} />} />
-                        <div onClick={() => dispatch(update_card({ index, card: card_action(card, id, "incr_row") }))} children={<IconChevronsDown size={"1.3rem"} />} />
-                        <div onClick={() => dispatch(update_card({ index, card: card_action(card, id, "decr_row") }))} children={<IconChevronsUp size={"1.3rem"} />} />
-                        <div onClick={() => {
-                            dispatch(delete_card({ id }))
-                        }} children={<IconTrash size={"1.3rem"} />} />
-                    </div>
-                    <legend className="p-3">{card.type} {id}</legend>
-                </motion.div>
-            </AnimatePresence>
-        )
-    }
+function ControlButton({
+  onClick,
+  children,
+  label,
+  variant = "default",
+}: {
+  onClick: () => void
+  children: React.ReactNode
+  label: string
+  variant?: "default" | "danger"
+}) {
+  return (
+    <button
+      onClick={onClick}
+      aria-label={label}
+      className={`p-1.5 rounded-md transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary-500 ${
+        variant === "danger"
+          ? "text-support-500 hover:text-danger-400 hover:bg-danger-500/10"
+          : "text-support-400 hover:text-support-100 hover:bg-[#e2e2e215]"
+      }`}
+    >
+      {children}
+    </button>
+  )
 }
-export default CardController
+
+export default function CardController({ id }: { id: number }) {
+  const structure = useSelector((s: RootState) => s.area.active.area.structure)
+  const card = structure.cards.find(item => item.id === id)
+  const dispatch = useDispatch<AppDispatch>()
+
+  if (!card) return null
+  const index = structure.cards.indexOf(card)
+
+  const needsConfig = ['summary', 'chart', 'comparison'].includes(card.type) && !card.store?.sheetId
+  if (needsConfig) return null
+
+  return (
+    <AnimatePresence mode="popLayout">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.15 }}
+        className="absolute inset-0 z-90 flex flex-col justify-between rounded-lg bg-dark-900/85 backdrop-blur-sm"
+      >
+        <div className="flex items-center justify-between p-2">
+          <div className="flex items-center gap-0.5 bg-dark-800 rounded-lg p-0.5">
+            <ControlButton
+              onClick={() => dispatch(update_card({ index, card: resizeCard(card, id, "decr_col") }))}
+              label="Decrease width"
+            >
+              <IconChevronLeft size={16} />
+            </ControlButton>
+            <ControlButton
+              onClick={() => dispatch(update_card({ index, card: resizeCard(card, id, "incr_col") }))}
+              label="Increase width"
+            >
+              <IconChevronRight size={16} />
+            </ControlButton>
+
+            <div className="w-px h-4 bg-[#e2e2e220] mx-0.5" />
+
+            <ControlButton
+              onClick={() => dispatch(update_card({ index, card: resizeCard(card, id, "decr_row") }))}
+              label="Decrease height"
+            >
+              <IconChevronUp size={16} />
+            </ControlButton>
+            <ControlButton
+              onClick={() => dispatch(update_card({ index, card: resizeCard(card, id, "incr_row") }))}
+              label="Increase height"
+            >
+              <IconChevronDown size={16} />
+            </ControlButton>
+          </div>
+
+          <ControlButton
+            onClick={() => dispatch(delete_card({ id }))}
+            label="Delete card"
+            variant="danger"
+          >
+            <IconTrash size={16} />
+          </ControlButton>
+        </div>
+
+        <div className="flex items-center justify-between px-3 pb-2">
+          <span className="text-xs text-support-500 capitalize">{card.type.replace('_', ' ')}</span>
+          <span className="text-[10px] text-support-600 tabular-nums">
+            {card.size.columns}×{card.size.rows}
+          </span>
+        </div>
+      </motion.div>
+    </AnimatePresence>
+  )
+}

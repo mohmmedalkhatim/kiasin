@@ -7,10 +7,20 @@ import { list_thunk_builder } from './functions/list'
 import { create_card_thunk_builder } from './functions/card/create'
 import { update_card_builder } from './functions/card/update'
 
+export interface CardStore {
+  list: undefined | number[]
+  sheetId?: number
+  column?: string
+  columnB?: string
+  chartType?: 'line' | 'bar' | 'pie'
+  label?: string
+  labelB?: string
+}
+
 export interface Card {
   id: number
-  type: 'areas' | 'value' | 'form'
-  store: { list: undefined | number[] }
+  type: 'areas' | 'value' | 'form' | 'summary' | 'chart' | 'comparison'
+  store: CardStore
   size: {
     columns: number
     rows: number
