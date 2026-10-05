@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useId, type KeyboardEvent } from 'react'
+import { useState, useRef, useEffect, useId, useCallback, type KeyboardEvent } from 'react'
 
 export interface SelectOption {
   value: string
@@ -28,12 +28,14 @@ export function Select({
   required = false,
 }: SelectProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [isClosing, setIsClosing] = useState(false)
   const [highlightedIndex, setHighlightedIndex] = useState(-1)
   const [searchQuery, setSearchQuery] = useState('')
 
   const selectRef = useRef<HTMLDivElement>(null)
   const listboxRef = useRef<HTMLUListElement>(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
+  const dropdownRef = useRef<HTMLDivElement>(null)
   const buttonId = useId()
   const listboxId = useId()
   const errorId = useId()
@@ -41,63 +43,75 @@ export function Select({
 
   const selectedOption = options.find(opt => opt.value === value)
 
-  // Filter options based on search query
   const filteredOptions = searchQuery
     ? options.filter(opt =>
         opt.label.toLowerCase().includes(searchQuery.toLowerCase())
       )
     : options
 
+  const closeDropdown = useCallback(() => {
+    setIsClosing(true)
+    const el = dropdownRef.current
+    if (el) {
+      const onEnd = () => {
+        el.removeEventListener('animationend', onEnd)
+        setIsOpen(false)
+        setIsClosing(false)
+        setHighlightedIndex(-1)
+        setSearchQuery('')
+      }
+      el.addEventListener('animationend', onEnd)
+    } else {
+      setIsOpen(false)
+      setIsClosing(false)
+      setHighlightedIndex(-1)
+      setSearchQuery('')
+    }
+  }, [])
+
   useEffect(() => {
     if (!isOpen) return
 
     const handleClickOutside = (e: Event) => {
       if (selectRef.current && !selectRef.current.contains(e.target as Node)) {
-        setIsOpen(false)
-        setHighlightedIndex(-1)
-        setSearchQuery('')
+        closeDropdown()
       }
     }
 
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
-  }, [isOpen])
+  }, [isOpen, closeDropdown])
 
   useEffect(() => {
     if (isOpen && highlightedIndex >= 0 && listboxRef.current) {
-      // Skip the search input (first child) when scrolling to options
       const highlightedElement = listboxRef.current.children[highlightedIndex + 1] as HTMLElement
       highlightedElement?.scrollIntoView({ block: 'nearest' })
     }
   }, [isOpen, highlightedIndex])
 
-  // Focus search input when dropdown opens
   useEffect(() => {
-    if (isOpen && searchInputRef.current) {
+    if (isOpen && !isClosing && searchInputRef.current) {
       searchInputRef.current.focus()
     }
-  }, [isOpen])
+  }, [isOpen, isClosing])
 
   const handleToggle = () => {
     if (disabled) return
-    const nextIsOpen = !isOpen
-    setIsOpen(nextIsOpen)
-    if (nextIsOpen && value) {
-      const index = filteredOptions.findIndex(opt => opt.value === value)
-      setHighlightedIndex(index)
-    }
-    if (!nextIsOpen) {
-      setSearchQuery('')
-      setHighlightedIndex(-1)
+    if (isOpen) {
+      closeDropdown()
+    } else {
+      setIsOpen(true)
+      if (value) {
+        const index = filteredOptions.findIndex(opt => opt.value === value)
+        setHighlightedIndex(index)
+      }
     }
   }
 
   const handleSelect = (option: SelectOption) => {
     if (option.disabled) return
     onChange?.(option.value)
-    setIsOpen(false)
-    setHighlightedIndex(-1)
-    setSearchQuery('')
+    closeDropdown()
   }
 
   const handleKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
@@ -121,9 +135,7 @@ export function Select({
 
       case 'Escape':
         e.preventDefault()
-        setIsOpen(false)
-        setHighlightedIndex(-1)
-        setSearchQuery('')
+        closeDropdown()
         break
 
       case 'ArrowDown':
@@ -177,7 +189,6 @@ export function Select({
   }
 
   const handleSearchKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
-    // Allow arrow keys and Enter to navigate/select options from search input
     switch (e.key) {
       case 'ArrowDown':
       case 'ArrowUp':
@@ -195,12 +206,12 @@ export function Select({
         break
       case 'Escape':
         e.preventDefault()
-        setIsOpen(false)
-        setHighlightedIndex(-1)
-        setSearchQuery('')
+        closeDropdown()
         break
     }
   }
+
+  const showDropdown = isOpen || isClosing
 
   return (
     <div className="w-full relative">
@@ -213,13 +224,13 @@ export function Select({
 
       <div
         ref={selectRef}
-        className={`relative w-full ${isOpen ? 'z-[101]' : 'z-[1]'}`}
+        className={`relative w-full ${showDropdown ? 'z-[101]' : 'z-[1]'}`}
       >
         <div
           id={buttonId}
           role="combobox"
           aria-controls={listboxId}
-          aria-expanded={isOpen}
+          aria-expanded={isOpen && !isClosing}
           aria-haspopup="listbox"
           aria-required={required}
           aria-invalid={!!error}
@@ -230,12 +241,12 @@ export function Select({
             bg-transparent border rounded-md
             text-[15px] text-support-100
             cursor-pointer select-none outline-none
-            transition-all duration-150
+            transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]
             ${error
               ? 'border-danger-500'
               : 'border-[#e2e2e220]'
             }
-            ${isOpen
+            ${isOpen && !isClosing
               ? error
                 ? 'border-danger-500 shadow-[0_0_0_3px_rgba(227,53,63,0.15)]'
                 : 'border-primary-500 shadow-[0_0_0_2px_rgba(71,152,209,0.2)]'
@@ -249,11 +260,11 @@ export function Select({
           onClick={handleToggle}
           onKeyDown={handleKeyDown}
         >
-          <span className={`flex-1 text-left whitespace-nowrap overflow-hidden text-ellipsis ${!selectedOption ? 'text-support-400 opacity-70' : ''}`}>
+          <span className={`flex-1 text-left whitespace-nowrap overflow-hidden text-ellipsis transition-colors duration-150 ${!selectedOption ? 'text-support-400 opacity-70' : ''}`}>
             {selectedOption ? selectedOption.label : placeholder}
           </span>
           <svg
-            className={`flex-shrink-0 text-support-300 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+            className={`flex-shrink-0 text-support-300 transition-transform duration-250 ease-[cubic-bezier(0.16,1,0.3,1)] ${isOpen && !isClosing ? 'rotate-180' : ''}`}
             width="20"
             height="20"
             viewBox="0 0 20 20"
@@ -270,8 +281,16 @@ export function Select({
           </svg>
         </div>
 
-        {isOpen && (
-          <div className="absolute top-[calc(100%+4px)] left-0 right-0 z-[100] bg-dark-900 border border-[#e2e2e220] rounded-md shadow-lg overflow-hidden animate-[fadeIn_150ms_ease-out]">
+        {showDropdown && (
+          <div
+            ref={dropdownRef}
+            className={`absolute top-[calc(100%+4px)] left-0 right-0 z-[100] bg-dark-900 border border-[#e2e2e220] rounded-md shadow-[0_2px_6px_0_rgba(0,0,0,0.15),0_8px_24px_0_rgba(0,0,0,0.3)] overflow-hidden origin-top select-dropdown-${isClosing ? 'exit' : 'enter'}`}
+            style={{
+              animation: isClosing
+                ? 'selectExit 120ms cubic-bezier(0.3, 0, 0.8, 0.15) forwards'
+                : 'selectEnter 200ms cubic-bezier(0.05, 0.7, 0.1, 1) forwards',
+            }}
+          >
             <div className="relative flex items-center px-2 pt-2 pb-1 border-b border-[#e2e2e220] bg-dark-900">
               <svg
                 className="absolute left-4 text-support-300 opacity-50 pointer-events-none"
@@ -288,7 +307,7 @@ export function Select({
                 ref={searchInputRef}
                 id={searchId}
                 type="text"
-                className="flex-1 py-2 pl-9 pr-8 bg-[#e2e2e206] border border-[#e2e2e220] rounded text-sm text-support-100 outline-none transition-all duration-150 placeholder:text-support-400 placeholder:opacity-60 focus:border-primary-500 focus:bg-transparent"
+                className="flex-1 py-2 pl-9 pr-8 bg-[#e2e2e206] border border-[#e2e2e220] rounded text-sm text-support-100 outline-none transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] placeholder:text-support-400 placeholder:opacity-60 focus:border-primary-500 focus:bg-transparent"
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => {
@@ -302,7 +321,7 @@ export function Select({
               {searchQuery && (
                 <button
                   type="button"
-                  className="absolute right-4 p-1 bg-transparent border-none rounded text-support-300 opacity-50 cursor-pointer flex items-center justify-center transition-all duration-150 hover:opacity-100 hover:bg-[#e2e2e220]"
+                  className="absolute right-4 p-1 bg-transparent border-none rounded text-support-300 opacity-50 cursor-pointer flex items-center justify-center transition-all duration-150 hover:opacity-100 hover:bg-[#e2e2e220] animate-[clearBtnIn_100ms_ease-out]"
                   onClick={() => {
                     setSearchQuery('')
                     setHighlightedIndex(value ? filteredOptions.findIndex(opt => opt.value === value) : -1)
@@ -338,7 +357,7 @@ export function Select({
                     className={`
                       flex items-center justify-between gap-2 px-3 py-2.5 rounded-sm
                       text-[15px] text-support-100 cursor-pointer select-none
-                      transition-all duration-100
+                      transition-all duration-150 ease-[cubic-bezier(0.16,1,0.3,1)]
                       ${option.value === value ? 'text-primary-400 font-medium' : ''}
                       ${index === highlightedIndex && !option.disabled ? 'bg-[#e2e2e220]' : ''}
                       ${option.disabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-[#e2e2e220]'}
