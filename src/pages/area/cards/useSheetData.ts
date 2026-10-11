@@ -29,11 +29,12 @@ export function useSheetData(sheetId: number | undefined): SheetData & { loading
     }
     setLoading(true)
     try {
-      let sheet: Sheet | null = null
-      const channel = new Channel<Sheet[]>((res) => {
-        sheet = res[0] ?? null
+      const sheet = await new Promise<Sheet | null>((resolve) => {
+        const channel = new Channel<Sheet[]>((res) => {
+          resolve(res[0] ?? null)
+        })
+        invoke('sheets_control', { payload: { command: 'retrieve', id: sheetId }, channel })
       })
-      await invoke('sheets_control', { payload: { command: 'retrieve', id: sheetId }, channel })
 
       if (!sheet) {
         setData({ columns: [], rows: [], sheet: null })
@@ -41,21 +42,20 @@ export function useSheetData(sheetId: number | undefined): SheetData & { loading
         return
       }
 
-      const s = sheet as Sheet
-      if (!s.file || !s.name) {
-        setData({ columns: [], rows: [], sheet: s })
+      if (!sheet.file || !sheet.name) {
+        setData({ columns: [], rows: [], sheet })
         setLoading(false)
         return
       }
 
       const workbook = new exceljs.Workbook()
       // @ts-ignore
-      const ws = (await workbook.xlsx.load(s.file)).worksheets[0]
-      const tableObj = ws.getTable(s.name)
+      const ws = (await workbook.xlsx.load(sheet.file)).worksheets[0]
+      const tableObj = ws.getTable(sheet.name)
       // @ts-ignore
       const tableDef = tableObj.table as exceljs.Table
       const numCols = tableDef.columns.length
-
+       
       const refMatch = (tableDef.ref ?? 'A1').match(/([A-Z]+)(\d+)/i)
       const startCol = refMatch ? colLetterToIndex(refMatch[1]) : 1
       const headerRow = refMatch ? parseInt(refMatch[2]) : 1
@@ -76,7 +76,7 @@ export function useSheetData(sheetId: number | undefined): SheetData & { loading
       setData({
         columns: tableDef.columns.map((c) => ({ name: c.name })),
         rows,
-        sheet: s,
+        sheet,
       })
     } catch (err) {
       console.error('Failed to load sheet data:', err)
