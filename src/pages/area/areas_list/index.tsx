@@ -12,6 +12,7 @@ import { list as List } from "../../../contexts/area/functions/list"
 function AreasList({ list,reload }: { list?: number[],reload:boolean  }) {
   const [areas, setAreas] = useState<Area[]>([])
   const dispatch = useDispatch<AppDispatch>()
+  const [refesh,setRefresh] =useState(false)
   useAsync(async () => {
     try {
       if (list) {
@@ -26,12 +27,12 @@ function AreasList({ list,reload }: { list?: number[],reload:boolean  }) {
     } catch (err) {
       console.error(err)
     }
-  }, [reload])
+  }, [reload,refesh])
   return (
     <>
       <div className="p-4 pt-22">
         <div className="area_list">
-          {areas.map(area => <AreaLink area={area} />)}
+          {areas.map(area => <AreaLink Refresh={setRefresh} key={area.id} area={area} />)}
         </div>
       </div>
     </>

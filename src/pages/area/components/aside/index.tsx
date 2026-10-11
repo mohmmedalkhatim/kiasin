@@ -39,6 +39,9 @@ function Aside() {
   useEffect(() => {
     setItems(structure.cards);
   }, [structure.cards.length]);
+  useEffect(()=>{
+    setItems(area.structure.cards)
+  },[area])
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (over && active.id !== over.id) {

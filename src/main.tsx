@@ -16,11 +16,12 @@ export let storage: Store;
 
 export let DB: Database;
 
-let root = document.getElementById("root") as HTMLElement
+let container = document.getElementById("root") as HTMLElement
 
 (async () => {
   storage = await load("main.json")
-  ReactDOM.createRoot(root).render(
+  let root = ReactDOM.createRoot(container)
+    root.render(
     <React.StrictMode>
       <Provider store={store}>
         <RouterProvider router={router} />

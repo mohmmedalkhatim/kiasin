@@ -5,6 +5,7 @@ import { retrieve_thunk_builder } from './functions/retrieve'
 import { delete_thunk_builder } from './functions/delete'
 import { list_thunk_builder } from './functions/list'
 import { create_card_thunk_builder } from './functions/card/create'
+import { delete_card_builder } from './functions/card/delete'
 import { update_card_builder } from './functions/card/update'
 
 export interface CardStore {
@@ -19,7 +20,7 @@ export interface CardStore {
 
 export interface Card {
   id: number
-  type: 'areas' | 'value' | 'form' | 'summary' | 'chart' | 'comparison'
+  type: 'areas' | 'value' | 'form' | 'summary' | 'chart' | 'comparison' | 'bar_chart' | 'line_chart' | 'donut_chart' | 'area_chart'
   store: CardStore
   size: {
     columns: number
@@ -70,6 +71,7 @@ export let areas = createSlice({
     retrieve_thunk_builder(builder)
     delete_thunk_builder(builder)
     list_thunk_builder(builder)
+    delete_card_builder(builder)
     update_card_builder(builder)
   }
 })

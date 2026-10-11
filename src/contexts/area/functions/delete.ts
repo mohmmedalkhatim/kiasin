@@ -12,7 +12,7 @@ export let delete_area = createAsyncThunk(
         res = state[0]
       })
       await invoke('areas_control', {
-        payload: { payload: { command: 'delete', id } },
+        payload: { command: 'delete', id } ,
         channel
       }).catch(err => {
         console.error('there is a problem invoking create_area: ', err)
