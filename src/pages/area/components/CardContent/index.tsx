@@ -2,6 +2,10 @@ import AreasLinkList from "../../cards/area_link_list"
 import SummaryCard from "../../cards/summary"
 import ChartCard from "../../cards/chart"
 import ComparisonCard from "../../cards/comparison"
+import BarChartCard from "../../cards/bar_chart"
+import LineChartCard from "../../cards/line_chart"
+import DonutChartCard from "../../cards/donut_chart"
+import AreaChartCard from "../../cards/area_chart"
 
 function CardContent({ id, type }: { id: number, type: string }) {
     switch (type) {
@@ -13,6 +17,14 @@ function CardContent({ id, type }: { id: number, type: string }) {
             return <ChartCard id={id} />
         case "comparison":
             return <ComparisonCard id={id} />
+        case "bar_chart":
+            return <BarChartCard id={id} />
+        case "line_chart":
+            return <LineChartCard id={id} />
+        case "donut_chart":
+            return <DonutChartCard id={id} />
+        case "area_chart":
+            return <AreaChartCard id={id} />
         case "form":
             return <div className="p-4 text-sm text-support-500">Form</div>
         case "value":

@@ -1,5 +1,5 @@
 import { Popover, PopoverPanel, PopoverButton, CloseButton } from "@headlessui/react"
-import { IconX, IconGrid3x3, IconForms, IconSum, IconChartBar, IconScale } from "@tabler/icons-react"
+import { IconX, IconGrid3x3, IconForms, IconSum, IconChartBar, IconScale, IconChartAreaLine, IconTrendingUp, IconChartPie } from "@tabler/icons-react"
 import { useRef } from "react"
 import Button from "../../../../components/Button"
 import { create_card } from "../../../../contexts/area/functions/card/create"
@@ -14,6 +14,10 @@ const CARD_TYPES = [
   { type: 'summary' as const, icon: IconSum, label: 'Summary', columns: 2 },
   { type: 'chart' as const, icon: IconChartBar, label: 'Chart', columns: 3, rows: 2 },
   { type: 'comparison' as const, icon: IconScale, label: 'Compare', columns: 2 },
+  { type: 'bar_chart' as const, icon: IconChartBar, label: 'Bar Chart', columns: 3, rows: 2 },
+  { type: 'line_chart' as const, icon: IconTrendingUp, label: 'Line Chart', columns: 3, rows: 2 },
+  { type: 'donut_chart' as const, icon: IconChartPie, label: 'Donut', columns: 2, rows: 2 },
+  { type: 'area_chart' as const, icon: IconChartAreaLine, label: 'Area Chart', columns: 3, rows: 2 },
 ]
 
 const DECEL = [0.16, 1, 0.3, 1] as [number, number, number, number]
