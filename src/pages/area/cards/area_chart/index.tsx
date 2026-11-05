@@ -6,13 +6,19 @@ import { useMemo, useState } from 'react'
 import { Select } from '../../../../components/select'
 import { update_card } from '../../../../contexts/area/functions/card/update'
 import { IconChartAreaLine, IconSettings } from '@tabler/icons-react'
-import Button from '../../../../components/Button'
+import { Dialog } from '../../../../components/Dialog'
+import { Line } from 'react-chartjs-2'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+} from 'chart.js'
 
-function formatAxis(n: number): string {
-  if (Math.abs(n) >= 1_000_000) return (n / 1_000_000).toFixed(0) + 'M'
-  if (Math.abs(n) >= 1_000) return (n / 1_000).toFixed(0) + 'k'
-  return String(Math.round(n))
-}
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Filler, Tooltip)
 
 export default function AreaChartCard({ id }: { id: number }) {
   const dispatch = useDispatch<AppDispatch>()
@@ -26,8 +32,8 @@ export default function AreaChartCard({ id }: { id: number }) {
   const { columns, rows, loading } = useSheetData(sheetId)
   const sheetNames = useSheetNames(linkedSheets)
 
-  const [configuring, setConfiguring] = useState(!sheetId || !labelCol || !valueCol)
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const configured = sheetId && labelCol && valueCol
 
   const updateStore = (patch: Record<string, any>) => {
     dispatch(update_card({
@@ -41,21 +47,15 @@ export default function AreaChartCard({ id }: { id: number }) {
     const labelIdx = columns.findIndex(c => c.name === labelCol)
     const valueIdx = columns.findIndex(c => c.name === valueCol)
     if (labelIdx === -1 || valueIdx === -1) return null
-
     const items = rows
       .map(r => ({ label: String(r[labelIdx]), value: Number(r[valueIdx]) }))
       .filter(d => !Number.isNaN(d.value))
-    if (items.length === 0) return null
-    return items
+    return items.length === 0 ? null : items
   }, [rows, columns, labelCol, valueCol])
 
-  if (configuring || !sheetId || !labelCol || !valueCol) {
-    return (
-      <div className="p-4 flex flex-col gap-3 h-full">
-        <div className="flex items-center gap-2 text-sm font-medium text-support-300">
-          <IconChartAreaLine size={16} />
-          Area Chart
-        </div>
+  const configDialog = (
+    <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} title="Configure Area Chart" widthClass="w-80">
+      <div className="flex flex-col gap-3 px-6">
         {linkedSheets.length === 0 ? (
           <p className="text-xs text-support-500">Link a sheet to this area first.</p>
         ) : (
@@ -68,28 +68,24 @@ export default function AreaChartCard({ id }: { id: number }) {
             />
             {sheetId && columns.length > 0 && (
               <>
-                <Select
-                  placeholder="Label column"
-                  value={labelCol}
-                  options={columns.map(c => ({ label: c.name, value: c.name }))}
-                  onChange={(val) => updateStore({ column: val })}
-                />
-                <Select
-                  placeholder="Value column"
-                  value={valueCol}
-                  options={columns.filter(c => c.name !== labelCol).map(c => ({ label: c.name, value: c.name }))}
-                  onChange={(val) => updateStore({ columnB: val })}
-                />
-                {valueCol && (
-                  <Button size="xs" variant="tonal" className="w-full" onClick={() => setConfiguring(false)}>
-                    Show chart
-                  </Button>
-                )}
+                <Select placeholder="Label column" value={labelCol} options={columns.map(c => ({ label: c.name, value: c.name }))} onChange={(val) => updateStore({ column: val })} />
+                <Select placeholder="Value column" value={valueCol} options={columns.filter(c => c.name !== labelCol).map(c => ({ label: c.name, value: c.name }))} onChange={(val) => updateStore({ columnB: val })} />
               </>
             )}
             {loading && <p className="text-xs text-support-500">Loading…</p>}
           </>
         )}
+      </div>
+    </Dialog>
+  )
+
+  if (!configured) {
+    return (
+      <div className="p-4 flex flex-col items-center justify-center gap-3 h-full">
+        {configDialog}
+        <IconChartAreaLine size={24} className="text-support-600" />
+        <p className="text-xs text-support-500">No chart configured</p>
+        <button className="text-xs text-primary-400 hover:text-primary-300 rounded focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:outline-none" onClick={() => setDialogOpen(true)}>Configure</button>
       </div>
     )
   }
@@ -97,116 +93,97 @@ export default function AreaChartCard({ id }: { id: number }) {
   if (!chartData) {
     return (
       <div className="p-4 h-full flex flex-col items-center justify-center gap-2">
+        {configDialog}
         <p className="text-sm text-support-500">No numeric data</p>
-        <button className="text-xs text-primary-400 hover:text-primary-300" onClick={() => setConfiguring(true)}>
-          Reconfigure
-        </button>
+        <button className="text-xs text-primary-400 hover:text-primary-300 rounded focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:outline-none" onClick={() => setDialogOpen(true)}>Reconfigure</button>
       </div>
     )
   }
 
-  const maxVal = Math.max(...chartData.map(d => d.value))
-  const minVal = Math.min(...chartData.map(d => d.value))
-  const range = maxVal - minVal || 1
-  const padding = range * 0.1
-  const effectiveMax = maxVal + padding
-  const effectiveRange = effectiveMax - minVal + padding
+  const data = {
+    labels: chartData.map(d => d.label),
+    datasets: [{
+      label: valueCol,
+      data: chartData.map(d => d.value),
+      fill: true,
+      borderColor: '#6366f1',
+      backgroundColor: 'rgba(99,102,241,0.12)',
+      borderWidth: 2.5,
+      pointRadius: 0,
+      pointHoverRadius: 5,
+      pointHoverBackgroundColor: '#fff',
+      pointHoverBorderColor: '#6366f1',
+      pointHoverBorderWidth: 2.5,
+      tension: 0.35,
+    }],
+  }
 
-  const gridSteps = 4
-  const svgW = 520
-  const svgH = 220
-  const left = 46
-  const right = 500
-  const top = 32
-  const bottom = 182
-  const labelY = 210
-  const chartW = right - left
-  const chartH = bottom - top
-
-  const points = chartData.map((d, i) => {
-    const x = left + (chartW / Math.max(chartData.length - 1, 1)) * i
-    const y = top + chartH * (1 - (d.value - minVal + padding) / effectiveRange)
-    return { x, y, ...d }
-  })
-
-  const polyline = points.map(p => `${p.x},${p.y}`).join(' ')
-  const areaPath = `M${points[0].x} ${points[0].y} ${points.slice(1).map(p => `L${p.x} ${p.y}`).join(' ')} L${points[points.length - 1].x} ${bottom} L${points[0].x} ${bottom} Z`
-
-  const gridValues = Array.from({ length: gridSteps }, (_, i) =>
-    effectiveMax - (effectiveRange * i) / (gridSteps - 1) + minVal - padding
-  )
-
-  const gradientId = `area-fill-${id}`
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: { intersect: false, mode: 'index' as const },
+    layout: { padding: { top: 8, bottom: 4, left: 0, right: 8 } },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: 'rgba(15,23,42,0.95)',
+        titleColor: '#e2e8f0',
+        bodyColor: '#f8fafc',
+        titleFont: { size: 11, weight: 'normal' as const },
+        bodyFont: { size: 12, weight: 'bold' as const },
+        padding: { top: 8, bottom: 8, left: 12, right: 12 },
+        cornerRadius: 6,
+        borderColor: 'rgba(148,163,184,0.15)',
+        borderWidth: 1,
+        displayColors: false,
+        callbacks: { label: (ctx: any) => ctx.parsed.y.toLocaleString() },
+      },
+    },
+    scales: {
+      x: {
+        border: { display: false },
+        grid: { display: false },
+        ticks: { color: 'rgba(148,163,184,0.6)', font: { size: 11 }, padding: 8 },
+      },
+      y: {
+        border: { display: false },
+        grid: { color: 'rgba(148,163,184,0.08)', lineWidth: 1 },
+        ticks: {
+          color: 'rgba(148,163,184,0.5)',
+          font: { size: 10 },
+          padding: 8,
+          maxTicksLimit: 5,
+          callback: (v: number | string) => {
+            const n = Number(v)
+            if (Math.abs(n) >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M'
+            if (Math.abs(n) >= 1_000) return (n / 1_000).toFixed(1) + 'k'
+            return String(Math.round(n))
+          },
+        },
+      },
+    },
+  }
 
   return (
-    <div className="flex flex-col h-full group/card">
-      <div className="flex items-center justify-between px-4 pt-3 pb-1">
+    <div className="flex flex-col h-full">
+      {configDialog}
+      {sheetId && <p className="text-[10px] text-support-600 px-4 pt-2 truncate">{sheetNames.get(sheetId) ?? `Sheet #${sheetId}`}</p>}
+      <div className="flex items-center justify-between px-4 pt-1 pb-1 relative z-0">
         <span className="text-xs font-medium text-support-500 uppercase tracking-wide truncate">
           {card.store.label || valueCol}
         </span>
         <button
-          className="p-1 rounded text-support-600 opacity-0 group-hover/card:opacity-100 transition-opacity duration-150 hover:text-support-300 hover:bg-[#e2e2e210]"
-          onClick={() => setConfiguring(true)}
+          className="p-2 rounded text-support-600 hover:text-support-300 hover:bg-hover-main focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:outline-none"
+          onClick={() => setDialogOpen(true)}
           aria-label="Configure chart"
         >
           <IconSettings size={14} />
         </button>
       </div>
-      <div className="relative flex-1 min-h-0 px-3 pb-2">
-        {hoveredIdx !== null && (
-          <div
-            className="absolute z-10 px-2.5 py-1.5 rounded-lg bg-[#10233f] text-white text-xs font-bold shadow-lg pointer-events-none"
-            style={{
-              left: points[hoveredIdx].x,
-              top: Math.max(4, points[hoveredIdx].y - 36),
-              transform: 'translateX(-50%)',
-            }}
-          >
-            {points[hoveredIdx].label} — {points[hoveredIdx].value.toLocaleString()}
-          </div>
-        )}
-        <svg viewBox={`0 0 ${svgW} ${svgH}`} className="w-full h-full" style={{ overflow: 'visible' }}>
-          <defs>
-            <linearGradient id={gradientId} x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stopColor="#2563eb" stopOpacity={0.28} />
-              <stop offset="100%" stopColor="#2563eb" stopOpacity={0.02} />
-            </linearGradient>
-          </defs>
-          {gridValues.map((v, i) => {
-            const y = top + (chartH / (gridSteps - 1)) * i
-            return (
-              <g key={i}>
-                <line x1={left} y1={y} x2={right} y2={y} stroke="#e2e2e215" strokeWidth={1} />
-                <text x={6} y={y + 4} fill="#718096" fontSize={11} fontFamily="inherit">{formatAxis(v)}</text>
-              </g>
-            )
-          })}
-          <path d={areaPath} fill={`url(#${gradientId})`} />
-          <polyline
-            points={polyline}
-            fill="none" stroke="#2563eb" strokeWidth={4}
-            strokeLinecap="round" strokeLinejoin="round"
-          />
-          {points.map((p, i) => (
-            <circle
-              key={i} cx={p.x} cy={p.y} r={5}
-              fill={hoveredIdx === i ? '#c7f36a' : '#fff'}
-              stroke={hoveredIdx === i ? '#10233f' : '#2563eb'}
-              strokeWidth={3}
-              style={{ cursor: 'pointer' }}
-              onMouseEnter={() => setHoveredIdx(i)}
-              onMouseLeave={() => setHoveredIdx(null)}
-            />
-          ))}
-          {points.map((p, i) => (
-            <text
-              key={`l${i}`} x={p.x} y={labelY}
-              textAnchor="middle" fill="#52627a" fontSize={11} fontWeight={700} fontFamily="inherit"
-            >
-              {p.label}
-            </text>
-          ))}
-        </svg>
+      <div className="relative flex-1 min-h-0 px-3 pb-3 z-0">
+        <div className="absolute inset-0 px-3 pb-3" role="img" aria-label={`${card.store.label || valueCol} area chart`}>
+          <Line data={data} options={options} />
+        </div>
       </div>
     </div>
   )

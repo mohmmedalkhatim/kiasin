@@ -2,19 +2,23 @@ import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '../../../../contexts/store'
 import { useSheetData } from '../useSheetData'
 import { useSheetNames } from '../useSheetNames'
-import { useMemo, useState, useRef } from 'react'
+import { useMemo, useState } from 'react'
 import { Select } from '../../../../components/select'
 import { update_card } from '../../../../contexts/area/functions/card/update'
 import { IconChartBar, IconSettings } from '@tabler/icons-react'
-import Button from '../../../../components/Button'
+import { Dialog } from '../../../../components/Dialog'
+import { Bar } from 'react-chartjs-2'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Tooltip,
+} from 'chart.js'
 
-const COLORS = ['#94a3b8', '#2563eb', '#c7f36a', '#f59e0b', '#ef4444']
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip)
 
-function formatAxis(n: number): string {
-  if (Math.abs(n) >= 1_000_000) return (n / 1_000_000).toFixed(0) + 'M'
-  if (Math.abs(n) >= 1_000) return (n / 1_000).toFixed(0) + 'k'
-  return String(Math.round(n))
-}
+const COLORS = ['#6366f1', '#3b82f6', '#22d3ee', '#a78bfa', '#f472b6']
 
 export default function BarChartCard({ id }: { id: number }) {
   const dispatch = useDispatch<AppDispatch>()
@@ -28,9 +32,8 @@ export default function BarChartCard({ id }: { id: number }) {
   const { columns, rows, loading } = useSheetData(sheetId)
   const sheetNames = useSheetNames(linkedSheets)
 
-  const [configuring, setConfiguring] = useState(!sheetId || !labelCol || !valueCol)
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null)
-  const tooltipRef = useRef<HTMLDivElement>(null)
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const configured = sheetId && labelCol && valueCol
 
   const updateStore = (patch: Record<string, any>) => {
     dispatch(update_card({
@@ -44,21 +47,15 @@ export default function BarChartCard({ id }: { id: number }) {
     const labelIdx = columns.findIndex(c => c.name === labelCol)
     const valueIdx = columns.findIndex(c => c.name === valueCol)
     if (labelIdx === -1 || valueIdx === -1) return null
-
     const items = rows
       .map(r => ({ label: String(r[labelIdx]), value: Number(r[valueIdx]) }))
       .filter(d => !Number.isNaN(d.value))
-    if (items.length === 0) return null
-    return items
+    return items.length === 0 ? null : items
   }, [rows, columns, labelCol, valueCol])
 
-  if (configuring || !sheetId || !labelCol || !valueCol) {
-    return (
-      <div className="p-4 flex flex-col gap-3 h-full">
-        <div className="flex items-center gap-2 text-sm font-medium text-support-300">
-          <IconChartBar size={16} />
-          Bar Chart
-        </div>
+  const configDialog = (
+    <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} title="Configure Bar Chart" widthClass="w-80">
+      <div className="flex flex-col gap-3 px-6">
         {linkedSheets.length === 0 ? (
           <p className="text-xs text-support-500">Link a sheet to this area first.</p>
         ) : (
@@ -71,28 +68,24 @@ export default function BarChartCard({ id }: { id: number }) {
             />
             {sheetId && columns.length > 0 && (
               <>
-                <Select
-                  placeholder="Label column"
-                  value={labelCol}
-                  options={columns.map(c => ({ label: c.name, value: c.name }))}
-                  onChange={(val) => updateStore({ column: val })}
-                />
-                <Select
-                  placeholder="Value column"
-                  value={valueCol}
-                  options={columns.filter(c => c.name !== labelCol).map(c => ({ label: c.name, value: c.name }))}
-                  onChange={(val) => updateStore({ columnB: val })}
-                />
-                {valueCol && (
-                  <Button size="xs" variant="tonal" className="w-full" onClick={() => setConfiguring(false)}>
-                    Show chart
-                  </Button>
-                )}
+                <Select placeholder="Label column" value={labelCol} options={columns.map(c => ({ label: c.name, value: c.name }))} onChange={(val) => updateStore({ column: val })} />
+                <Select placeholder="Value column" value={valueCol} options={columns.filter(c => c.name !== labelCol).map(c => ({ label: c.name, value: c.name }))} onChange={(val) => updateStore({ columnB: val })} />
               </>
             )}
             {loading && <p className="text-xs text-support-500">Loading…</p>}
           </>
         )}
+      </div>
+    </Dialog>
+  )
+
+  if (!configured) {
+    return (
+      <div className="p-4 flex flex-col items-center justify-center gap-3 h-full">
+        {configDialog}
+        <IconChartBar size={24} className="text-support-600" />
+        <p className="text-xs text-support-500">No chart configured</p>
+        <button className="text-xs text-primary-400 hover:text-primary-300 rounded focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:outline-none" onClick={() => setDialogOpen(true)}>Configure</button>
       </div>
     )
   }
@@ -100,100 +93,93 @@ export default function BarChartCard({ id }: { id: number }) {
   if (!chartData) {
     return (
       <div className="p-4 h-full flex flex-col items-center justify-center gap-2">
+        {configDialog}
         <p className="text-sm text-support-500">No numeric data</p>
-        <button className="text-xs text-primary-400 hover:text-primary-300" onClick={() => setConfiguring(true)}>
-          Reconfigure
-        </button>
+        <button className="text-xs text-primary-400 hover:text-primary-300 rounded focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:outline-none" onClick={() => setDialogOpen(true)}>Reconfigure</button>
       </div>
     )
   }
 
-  const maxVal = Math.max(...chartData.map(d => d.value))
-  const gridSteps = 4
-  const svgW = 520
-  const svgH = 250
-  const left = 55
-  const right = 500
-  const top = 30
-  const bottom = 186
-  const labelY = 216
-  const chartHeight = bottom - top
+  const data = {
+    labels: chartData.map(d => d.label),
+    datasets: [{
+      data: chartData.map(d => d.value),
+      backgroundColor: chartData.map((_, i) => COLORS[i % COLORS.length] + 'cc'),
+      hoverBackgroundColor: chartData.map((_, i) => COLORS[i % COLORS.length]),
+      borderRadius: 6,
+      borderSkipped: false as const,
+      maxBarThickness: 48,
+    }],
+  }
 
-  const gridValues = Array.from({ length: gridSteps }, (_, i) => maxVal * (1 - i / (gridSteps - 1)))
-  const barWidth = Math.min(72, (right - left) / chartData.length * 0.5)
-  const spacing = (right - left) / chartData.length
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    layout: { padding: { top: 8, bottom: 4, left: 0, right: 8 } },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: 'rgba(15,23,42,0.95)',
+        titleColor: '#e2e8f0',
+        bodyColor: '#f8fafc',
+        titleFont: { size: 11, weight: 'normal' as const },
+        bodyFont: { size: 12, weight: 'bold' as const },
+        padding: { top: 8, bottom: 8, left: 12, right: 12 },
+        cornerRadius: 6,
+        borderColor: 'rgba(148,163,184,0.15)',
+        borderWidth: 1,
+        displayColors: false,
+        callbacks: {
+          title: (items: any[]) => items[0]?.label ?? '',
+          label: (ctx: any) => ctx.parsed.y.toLocaleString(),
+        },
+      },
+    },
+    scales: {
+      x: {
+        border: { display: false },
+        grid: { display: false },
+        ticks: { color: 'rgba(148,163,184,0.6)', font: { size: 11 }, padding: 8 },
+      },
+      y: {
+        border: { display: false },
+        grid: { color: 'rgba(148,163,184,0.08)', lineWidth: 1 },
+        ticks: {
+          color: 'rgba(148,163,184,0.5)',
+          font: { size: 10 },
+          padding: 8,
+          maxTicksLimit: 5,
+          callback: (v: number | string) => {
+            const n = Number(v)
+            if (Math.abs(n) >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M'
+            if (Math.abs(n) >= 1_000) return (n / 1_000).toFixed(1) + 'k'
+            return String(Math.round(n))
+          },
+        },
+      },
+    },
+  }
 
   return (
-    <div className="flex flex-col h-full group/card">
-      <div className="flex items-center justify-between px-4 pt-3 pb-1">
+    <div className="flex flex-col h-full">
+      {configDialog}
+      {sheetId && <p className="text-[10px] text-support-600 px-4 pt-2 truncate">{sheetNames.get(sheetId) ?? `Sheet #${sheetId}`}</p>}
+      <div className="flex items-center justify-between px-4 pt-1 pb-1 relative z-0">
         <span className="text-xs font-medium text-support-500 uppercase tracking-wide truncate">
           {card.store.label || valueCol}
         </span>
         <button
-          className="p-1 rounded text-support-600 opacity-0 group-hover/card:opacity-100 transition-opacity duration-150 hover:text-support-300 hover:bg-[#e2e2e210]"
-          onClick={() => setConfiguring(true)}
+          className="p-2 rounded text-support-600 hover:text-support-300 hover:bg-hover-main focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:outline-none"
+          onClick={() => setDialogOpen(true)}
           aria-label="Configure chart"
         >
           <IconSettings size={14} />
         </button>
       </div>
-      <div className="relative flex-1 min-h-0 px-3 pb-2">
-        {hoveredIdx !== null && (
-          <div
-            ref={tooltipRef}
-            className="absolute z-10 px-2.5 py-1.5 rounded-lg bg-[#10233f] text-white text-xs font-bold shadow-lg pointer-events-none"
-            style={{
-              left: left + spacing * hoveredIdx + spacing / 2,
-              top: Math.max(4, top + chartHeight * (1 - chartData[hoveredIdx].value / maxVal) - 36),
-              transform: 'translateX(-50%)',
-            }}
-          >
-            {chartData[hoveredIdx].label} — {chartData[hoveredIdx].value.toLocaleString()}
-          </div>
-        )}
-        <svg viewBox={`0 0 ${svgW} ${svgH}`} className="w-full h-full" style={{ overflow: 'visible' }}>
-          {gridValues.map((v, i) => {
-            const y = top + (chartHeight / (gridSteps - 1)) * i
-            return (
-              <g key={i}>
-                <line x1={left} y1={y} x2={right} y2={y} stroke="#e2e2e215" strokeWidth={1} />
-                <text x={10} y={y + 4} fill="#718096" fontSize={11} fontFamily="inherit">{formatAxis(v)}</text>
-              </g>
-            )
-          })}
-          {chartData.map((d, i) => {
-            const barH = maxVal > 0 ? (d.value / maxVal) * chartHeight : 0
-            const x = left + spacing * i + (spacing - barWidth) / 2
-            const y = bottom - barH
-            const color = COLORS[i % COLORS.length]
-            return (
-              <g key={i}>
-                <rect
-                  x={x} y={y} width={barWidth} height={Math.max(barH, 2)} rx={8}
-                  fill={color}
-                  opacity={hoveredIdx === null || hoveredIdx === i ? 1 : 0.4}
-                  style={{ cursor: 'pointer', transition: 'opacity 160ms ease' }}
-                  onMouseEnter={() => setHoveredIdx(i)}
-                  onMouseLeave={() => setHoveredIdx(null)}
-                />
-                <text
-                  x={x + barWidth / 2} y={labelY}
-                  textAnchor="middle" fill="#52627a" fontSize={11} fontWeight={700} fontFamily="inherit"
-                >
-                  {d.label}
-                </text>
-              </g>
-            )
-          })}
-        </svg>
-      </div>
-      <div className="flex flex-wrap gap-3 px-4 pb-3 mt-auto">
-        {chartData.map((d, i) => (
-          <span key={i} className="inline-flex items-center gap-1.5 text-[11px] text-support-500">
-            <span className="w-2.5 h-2.5 rounded-full" style={{ background: COLORS[i % COLORS.length] }} />
-            {d.label}
-          </span>
-        ))}
+      <div className="relative flex-1 min-h-0 px-3 pb-3 z-0">
+        <div className="absolute inset-0 px-3 pb-3" role="img" aria-label={`${card.store.label || valueCol} bar chart`}>
+          <Bar data={data} options={options} />
+        </div>
       </div>
     </div>
   )

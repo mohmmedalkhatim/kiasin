@@ -6,9 +6,17 @@ import { useMemo, useState } from 'react'
 import { Select } from '../../../../components/select'
 import { update_card } from '../../../../contexts/area/functions/card/update'
 import { IconChartPie, IconSettings } from '@tabler/icons-react'
-import Button from '../../../../components/Button'
+import { Dialog } from '../../../../components/Dialog'
+import { Doughnut } from 'react-chartjs-2'
+import {
+  Chart as ChartJS,
+  ArcElement,
+  Tooltip,
+} from 'chart.js'
 
-const COLORS = ['#2563eb', '#c7f36a', '#94a3b8', '#f59e0b', '#ef4444', '#8b5cf6']
+ChartJS.register(ArcElement, Tooltip)
+
+const COLORS = ['#6366f1', '#3b82f6', '#22d3ee', '#a78bfa', '#f472b6', '#f59e0b']
 
 export default function DonutChartCard({ id }: { id: number }) {
   const dispatch = useDispatch<AppDispatch>()
@@ -22,7 +30,8 @@ export default function DonutChartCard({ id }: { id: number }) {
   const { columns, rows, loading } = useSheetData(sheetId)
   const sheetNames = useSheetNames(linkedSheets)
 
-  const [configuring, setConfiguring] = useState(!sheetId || !labelCol || !valueCol)
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const configured = sheetId && labelCol && valueCol
 
   const updateStore = (patch: Record<string, any>) => {
     dispatch(update_card({
@@ -36,23 +45,17 @@ export default function DonutChartCard({ id }: { id: number }) {
     const labelIdx = columns.findIndex(c => c.name === labelCol)
     const valueIdx = columns.findIndex(c => c.name === valueCol)
     if (labelIdx === -1 || valueIdx === -1) return null
-
     const items = rows
       .map(r => ({ label: String(r[labelIdx]), value: Math.abs(Number(r[valueIdx])) }))
       .filter(d => !Number.isNaN(d.value) && d.value > 0)
     if (items.length === 0) return null
-
     const total = items.reduce((a, b) => a + b.value, 0)
     return items.map(d => ({ ...d, pct: (d.value / total) * 100 }))
   }, [rows, columns, labelCol, valueCol])
 
-  if (configuring || !sheetId || !labelCol || !valueCol) {
-    return (
-      <div className="p-4 flex flex-col gap-3 h-full">
-        <div className="flex items-center gap-2 text-sm font-medium text-support-300">
-          <IconChartPie size={16} />
-          Donut Chart
-        </div>
+  const configDialog = (
+    <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} title="Configure Donut Chart" widthClass="w-80">
+      <div className="flex flex-col gap-3 px-6">
         {linkedSheets.length === 0 ? (
           <p className="text-xs text-support-500">Link a sheet to this area first.</p>
         ) : (
@@ -65,28 +68,24 @@ export default function DonutChartCard({ id }: { id: number }) {
             />
             {sheetId && columns.length > 0 && (
               <>
-                <Select
-                  placeholder="Label column"
-                  value={labelCol}
-                  options={columns.map(c => ({ label: c.name, value: c.name }))}
-                  onChange={(val) => updateStore({ column: val })}
-                />
-                <Select
-                  placeholder="Value column"
-                  value={valueCol}
-                  options={columns.filter(c => c.name !== labelCol).map(c => ({ label: c.name, value: c.name }))}
-                  onChange={(val) => updateStore({ columnB: val })}
-                />
-                {valueCol && (
-                  <Button size="xs" variant="tonal" className="w-full" onClick={() => setConfiguring(false)}>
-                    Show chart
-                  </Button>
-                )}
+                <Select placeholder="Label column" value={labelCol} options={columns.map(c => ({ label: c.name, value: c.name }))} onChange={(val) => updateStore({ column: val })} />
+                <Select placeholder="Value column" value={valueCol} options={columns.filter(c => c.name !== labelCol).map(c => ({ label: c.name, value: c.name }))} onChange={(val) => updateStore({ columnB: val })} />
               </>
             )}
             {loading && <p className="text-xs text-support-500">Loading…</p>}
           </>
         )}
+      </div>
+    </Dialog>
+  )
+
+  if (!configured) {
+    return (
+      <div className="p-4 flex flex-col items-center justify-center gap-3 h-full">
+        {configDialog}
+        <IconChartPie size={24} className="text-support-600" />
+        <p className="text-xs text-support-500">No chart configured</p>
+        <button className="text-xs text-primary-400 hover:text-primary-300 rounded focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:outline-none" onClick={() => setDialogOpen(true)}>Configure</button>
       </div>
     )
   }
@@ -94,67 +93,79 @@ export default function DonutChartCard({ id }: { id: number }) {
   if (!chartData) {
     return (
       <div className="p-4 h-full flex flex-col items-center justify-center gap-2">
+        {configDialog}
         <p className="text-sm text-support-500">No numeric data</p>
-        <button className="text-xs text-primary-400 hover:text-primary-300" onClick={() => setConfiguring(true)}>
-          Reconfigure
-        </button>
+        <button className="text-xs text-primary-400 hover:text-primary-300 rounded focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:outline-none" onClick={() => setDialogOpen(true)}>Reconfigure</button>
       </div>
     )
   }
 
-  const r = 43
-  const circumference = 2 * Math.PI * r
-  let offset = 0
-  const segments = chartData.map((d, i) => {
-    const dashLen = (d.pct / 100) * circumference
-    const seg = { dashLen, offset: -offset, color: COLORS[i % COLORS.length], ...d }
-    offset += dashLen + 1.5
-    return seg
-  })
+  const data = {
+    labels: chartData.map(d => d.label),
+    datasets: [{
+      data: chartData.map(d => d.value),
+      backgroundColor: chartData.map((_, i) => COLORS[i % COLORS.length]),
+      borderWidth: 0,
+      spacing: 2,
+    }],
+  }
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: '60%',
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: 'rgba(15,23,42,0.95)',
+        titleColor: '#e2e8f0',
+        bodyColor: '#f8fafc',
+        titleFont: { size: 11, weight: 'normal' as const },
+        bodyFont: { size: 12, weight: 'bold' as const },
+        padding: { top: 8, bottom: 8, left: 12, right: 12 },
+        cornerRadius: 6,
+        borderColor: 'rgba(148,163,184,0.15)',
+        borderWidth: 1,
+        displayColors: true,
+        callbacks: {
+          label: (ctx: any) => {
+            const item = chartData[ctx.dataIndex]
+            return ` ${item.label}: ${item.pct.toFixed(0)}%`
+          },
+        },
+      },
+    },
+  }
 
   return (
-    <div className="flex flex-col h-full group/card">
-      <div className="flex items-center justify-between px-4 pt-3 pb-1">
+    <div className="flex flex-col h-full @container">
+      {configDialog}
+      {sheetId && <p className="text-[10px] text-support-600 px-4 pt-2 truncate">{sheetNames.get(sheetId) ?? `Sheet #${sheetId}`}</p>}
+      <div className="flex items-center justify-between px-4 pt-1 pb-1 relative z-0">
         <span className="text-xs font-medium text-support-500 uppercase tracking-wide truncate">
           {card.store.label || valueCol}
         </span>
         <button
-          className="p-1 rounded text-support-600 opacity-0 group-hover/card:opacity-100 transition-opacity duration-150 hover:text-support-300 hover:bg-[#e2e2e210]"
-          onClick={() => setConfiguring(true)}
+          className="p-2 rounded text-support-600 hover:text-support-300 hover:bg-hover-main focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:outline-none"
+          onClick={() => setDialogOpen(true)}
           aria-label="Configure chart"
         >
           <IconSettings size={14} />
         </button>
       </div>
-      <div className="flex-1 min-h-0 px-4 pb-2 grid grid-cols-[minmax(100px,0.9fr)_minmax(100px,1.1fr)] items-center gap-4">
-        <div className="relative aspect-square w-full max-w-[180px] mx-auto grid place-items-center">
-          <svg viewBox="0 0 120 120" className="w-full h-full" style={{ transform: 'rotate(-90deg)' }}>
-            <circle cx={60} cy={60} r={r} fill="none" stroke="#e2e2e215" strokeWidth={18} />
-            {segments.map((s, i) => (
-              <circle
-                key={i} cx={60} cy={60} r={r}
-                fill="none" stroke={s.color} strokeWidth={18}
-                strokeDasharray={`${s.dashLen} ${circumference}`}
-                strokeDashoffset={s.offset}
-              />
-            ))}
-          </svg>
-          <div className="absolute text-center">
-            <strong className="block text-2xl font-semibold text-support-100 tabular-nums leading-none">100%</strong>
-            <span className="text-[10px] text-support-500 uppercase font-bold">total</span>
+      <div className={`flex-1 min-h-0 flex items-center justify-center overflow-hidden ${card.size.rows >= 2 ? 'p-4 @[20rem]:p-6' : 'px-3 @[14rem]:px-4 py-2'}`}>
+        <div className="aspect-square h-full max-h-full" role="img" aria-label={`${card.store.label || valueCol} donut chart`}>
+          <Doughnut data={data} options={{ ...options, maintainAspectRatio: true }} />
+        </div>
+      </div>
+      <div className="shrink-0 flex flex-wrap gap-x-3 gap-y-0.5 @[14rem]:gap-y-1 px-3 @[14rem]:px-4 pb-2 justify-center overflow-hidden">
+        {chartData.map((d, i) => (
+          <div key={i} className="flex items-center gap-1 @[14rem]:gap-1.5 text-[10px] @[14rem]:text-xs text-support-400">
+            <span className="w-1.5 h-1.5 @[14rem]:w-2 @[14rem]:h-2 rounded-full shrink-0" style={{ background: COLORS[i % COLORS.length] }} />
+            <span className="truncate">{d.label}</span>
+            <span className="text-support-200 font-bold tabular-nums">{d.pct.toFixed(0)}%</span>
           </div>
-        </div>
-        <div className="grid gap-3">
-          {chartData.map((d, i) => (
-            <div key={i} className="flex items-center justify-between gap-2 text-sm text-support-400">
-              <span className="inline-flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full" style={{ background: COLORS[i % COLORS.length] }} />
-                {d.label}
-              </span>
-              <span className="text-support-200 font-bold tabular-nums">{d.pct.toFixed(0)}%</span>
-            </div>
-          ))}
-        </div>
+        ))}
       </div>
     </div>
   )
