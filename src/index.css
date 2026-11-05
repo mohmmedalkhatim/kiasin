@@ -110,7 +110,14 @@
      ========================= */
     --color-border-main: #e2e2e220;
     --color-border-subtle: #e2e2e210;
-    --color-border-strong: #e2e2e240
+    --color-border-strong: #e2e2e240;
+
+    /* =========================
+     Hover Surfaces
+     ========================= */
+    --color-hover-subtle: #e2e2e208;
+    --color-hover-main: #e2e2e210;
+    --color-hover-strong: #e2e2e220
 }
 
 @layer components {
