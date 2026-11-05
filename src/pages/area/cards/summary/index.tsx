@@ -6,6 +6,7 @@ import { useMemo, useState } from 'react'
 import { Select } from '../../../../components/select'
 import { update_card } from '../../../../contexts/area/functions/card/update'
 import { IconSettings, IconSum } from '@tabler/icons-react'
+import { Dialog } from '../../../../components/Dialog'
 
 function formatValue(n: number): string {
   if (Math.abs(n) >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M'
@@ -21,10 +22,11 @@ export default function SummaryCard({ id }: { id: number }) {
 
   const sheetId = card?.store?.sheetId
   const columnName = card?.store?.column
-  const { columns, rows, sheet, loading } = useSheetData(sheetId)
+  const { columns, rows, loading } = useSheetData(sheetId)
   const sheetNames = useSheetNames(linkedSheets)
 
-  const [configuring, setConfiguring] = useState(!sheetId || !columnName)
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const configured = sheetId && columnName
 
   const stats = useMemo(() => {
     if (!columnName || rows.length === 0) return null
@@ -49,13 +51,9 @@ export default function SummaryCard({ id }: { id: number }) {
     }))
   }
 
-  if (configuring || !sheetId || !columnName) {
-    return (
-      <div className="p-4 flex flex-col gap-3 h-full">
-        <div className="flex items-center gap-2 text-sm font-medium text-support-300">
-          <IconSum size={16} />
-          Summary
-        </div>
+  const configDialog = (
+    <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} title="Configure Summary" widthClass="w-80">
+      <div className="flex flex-col gap-3 px-6">
         {linkedSheets.length === 0 ? (
           <p className="text-xs text-support-500">Link a sheet to this area first.</p>
         ) : (
@@ -71,28 +69,42 @@ export default function SummaryCard({ id }: { id: number }) {
                 placeholder="Select column"
                 value={columnName}
                 options={columns.map(c => ({ label: c.name, value: c.name }))}
-                onChange={(val) => {
-                  updateStore({ column: val })
-                  setConfiguring(false)
-                }}
+                onChange={(val) => updateStore({ column: val })}
               />
             )}
             {loading && <p className="text-xs text-support-500">Loading…</p>}
           </>
         )}
       </div>
+    </Dialog>
+  )
+
+  if (!configured) {
+    return (
+      <div className="p-4 flex flex-col items-center justify-center gap-3 h-full">
+        {configDialog}
+        <IconSum size={24} className="text-support-600" />
+        <p className="text-xs text-support-500">No summary configured</p>
+        <button
+          className="text-xs text-primary-400 hover:text-primary-300 rounded focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:outline-none"
+          onClick={() => setDialogOpen(true)}
+        >
+          Configure
+        </button>
+      </div>
     )
   }
 
   return (
-    <div className="p-4 flex flex-col justify-between h-full group/card">
-      <div className="flex items-center justify-between">
+    <div className="flex flex-col h-full group/card">
+      {configDialog}
+      <div className="flex items-center justify-between px-4 pt-3 pb-1">
         <span className="text-xs font-medium text-support-500 uppercase tracking-wide truncate">
           {card.store.label || columnName}
         </span>
         <button
-          className="p-1 rounded text-support-600 opacity-0 group-hover/card:opacity-100 transition-opacity duration-150 hover:text-support-300 hover:bg-[#e2e2e210]"
-          onClick={() => setConfiguring(true)}
+          className="p-2 rounded text-support-600 opacity-0 group-hover/card:opacity-100 focus-visible:opacity-100 transition-opacity duration-150 hover:text-support-300 hover:bg-hover-main focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:outline-none"
+          onClick={() => setDialogOpen(true)}
           aria-label="Configure card"
         >
           <IconSettings size={14} />
@@ -100,21 +112,31 @@ export default function SummaryCard({ id }: { id: number }) {
       </div>
 
       {stats ? (
-        <>
-          <div className="mt-2">
-            <span className="text-2xl font-semibold text-support-100 tabular-nums">
-              {formatValue(stats.sum)}
-            </span>
-            <span className="ml-1.5 text-xs text-support-500">total</span>
+        <div className="flex-1 flex items-center px-4 pb-4">
+          <div className="w-full rounded-lg border border-border-main bg-hover-subtle px-4 py-2.5 flex flex-col gap-3">
+            <div>
+              <span className="text-2xl font-semibold text-support-100 tabular-nums">
+                {formatValue(stats.sum)}
+              </span>
+              <span className="ml-1.5 text-xs text-support-500">total</span>
+            </div>
+            <div className="border-t border-border-main pt-3 grid grid-cols-3 gap-2">
+              <Stat label="Avg" value={formatValue(stats.average)} />
+              <Stat label="Min" value={formatValue(stats.min)} />
+              <Stat label="Max" value={formatValue(stats.max)} />
+            </div>
           </div>
-          <div className="mt-3 grid grid-cols-3 gap-2">
-            <Stat label="Avg" value={formatValue(stats.average)} />
-            <Stat label="Min" value={formatValue(stats.min)} />
-            <Stat label="Max" value={formatValue(stats.max)} />
-          </div>
-        </>
+        </div>
       ) : (
-        <p className="text-sm text-support-500 mt-2">No numeric data</p>
+        <div className="flex-1 flex flex-col items-center justify-center px-4 pb-4 gap-2">
+          <p className="text-sm text-support-500">No numeric data</p>
+          <button
+            className="text-xs text-primary-400 hover:text-primary-300 rounded focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:outline-none"
+            onClick={() => setDialogOpen(true)}
+          >
+            Reconfigure
+          </button>
+        </div>
       )}
     </div>
   )
