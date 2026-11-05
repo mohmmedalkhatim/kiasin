@@ -12,10 +12,6 @@ import {
   IconPhone,
 } from "@tabler/icons-react";
 
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
 export type InputSize = "sm" | "md" | "lg";
 export type InputVariant = "outlined" | "filled";
 export type InputType =
@@ -49,19 +45,11 @@ export interface InputProps
   onClear?: () => void;
 }
 
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
-
-const SIZE_CONFIG = {
-  sm: { height: "h-10", text: "text-sm", label: "text-xs", iconSize: 16 },
-  md: { height: "h-14", text: "text-sm", label: "text-xs", iconSize: 18 },
-  lg: { height: "h-16", text: "text-base", label: "text-xs", iconSize: 20 },
+const SIZE = {
+  sm: { height: "h-9", text: "text-sm", label: "text-[11px]", icon: 16 },
+  md: { height: "h-10", text: "text-sm", label: "text-[11px]", icon: 18 },
+  lg: { height: "h-12", text: "text-base", label: "text-xs", icon: 20 },
 } as const;
-
-// ---------------------------------------------------------------------------
-// Component
-// ---------------------------------------------------------------------------
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   (
@@ -95,9 +83,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
     const inputRef = useRef<HTMLInputElement>(null);
     const fieldId = useId();
 
-    const [internalValue, setInternalValue] = useState(
-      value ?? defaultValue ?? "",
-    );
+    const [internalValue, setInternalValue] = useState(value ?? defaultValue ?? "");
     const [focused, setFocused] = useState(false);
     const [showPassword, setShowPassword] = useState(false);
 
@@ -122,83 +108,68 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
       inputRef.current?.focus();
     };
 
-    const handleFocus = (e: React.FocusEvent<HTMLInputElement>) => {
-      setFocused(true);
-      onFocus?.(e);
-    };
-
-    const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-      setFocused(false);
-      onBlur?.(e);
-    };
-
-    const cfg = SIZE_CONFIG[size];
+    const cfg = SIZE[size];
 
     const defaultLeftIcon = useMemo(() => {
       if (leftSection) return leftSection;
-      if (type === "email") return <IconMail size={cfg.iconSize} />;
-      if (type === "password") return <IconLock size={cfg.iconSize} />;
-      if (type === "search") return <IconSearch size={cfg.iconSize} />;
-      if (type === "tel") return <IconPhone size={cfg.iconSize} />;
+      if (type === "email") return <IconMail size={cfg.icon} />;
+      if (type === "password") return <IconLock size={cfg.icon} />;
+      if (type === "search") return <IconSearch size={cfg.icon} />;
+      if (type === "tel") return <IconPhone size={cfg.icon} />;
       return null;
-    }, [type, leftSection, cfg.iconSize]);
+    }, [type, leftSection, cfg.icon]);
 
     const hasLeft = !!defaultLeftIcon;
-    const hasRight =
-      !!rightSection || clearable || isPassword || loading || !!error || !!success;
+    const hasRight = !!rightSection || clearable || isPassword || loading || !!error || !!success;
 
-    // MD3 state colors
-    const stateColor = disabled
-      ? "text-support-500"
-      : error
-        ? "text-danger-500"
-        : success
-          ? "text-success-500"
-          : focused
-            ? "text-primary-600"
-            : "text-support-500";
-
-    const borderColor = disabled
-      ? "border-support-400/20"
+    const borderClass = disabled
+      ? "border-border-main opacity-50 pointer-events-none"
       : error
         ? "border-danger-500"
         : success
           ? "border-success-500"
           : focused
             ? "border-primary-600"
-            : "border-support-400/40 hover:border-support-300";
+            : "border-border-main hover:border-border-strong";
 
-    const borderWidth = focused || error ? "border-2" : "border";
-
-    const labelFloated = focused || hasValue || !!placeholder;
+    const labelColor = error
+      ? "text-danger-500"
+      : success
+        ? "text-success-500"
+        : focused
+          ? "text-primary-500"
+          : "text-support-400";
 
     return (
-      <div
-        className={`relative ${fullWidth ? "w-full" : ""} ${wrapperClassName ?? ""}`}
-      >
-        {/* Field container */}
+      <div className={`relative ${fullWidth ? "w-full" : ""} ${wrapperClassName ?? ""}`}>
+        {label && (
+          <label
+            htmlFor={fieldId}
+            className={`
+              absolute -top-2 left-3 px-1 bg-dark-900 z-[1]
+              ${cfg.label} font-medium ${labelColor}
+              transition-colors duration-150
+            `}
+          >
+            {label}
+          </label>
+        )}
+
         <div
           className={`
-            relative ${cfg.height} rounded-[4px]
-            ${variant === "filled" ? "bg-support-800/10 rounded-t-[4px] rounded-b-none border-b-2 border-t-0 border-x-0" : ""}
-            ${variant === "outlined" ? `${borderWidth} ${borderColor}` : ""}
-            ${disabled ? "opacity-50 pointer-events-none" : ""}
-            transition-[border-color] duration-200
-            [transition-timing-function:cubic-bezier(0.2,0,0,1)]
-            cursor-text
+            relative ${cfg.height} rounded-lg border
+            ${variant === "filled" ? "bg-hover-subtle" : ""}
+            ${borderClass}
+            transition-colors duration-150 cursor-text
           `}
           onClick={() => inputRef.current?.focus()}
         >
-          {/* Left section */}
           {hasLeft && (
-            <div
-              className={`absolute left-3 inset-y-0 flex items-center ${stateColor} pointer-events-none`}
-            >
+            <div className={`absolute left-3 inset-y-0 flex items-center ${focused ? "text-primary-500" : "text-support-500"} pointer-events-none transition-colors duration-150`}>
               {defaultLeftIcon}
             </div>
           )}
 
-          {/* Input */}
           <input
             ref={(node) => {
               inputRef.current = node;
@@ -209,95 +180,48 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
             type={resolvedType}
             value={currentValue}
             disabled={disabled}
-            placeholder={labelFloated ? placeholder : undefined}
+            placeholder={placeholder}
             onChange={handleChange}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
+            onFocus={(e) => { setFocused(true); onFocus?.(e); }}
+            onBlur={(e) => { setFocused(false); onBlur?.(e); }}
             className={`
-              peer w-full h-full bg-transparent outline-none
-              ${cfg.text}
-              ${hasLeft ? "pl-11" : "pl-4"}
-              ${hasRight ? "pr-11" : "pr-4"}
-              ${label ? "pt-5 pb-1" : ""}
-              text-support-100
-              placeholder:text-support-500/60
+              w-full h-full bg-transparent outline-none
+              ${cfg.text} text-support-100
+              ${hasLeft ? "pl-10" : "pl-3.5"}
+              ${hasRight ? "pr-10" : "pr-3.5"}
+              placeholder:text-support-500/50
               ${inputClassName ?? ""}
             `}
             aria-invalid={!!error}
             aria-describedby={
-              error
-                ? `${fieldId}-error`
-                : helperText
-                  ? `${fieldId}-helper`
-                  : undefined
+              error ? `${fieldId}-error` : helperText ? `${fieldId}-helper` : undefined
             }
             {...props}
           />
 
-          {/* Floating label (MD3 outlined style) */}
-          {label && (
-            <label
-              htmlFor={fieldId}
-              className={`
-                absolute pointer-events-none select-none
-                transition-all duration-200
-                [transition-timing-function:cubic-bezier(0.2,0,0,1)]
-                ${hasLeft ? "left-11" : "left-4"}
-                ${stateColor}
-                ${
-                  labelFloated
-                    ? `top-1.5 ${cfg.label} font-medium`
-                    : `top-1/2 -translate-y-1/2 ${cfg.text}`
-                }
-              `}
-            >
-              {label}
-            </label>
-          )}
-
-          {/* Right section */}
           {hasRight && (
             <div className="absolute right-2 inset-y-0 flex items-center gap-1">
-              {loading && (
-                <IconLoader2
-                  className="animate-spin text-support-400"
-                  size={cfg.iconSize}
-                />
-              )}
-              {error && !loading && (
-                <IconAlertCircle
-                  size={cfg.iconSize}
-                  className="text-danger-500"
-                />
-              )}
-              {success && !error && !loading && (
-                <IconCheck
-                  size={cfg.iconSize}
-                  className="text-success-500"
-                />
-              )}
+              {loading && <IconLoader2 className="animate-spin text-support-400" size={cfg.icon} />}
+              {error && !loading && <IconAlertCircle size={cfg.icon} className="text-danger-500" />}
+              {success && !error && !loading && <IconCheck size={cfg.icon} className="text-success-500" />}
               {clearable && hasValue && !loading && (
                 <button
                   type="button"
-                  tabIndex={-1}
+                  aria-label="Clear"
                   onClick={handleClear}
-                  className="p-1 rounded-full text-support-400 hover:text-support-200 hover:bg-support-600/10 transition-colors"
+                  className="p-1.5 rounded-md text-support-400 hover:text-support-200 hover:bg-hover-strong transition-colors cursor-pointer"
                 >
-                  <IconX size={cfg.iconSize - 2} />
+                  <IconX size={cfg.icon - 2} />
                 </button>
               )}
               {isPassword && (
                 <button
                   type="button"
-                  tabIndex={-1}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                   onClick={() => setShowPassword((p) => !p)}
-                  className="p-1 rounded-full text-support-400 hover:text-support-200 hover:bg-support-600/10 transition-colors"
+                  className="p-1.5 rounded-md text-support-400 hover:text-support-200 hover:bg-hover-strong transition-colors cursor-pointer"
                 >
-                  {showPassword ? (
-                    <IconEyeOff size={cfg.iconSize} />
-                  ) : (
-                    <IconEye size={cfg.iconSize} />
-                  )}
+                  {showPassword ? <IconEyeOff size={cfg.icon} /> : <IconEye size={cfg.icon} />}
                 </button>
               )}
               {rightSection}
@@ -305,14 +229,11 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           )}
         </div>
 
-        {/* Helper / error text (MD3: body-small, 16px left padding) */}
         {(error || helperText) && (
           <p
             id={error ? `${fieldId}-error` : `${fieldId}-helper`}
             role={error ? "alert" : undefined}
-            className={`mt-1 px-4 text-xs leading-4 ${
-              error ? "text-danger-500" : "text-support-500"
-            }`}
+            className={`mt-1.5 px-3.5 text-xs leading-4 ${error ? "text-danger-500" : "text-support-500"}`}
           >
             {error || helperText}
           </p>
