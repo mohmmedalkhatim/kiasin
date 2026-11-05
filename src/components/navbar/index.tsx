@@ -5,7 +5,7 @@ import Profile_link from './profile';
 function Navbar () {
   return (
     <>
-      <nav className={true ? 'navbar' : 'navbar -left-24'}>
+      <nav className="navbar">
         <Profile_link />
         <Links />
       </nav>

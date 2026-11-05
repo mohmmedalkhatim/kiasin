@@ -10,9 +10,9 @@ interface props {
 
 function Page(item: props) {
   return (
-    <Link key={item.id} viewTransition={true} className="link group w-full rounded z-40" to={item.link}>
+    <Link key={item.id} viewTransition={true} className="link group w-full rounded z-40" to={item.link} aria-label={item.name}>
       <div>{item.Icon}</div>
-      <abbr className="hidden m_border group-hover:block tip">{item.name}</abbr>
+      <span className="hidden m_border group-hover:block tip" role="tooltip">{item.name}</span>
     </Link>
   );
 }

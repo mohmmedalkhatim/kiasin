@@ -23,11 +23,11 @@ function Links() {
           <Page id={i} key={i} {...item} />
         ))}
       </div>
-      <div className='link group rounded z-40'>
+      <button className="link group rounded z-40" title="Settings" aria-label="Settings">
         <div>
           <IconSettings />
         </div>
-      </div>
+      </button>
     </div>
   );
 }

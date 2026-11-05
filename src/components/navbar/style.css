@@ -15,6 +15,6 @@
     @apply pt-16 top-0 h-screen border-(--color-border-main) w-19 bg-dark-900  border-r z-10 fixed -left-24 md:left-0;
   }
   .tip {
-    @apply absolute left-14 text-xs w-auto -translate-y-4 rounded-xs py-1 px-2 bg-dark-200 text-[#181818] align-middle;
+    @apply absolute left-14 text-xs w-auto -translate-y-4 rounded-xs py-1 px-2 bg-dark-200 text-dark-900 align-middle;
   }
 }
