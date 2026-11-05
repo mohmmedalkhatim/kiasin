@@ -25,58 +25,57 @@ type ButtonProps = {
 const variantStyles: Record<ButtonVariant, string> = {
   filled: [
     'bg-primary-600 text-white',
-    'hover:bg-primary-700 hover:shadow-md hover:shadow-primary-900/20',
-    'active:bg-primary-800',
+    'hover:bg-primary-700 hover:shadow-md hover:shadow-primary-900/20 hover:-translate-y-px',
+    'active:bg-primary-800 active:translate-y-0 active:shadow-none active:scale-[0.97]',
     'focus-visible:bg-primary-700',
   ].join(' '),
 
   tonal: [
     'bg-support-700 text-support-100',
     'hover:bg-support-600',
-    'active:bg-support-500',
+    'active:bg-support-500 active:scale-[0.97]',
     'focus-visible:bg-support-600',
   ].join(' '),
 
   outlined: [
     'bg-transparent text-primary-400 border border-border-main',
-    'hover:bg-primary-600/8',
-    'active:bg-primary-600/12',
+    'hover:bg-primary-600/8 hover:border-primary-500/30',
+    'active:bg-primary-600/12 active:scale-[0.97]',
     'focus-visible:bg-primary-600/8 focus-visible:border-primary-400',
   ].join(' '),
 
   elevated: [
     'bg-dark-800 text-primary-400 shadow-sm shadow-dark-900/40',
-    'hover:bg-dark-700 hover:shadow-md hover:shadow-dark-900/30',
-    'active:bg-dark-600',
+    'hover:bg-dark-700 hover:shadow-md hover:shadow-dark-900/30 hover:-translate-y-px',
+    'active:bg-dark-600 active:translate-y-0 active:shadow-sm active:scale-[0.97]',
     'focus-visible:bg-dark-700',
   ].join(' '),
 
   text: [
     'bg-transparent text-primary-400',
     'hover:bg-primary-600/8',
-    'active:bg-primary-600/12',
+    'active:bg-primary-600/12 active:scale-[0.97]',
     'focus-visible:bg-primary-600/8',
   ].join(' '),
 
-  // Legacy aliases
   primary: [
     'bg-primary-600 text-white',
-    'hover:bg-primary-700 hover:shadow-md hover:shadow-primary-900/20',
-    'active:bg-primary-800',
+    'hover:bg-primary-700 hover:shadow-md hover:shadow-primary-900/20 hover:-translate-y-px',
+    'active:bg-primary-800 active:translate-y-0 active:shadow-none active:scale-[0.97]',
     'focus-visible:bg-primary-700',
   ].join(' '),
 
   secondary: [
     'bg-support-700 text-support-100',
     'hover:bg-support-600',
-    'active:bg-support-500',
+    'active:bg-support-500 active:scale-[0.97]',
     'focus-visible:bg-support-600',
   ].join(' '),
 
   danger: [
     'bg-danger-600 text-white',
-    'hover:bg-danger-700 hover:shadow-md hover:shadow-danger-900/20',
-    'active:bg-danger-800',
+    'hover:bg-danger-700 hover:shadow-md hover:shadow-danger-900/20 hover:-translate-y-px',
+    'active:bg-danger-800 active:translate-y-0 active:shadow-none active:scale-[0.97]',
     'focus-visible:bg-danger-700',
   ].join(' '),
 };
@@ -111,9 +110,9 @@ export default function Button({
     <button
       className={twMerge(
         clsx(
-          'inline-flex items-center justify-center',
+          'inline-flex items-center justify-center cursor-pointer',
           'rounded-md font-medium select-none',
-          'transition-[background-color,box-shadow,opacity] duration-200',
+          'transition-[background-color,box-shadow,opacity,transform,border-color] duration-150',
           '[transition-timing-function:cubic-bezier(0.2,0,0,1)]',
           'focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-400',
           'disabled:opacity-38 disabled:pointer-events-none disabled:shadow-none',
