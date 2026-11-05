@@ -20,7 +20,7 @@ function MainPage() {
                     Create Area
                 </Button>
             </Header>
-            <AreasList reload={reload}/>
+      <AreasList reload={reload}/>
         </div>
     )
 }
