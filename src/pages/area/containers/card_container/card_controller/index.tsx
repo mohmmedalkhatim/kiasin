@@ -36,7 +36,7 @@ function ControlButton({
       className={`p-1.5 rounded-md transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-primary-500 ${
         variant === "danger"
           ? "text-support-500 hover:text-danger-400 hover:bg-danger-500/10"
-          : "text-support-400 hover:text-support-100 hover:bg-[#e2e2e215]"
+          : "text-support-400 hover:text-support-100 hover:bg-hover-main"
       }`}
     >
       {children}
@@ -52,7 +52,7 @@ export default function CardController({ id }: { id: number }) {
   if (!card) return null
   const index = structure.cards.indexOf(card)
 
-  const needsConfig = ['summary', 'chart', 'comparison'].includes(card.type) && !card.store?.sheetId
+  const needsConfig = ['summary', 'chart', 'comparison', 'bar_chart', 'line_chart', 'donut_chart', 'area_chart'].includes(card.type) && !card.store?.sheetId
   if (needsConfig) return null
 
   return (
@@ -79,7 +79,7 @@ export default function CardController({ id }: { id: number }) {
               <IconChevronRight size={16} />
             </ControlButton>
 
-            <div className="w-px h-4 bg-[#e2e2e220] mx-0.5" />
+            <div className="w-px h-4 bg-hover-strong mx-0.5" />
 
             <ControlButton
               onClick={() => dispatch(update_card({ index, card: resizeCard(card, id, "decr_row") }))}
@@ -105,7 +105,7 @@ export default function CardController({ id }: { id: number }) {
         </div>
 
         <div className="flex items-center justify-between px-3 pb-2">
-          <span className="text-xs text-support-500 capitalize">{card.type.replace('_', ' ')}</span>
+          <span className="text-xs text-support-500 capitalize">{card.type.replaceAll('_', ' ')}</span>
           <span className="text-[10px] text-support-600 tabular-nums">
             {card.size.columns}×{card.size.rows}
           </span>

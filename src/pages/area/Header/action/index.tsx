@@ -13,7 +13,7 @@ export default function HeaderAction({
     ...props
 }: ButtonProps) {
     const baseStyles =
-        'font-medium transition-color h-full focus:ring-2 rounded-xs border-border-main focus:outline-none border hover:bg-dark-800';
+        'font-medium transition-all duration-150 h-full focus-visible:ring-2 focus-visible:ring-primary-400 rounded-xs border-border-main focus:outline-none border hover:bg-dark-800 active:scale-[0.97]';
     return (
         <button
             className={classNames(
@@ -21,10 +21,10 @@ export default function HeaderAction({
                 "px-3 py-2 text-sm group relative",
                 className
             )}
+            title={description}
             {...props}
         >
             {children}
-            {description &&<abbr className="hidden m_border group-hover:block tip -translate-x-15 translate-y-8">{description}</abbr>}
         </button>
     );
 }

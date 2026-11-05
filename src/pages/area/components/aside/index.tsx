@@ -5,6 +5,7 @@ import {
   DndContext,
   DragEndEvent,
   DragOverlay,
+  DragStartEvent,
   KeyboardSensor,
   PointerSensor,
   useSensor,
@@ -17,35 +18,45 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable";
 import DraggableCard from "./DraggableCard";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { areas, Card } from "../../../../contexts/area";
 import { update } from "../../../../contexts/area/functions/update";
-import Popover from "../Popover";
-import { IconChevronUp } from "@tabler/icons-react";
+import CardPicker from "../Popover";
+import { IconChevronUp, IconGridDots } from "@tabler/icons-react";
+import { delete_card } from "../../../../contexts/area/functions/card/delete";
 import Button from "../../../../components/Button";
 
-function Aside() {
+function CardPanel() {
   const dispatch = useDispatch<AppDispatch>();
   let structure = useSelector((state: RootState) => state.area.active.area.structure);
   let area = useSelector((state: RootState) => state.area.active.area);
   let [items, setItems] = useState<Card[]>(structure.cards);
+  let [activeCard, setActiveCard] = useState<Card | null>(null);
   const sensors = useSensors(
-    useSensor(PointerSensor),
+    useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
   );
+  const itemIds = useMemo(() => items.map(c => c.id), [items]);
 
   useEffect(() => {
     setItems(structure.cards);
   }, [structure.cards.length]);
-  useEffect(()=>{
-    setItems(area.structure.cards)
-  },[area])
+  useEffect(() => {
+    setItems(area.structure.cards);
+  }, [area]);
+  function handleDragStart(event: DragStartEvent) {
+    setActiveCard(items.find(c => c.id === event.active.id) ?? null);
+  }
   function handleDragEnd(event: DragEndEvent) {
+    setActiveCard(null);
     const { active, over } = event;
     if (over && active.id !== over.id) {
-      const reordered = structuredClone(arrayMove(items, Number(active.id), Number(over.id)));
+      const oldIndex = items.findIndex(c => c.id === active.id);
+      const newIndex = items.findIndex(c => c.id === over.id);
+      if (oldIndex === -1 || newIndex === -1) return;
+      const reordered = structuredClone(arrayMove(items, oldIndex, newIndex));
       setItems(reordered);
       dispatch(areas.actions.update_card_order(reordered));
       dispatch(update({ ...area, structure: { ...structure, cards: reordered } }));
@@ -63,15 +74,17 @@ function Aside() {
             <DndContext
               sensors={sensors}
               collisionDetection={closestCenter}
+              onDragStart={handleDragStart}
               onDragEnd={handleDragEnd}
             >
-              <SortableContext items={structure.cards} strategy={verticalListSortingStrategy}>
+              <SortableContext items={itemIds} strategy={verticalListSortingStrategy}>
                 <div className="gap-2 flex flex-col overflow-x-auto gutter pb-2">
                   {items.map((item, i) => (
                     <DraggableCard
-                      key={i}
+                      key={item.id}
                       card={item}
-                      id={i}
+                      id={item.id}
+                      onDelete={() => dispatch(delete_card({ id: i }))}
                       style={{
                         transition: open
                           ? `opacity 200ms cubic-bezier(0.16,1,0.3,1) ${i * 40}ms, transform 200ms cubic-bezier(0.16,1,0.3,1) ${i * 40}ms`
@@ -82,8 +95,15 @@ function Aside() {
                     />
                   ))}
                 </div>
-                <DragOverlay />
               </SortableContext>
+              <DragOverlay dropAnimation={{ duration: 200, easing: 'cubic-bezier(0.16,1,0.3,1)' }}>
+                {activeCard ? (
+                  <div className="p-3 border rounded-md border-border-main flex gap-2 items-center text-sm bg shadow-lg">
+                    <IconGridDots size="1rem" className="text-support-500 shrink-0" />
+                    {activeCard.type} {activeCard.id}
+                  </div>
+                ) : null}
+              </DragOverlay>
             </DndContext>
           </div>
         </div>
@@ -93,9 +113,9 @@ function Aside() {
             style={{ transform: open ? 'rotate(0deg)' : 'rotate(180deg)' }}
           />
         </Button>
-        <Popover />
+        <CardPicker />
       </aside>
     </>
   );
 }
-export default Aside;
+export default CardPanel;

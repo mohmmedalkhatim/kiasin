@@ -1,10 +1,10 @@
 import { useSortable } from "@dnd-kit/sortable"
 import { CSS } from '@dnd-kit/utilities'
-import { IconGridDots } from "@tabler/icons-react";
+import { IconGridDots, IconTrash } from "@tabler/icons-react";
 import { Card } from "../../../../../contexts/area";
 import { CSSProperties } from "react";
 
-function DraggableCard({ card, id, style: externalStyle }: { card: Card, id: number, style?: CSSProperties }) {
+function DraggableCard({ card, id, style: externalStyle, onDelete }: { card: Card, id: number, style?: CSSProperties, onDelete?: () => void }) {
     let {
         attributes,
         listeners,
@@ -14,25 +14,36 @@ function DraggableCard({ card, id, style: externalStyle }: { card: Card, id: num
         isDragging,
     } = useSortable({ id })
 
-    const dndStyle: CSSProperties = {
-        transform: CSS.Transform.toString(transform),
-        transition,
-    };
+    const dndTransform = CSS.Transform.toString(transform);
 
     const mergedStyle: CSSProperties = isDragging
-        ? { ...dndStyle, zIndex: 10, opacity: 0.9 }
-        : { ...externalStyle, ...dndStyle };
+        ? { transform: dndTransform, transition, zIndex: 10, opacity: 0.5 }
+        : {
+            ...externalStyle,
+            transform: [externalStyle?.transform, dndTransform].filter(Boolean).join(' '),
+            transition: [externalStyle?.transition, transition].filter(Boolean).join(', '),
+        };
 
     return (
         <div
-            className="p-3 border rounded-md border-border-main flex gap-2 items-center text-sm transition-[background-color,box-shadow] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-[#e2e2e208] cursor-grab active:cursor-grabbing"
+            className="p-3 border rounded-md border-border-main flex gap-2 items-center text-sm transition-[background-color,box-shadow] duration-150 ease-[cubic-bezier(0.16,1,0.3,1)] hover:bg-hover-subtle cursor-grab active:cursor-grabbing"
             ref={setNodeRef}
             style={mergedStyle}
             {...attributes}
             {...listeners}
         >
             <IconGridDots size="1rem" className="text-support-500 shrink-0" />
-            {card.type} {id}
+            <span className="truncate capitalize flex-1">{card.type.replaceAll('_', ' ')}</span>
+            {onDelete && (
+                <button
+                    onClick={(e) => { e.stopPropagation(); onDelete(); }}
+                    onPointerDown={(e) => e.stopPropagation()}
+                    aria-label="Delete card"
+                    className="p-2 rounded-md text-support-500 hover:text-danger-400 hover:bg-danger-500/10 transition-colors duration-150 shrink-0 focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:outline-none"
+                >
+                    <IconTrash size={14} />
+                </button>
+            )}
         </div>
     )
 }

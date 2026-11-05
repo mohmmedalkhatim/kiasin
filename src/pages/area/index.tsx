@@ -24,27 +24,31 @@ function Area() {
     }
   }, [area.id, id])  
 
-  if (area.id === Number(id)) {
+  if (area.id !== Number(id)) {
     return (
-      <main className="area_container relative">
-        <AreaHeader setDense={setDense} />
-        <MainGrid dense={denseState}>
-          {area.structure.cards.map((item) => (
-            <CardContainer
-              key={item.id}
-              columns={item.size.columns}
-              rows={item.size.rows}
-              id={item.id as never}
-            >
-              <CardContent type={item.type} id={item.id} />
-            </CardContainer>
-          ))}
-        </MainGrid>
-        {edit && <Aside />}
+      <main className="area_container relative flex items-center justify-center h-screen">
+        <div className="animate-pulse text-sm text-support-500">Loading…</div>
       </main>
     )
   }
 
-  return null
+  return (
+    <main className="area_container relative">
+      <AreaHeader setDense={setDense} />
+      <MainGrid dense={denseState}>
+        {area.structure.cards.map((item,index) => (
+          <CardContainer
+            key={item.id}
+            columns={item.size.columns}
+            rows={item.size.rows}
+            id={item.id as never}
+          >
+            <CardContent type={item.type} id={index} />
+          </CardContainer>
+        ))}
+      </MainGrid>
+      {edit && <Aside />}
+    </main>
+  )
 }
 export default Area
