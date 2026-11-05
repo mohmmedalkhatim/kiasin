@@ -244,7 +244,7 @@ export function Select({
             transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)]
             ${error
               ? 'border-danger-500'
-              : 'border-[#e2e2e220]'
+              : 'border-border-main'
             }
             ${isOpen && !isClosing
               ? error
@@ -253,8 +253,8 @@ export function Select({
               : ''
             }
             ${disabled
-              ? 'opacity-50 cursor-not-allowed bg-[#e2e2e206]'
-              : 'hover:border-[#e2e2e240] hover:bg-[#e2e2e206] focus-visible:border-primary-500 focus-visible:shadow-[0_0_0_2px_rgba(71,152,209,0.2)]'
+              ? 'opacity-50 cursor-not-allowed bg-hover-subtle'
+              : 'hover:border-border-strong hover:bg-hover-subtle focus-visible:border-primary-500 focus-visible:shadow-[0_0_0_2px_rgba(71,152,209,0.2)]'
             }
           `}
           onClick={handleToggle}
@@ -284,14 +284,14 @@ export function Select({
         {showDropdown && (
           <div
             ref={dropdownRef}
-            className={`absolute top-[calc(100%+4px)] left-0 right-0 z-[100] bg-dark-900 border border-[#e2e2e220] rounded-md shadow-[0_2px_6px_0_rgba(0,0,0,0.15),0_8px_24px_0_rgba(0,0,0,0.3)] overflow-hidden origin-top select-dropdown-${isClosing ? 'exit' : 'enter'}`}
+            className={`absolute top-[calc(100%+4px)] left-0 right-0 z-[100] bg-dark-900 border border-border-main rounded-md shadow-[0_2px_6px_0_rgba(0,0,0,0.15),0_8px_24px_0_rgba(0,0,0,0.3)] overflow-hidden origin-top select-dropdown-${isClosing ? 'exit' : 'enter'}`}
             style={{
               animation: isClosing
                 ? 'selectExit 120ms cubic-bezier(0.3, 0, 0.8, 0.15) forwards'
                 : 'selectEnter 200ms cubic-bezier(0.05, 0.7, 0.1, 1) forwards',
             }}
           >
-            <div className="relative flex items-center px-2 pt-2 pb-1 border-b border-[#e2e2e220] bg-dark-900">
+            <div className="relative flex items-center px-2 pt-2 pb-1 border-b border-border-main bg-dark-900">
               <svg
                 className="absolute left-4 text-support-300 opacity-50 pointer-events-none"
                 width="16"
@@ -307,7 +307,7 @@ export function Select({
                 ref={searchInputRef}
                 id={searchId}
                 type="text"
-                className="flex-1 py-2 pl-9 pr-8 bg-[#e2e2e206] border border-[#e2e2e220] rounded text-sm text-support-100 outline-none transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] placeholder:text-support-400 placeholder:opacity-60 focus:border-primary-500 focus:bg-transparent"
+                className="flex-1 py-2 pl-9 pr-8 bg-hover-subtle border border-border-main rounded text-sm text-support-100 outline-none transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] placeholder:text-support-400 placeholder:opacity-60 focus:border-primary-500 focus:bg-transparent"
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => {
@@ -321,7 +321,7 @@ export function Select({
               {searchQuery && (
                 <button
                   type="button"
-                  className="absolute right-4 p-1 bg-transparent border-none rounded text-support-300 opacity-50 cursor-pointer flex items-center justify-center transition-all duration-150 hover:opacity-100 hover:bg-[#e2e2e220] animate-[clearBtnIn_100ms_ease-out]"
+                  className="absolute right-4 p-2 bg-transparent border-none rounded text-support-300 opacity-50 cursor-pointer flex items-center justify-center transition-all duration-150 hover:opacity-100 hover:bg-hover-strong animate-[clearBtnIn_100ms_ease-out]"
                   onClick={() => {
                     setSearchQuery('')
                     setHighlightedIndex(value ? filteredOptions.findIndex(opt => opt.value === value) : -1)
@@ -359,8 +359,8 @@ export function Select({
                       text-[15px] text-support-100 cursor-pointer select-none
                       transition-all duration-150 ease-[cubic-bezier(0.16,1,0.3,1)]
                       ${option.value === value ? 'text-primary-400 font-medium' : ''}
-                      ${index === highlightedIndex && !option.disabled ? 'bg-[#e2e2e220]' : ''}
-                      ${option.disabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-[#e2e2e220]'}
+                      ${index === highlightedIndex && !option.disabled ? 'bg-hover-strong' : ''}
+                      ${option.disabled ? 'opacity-40 cursor-not-allowed' : 'hover:bg-hover-strong'}
                     `}
                     onClick={() => handleSelect(option)}
                     onMouseEnter={() => !option.disabled && setHighlightedIndex(index)}

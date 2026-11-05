@@ -2,7 +2,7 @@ import { AllHTMLAttributes, ReactElement } from "react"
 
 type Header_component = {
   children?: ReactElement | ReactElement[]
-} & AllHTMLAttributes<HTMLDivElement>
+} & AllHTMLAttributes<HTMLElement>
 
 
 function Header({ children, ...props }: Header_component) {

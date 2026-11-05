@@ -1,6 +1,7 @@
 import {
     useEffect,
     useRef,
+    useId,
     ReactNode,
     forwardRef,
 } from "react";
@@ -47,6 +48,8 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
     ) => {
         const panelRef = useRef<HTMLDivElement | null>(null);
         const lastActiveElement = useRef<HTMLElement | null>(null);
+        const titleId = useId();
+        const descId = useId();
 
         useEffect(() => {
             if (!open) return;
@@ -118,9 +121,9 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
                     }}
                     role="dialog"
                     aria-modal="true"
-                    aria-labelledby={title ? "dialog-title" : undefined}
+                    aria-labelledby={title ? titleId : undefined}
                     aria-describedby={
-                        description ? "dialog-description" : undefined
+                        description ? descId : undefined
                     }
                     tabIndex={-1}
                     className={twMerge(
@@ -142,7 +145,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
                         >
                             {title && (
                                 <h2
-                                    id="dialog-title"
+                                    id={titleId}
                                     className="text-lg font-semibold"
                                 >
                                     {title}
@@ -150,8 +153,8 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
                             )}
                             {description && (
                                 <p
-                                    id="dialog-description"
-                                    className="text-sm text-gray-500"
+                                    id={descId}
+                                    className="text-sm text-support-400"
                                 >
                                     {description}
                                 </p>
