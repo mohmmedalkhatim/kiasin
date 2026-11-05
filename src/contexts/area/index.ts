@@ -11,16 +11,20 @@ import { update_card_builder } from './functions/card/update'
 export interface CardStore {
   list: undefined | number[]
   sheetId?: number
+  sheetIdB?: number
   column?: string
   columnB?: string
   chartType?: 'line' | 'bar' | 'pie'
   label?: string
   labelB?: string
+  aggregation?: 'sum' | 'average' | 'count' | 'latest' | 'min' | 'max'
+  prefix?: string
+  suffix?: string
 }
 
 export interface Card {
   id: number
-  type: 'areas' | 'value' | 'form' | 'summary' | 'chart' | 'comparison' | 'bar_chart' | 'line_chart' | 'donut_chart' | 'area_chart'
+  type: 'areas' | 'value' | 'form' | 'summary' | 'chart' | 'comparison' | 'bar_chart' | 'line_chart' | 'donut_chart' | 'area_chart' | 'balance' | 'revenue'
   store: CardStore
   size: {
     columns: number
