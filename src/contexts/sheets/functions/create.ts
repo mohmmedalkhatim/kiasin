@@ -24,6 +24,6 @@ export let create_table_thunk_builder = (builder: ActionReducerMapBuilder<SheetS
       state.loading = false;
       state.status = "fullfilled";
     },
-    rejected: (err) => { },
+    rejected: () => { },
   });
 };

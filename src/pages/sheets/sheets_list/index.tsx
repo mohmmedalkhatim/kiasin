@@ -25,6 +25,7 @@ function SheetList({ setActive, activeId }: SheetsListProps) {
     try {
       const channel = new Channel((res: Sheet[]) => {
         setSheets(res);
+        setActive(res[0].id)
       });
       await invoke("sheets_control", {
         payload: { command: "list" },

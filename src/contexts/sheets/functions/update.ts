@@ -28,6 +28,6 @@ export let update_table_thunk_builder = (
       state.loading = false;
       state.status = "fulfilled";
     },
-    rejected: (err) => { },
+    rejected: () => { },
   });
 };

@@ -9,13 +9,15 @@ export interface SheetStore {
   err: string
   status: string
   loading: boolean
+  revision: number
 }
 
 let init:SheetStore = {
   active: null ,
   err: '',
   status: 'idle',
-  loading: false
+  loading: false,
+  revision: 0
 }
 
 let databases = createSlice({
@@ -23,9 +25,11 @@ let databases = createSlice({
   initialState: init,
   reducers: {
     setActive:(state,action:PayloadAction<Sheet>)=>{
-      state.active = action.payload   
+      state.active = action.payload
+    },
+    bumpRevision:(state)=>{
+      state.revision += 1
     }
-      
   },
   
   extraReducers: builder => {
@@ -35,6 +39,6 @@ let databases = createSlice({
   }
 })
 
-export const {setActive} = databases.actions;
+export const {setActive, bumpRevision} = databases.actions;
 
 export default databases.reducer
