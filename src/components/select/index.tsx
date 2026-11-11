@@ -118,8 +118,17 @@ export function Select({
     if (disabled) return
 
     switch (e.key) {
-      case 'Enter':
       case ' ':
+        if (isOpen) return
+        e.preventDefault()
+        setIsOpen(true)
+        if (value) {
+          const index = filteredOptions.findIndex(opt => opt.value === value)
+          setHighlightedIndex(index)
+        }
+        break
+
+      case 'Enter':
         e.preventDefault()
         if (!isOpen) {
           setIsOpen(true)
@@ -307,7 +316,7 @@ export function Select({
                 ref={searchInputRef}
                 id={searchId}
                 type="text"
-                className="flex-1 py-2 pl-9 pr-8 bg-hover-subtle border border-border-main rounded text-sm text-support-100 outline-none transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] placeholder:text-support-400 placeholder:opacity-60 focus:border-primary-500 focus:bg-transparent"
+                className="flex-1 py-2 pl-9 pr-8 bg-hover-subtle border border-border-main rounded text-sm text-support-100 outline-none transition-all duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] placeholder:text-support-500 focus:border-primary-500 focus:bg-transparent"
                 placeholder="Search..."
                 value={searchQuery}
                 onChange={(e) => {

@@ -2,6 +2,7 @@ import {
     useEffect,
     useRef,
     useId,
+    useCallback,
     ReactNode,
     forwardRef,
 } from "react";
@@ -48,8 +49,23 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
     ) => {
         const panelRef = useRef<HTMLDivElement | null>(null);
         const lastActiveElement = useRef<HTMLElement | null>(null);
+        const onCloseRef = useRef(onClose);
         const titleId = useId();
         const descId = useId();
+
+        onCloseRef.current = onClose;
+
+        const focusFirstOrPanel = useCallback(() => {
+            if (!panelRef.current) return;
+            const first = panelRef.current.querySelector<HTMLElement>(
+                'input:not([disabled]), textarea:not([disabled]), select:not([disabled]), [autofocus]'
+            );
+            if (first) {
+                first.focus();
+            } else {
+                panelRef.current.focus();
+            }
+        }, []);
 
         useEffect(() => {
             if (!open) return;
@@ -57,11 +73,11 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
             lastActiveElement.current =
                 document.activeElement as HTMLElement;
 
-            panelRef.current?.focus();
+            requestAnimationFrame(focusFirstOrPanel);
 
             const handleKeyDown = (e: KeyboardEvent) => {
                 if (e.key === "Escape") {
-                    onClose();
+                    onCloseRef.current();
                 }
 
                 if (e.key === "Tab" && panelRef.current) {
@@ -97,7 +113,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
                 document.body.style.overflow = "";
                 lastActiveElement.current?.focus();
             };
-        }, [open, onClose]);
+        }, [open, focusFirstOrPanel]);
 
         if (!open) return null;
 

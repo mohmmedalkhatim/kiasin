@@ -24,17 +24,17 @@ type ButtonProps = {
 
 const variantStyles: Record<ButtonVariant, string> = {
   filled: [
-    'bg-primary-600 text-white',
-    'hover:bg-primary-700 hover:shadow-md hover:shadow-primary-900/20 hover:-translate-y-px',
-    'active:bg-primary-800 active:translate-y-0 active:shadow-none active:scale-[0.97]',
-    'focus-visible:bg-primary-700',
+    'bg-primary-800 text-white',
+    'hover:bg-primary-900 hover:shadow-md hover:shadow-primary-900/20 hover:-translate-y-px',
+    'active:bg-primary-900 active:translate-y-0 active:shadow-none active:scale-[0.97]',
+    'focus-visible:bg-primary-900',
   ].join(' '),
 
   tonal: [
-    'bg-support-700 text-support-100',
-    'hover:bg-support-600',
-    'active:bg-support-500 active:scale-[0.97]',
-    'focus-visible:bg-support-600',
+    'bg-support-800 text-support-100',
+    'hover:bg-support-900',
+    'active:bg-support-900 active:scale-[0.97]',
+    'focus-visible:bg-support-900',
   ].join(' '),
 
   outlined: [
@@ -59,17 +59,17 @@ const variantStyles: Record<ButtonVariant, string> = {
   ].join(' '),
 
   primary: [
-    'bg-primary-600 text-white',
-    'hover:bg-primary-700 hover:shadow-md hover:shadow-primary-900/20 hover:-translate-y-px',
-    'active:bg-primary-800 active:translate-y-0 active:shadow-none active:scale-[0.97]',
-    'focus-visible:bg-primary-700',
+    'bg-primary-800 text-white',
+    'hover:bg-primary-900 hover:shadow-md hover:shadow-primary-900/20 hover:-translate-y-px',
+    'active:bg-primary-900 active:translate-y-0 active:shadow-none active:scale-[0.97]',
+    'focus-visible:bg-primary-900',
   ].join(' '),
 
   secondary: [
-    'bg-support-700 text-support-100',
-    'hover:bg-support-600',
-    'active:bg-support-500 active:scale-[0.97]',
-    'focus-visible:bg-support-600',
+    'bg-support-800 text-support-100',
+    'hover:bg-support-900',
+    'active:bg-support-900 active:scale-[0.97]',
+    'focus-visible:bg-support-900',
   ].join(' '),
 
   danger: [

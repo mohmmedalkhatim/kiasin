@@ -189,7 +189,7 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               ${cfg.text} text-support-100
               ${hasLeft ? "pl-10" : "pl-3.5"}
               ${hasRight ? "pr-10" : "pr-3.5"}
-              placeholder:text-support-500/50
+              placeholder:text-support-500
               ${inputClassName ?? ""}
             `}
             aria-invalid={!!error}

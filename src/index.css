@@ -8,6 +8,10 @@
     scrollbar-gutter: stable;
 }
 
+:root {
+    color-scheme: dark;
+}
+
 @theme {
     /* =========================         Primary (Blue Brand)
          ========================= */
@@ -126,7 +130,7 @@
     }
 
     .bg {
-        @apply bg-dark-50 dark:bg-dark-900;
+        @apply bg-dark-900;
     }
 
     * {
@@ -140,11 +144,18 @@
 
     .btn {
         @apply px-4 py-2 rounded-md text-white font-medium transition;
-        background-color: var(--color-primary-600);
+        background-color: var(--color-primary-800);
     }
 
     .btn:hover {
-        background-color: var(--color-primary-700);
+        background-color: var(--color-primary-900);
+    }
+
+    .scrollbar-none {
+        scrollbar-width: none;
+    }
+    .scrollbar-none::-webkit-scrollbar {
+        display: none;
     }
 }
 

@@ -8,7 +8,7 @@
     --button-width: 48px;
     --transition-speed: 0.2s;
     --border-radius: 8px 8px 0 0;
-    @apply bg-support-400 dark:bg-dark-900 fixed text-support-900 dark:text-support-100;
+    @apply bg-dark-900 fixed text-support-100;
     padding: 0;
     ;
     display: flex;

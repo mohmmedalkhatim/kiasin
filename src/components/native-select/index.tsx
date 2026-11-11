@@ -74,7 +74,8 @@ const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
             className={`
               absolute -top-2 left-3 px-1 bg-dark-900 z-[1]
               ${cfg.label} font-medium ${labelColor}
-              transition-colors duration-150
+              transition-all duration-200
+              ${focused ? "-top-2.5 scale-95 origin-left" : ""}
             `}
           >
             {label}
@@ -85,7 +86,8 @@ const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
           className={`
             relative ${cfg.height} rounded-lg border
             ${borderClass}
-            transition-colors duration-150 cursor-pointer
+            transition-all duration-200 cursor-pointer
+            ${focused ? "ring-2 ring-primary-600/15" : ""}
           `}
         >
           <select
@@ -128,7 +130,7 @@ const NativeSelect = forwardRef<HTMLSelectElement, NativeSelectProps>(
               viewBox="0 0 20 20"
               fill="none"
               aria-hidden="true"
-              className={`transition-colors duration-150 ${focused ? "text-primary-500" : "text-support-400"}`}
+              className={`transition-all duration-200 ${focused ? "text-primary-500 rotate-180" : "text-support-400"}`}
             >
               <path
                 d="M5 7.5L10 12.5L15 7.5"

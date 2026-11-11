@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { UploadCloud, File, X } from 'lucide-react';
+import { IconCloudUpload, IconFile, IconX } from '@tabler/icons-react';
 import clsx from 'clsx';
 
 type FileUploadProps = {
@@ -73,17 +73,7 @@ export default function FileUpload({
   };
 
   return (
-    <div
-      className={clsx(
-        'w-full max-w-md p-6 mx-auto bg-card text-card-foreground rounded-xl shadow-sm border border-border font-sans transition-colors duration-200',
-        className,
-      )}
-    >
-      <div className="text-center mb-6">
-        <h2 className="text-xl font-semibold text-foreground">{title}</h2>
-        <p className="text-sm text-muted-foreground mt-1">{subtitle}</p>
-      </div>
-
+    <div className={clsx('w-full', className)}>
       <form
         onDragEnter={handleDrag}
         onSubmit={(e) => e.preventDefault()}
@@ -100,10 +90,10 @@ export default function FileUpload({
 
         <div
           className={clsx(
-            'flex flex-col items-center justify-center w-full h-48 rounded-lg border-2 border-dashed transition-colors duration-200 ease-in-out cursor-pointer',
+            'flex flex-col items-center justify-center w-full py-8 rounded-lg border-2 border-dashed transition-colors cursor-pointer',
             dragActive
-              ? 'border-primary bg-primary/10 dark:bg-primary/5'
-              : 'border-border bg-muted/50 hover:bg-muted dark:bg-muted/10 dark:hover:bg-muted/20',
+              ? 'border-primary-500 bg-primary-600/5'
+              : 'border-border-main bg-hover-subtle/50 hover:bg-hover-subtle hover:border-border-strong',
           )}
           onClick={() => inputRef.current?.click()}
           onDragEnter={handleDrag}
@@ -111,56 +101,43 @@ export default function FileUpload({
           onDragOver={handleDrag}
           onDrop={handleDrop}
         >
-          <UploadCloud
+          <IconCloudUpload
+            size={28}
             className={clsx(
-              'w-10 h-10 mb-3',
-              dragActive ? 'text-primary' : 'text-muted-foreground',
+              'mb-2',
+              dragActive ? 'text-primary-400' : 'text-support-500',
             )}
-            aria-hidden
           />
-          <p className="text-sm text-foreground font-medium">
-            Drag & drop files or{' '}
-            <span className="text-primary hover:text-primary/80 transition-colors">
-              Browse
-            </span>
-          </p>
+          <p className="text-sm text-support-200 font-medium">{title}</p>
+          <p className="text-xs text-support-500 mt-1">{subtitle}</p>
         </div>
       </form>
 
       {files.length > 0 && (
-        <div className="mt-6 space-y-3">
-          <h3 className="text-sm font-medium text-foreground">
-            Selected Files
-          </h3>
-          <div className="max-h-48 overflow-y-auto space-y-2 pr-1">
-            {files.map((file, index) => (
-              <div
-                key={`${file.name}-${index}`}
-                className="flex items-center justify-between p-3 bg-muted/30 dark:bg-muted/10 border border-border rounded-lg group hover:border-primary/50 transition-colors"
-              >
-                <div className="flex items-center space-x-3 overflow-hidden">
-                  <div className="p-2 bg-background dark:bg-muted/20 rounded shadow-sm text-primary shrink-0 border border-border/50">
-                    <File className="w-5 h-5" />
-                  </div>
-                  <div className="flex flex-col overflow-hidden">
-                    <span className="text-sm font-medium text-foreground truncate">
-                      {file.name}
-                    </span>
-                    <span className="text-xs text-muted-foreground">
-                      {formatSize(file.size)}
-                    </span>
-                  </div>
+        <div className="mt-3 space-y-2">
+          {files.map((file, index) => (
+            <div
+              key={`${file.name}-${index}`}
+              className="flex items-center justify-between p-2.5 border border-border-main rounded-lg hover:border-border-strong transition-colors"
+            >
+              <div className="flex items-center gap-2.5 overflow-hidden">
+                <div className="p-1.5 bg-hover-subtle rounded border border-border-main text-primary-400 shrink-0">
+                  <IconFile size={16} />
                 </div>
-                <button
-                  onClick={() => removeFile(index)}
-                  className="p-1.5 text-muted-foreground hover:text-destructive hover:bg-destructive/10 rounded-md transition-colors shrink-0"
-                  aria-label="Remove file"
-                >
-                  <X className="w-4 h-4" />
-                </button>
+                <div className="flex flex-col overflow-hidden">
+                  <span className="text-sm text-support-100 truncate">{file.name}</span>
+                  <span className="text-xs text-support-500">{formatSize(file.size)}</span>
+                </div>
               </div>
-            ))}
-          </div>
+              <button
+                onClick={() => removeFile(index)}
+                className="p-1.5 text-support-500 hover:text-danger-400 hover:bg-danger-900/20 rounded-md transition-colors shrink-0 cursor-pointer"
+                aria-label="Remove file"
+              >
+                <IconX size={14} />
+              </button>
+            </div>
+          ))}
         </div>
       )}
     </div>
