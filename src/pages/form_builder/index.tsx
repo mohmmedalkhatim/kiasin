@@ -1,12 +1,21 @@
-import { useState, useCallback } from "react"
+import { useState, useCallback, useRef, useEffect } from "react"
+import { useDispatch, useSelector } from "react-redux"
 import { Channel, invoke } from "@tauri-apps/api/core"
-import { useAsync } from "react-use"
+import type { AppDispatch, RootState } from "../../contexts/store"
+import { forms } from "../../contexts/forms"
+import { create_form } from "../../contexts/forms/functions/create"
+import { list_forms } from "../../contexts/forms/functions/list"
+import { update_form } from "../../contexts/forms/functions/update"
+import { delete_form } from "../../contexts/forms/functions/delete"
+import type { FormDef, FormField, FieldType, FormLayout } from "../../contexts/forms"
+import type { Sheet } from "../../contexts/sheets/objects"
 import Header from "../../components/header"
 import Button from "../../components/Button"
 import Input from "../../components/input"
 import { Dialog } from "../../components/Dialog"
-import { Select } from "../../components/select"
 import NativeSelect from "../../components/native-select"
+import NumberInput from "../../components/number-input"
+import DatePicker from "../../components/datepicker"
 import {
   IconPlus,
   IconTrash,
@@ -21,28 +30,16 @@ import {
   IconChevronDown,
   IconArrowLeft,
   IconSend,
+  IconX,
+  IconTable,
+  IconTextSize,
+  IconHash,
+  IconMail,
+  IconCalendar,
+  IconSelector,
+  IconAlignLeft,
+  IconCheckbox,
 } from "@tabler/icons-react"
-
-type FieldType = "text" | "number" | "email" | "date" | "select" | "textarea" | "checkbox"
-
-type ColSpan = 1 | 2
-
-interface FormField {
-  id: string
-  label: string
-  type: FieldType
-  placeholder: string
-  required: boolean
-  options: string[]
-  colSpan: ColSpan
-}
-
-interface FormDef {
-  id: string
-  name: string
-  fields: FormField[]
-  createdAt: string
-}
 
 const FIELD_TYPES: { value: FieldType; label: string }[] = [
   { value: "text", label: "Text" },
@@ -54,8 +51,59 @@ const FIELD_TYPES: { value: FieldType; label: string }[] = [
   { value: "checkbox", label: "Checkbox" },
 ]
 
+const FORM_LAYOUTS: { value: FormLayout; label: string }[] = [
+  { value: "basic", label: "Basic" },
+  { value: "inline", label: "Inline" },
+  { value: "grid", label: "Grid" },
+  { value: "block", label: "Block" },
+  { value: "horizontal", label: "Horizontal" },
+  { value: "nolabel", label: "No Labels" },
+]
+
+const FIELD_TYPE_ICONS: Record<FieldType, typeof IconTextSize> = {
+  text: IconTextSize,
+  number: IconHash,
+  email: IconMail,
+  date: IconCalendar,
+  select: IconSelector,
+  textarea: IconAlignLeft,
+  checkbox: IconCheckbox,
+}
+
 function generateId() {
   return Math.random().toString(36).slice(2, 10)
+}
+
+function sheetTypeToFieldType(type: string): FieldType {
+  switch (type) {
+    case "number": return "number"
+    case "boolean": return "checkbox"
+    case "date": return "date"
+    default: return "text"
+  }
+}
+
+function parseSheetColumns(sheet: Sheet): { name: string; type: string }[] {
+  if (sheet.description) {
+    try {
+      let parsed = JSON.parse(sheet.description)
+      if (Array.isArray(parsed)) return parsed
+      if (parsed?.columns && Array.isArray(parsed.columns)) return parsed.columns
+    } catch {}
+  }
+  return []
+}
+
+function sheetToFormFields(sheet: Sheet): FormField[] {
+  return parseSheetColumns(sheet).map(col => ({
+    id: generateId(),
+    label: col.name,
+    type: sheetTypeToFieldType(col.type),
+    placeholder: `Enter ${col.name.toLowerCase()}`,
+    required: false,
+    options: [],
+    colSpan: 1,
+  }))
 }
 
 function newField(): FormField {
@@ -71,107 +119,114 @@ function newField(): FormField {
 }
 
 function FormBuilder() {
-  const [forms, setForms] = useState<FormDef[]>([])
-  const [activeForm, setActiveForm] = useState<FormDef | null>(null)
-  const [createOpen, setCreateOpen] = useState(false)
-  const [formName, setFormName] = useState("")
-  const [previewOpen, setPreviewOpen] = useState(false)
-  const [dragFrom, setDragFrom] = useState<number | null>(null)
-  const [dragOver, setDragOver] = useState<number | null>(null)
+  let dispatch = useDispatch<AppDispatch>()
+  let { list: formsList, active: activeForm } = useSelector((s: RootState) => s.forms)
+  let [createOpen, setCreateOpen] = useState(false)
+  let [generateOpen, setGenerateOpen] = useState(false)
+  let [formName, setFormName] = useState("")
+  let [previewOpen, setPreviewOpen] = useState(false)
+  let [dragFrom, setDragFrom] = useState<number | null>(null)
+  let [dragOver, setDragOver] = useState<number | null>(null)
 
-  useAsync(async () => {
-    try {
-      const channel = new Channel<FormDef[]>((items) => setForms(items))
-      await invoke("forms_control", { payload: { command: "list" }, channel })
-    } catch {
-      // forms_control may not exist yet
-    }
+  useEffect(() => {
+    dispatch(list_forms())
   }, [])
 
-  const createForm = () => {
+  let generateFromSheet = (sheet: Sheet) => {
+    let form: FormDef = {
+      id: generateId(),
+      name: sheet.name,
+      layout: "basic",
+      fields: sheetToFormFields(sheet),
+      createdAt: new Date().toISOString(),
+    }
+    dispatch(create_form(form))
+    dispatch(forms.actions.set_active(form))
+    setGenerateOpen(false)
+  }
+
+  let createForm = () => {
     if (!formName.trim()) return
-    const form: FormDef = {
+    let form: FormDef = {
       id: generateId(),
       name: formName.trim(),
+      layout: "basic",
       fields: [newField()],
       createdAt: new Date().toISOString(),
     }
-    setForms(prev => [...prev, form])
-    setActiveForm(form)
+    dispatch(create_form(form))
+    dispatch(forms.actions.set_active(form))
     setFormName("")
     setCreateOpen(false)
   }
 
-  const updateActiveForm = useCallback((updater: (f: FormDef) => FormDef) => {
-    setActiveForm(prev => {
-      if (!prev) return prev
-      const next = updater(prev)
-      setForms(fs => fs.map(f => f.id === next.id ? next : f))
-      return next
-    })
-  }, [])
+  let updateActiveForm = useCallback((updater: (f: FormDef) => FormDef) => {
+    if (!activeForm) return
+    let next = updater(activeForm)
+    dispatch(update_form(next))
+  }, [activeForm, dispatch])
 
-  const addField = () => {
+  let addField = () => {
     updateActiveForm(f => ({ ...f, fields: [...f.fields, newField()] }))
   }
 
-  const removeField = (fieldId: string) => {
+  let removeField = (fieldId: string) => {
     updateActiveForm(f => ({ ...f, fields: f.fields.filter(fi => fi.id !== fieldId) }))
   }
 
-  const updateField = (fieldId: string, patch: Partial<FormField>) => {
+  let updateField = (fieldId: string, patch: Partial<FormField>) => {
     updateActiveForm(f => ({
       ...f,
       fields: f.fields.map(fi => fi.id === fieldId ? { ...fi, ...patch } : fi),
     }))
   }
 
-  const deleteForm = (formId: string) => {
-    setForms(prev => prev.filter(f => f.id !== formId))
-    if (activeForm?.id === formId) setActiveForm(null)
+  let handleDeleteForm = (formId: string) => {
+    dispatch(delete_form(formId))
   }
 
-  const duplicateForm = (form: FormDef) => {
-    const copy: FormDef = {
+  let duplicateForm = (form: FormDef) => {
+    let copy: FormDef = {
       ...form,
       id: generateId(),
       name: form.name + " (copy)",
+      layout: form.layout ?? "basic",
       fields: form.fields.map(f => ({ ...f, id: generateId() })),
       createdAt: new Date().toISOString(),
     }
-    setForms(prev => [...prev, copy])
-    setActiveForm(copy)
+    dispatch(create_form(copy))
+    dispatch(forms.actions.set_active(copy))
   }
 
-  const moveField = (from: number, to: number) => {
+  let moveField = (from: number, to: number) => {
     if (from === to) return
     updateActiveForm(f => {
-      const fields = [...f.fields]
-      const [moved] = fields.splice(from, 1)
+      let fields = [...f.fields]
+      let [moved] = fields.splice(from, 1)
       fields.splice(to, 0, moved)
       return { ...f, fields }
     })
   }
 
-  const handleDragStart = (e: React.DragEvent, idx: number) => {
+  let handleDragStart = (e: React.DragEvent, idx: number) => {
     setDragFrom(idx)
     e.dataTransfer.effectAllowed = "move"
     if (e.currentTarget instanceof HTMLElement) e.currentTarget.style.opacity = "0.4"
   }
 
-  const handleDragEnd = (e: React.DragEvent) => {
+  let handleDragEnd = (e: React.DragEvent) => {
     setDragFrom(null)
     setDragOver(null)
     if (e.currentTarget instanceof HTMLElement) e.currentTarget.style.opacity = ""
   }
 
-  const handleDragOver = (e: React.DragEvent, idx: number) => {
+  let handleDragOver = (e: React.DragEvent, idx: number) => {
     e.preventDefault()
     e.dataTransfer.dropEffect = "move"
     setDragOver(idx)
   }
 
-  const handleDrop = (e: React.DragEvent, toIdx: number) => {
+  let handleDrop = (e: React.DragEvent, toIdx: number) => {
     e.preventDefault()
     if (dragFrom !== null && dragFrom !== toIdx) moveField(dragFrom, toIdx)
     setDragFrom(null)
@@ -186,7 +241,7 @@ function FormBuilder() {
             <div className="flex items-center gap-3">
               <button
                 className="flex items-center gap-1.5 text-sm text-support-400 hover:text-support-200 transition-colors cursor-pointer"
-                onClick={() => setActiveForm(null)}
+                onClick={() => dispatch(forms.actions.clear_active())}
                 aria-label="Back to forms list"
               >
                 <IconArrowLeft size={16} />
@@ -205,30 +260,57 @@ function FormBuilder() {
             </div>
           </Header>
 
-          <div className="pt-22 px-6 pb-6 max-w-4xl mx-auto">
-            {activeForm.fields.length === 0 ? (
-              <EmptyFields onAdd={addField} />
-            ) : (
-              <div className="grid grid-cols-2 gap-3">
-                {activeForm.fields.map((field, idx) => (
-                  <FieldCard
-                    key={field.id}
-                    field={field}
-                    index={idx}
-                    total={activeForm.fields.length}
-                    dragOver={dragOver === idx && dragFrom !== idx}
-                    onUpdate={(patch) => updateField(field.id, patch)}
-                    onRemove={() => removeField(field.id)}
-                    onMoveUp={() => moveField(idx, idx - 1)}
-                    onMoveDown={() => moveField(idx, idx + 1)}
-                    onDragStart={(e) => handleDragStart(e, idx)}
-                    onDragEnd={handleDragEnd}
-                    onDragOver={(e) => handleDragOver(e, idx)}
-                    onDrop={(e) => handleDrop(e, idx)}
-                  />
+          <div className="pt-18 max-w-3xl mx-auto">
+            <div className="px-6 py-3 flex items-center justify-between border-b border-border-main/50">
+              <span className="text-[11px] font-semibold text-support-500 uppercase tracking-wider">Layout</span>
+              <div className="flex items-center gap-1 bg-hover-subtle/50 rounded-lg p-0.5">
+                {FORM_LAYOUTS.map(l => (
+                  <button
+                    key={l.value}
+                    className={`px-3 py-1.5 text-[11px] font-medium rounded-md transition-all duration-150 cursor-pointer ${
+                      (activeForm.layout ?? "basic") === l.value
+                        ? "bg-dark-900 text-support-100 shadow-sm"
+                        : "text-support-500 hover:text-support-300"
+                    }`}
+                    onClick={() => updateActiveForm(f => ({ ...f, layout: l.value }))}
+                  >
+                    {l.label}
+                  </button>
                 ))}
               </div>
-            )}
+            </div>
+
+            <div className="px-6 py-4">
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-[11px] font-semibold text-support-500 uppercase tracking-wider">
+                  Fields ({activeForm.fields.length})
+                </span>
+              </div>
+
+              {activeForm.fields.length === 0 ? (
+                <EmptyFields onAdd={addField} />
+              ) : (
+                <div className="flex flex-col gap-2">
+                  {activeForm.fields.map((field, idx) => (
+                    <FieldCard
+                      key={field.id}
+                      field={field}
+                      index={idx}
+                      total={activeForm.fields.length}
+                      dragOver={dragOver === idx && dragFrom !== idx}
+                      onUpdate={(patch) => updateField(field.id, patch)}
+                      onRemove={() => removeField(field.id)}
+                      onMoveUp={() => moveField(idx, idx - 1)}
+                      onMoveDown={() => moveField(idx, idx + 1)}
+                      onDragStart={(e) => handleDragStart(e, idx)}
+                      onDragEnd={handleDragEnd}
+                      onDragOver={(e) => handleDragOver(e, idx)}
+                      onDrop={(e) => handleDrop(e, idx)}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
         </main>
 
@@ -249,13 +331,7 @@ function FormBuilder() {
           ) : (
             <>
               <div className="flex-1 overflow-y-auto px-6 py-5">
-                <div className="grid grid-cols-2 gap-x-4 gap-y-5 rounded-lg border border-border-main p-5 bg-hover-subtle/30">
-                  {activeForm.fields.map(field => (
-                    <div key={field.id} style={{ gridColumn: `span ${field.colSpan}` }}>
-                      <FormFieldPreview field={field} />
-                    </div>
-                  ))}
-                </div>
+                <FormLayoutPreview layout={activeForm.layout ?? "basic"} fields={activeForm.fields} />
               </div>
 
               <div className="shrink-0 px-6 py-4 border-t border-border-main">
@@ -274,9 +350,14 @@ function FormBuilder() {
     <div>
       <Header>
         <h1 className="text-sm font-medium">Forms</h1>
-        <Button size="sm" icon={<IconPlus size={16} />} onClick={() => setCreateOpen(true)}>
-          New form
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button variant="outlined" size="sm" icon={<IconTable size={16} />} onClick={() => setGenerateOpen(true)}>
+            Generate from sheet
+          </Button>
+          <Button size="sm" icon={<IconPlus size={16} />} onClick={() => setCreateOpen(true)}>
+            New form
+          </Button>
+        </div>
       </Header>
 
       <Dialog open={createOpen} onClose={() => setCreateOpen(false)} title="New Form" widthClass="w-80">
@@ -293,8 +374,14 @@ function FormBuilder() {
         </div>
       </Dialog>
 
+      <GenerateFromSheetDialog
+        open={generateOpen}
+        onClose={() => setGenerateOpen(false)}
+        onSelect={generateFromSheet}
+      />
+
       <div className="p-6 pt-22">
-        {forms.length === 0 ? (
+        {formsList.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-32 gap-4">
             <div className="p-4 rounded-lg bg-hover-subtle border border-border-main">
               <IconForms size={28} className="text-support-500" />
@@ -309,19 +396,83 @@ function FormBuilder() {
           </div>
         ) : (
           <div className="grid grid-cols-[repeat(auto-fill,minmax(16rem,1fr))] gap-3">
-            {forms.map(form => (
+            {formsList.map(form => (
               <FormCard
                 key={form.id}
                 form={form}
-                onSelect={() => setActiveForm(form)}
+                onSelect={() => dispatch(forms.actions.set_active(form))}
                 onDuplicate={() => duplicateForm(form)}
-                onDelete={() => deleteForm(form.id)}
+                onDelete={() => handleDeleteForm(form.id)}
               />
             ))}
           </div>
         )}
       </div>
     </div>
+  )
+}
+
+function GenerateFromSheetDialog({
+  open,
+  onClose,
+  onSelect,
+}: {
+  open: boolean
+  onClose: () => void
+  onSelect: (sheet: Sheet) => void
+}) {
+  let [sheets, setSheets] = useState<Sheet[]>([])
+  let [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    if (!open) return
+    setLoading(true)
+    let channel = new Channel<Sheet[]>((res) => {
+      setSheets(res)
+      setLoading(false)
+    })
+    invoke("sheets_control", { payload: { command: "list" }, channel }).catch(() => setLoading(false))
+  }, [open])
+
+  return (
+    <Dialog open={open} onClose={onClose} title="Generate from sheet" widthClass="w-96">
+      <div className="px-6 pb-2">
+        <p className="text-xs text-support-500 mb-4">
+          Pick a sheet to auto-generate a form from its columns.
+        </p>
+        {loading ? (
+          <div className="flex items-center justify-center py-8">
+            <span className="text-sm text-support-400">Loading sheets...</span>
+          </div>
+        ) : sheets.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-8 gap-2">
+            <IconTable size={24} className="text-support-600" />
+            <p className="text-sm text-support-500">No sheets found</p>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-1 max-h-72 overflow-y-auto">
+            {sheets.map(sheet => (
+              <button
+                key={sheet.id}
+                className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-left hover:bg-hover-subtle transition-colors cursor-pointer group"
+                onClick={() => onSelect(sheet)}
+              >
+                <IconTable size={16} className="text-support-500 shrink-0" />
+                <div className="flex-1 min-w-0">
+                  <span className="text-sm font-medium block truncate">{sheet.name}</span>
+                  <span className="text-[11px] text-support-500">
+                    {parseSheetColumns(sheet).length} column{parseSheetColumns(sheet).length !== 1 ? "s" : ""}
+                  </span>
+                </div>
+                <span className="text-xs text-support-600 opacity-0 group-hover:opacity-100 transition-opacity">
+                  Generate
+                </span>
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+    </Dialog>
   )
 }
 
@@ -358,38 +509,44 @@ function FormCard({
       className="group border border-border-main rounded-lg p-4 flex flex-col gap-3 hover:border-border-strong transition-colors cursor-pointer"
       onClick={onSelect}
     >
-      <div className="flex items-center justify-between">
-        <span className="text-sm font-medium truncate">{form.name}</span>
-        <span className="text-[11px] text-support-500 tabular-nums">{form.fields.length} fields</span>
-      </div>
-
-      <div className="flex flex-wrap gap-1">
-        {form.fields.slice(0, 4).map(f => (
-          <span key={f.id} className="text-[11px] px-1.5 py-0.5 rounded-md bg-hover-subtle border border-border-main text-support-400 truncate max-w-[8rem]">
-            {f.label || f.type}
+      <div className="flex items-start justify-between gap-3">
+        <div className="flex-1 min-w-0">
+          <span className="text-sm font-medium truncate block">{form.name}</span>
+          <span className="text-[11px] text-support-500 mt-0.5 flex items-center gap-1.5">
+            <span className="px-1.5 py-0.5 rounded bg-hover-subtle text-support-400 text-[10px]">{form.layout ?? "basic"}</span>
+            {form.fields.length} field{form.fields.length !== 1 ? "s" : ""}
           </span>
-        ))}
-        {form.fields.length > 4 && (
-          <span className="text-[11px] text-support-500 self-center">+{form.fields.length - 4}</span>
-        )}
+        </div>
+        <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity shrink-0">
+          <button
+            className="p-1.5 rounded-md text-support-500 hover:text-support-200 hover:bg-hover-strong transition-colors cursor-pointer"
+            onClick={(e) => { e.stopPropagation(); onDuplicate() }}
+            aria-label={`Duplicate ${form.name}`}
+          >
+            <IconCopy size={14} />
+          </button>
+          <button
+            className="p-1.5 rounded-md text-support-500 hover:text-danger-400 hover:bg-danger-900/20 transition-colors cursor-pointer"
+            onClick={(e) => { e.stopPropagation(); onDelete() }}
+            aria-label={`Delete ${form.name}`}
+          >
+            <IconTrash size={14} />
+          </button>
+        </div>
       </div>
 
-      <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-        <button
-          className="p-1.5 rounded-md text-support-500 hover:text-support-200 hover:bg-hover-strong transition-colors cursor-pointer"
-          onClick={(e) => { e.stopPropagation(); onDuplicate() }}
-          aria-label={`Duplicate ${form.name}`}
-        >
-          <IconCopy size={14} />
-        </button>
-        <button
-          className="p-1.5 rounded-md text-support-500 hover:text-danger-400 hover:bg-danger-900/20 transition-colors cursor-pointer"
-          onClick={(e) => { e.stopPropagation(); onDelete() }}
-          aria-label={`Delete ${form.name}`}
-        >
-          <IconTrash size={14} />
-        </button>
-      </div>
+      {form.fields.length > 0 && (
+        <div className="flex flex-wrap gap-1">
+          {form.fields.slice(0, 4).map(f => (
+            <span key={f.id} className="text-[11px] px-1.5 py-0.5 rounded-md bg-hover-subtle border border-border-main text-support-400 truncate max-w-[8rem]">
+              {f.label || f.type}
+            </span>
+          ))}
+          {form.fields.length > 4 && (
+            <span className="text-[11px] text-support-500 self-center">+{form.fields.length - 4}</span>
+          )}
+        </div>
+      )}
     </div>
   )
 }
@@ -422,6 +579,8 @@ function FieldCard({
   onDrop: (e: React.DragEvent) => void
 }) {
   const fieldName = field.label || `Field ${index + 1}`
+  const TypeIcon = FIELD_TYPE_ICONS[field.type] ?? IconTextSize
+  const [expanded, setExpanded] = useState(false)
 
   return (
     <div
@@ -430,122 +589,292 @@ function FieldCard({
       onDragEnd={onDragEnd}
       onDragOver={onDragOver}
       onDrop={onDrop}
-      style={{ gridColumn: `span ${field.colSpan}` }}
-      className={`group border rounded-lg transition-colors duration-100 ${
+      className={`group rounded-lg border transition-all duration-150 ${
         dragOver
-          ? "border-primary-500 bg-primary-600/5"
+          ? "border-primary-500 bg-primary-600/5 shadow-sm shadow-primary-500/10"
           : "border-border-main hover:border-border-strong"
       }`}
     >
-      {/* Header row — drag handle, label, actions */}
-      <div className="flex items-center gap-2 px-3 py-2.5 border-b border-border-subtle">
-        <span className="cursor-grab active:cursor-grabbing text-support-600 hover:text-support-400 transition-colors p-1">
+      <div className="flex items-center gap-2 px-2 py-2">
+        <span className="cursor-grab active:cursor-grabbing text-support-600 hover:text-support-400 transition-colors p-1 shrink-0">
           <IconGripVertical size={14} />
         </span>
 
+        <div className="flex items-center justify-center w-7 h-7 rounded-md bg-hover-subtle shrink-0">
+          <TypeIcon size={14} className="text-support-400" />
+        </div>
+
         <input
-          className="flex-1 bg-transparent text-sm font-medium outline-none placeholder:text-support-500 focus-visible:underline focus-visible:underline-offset-4 focus-visible:decoration-primary-600/40"
+          className="flex-1 min-w-0 bg-transparent text-sm font-medium outline-none placeholder:text-support-500"
           placeholder="Field label"
           value={field.label}
           onChange={(e) => onUpdate({ label: e.target.value })}
           aria-label="Field label"
         />
 
-        <span className="text-[10px] text-support-600 tabular-nums select-none shrink-0">#{index + 1}</span>
+        <div className="flex items-center gap-1 shrink-0">
+          {field.required && (
+            <span className="text-[9px] font-bold text-danger-400 bg-danger-500/10 px-1.5 py-0.5 rounded">REQ</span>
+          )}
+          {field.colSpan === 2 && (
+            <span className="text-[9px] font-bold text-primary-400 bg-primary-500/10 px-1.5 py-0.5 rounded">FULL</span>
+          )}
+          <span className="text-[10px] text-support-500 px-1">{field.type}</span>
+        </div>
 
-        <div className="flex items-center">
+        <div className="flex items-center gap-0.5 shrink-0 opacity-0 group-hover:opacity-100 transition-opacity">
           <button
-            className="p-1.5 rounded-md text-support-500 hover:text-support-200 hover:bg-hover-strong disabled:opacity-20 disabled:pointer-events-none transition-colors cursor-pointer"
+            className="p-1 rounded-md text-support-600 hover:text-support-200 hover:bg-hover-strong disabled:opacity-20 disabled:pointer-events-none transition-colors cursor-pointer"
             onClick={onMoveUp}
             disabled={index === 0}
             aria-label={`Move ${fieldName} up`}
           >
-            <IconChevronUp size={14} />
+            <IconChevronUp size={13} />
           </button>
           <button
-            className="p-1.5 rounded-md text-support-500 hover:text-support-200 hover:bg-hover-strong disabled:opacity-20 disabled:pointer-events-none transition-colors cursor-pointer"
+            className="p-1 rounded-md text-support-600 hover:text-support-200 hover:bg-hover-strong disabled:opacity-20 disabled:pointer-events-none transition-colors cursor-pointer"
             onClick={onMoveDown}
             disabled={index === total - 1}
             aria-label={`Move ${fieldName} down`}
           >
-            <IconChevronDown size={14} />
+            <IconChevronDown size={13} />
+          </button>
+          <button
+            className="p-1 rounded-md text-support-600 hover:text-danger-400 hover:bg-danger-900/20 transition-colors cursor-pointer"
+            onClick={onRemove}
+            aria-label={`Delete ${fieldName}`}
+          >
+            <IconTrash size={13} />
           </button>
         </div>
 
         <button
-          className={`p-1.5 rounded-md border shrink-0 transition-colors cursor-pointer ${
-            field.colSpan === 2
-              ? "border-primary-600 bg-primary-600/10 text-primary-400"
-              : "border-border-main text-support-500 hover:border-border-strong hover:text-support-300"
-          }`}
-          onClick={() => onUpdate({ colSpan: field.colSpan === 1 ? 2 : 1 })}
-          aria-label={field.colSpan === 1 ? "Expand to full width" : "Shrink to half width"}
-          title={field.colSpan === 1 ? "Full width" : "Half width"}
+          className="p-1 rounded-md text-support-600 hover:text-support-300 hover:bg-hover-strong transition-colors cursor-pointer shrink-0"
+          onClick={() => setExpanded(e => !e)}
+          aria-label={expanded ? "Collapse" : "Expand"}
         >
-          {field.colSpan === 1 ? <IconColumns2 size={14} /> : <IconColumnInsertRight size={14} />}
-        </button>
-
-        <button
-          className="p-1.5 rounded-md text-support-600 hover:text-danger-400 hover:bg-danger-900/20 transition-colors cursor-pointer shrink-0"
-          onClick={onRemove}
-          aria-label={`Delete ${fieldName}`}
-        >
-          <IconTrash size={14} />
+          <IconChevronDown size={14} className={`transition-transform duration-150 ${expanded ? "rotate-180" : ""}`} />
         </button>
       </div>
 
-      {/* Body — type, placeholder, options, required */}
-      <div className="px-4 py-3 flex flex-col gap-3">
-        <NativeSelect
-          size="sm"
-          label="Type"
-          value={field.type}
-          onChange={(e) => onUpdate({ type: e.target.value as FieldType })}
-          options={FIELD_TYPES}
-        />
-
-        <input
-          className="bg-transparent text-xs text-support-400 outline-none placeholder:text-support-600 border-b border-transparent focus-visible:border-primary-600/40 pb-1 transition-colors"
-          placeholder="Placeholder text (optional)"
-          value={field.placeholder}
-          onChange={(e) => onUpdate({ placeholder: e.target.value })}
-          aria-label={`Placeholder for ${fieldName}`}
-        />
-
-        {field.type === "select" && (
-          <div className="flex flex-col gap-1.5">
-            <span className="text-[10px] text-support-500 uppercase tracking-wider font-medium">Options (comma separated)</span>
-            <input
-              className="bg-transparent text-xs outline-none border-b border-border-main pb-1.5 placeholder:text-support-600 focus-visible:border-primary-600 transition-colors"
-              placeholder="Option 1, Option 2, Option 3"
-              value={field.options.join(", ")}
-              onChange={(e) => onUpdate({ options: e.target.value.split(",").map(s => s.trim()).filter(Boolean) })}
-              aria-label={`Options for ${fieldName}`}
+      {expanded && (
+        <div className="px-3 pb-3 pt-1 border-t border-border-subtle/50 flex flex-col gap-3">
+          <div className="grid grid-cols-3 gap-3">
+            <NativeSelect
+              size="sm"
+              label="Type"
+              value={field.type}
+              onChange={(e) => onUpdate({ type: e.target.value as FieldType })}
+              options={FIELD_TYPES}
             />
+            <Input
+              size="sm"
+              label="Placeholder"
+              placeholder="Placeholder text"
+              value={field.placeholder}
+              onChange={(e) => onUpdate({ placeholder: e.target.value })}
+            />
+            <div className="flex items-end gap-2">
+              <label className="flex items-center gap-2 h-9 px-2 rounded-md text-xs text-support-400 cursor-pointer select-none hover:bg-hover-subtle transition-colors">
+                <span
+                  className={`flex items-center justify-center w-4 h-4 rounded border transition-colors ${
+                    field.required
+                      ? "border-primary-600 bg-primary-600"
+                      : "border-support-500 bg-transparent"
+                  }`}
+                >
+                  {field.required && <IconCheck size={11} className="text-white" />}
+                </span>
+                <input
+                  type="checkbox"
+                  className="sr-only"
+                  checked={field.required}
+                  onChange={(e) => onUpdate({ required: e.target.checked })}
+                />
+                Required
+              </label>
+              <button
+                className={`h-9 px-2 rounded-md text-xs transition-colors cursor-pointer flex items-center gap-1.5 ${
+                  field.colSpan === 2
+                    ? "text-primary-400 bg-primary-600/10"
+                    : "text-support-500 hover:text-support-300 hover:bg-hover-subtle"
+                }`}
+                onClick={() => onUpdate({ colSpan: field.colSpan === 1 ? 2 : 1 })}
+              >
+                {field.colSpan === 1 ? <IconColumns2 size={13} /> : <IconColumnInsertRight size={13} />}
+                {field.colSpan === 1 ? "Half" : "Full"}
+              </button>
+            </div>
           </div>
-        )}
 
-        <label className="flex items-center gap-2 text-xs text-support-400 cursor-pointer select-none w-fit">
+          {field.type === "select" && (
+            <OptionsTagInput
+              options={field.options}
+              onChange={(opts) => onUpdate({ options: opts })}
+            />
+          )}
+        </div>
+      )}
+    </div>
+  )
+}
+
+function OptionsTagInput({
+  options,
+  onChange,
+}: {
+  options: string[]
+  onChange: (opts: string[]) => void
+}) {
+  const [draft, setDraft] = useState("")
+  const inputRef = useRef<HTMLInputElement>(null)
+
+  const commit = () => {
+    const val = draft.trim()
+    if (val && !options.includes(val)) {
+      onChange([...options, val])
+    }
+    setDraft("")
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" || e.key === ",") {
+      e.preventDefault()
+      commit()
+    }
+    if (e.key === "Backspace" && draft === "" && options.length > 0) {
+      onChange(options.slice(0, -1))
+    }
+  }
+
+  const remove = (idx: number) => {
+    onChange(options.filter((_, i) => i !== idx))
+  }
+
+  return (
+    <div className="relative">
+      <label className="absolute -top-2 left-3 px-1 bg-dark-900 z-[1] text-[11px] font-medium text-support-400">
+        Options
+      </label>
+      <div
+        className="flex flex-wrap items-center gap-1.5 min-h-9 rounded-lg border border-border-main hover:border-border-strong focus-within:border-primary-600 transition-colors duration-150 px-2.5 py-1.5 cursor-text"
+        onClick={() => inputRef.current?.focus()}
+      >
+        {options.map((opt, i) => (
           <span
-            className={`flex items-center justify-center w-4 h-4 rounded border transition-colors ${
-              field.required
-                ? "border-primary-600 bg-primary-600"
-                : "border-support-500 bg-transparent"
-            }`}
+            key={i}
+            className="inline-flex items-center gap-1 text-xs bg-hover-subtle border border-border-main rounded-md px-2 py-0.5 text-support-200"
           >
-            {field.required && <IconCheck size={11} className="text-white" />}
+            {opt}
+            <button
+              type="button"
+              className="text-support-500 hover:text-support-200 transition-colors cursor-pointer"
+              onClick={(e) => { e.stopPropagation(); remove(i) }}
+              aria-label={`Remove ${opt}`}
+            >
+              <IconX size={10} />
+            </button>
           </span>
-          <input
-            type="checkbox"
-            className="sr-only"
-            checked={field.required}
-            onChange={(e) => onUpdate({ required: e.target.checked })}
-          />
-          Required
-        </label>
+        ))}
+        <input
+          ref={inputRef}
+          className="flex-1 min-w-[4rem] bg-transparent text-sm outline-none placeholder:text-support-500"
+          placeholder={options.length === 0 ? "Type and press Enter" : "Add more..."}
+          value={draft}
+          onChange={(e) => setDraft(e.target.value)}
+          onKeyDown={handleKeyDown}
+          onBlur={commit}
+        />
       </div>
     </div>
   )
+}
+
+function FormLayoutPreview({ layout, fields }: { layout: FormLayout; fields: FormField[] }) {
+  switch (layout) {
+    case "inline":
+      return (
+        <div className="rounded-lg border border-border-main p-5 bg-hover-subtle/30">
+          <div className="flex items-end gap-3 flex-wrap">
+            {fields.map(field => (
+              <div key={field.id} className="flex-1 min-w-[8rem]">
+                <FormFieldPreview field={field} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+
+    case "grid":
+      return (
+        <div className="rounded-lg border border-border-main p-5 bg-hover-subtle/30">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-5">
+            {fields.map(field => (
+              <div key={field.id} style={{ gridColumn: `span ${field.colSpan}` }}>
+                <FormFieldPreview field={field} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+
+    case "block":
+      return (
+        <div className="flex flex-col gap-4">
+          {fields.map(field => (
+            <div key={field.id} className="rounded-lg border border-border-main p-4 bg-hover-subtle/30">
+              <FormFieldPreview field={field} />
+            </div>
+          ))}
+        </div>
+      )
+
+    case "horizontal":
+      return (
+        <div className="rounded-lg border border-border-main p-5 bg-hover-subtle/30">
+          <div className="flex flex-col gap-4">
+            {fields.map(field => (
+              <div key={field.id} className="flex items-center gap-4">
+                <label className="w-32 shrink-0 text-xs font-medium text-support-200 text-right">
+                  {field.label || "Untitled"}
+                  {field.required && <span className="text-danger-400 ml-0.5">*</span>}
+                </label>
+                <div className="flex-1">
+                  <FormFieldPreview field={field} hideLabel />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+
+    case "nolabel":
+      return (
+        <div className="rounded-lg border border-border-main p-5 bg-hover-subtle/30">
+          <div className="grid grid-cols-2 gap-x-4 gap-y-4">
+            {fields.map(field => (
+              <div key={field.id} style={{ gridColumn: `span ${field.colSpan}` }}>
+                <FormFieldPreview field={field} hideLabel />
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+
+    case "basic":
+    default:
+      return (
+        <div className="rounded-lg border border-border-main p-5 bg-hover-subtle/30">
+          <div className="flex flex-col gap-5">
+            {fields.map(field => (
+              <div key={field.id}>
+                <FormFieldPreview field={field} />
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+  }
 }
 
 function PreviewLabel({ label, required }: { label: string; required: boolean }) {
@@ -562,9 +891,7 @@ function PreviewCheckbox({ field }: { field: FormField }) {
   const label = field.label || "Untitled"
 
   return (
-    <label
-      className="flex items-center gap-2.5 text-sm text-support-200 cursor-pointer select-none h-10 px-1 rounded-md hover:bg-hover-subtle transition-colors"
-    >
+    <label className="flex items-center gap-2.5 text-sm text-support-200 cursor-pointer select-none h-10 px-1 rounded-md hover:bg-hover-subtle transition-colors">
       <span
         className={`flex items-center justify-center w-[18px] h-[18px] rounded border transition-colors ${
           checked
@@ -586,17 +913,19 @@ function PreviewCheckbox({ field }: { field: FormField }) {
   )
 }
 
-function FormFieldPreview({ field }: { field: FormField }) {
+function FormFieldPreview({ field, hideLabel }: { field: FormField; hideLabel?: boolean }) {
   const label = field.label || "Untitled"
+  const labelText = hideLabel ? undefined : `${label}${field.required ? " *" : ""}`
+  const placeholderText = hideLabel ? (field.placeholder || label) : field.placeholder
 
   switch (field.type) {
     case "textarea":
       return (
         <div>
-          <PreviewLabel label={label} required={field.required} />
+          {!hideLabel && <PreviewLabel label={label} required={field.required} />}
           <textarea
-            className="w-full h-20 px-3 py-2 text-sm bg-transparent border border-border-main rounded-md outline-none resize-none focus:border-primary-600 transition-colors placeholder:text-support-500/60"
-            placeholder={field.placeholder}
+            className="w-full h-20 px-3 py-2 text-sm bg-transparent border border-border-main rounded-lg outline-none resize-none focus:border-primary-600 transition-colors placeholder:text-support-500"
+            placeholder={placeholderText}
           />
         </div>
       )
@@ -604,22 +933,38 @@ function FormFieldPreview({ field }: { field: FormField }) {
       return <PreviewCheckbox field={field} />
     case "select":
       return (
-        <Select
-          label={`${label}${field.required ? " *" : ""}`}
-          placeholder={field.placeholder || "Select..."}
+        <NativeSelect
+          size="sm"
+          label={labelText}
+          placeholder={placeholderText || "Select..."}
           options={field.options.map(opt => ({ label: opt, value: opt }))}
         />
       )
-    case "email":
     case "number":
-    case "text":
+      return (
+        <NumberInput
+          size="sm"
+          label={labelText}
+          placeholder={placeholderText}
+        />
+      )
     case "date":
+      return (
+        <DatePicker
+          size="sm"
+          label={labelText}
+          placeholder={placeholderText || "Select date"}
+          clearable
+        />
+      )
+    case "email":
+    case "text":
       return (
         <Input
           size="sm"
-          label={`${label}${field.required ? " *" : ""}`}
-          type={field.type === "number" ? "number" : field.type === "email" ? "email" : field.type === "date" ? "date" : "text"}
-          placeholder={field.placeholder}
+          label={labelText}
+          type={field.type === "email" ? "email" : "text"}
+          placeholder={placeholderText}
         />
       )
   }
