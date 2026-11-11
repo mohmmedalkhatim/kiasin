@@ -1,0 +1,33 @@
+@import "tailwindcss";
+
+
+@layer components {
+    .dashboard_container {
+        @apply min-w-full min-h-[calc(100vh-2.5rem)] 
+    }
+
+    /* Starting state for entering */
+    /* Prefix 'slide-left' used in React component */
+
+    /* 1. ENTERING: Starts off-screen to the right (100%) and slides to its normal position (0%) */
+    .slide-left-enter {
+        transform: translateX(100%);
+    }
+
+    .slide-left-enter-active {
+        transform: translateX(0);
+        transition: transform 300ms ease-in-out;
+    }
+
+    /* 2. EXITING: Starts at normal position (0%) and slides off-screen to the left (-100%) */
+    .slide-left-exit {
+        transform: translateX(0);
+    }
+
+    .slide-left-exit-active {
+        transform: translateX(-100%);
+        transition: transform 300ms ease-in-out;
+    }
+
+
+}

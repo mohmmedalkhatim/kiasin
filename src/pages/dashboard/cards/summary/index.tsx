@@ -1,0 +1,152 @@
+import { useSelector, useDispatch } from 'react-redux'
+import { RootState, AppDispatch } from '../../../../contexts/store'
+import { useSheetData } from '../useSheetData'
+import { useSheetNames } from '../useSheetNames'
+import { useMemo, useState } from 'react'
+import { Select } from '../../../../components/select'
+import { update_card } from '../../../../contexts/dashboard/functions/card/update'
+import { IconSettings, IconSum } from '@tabler/icons-react'
+import { Dialog } from '../../../../components/Dialog'
+
+function formatValue(n: number): string {
+  if (Math.abs(n) >= 1_000_000) return (n / 1_000_000).toFixed(1) + 'M'
+  if (Math.abs(n) >= 1_000) return (n / 1_000).toFixed(1) + 'K'
+  return Number.isInteger(n) ? String(n) : n.toFixed(2)
+}
+
+export default function SummaryCard({ id }: { id: number }) {
+  const dispatch = useDispatch<AppDispatch>()
+  const card = useSelector((s: RootState) => s.dashboard.active.dashboard.structure.cards)[id]
+  const dashboard = useSelector((s: RootState) => s.dashboard.active.dashboard)
+  const linkedSheets = dashboard.structure.sheets ?? []
+
+  const sheetId = card?.store?.sheetId
+  const columnName = card?.store?.column
+  const { columns, rows, loading } = useSheetData(sheetId)
+  const sheetNames = useSheetNames(linkedSheets)
+
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const configured = sheetId && columnName
+
+  const stats = useMemo(() => {
+    if (!columnName || rows.length === 0) return null
+    const colIdx = columns.findIndex(c => c.name === columnName)
+    if (colIdx === -1) return null
+    const nums = rows.map(r => Number(r[colIdx])).filter(n => !Number.isNaN(n))
+    if (nums.length === 0) return null
+    const sum = nums.reduce((a, b) => a + b, 0)
+    return {
+      sum,
+      average: sum / nums.length,
+      min: Math.min(...nums),
+      max: Math.max(...nums),
+      count: nums.length,
+    }
+  }, [rows, columns, columnName])
+
+  const updateStore = (patch: Record<string, any>) => {
+    dispatch(update_card({
+      index: id,
+      card: { ...card, store: { ...card.store, ...patch } },
+    }))
+  }
+
+  const configDialog = (
+    <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} title="Configure Summary" widthClass="w-80">
+      <div className="flex flex-col gap-3 px-6">
+        {linkedSheets.length === 0 ? (
+          <p className="text-xs text-support-500">Link a sheet to this area first.</p>
+        ) : (
+          <>
+            <Select
+              placeholder="Select sheet"
+              value={sheetId ? String(sheetId) : undefined}
+              options={linkedSheets.map(sid => ({ label: sheetNames.get(sid) ?? `Sheet #${sid}`, value: String(sid) }))}
+              onChange={(val) => updateStore({ sheetId: Number(val), column: undefined })}
+            />
+            {sheetId && columns.length > 0 && (
+              <Select
+                placeholder="Select column"
+                value={columnName}
+                options={columns.map(c => ({ label: c.name, value: c.name }))}
+                onChange={(val) => updateStore({ column: val })}
+              />
+            )}
+            {loading && <p className="text-xs text-support-500">Loading…</p>}
+          </>
+        )}
+      </div>
+    </Dialog>
+  )
+
+  if (!configured) {
+    return (
+      <div className="p-4 flex flex-col items-center justify-center gap-3 h-full">
+        {configDialog}
+        <IconSum size={24} className="text-support-600" />
+        <p className="text-xs text-support-500">No summary configured</p>
+        <button
+          className="text-xs text-primary-400 hover:text-primary-300 rounded focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:outline-none"
+          onClick={() => setDialogOpen(true)}
+        >
+          Configure
+        </button>
+      </div>
+    )
+  }
+
+  return (
+    <div className="flex flex-col h-full group/card">
+      {configDialog}
+      <div className="flex items-center justify-between px-4 pt-3 pb-1">
+        <span className="text-xs font-medium text-support-500 uppercase tracking-wide truncate">
+          {card.store.label || columnName}
+        </span>
+        <button
+          className="p-2 rounded text-support-600 opacity-0 group-hover/card:opacity-100 focus-visible:opacity-100 transition-opacity duration-150 hover:text-support-300 hover:bg-hover-main focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:outline-none"
+          onClick={() => setDialogOpen(true)}
+          aria-label="Configure card"
+        >
+          <IconSettings size={14} />
+        </button>
+      </div>
+
+      {stats ? (
+        <div className="flex-1 flex items-center px-4 pb-4">
+          <div className="w-full rounded-lg border border-border-main bg-hover-subtle px-4 py-2.5 flex flex-col gap-3">
+            <div>
+              <span className="text-2xl font-semibold text-support-100 tabular-nums">
+                {formatValue(stats.sum)}
+              </span>
+              <span className="ml-1.5 text-xs text-support-500">total</span>
+            </div>
+            <div className="border-t border-border-main pt-3 grid grid-cols-3 gap-2">
+              <Stat label="Avg" value={formatValue(stats.average)} />
+              <Stat label="Min" value={formatValue(stats.min)} />
+              <Stat label="Max" value={formatValue(stats.max)} />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div className="flex-1 flex flex-col items-center justify-center px-4 pb-4 gap-2">
+          <p className="text-sm text-support-500">No numeric data</p>
+          <button
+            className="text-xs text-primary-400 hover:text-primary-300 rounded focus-visible:ring-2 focus-visible:ring-primary-400 focus-visible:outline-none"
+            onClick={() => setDialogOpen(true)}
+          >
+            Reconfigure
+          </button>
+        </div>
+      )}
+    </div>
+  )
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex flex-col">
+      <span className="text-[10px] text-support-600 uppercase">{label}</span>
+      <span className="text-sm font-medium text-support-200 tabular-nums">{value}</span>
+    </div>
+  )
+}

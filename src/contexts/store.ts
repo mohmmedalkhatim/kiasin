@@ -1,11 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
-import areas_slice from '../contexts/area'
+import dashboards_slice from '../contexts/dashboard'
 import database_slice from './sheets'
+import forms_slice from './forms'
 
 export let store = configureStore({
   reducer: {
-    area: areas_slice,
-    database: database_slice
+    dashboard: dashboards_slice,
+    database: database_slice,
+    forms: forms_slice
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

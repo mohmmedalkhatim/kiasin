@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@layer {
+    .dashboard_list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
+        grid-auto-rows: 10rem;
+        gap: 1rem;
+    }
+    .dashboard_link{
+        @apply border flex items-center rounded-sm flex-col justify-between;
+    }
+}

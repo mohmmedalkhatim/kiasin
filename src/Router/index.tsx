@@ -1,9 +1,12 @@
+import { lazy } from "react";
 import { createBrowserRouter, createRoutesFromElements, Route } from "react-router-dom";
-import Area from "../pages/area";
 import App from "../App";
-import Databases from "../pages/sheets";
-import MainPage from "../pages/main";
-import FormBuilder from "../pages/form_builder";
+
+const Dashboard = lazy(() => import("../pages/dashboard"));
+const Databases = lazy(() => import("../pages/sheets"));
+const MainPage = lazy(() => import("../pages/main"));
+const FormBuilder = lazy(() => import("../pages/form_builder"));
+const KanbanPage = lazy(() => import("../pages/kanban"));
 
 
 export let router = createBrowserRouter(
@@ -11,8 +14,9 @@ export let router = createBrowserRouter(
         <Route element={<App />}>
             <Route path="/" index element={<MainPage/> } />
             <Route path="/databases" element={<Databases />} />
-            <Route path="/area/:id" element={<Area />} />
+            <Route path="/dashboard/:id" element={<Dashboard />} />
             <Route path="/form_builder" element={<FormBuilder />} />
+            <Route path="/kanban" element={<KanbanPage />} />
         </Route>
     )
 )
