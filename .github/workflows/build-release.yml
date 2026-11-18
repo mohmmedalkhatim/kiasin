@@ -42,6 +42,9 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
+      - name: Remove stale pnpm lockfile
+        run: rm -f pnpm-lock.yaml
+
       - name: Build Tauri app
         uses: tauri-apps/tauri-action@v0
         env:
