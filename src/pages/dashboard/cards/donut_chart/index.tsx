@@ -149,12 +149,11 @@ export default function DonutChartCard({ id }: { id: number }) {
           <Doughnut data={data} options={{ ...options, maintainAspectRatio: true }} />
         </div>
       </div>
-      <div className="shrink-0 flex flex-wrap gap-x-3 gap-y-0.5 @[14rem]:gap-y-1 px-3 @[14rem]:px-4 pb-2 justify-center overflow-hidden">
+      <div className="shrink-0 flex flex-wrap gap-x-3 gap-y-0.5 px-3 pb-2 justify-center overflow-hidden">
         {chartData.map((d, i) => (
-          <div key={i} className="flex items-center gap-1 @[14rem]:gap-1.5 text-[10px] @[14rem]:text-xs text-support-400">
-            <span className="w-1.5 h-1.5 @[14rem]:w-2 @[14rem]:h-2 rounded-full shrink-0" style={{ background: CHART_COLORS[i % CHART_COLORS.length] }} />
-            <span className="truncate">{d.label}</span>
-            <span className="text-support-200 font-bold tabular-nums">{d.pct.toFixed(0)}%</span>
+          <div key={i} className="flex items-center gap-1 text-[10px] text-support-400">
+            <span className="w-1.5 h-1.5 rounded-full shrink-0" style={{ background: CHART_COLORS[i % CHART_COLORS.length] }} />
+            <span className="tabular-nums font-medium">{d.pct.toFixed(0)}%</span>
           </div>
         ))}
       </div>

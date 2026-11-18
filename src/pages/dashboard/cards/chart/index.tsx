@@ -85,7 +85,7 @@ export default function ChartCard({ id }: { id: number }) {
       dataLabels: { enabled: chartType === 'pie' },
       xaxis: {
         categories: chartData.labels,
-        labels: { style: { colors: CHART_TICK_MUTED, fontSize: '10px', fontFamily } },
+        labels: { show: false },
         axisBorder: { show: false },
         axisTicks: { show: false },
       },

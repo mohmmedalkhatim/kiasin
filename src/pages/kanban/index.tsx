@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from "react"
 import { useDispatch } from "react-redux"
+import { useParams, useNavigate } from "react-router-dom"
 import type { AppDispatch } from "../../contexts/store"
 import { create_sheet } from "../../contexts/sheets/functions/create"
 import { update_sheet } from "../../contexts/sheets/functions/update"
@@ -237,6 +238,8 @@ function findContainer(id: string, grouped: Record<string, CardRow[]>, statuses:
 
 export default function KanbanPage() {
   let dispatch = useDispatch<AppDispatch>()
+  let navigate = useNavigate()
+  let { id: routeBoardId } = useParams<{ id: string }>()
   let [boards, setBoards] = useState<{ sheetId: number; name: string; statuses: string[]; colors: Record<string, string>; cardCount: number }[]>([])
   let [activeBoard, setActiveBoard] = useState<BoardData | null>(null)
   let [createOpen, setCreateOpen] = useState(false)
@@ -249,9 +252,17 @@ export default function KanbanPage() {
     let list = sheets.filter(isKanbanSheet).map(s => ({ sheetId: s.id!, name: s.name, statuses: getStatuses(s), colors: getColors(s), cardCount: 0 }))
     setBoards(list)
     setLoading(false)
+    return list
   }, [])
 
-  useEffect(() => { loadList() }, [])
+  useEffect(() => {
+    loadList().then(list => {
+      if (routeBoardId && !activeBoard) {
+        let boardId = Number(routeBoardId)
+        if (list.some(b => b.sheetId === boardId)) openBoard(boardId)
+      }
+    })
+  }, [routeBoardId])
 
   let openBoard = useCallback(async (sheetId: number) => {
     let sheet = await fetchSheet(sheetId)
@@ -359,7 +370,7 @@ export default function KanbanPage() {
     return (
       <BoardView
         board={activeBoard}
-        onBack={() => { setActiveBoard(null); loadList() }}
+        onBack={() => { setActiveBoard(null); navigate("/kanban"); loadList() }}
         onAddCard={addCard}
         onAddColumn={addColumn}
         onUpdateCard={updateCard}

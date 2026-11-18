@@ -136,7 +136,7 @@ export default function AreaChartCard({ id }: { id: number }) {
       x: {
         border: { display: false },
         grid: { display: false },
-        ticks: { color: CHART_TICK, font: { size: 11 }, padding: 8 },
+        ticks: { display: false },
       },
       y: {
         border: { display: false },

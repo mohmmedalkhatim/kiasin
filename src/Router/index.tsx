@@ -17,6 +17,7 @@ export let router = createBrowserRouter(
             <Route path="/dashboard/:id" element={<Dashboard />} />
             <Route path="/form_builder" element={<FormBuilder />} />
             <Route path="/kanban" element={<KanbanPage />} />
+            <Route path="/kanban/:id" element={<KanbanPage />} />
         </Route>
     )
 )

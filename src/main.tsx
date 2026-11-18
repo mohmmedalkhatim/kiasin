@@ -44,4 +44,3 @@ gsap.ticker.add((time) => {
 gsap.ticker.lagSmoothing(0);
 
 gsap.registerPlugin(ScrollTrigger);
-

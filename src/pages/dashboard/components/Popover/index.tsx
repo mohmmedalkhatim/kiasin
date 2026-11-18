@@ -15,6 +15,7 @@ import {
   IconReportMoney,
   IconTargetArrow,
   IconCheckbox,
+  IconLayoutKanban,
 } from "@tabler/icons-react";
 import { useEffect, useRef, useState } from "react";
 import Button from "../../../../components/Button";
@@ -39,6 +40,7 @@ const CARD_TYPES = [
   { type: "revenue" as const, icon: IconReportMoney, label: "Revenue", columns: 2 },
   { type: "progress" as const, icon: IconTargetArrow, label: "Progress" },
   { type: "todo" as const, icon: IconCheckbox, label: "To-do" },
+  { type: "kanban_link" as const, icon: IconLayoutKanban, label: "Kanban" },
 ];
 
 const DECEL = [0.16, 1, 0.3, 1] as [number, number, number, number];

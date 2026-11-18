@@ -11,6 +11,7 @@ import RevenueCard from "../../cards/revenue"
 import ProgressCard from "../../cards/progress"
 import TodoCard from "../../cards/todo"
 import FormCard from "../../cards/form"
+import KanbanLinkCard from "../../cards/kanban_link"
 
 function CardContent({ id, type }: { id: number, type: string }) {
     switch (type) {
@@ -40,6 +41,8 @@ function CardContent({ id, type }: { id: number, type: string }) {
             return <ProgressCard id={id} />
         case "todo":
             return <TodoCard id={id} />
+        case "kanban_link":
+            return <KanbanLinkCard id={id} />
         default:
             return <div className="p-4 text-sm text-support-500">{type}</div>
     }
