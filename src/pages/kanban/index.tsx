@@ -356,6 +356,20 @@ export default function KanbanPage() {
     setActiveBoard(prev => prev ? { ...prev, statuses: newStatuses, colors: newColors, cards: newCards, sheet: updatedSheet } : prev)
   }, [activeBoard, dispatch])
 
+  let deleteColumn = useCallback(async (colName: string) => {
+    if (!activeBoard || activeBoard.statuses.length <= 1) return
+    let fallback = activeBoard.statuses.find(s => s !== colName) ?? activeBoard.statuses[0]
+    let newStatuses = activeBoard.statuses.filter(s => s !== colName)
+    let newCards = activeBoard.cards.map(c => c.status === colName ? { ...c, status: fallback } : c)
+    let newColors = { ...activeBoard.colors }
+    delete newColors[colName]
+    let newDesc = kanbanDescription(newStatuses, newColors)
+    let updatedSheet: Sheet = { ...activeBoard.sheet, description: newDesc }
+    let updatedTable: exceljs.Table = { ...activeBoard.table, rows: cardsToRows(newCards) }
+    await writeTable(updatedSheet, updatedTable as exceljs.Table, dispatch)
+    setActiveBoard(prev => prev ? { ...prev, statuses: newStatuses, colors: newColors, cards: newCards, sheet: updatedSheet } : prev)
+  }, [activeBoard, dispatch])
+
   let updateColumnColor = useCallback(async (status: string, color: string) => {
     if (!activeBoard) return
     let newColors = { ...activeBoard.colors, [status]: color }
@@ -377,6 +391,7 @@ export default function KanbanPage() {
         onDeleteCard={deleteCard}
         onDuplicateCard={duplicateCard}
         onMoveCard={moveCard}
+        onDeleteColumn={deleteColumn}
         onChangeColumnColor={updateColumnColor}
         onRenameColumn={renameColumn}
       />
@@ -454,7 +469,7 @@ function sortCards(cards: CardRow[], sortBy: SortKey): CardRow[] {
 }
 
 function BoardView({
-  board, onBack, onAddCard, onAddColumn, onUpdateCard, onDeleteCard, onDuplicateCard, onMoveCard, onChangeColumnColor, onRenameColumn,
+  board, onBack, onAddCard, onAddColumn, onUpdateCard, onDeleteCard, onDuplicateCard, onMoveCard, onDeleteColumn, onChangeColumnColor, onRenameColumn,
 }: {
   board: BoardData
   onBack: () => void
@@ -464,6 +479,7 @@ function BoardView({
   onDeleteCard: (rowIndex: number) => void
   onDuplicateCard: (rowIndex: number) => void
   onMoveCard: (rowIndex: number, newStatus: string) => void
+  onDeleteColumn: (colName: string) => void
   onChangeColumnColor: (status: string, color: string) => void
   onRenameColumn: (oldName: string, newName: string) => void
 }) {
@@ -614,6 +630,7 @@ function BoardView({
                     onAddCard={(title) => onAddCard(status, title)}
                     onClickCard={setPeekCard}
                     onHide={() => setHiddenCols(prev => new Set(prev).add(status))}
+                    onDelete={() => onDeleteColumn(status)}
                     onChangeColor={(c) => onChangeColumnColor(status, c)}
                     onRename={(name) => onRenameColumn(status, name)}
                     activeId={activeCard ? cardId(activeCard) : null}
@@ -794,9 +811,9 @@ function FilterPopover({
 // ── Column ──
 
 function DropColumn({
-  status, color, cards, collapsed, onToggleCollapse, onAddCard, onClickCard, onHide, onChangeColor, onRename, activeId,
+  status, color, cards, collapsed, onToggleCollapse, onAddCard, onClickCard, onHide, onDelete, onChangeColor, onRename, activeId,
 }: {
-  status: string; color: string; cards: CardRow[]; collapsed: boolean; onToggleCollapse: () => void; onAddCard: (title: string) => void; onClickCard: (card: CardRow) => void; onHide: () => void; onChangeColor: (color: string) => void; onRename: (name: string) => void; activeId: string | null
+  status: string; color: string; cards: CardRow[]; collapsed: boolean; onToggleCollapse: () => void; onAddCard: (title: string) => void; onClickCard: (card: CardRow) => void; onHide: () => void; onDelete: () => void; onChangeColor: (color: string) => void; onRename: (name: string) => void; activeId: string | null
 }) {
   let { isOver, setNodeRef } = useDroppable({ id: status })
   let ids = useMemo(() => cards.map(c => cardId(c)), [cards])
@@ -909,6 +926,11 @@ function DropColumn({
                   <button className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-support-300 hover:bg-hover-subtle transition-colors cursor-pointer"
                     onClick={() => { onToggleCollapse(); setMenuOpen(false) }}>
                     <IconChevronRight size={13} />Collapse
+                  </button>
+                  <div className="border-t border-border-main/40 my-1" />
+                  <button className="w-full flex items-center gap-2 px-3 py-1.5 text-xs text-danger-400 hover:bg-danger-900/20 transition-colors cursor-pointer"
+                    onClick={() => { onDelete(); setMenuOpen(false) }}>
+                    <IconTrash size={13} />Delete column
                   </button>
                 </motion.div>
               )}

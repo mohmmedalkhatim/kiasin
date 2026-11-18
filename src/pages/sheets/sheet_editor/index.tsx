@@ -1242,7 +1242,7 @@ function SheetEditor() {
       </Header>
 
       <main className="w-full">
-        <div className="pt-24 px-10 pb-6 flex flex-col min-h-[calc(100vh-2.5rem)]">
+        <div className="pt-24 px-10 pb-6 flex flex-col h-[calc(100vh-2.5rem)]">
           {/* Toolbar */}
           <div className="mb-4 flex items-center justify-between gap-4">
             <div className="relative w-64">
@@ -1275,10 +1275,10 @@ function SheetEditor() {
           </div>
 
           {/* Table */}
-          <div className="border border-border-main/60 rounded-lg overflow-x-auto flex-1 flex flex-col">
+          <div className="border border-border-main rounded-lg flex-1 flex flex-col overflow-hidden" style={{ minHeight: 0 }}>
             {/* Column headers */}
             <div
-              className="grid border-b border-border-main/60 bg-dark-800/30 sticky top-0 z-10"
+              className="grid border-b border-border-main bg-dark-900/80 shrink-0"
               style={{ gridTemplateColumns: gridCols }}
             >
               <div
@@ -1305,7 +1305,7 @@ function SheetEditor() {
                     }
                   >
                     <button
-                      className="flex-1 min-w-0 px-3 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wider text-support-500 truncate flex items-center gap-1.5 hover:text-support-300 transition-colors cursor-pointer"
+                      className="flex-1 min-w-0 px-3 py-2.5 text-left text-[11px] font-semibold uppercase tracking-wider text-support-400 truncate flex items-center gap-1.5 hover:text-support-200 transition-colors cursor-pointer"
                       onClick={() => toggleSort(colIdx)}
                     >
                       <span className="truncate">{col.name}</span>
@@ -1320,7 +1320,7 @@ function SheetEditor() {
                       className={`shrink-0 p-1 mr-1.5 rounded transition-all cursor-pointer ${
                         isPinned
                           ? "text-primary-400 hover:text-primary-300"
-                          : "text-support-700 opacity-0 group-hover/col:opacity-100 hover:text-support-400"
+                          : "text-support-600 opacity-0 group-hover/col:opacity-100 hover:text-support-300"
                       }`}
                       onClick={() => togglePin(col.name)}
                       title={isPinned ? "Unpin column" : "Pin column"}
@@ -1333,7 +1333,8 @@ function SheetEditor() {
               <div />
             </div>
 
-            {/* Data rows */}
+            {/* Data rows — scrollable */}
+            <div className="flex-1 overflow-y-auto" style={{ minHeight: 0 }}>
             {visibleRows.length === 0 ? (
               <div className="px-3 py-12 text-center">
                 <p className="text-sm text-support-500">
@@ -1362,9 +1363,9 @@ function SheetEditor() {
                     onDragEnd={canDrag ? handleDragEnd : undefined}
                     onDragOver={canDrag ? (e) => handleDragOver(e, originalIndex) : undefined}
                     onDrop={canDrag ? (e) => handleDrop(e, originalIndex) : undefined}
-                    className={`grid group transition-colors duration-75 border-b border-border-main/30 last:border-b-0 ${dragOver === originalIndex && dragFrom !== originalIndex
-                      ? "bg-primary-600/8 border-t-2 border-t-primary-500"
-                      : "hover:bg-dark-800/40"
+                    className={`grid group transition-colors duration-75 border-b border-border-main/50 last:border-b-0 ${dragOver === originalIndex && dragFrom !== originalIndex
+                      ? "bg-primary-600/10 border-t-2 border-t-primary-500"
+                      : "hover:bg-hover-main"
                       }`}
                     style={{ gridTemplateColumns: gridCols }}
                   >
@@ -1373,7 +1374,7 @@ function SheetEditor() {
                       style={hasPinned ? { position: "sticky", left: 0, zIndex: 2 } : undefined}
                     >
                       {canDrag ? (
-                        <span className="cursor-grab active:cursor-grabbing text-support-700 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">
+                        <span className="cursor-grab active:cursor-grabbing text-support-600 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">
                           <IconGripVertical size={13} />
                         </span>
                       ) : (
@@ -1381,7 +1382,7 @@ function SheetEditor() {
                       )}
                     </div>
                     <div
-                      className={`px-1 py-2 text-[10px] text-center text-support-700 self-center tabular-nums select-none ${hasPinned ? "bg-dark-900" : ""}`}
+                      className={`px-1 py-2 text-[10px] text-center text-support-500 self-center tabular-nums select-none ${hasPinned ? "bg-dark-900" : ""}`}
                       style={hasPinned ? { position: "sticky", left: 28, zIndex: 2 } : undefined}
                     >
                       {originalIndex + 1}
@@ -1420,18 +1421,18 @@ function SheetEditor() {
               </div>
             )}
 
-            {/* Totals row */}
+            {/* Totals row — sticks to bottom of scroll area */}
             {hasFunctions && visibleRows.length > 0 && (
               <div
-                className="grid border-t mt-auto border-border-main/60 bg-dark-800/25"
+                className="grid border-t border-border-main bg-dark-900 pb-3 sticky bottom-0 z-10"
                 style={{ gridTemplateColumns: gridCols }}
               >
                 <div
-                  className={hasPinned ? "bg-dark-800" : ""}
+                  className="bg-dark-900"
                   style={hasPinned ? { position: "sticky", left: 0, zIndex: 2 } : undefined}
                 />
                 <div
-                  className={`px-1 py-2 text-xs text-center text-support-500 self-center ${hasPinned ? "bg-dark-800" : ""}`}
+                  className="px-1 py-2 text-xs text-center text-support-400 self-center bg-dark-900"
                   style={hasPinned ? { position: "sticky", left: 28, zIndex: 2 } : undefined}
                 >
                   <IconMathFunction size={12} />
@@ -1451,7 +1452,7 @@ function SheetEditor() {
                   return (
                     <div
                       key={col.name ?? colIdx}
-                      className={`px-3 py-2 text-sm font-mono tabular-nums ${isPinned ? "bg-dark-800 border-r border-border-main/40" : ""}`}
+                      className={`px-3 py-2 text-sm font-mono tabular-nums bg-dark-900 ${isPinned ? "border-r border-border-main/40" : ""}`}
                       style={
                         isPinned
                           ? { position: "sticky", left: PRE_W + displayIdx * PIN_W, zIndex: 2 }
@@ -1461,7 +1462,7 @@ function SheetEditor() {
                       {result != null ? (
                         <span className="flex items-baseline justify-end gap-1.5">
                           <span
-                            className="text-[10px] uppercase text-support-600 truncate max-w-[5rem]"
+                            className="text-[10px] uppercase text-support-500 truncate max-w-[5rem]"
                             title={fn === "custom" ? entry?.customExpr : fn}
                           >
                             {label}
@@ -1474,16 +1475,15 @@ function SheetEditor() {
                     </div>
                   );
                 })}
-                <div />
+                <div className="bg-dark-900" />
               </div>
             )}
-          </div>
+            </div>
 
-          {/* Footer */}
-          {visibleRows.length > 0 && (
-            <div className="mt-3">
+            {/* Add row — fixed at bottom */}
+            <div className="shrink-0 border-t border-border-main px-3 py-2">
               <button
-                className="flex items-center gap-1.5 text-[11px] text-support-600 hover:text-support-400 transition-colors cursor-pointer"
+                className="flex items-center gap-1.5 text-[11px] text-support-500 hover:text-primary-400 transition-colors cursor-pointer"
                 onClick={() => {
                   setTempRow([]);
                   setRowErrors([]);
@@ -1494,7 +1494,7 @@ function SheetEditor() {
                 Add row
               </button>
             </div>
-          )}
+          </div>
         </div>
       </main>
 
