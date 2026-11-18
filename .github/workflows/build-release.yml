@@ -42,14 +42,12 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci
 
-      - name: Remove stale pnpm lockfile
-        run: rm -f pnpm-lock.yaml
-
       - name: Build Tauri app
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
+          tauriScript: npx tauri
           tagName: ${{ github.ref_name }}
           releaseName: 'Kiasin System ${{ github.ref_name }}'
           releaseBody: 'See the assets to download and install this version.'
